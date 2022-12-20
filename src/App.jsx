@@ -1,20 +1,12 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
 import "./App.css";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <div className="App">
-      <div>
-        <p className="text-9xl">Hi mom</p>
-      </div>
-      <div className="card">
-        <button className="btn" onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-      </div>
+      <Login />
+      {/* <Register /> */}
     </div>
   );
 }
