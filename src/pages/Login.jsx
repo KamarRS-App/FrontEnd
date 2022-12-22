@@ -37,6 +37,7 @@ function Login() {
             backgroundPosition='center'
             justifyContent='center'
             alignItems='center'
+            mr={{ base:'0', md:'20' }}
           >
             <Box
               display={{ base: 'block', md: 'none' }}
@@ -73,7 +74,7 @@ function Login() {
           <Box
             mx={{ base: 'auto', lg: '0' }}
             width={{ base: '350px', sm: '500px', md: '700px', lg: '700px' }}
-            px={{ base: '10', lg: '20' }}
+            px={{ base: '10', lg: '24' }}
             py={{ base: '16' }}
           >
             <Box
@@ -84,7 +85,7 @@ function Login() {
                 fontSize={{ md:'4xl', lg: '5xl' }}
                 fontWeight="semibold"
                 color="alta.primary">
-                Find Room,{" "}
+                Find Room,
               </Text>
               <Text
                 fontSize={{  md:'4xl', lg: '5xl' }}

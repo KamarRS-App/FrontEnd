@@ -8,7 +8,8 @@ import DataDiriPasien from "./pages/DataDiriPasien";
 function App() {
   return (
     <div className="App">
-      <Login />
+      {/* <Login /> */}
+      <Register />
       {/* <HomePage /> */}
       {/* <TambahData /> */}
       {/* <DataDiriPasien /> */}
