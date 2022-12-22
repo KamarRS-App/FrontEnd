@@ -12,10 +12,10 @@ function App() {
       {/* <Login /> */}
       {/* <Register /> */}
       {/* <HomePage /> */}
-      {/* <TambahData /> */}
+      <TambahData />
       {/* <DataDiriPasien /> */}
       {/* <Riwayat /> */}
-      <DetailCariRumahSakit />
+      {/* <DetailCariRumahSakit /> */}
     </div>
   );
 }
