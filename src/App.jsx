@@ -8,9 +8,10 @@ import DataDiriPasien from "./pages/DataDiriPasien";
 function App() {
   return (
     <div className="App">
-      {/* <Login />
+      <Login />
+      {/* <HomePage /> */}
       {/* <TambahData /> */}
-      <DataDiriPasien />
+      {/* <DataDiriPasien /> */}
     </div>
   );
 }
