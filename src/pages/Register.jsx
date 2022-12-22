@@ -114,6 +114,7 @@ function Register() {
               width="100%"
               mt="10"
               backgroundColor="alta.primary"
+              _hover={{ bg:'#3AB8FF' }}
             >
               Sign Up
             </Button>
