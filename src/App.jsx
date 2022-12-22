@@ -10,12 +10,12 @@ function App() {
   return (
     <div className="App">
       {/* <Login /> */}
-      {/* <Register /> */}
+      <Register />
       {/* <HomePage /> */}
       {/* <TambahData /> */}
       {/* <DataDiriPasien /> */}
       {/* <Riwayat /> */}
-      <DetailCariRumahSakit />
+      {/* <DetailCariRumahSakit /> */}
     </div>
   );
 }
