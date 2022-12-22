@@ -117,7 +117,7 @@ function DataDiriPasien() {
               <GridItem w="100%" h="100%">
                 <FormControl isRequired>
                   <FormLabel>Kabupaten / Kota</FormLabel>
-                  <Select placeholder="-- Pilih kota --">
+                  <Select placeholder="-- Pilih kabupaten/kota --">
                     <option value="papbaratdaya">Papua Barat Daya</option>
                   </Select>
                 </FormControl>
