@@ -5,7 +5,7 @@ import { Image } from '@chakra-ui/react';
 import { Wrap, WrapItem } from '@chakra-ui/react';
 import { Grid, GridItem, SimpleGrid } from '@chakra-ui/react';
 
-function CariRumahSakit() {
+function HeaderCariRS() {
   return (
     <SimpleGrid columns={2}>
       <Center>
@@ -33,4 +33,4 @@ function CariRumahSakit() {
   );
 }
 
-export default CariRumahSakit;
+export default HeaderCariRS;
