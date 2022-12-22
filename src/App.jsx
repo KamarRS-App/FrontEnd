@@ -3,6 +3,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import TambahData from "./pages/TambahData";
 import DataDiriPasien from "./pages/DataDiriPasien";
+import DetailCariRumahSakit from "./pages/DetailCariRumahSakit";
 
 function App() {
   return (
@@ -10,7 +11,9 @@ function App() {
       {/* <Login />
       <Register /> */}
       {/* <TambahData /> */}
-      <DataDiriPasien />
+      {/* <DataDiriPasien /> */}
+      {/* <Riwayat /> */}
+      <DetailCariRumahSakit />
     </div>
   );
 }
