@@ -23,37 +23,42 @@ import {
 } from '@chakra-ui/react';
 import { ChevronDownIcon, HamburgerIcon, CloseIcon, ChevronRightIcon } from '@chakra-ui/icons';
 
-const Navbar = ({isAuth}) => {
+const Navbar = ({ isAuth }) => {
     const [isOpen, SetIsOpen] = useState(false);
     const toggle = () => SetIsOpen(!isOpen);
     return (
-        <NavBarContainer>
-            <Image
-                height='75px'
-                width='100px'
-                objectFit='contain'
-                src='/src/assets/images/logo_rawat_inap.svg'
-                alt='Logo Rawat Inap'
-            />
-            <MenuToggle toggle={toggle} isOpen={isOpen} />
-            <MenuLinks isOpen={isOpen} Auth={isAuth}/>
-        </NavBarContainer>
+        <div className='sticky top-0 z-10'>
+            <NavBarContainer>
+                <Image
+                    height='75px'
+                    width='100px'
+                    objectFit='contain'
+                    src='/src/assets/images/logo_rawat_inap.svg'
+                    alt='Logo Rawat Inap'
+                />
+                <MenuToggle toggle={toggle} isOpen={isOpen} />
+                <MenuLinks isOpen={isOpen} Auth={isAuth} />
+            </NavBarContainer>
+        </div>
     );
 }
 
 const MenuToggle = ({ toggle, isOpen }) => {
     return (
-      <Box display={{ base: "block", md: "none" }} onClick={toggle}>
-        {isOpen ? <CloseIcon /> : <HamburgerIcon />}
-      </Box>
+        <Box display={{ base: "block", md: "none" }} onClick={toggle}>
+            {isOpen ? <CloseIcon /> : <HamburgerIcon />}
+        </Box>
     );
-  };
+};
 
 const MenuLinks = ({ isOpen, Auth }) => {
     return (
         <Box
             display={{ base: isOpen ? "block" : "none", md: "block" }}
             flexBasis={{ base: "100%", md: "auto" }}
+            bg={{ base:'white' }}
+            borderRadius='20'
+            py={{ base:'6' }}
         >
             <Stack
                 spacing={8}
@@ -86,7 +91,7 @@ const MenuLinks = ({ isOpen, Auth }) => {
                 ) : (
                     <Menu>
                         <Link color='#3AB8FF' _hover={{ textDecoration: 'none' }} to="/">Beranda</Link>
-                        <Button bg='#3AB8FF' _hover={{ bg:'#1FA8F6' }} color='white'>Login <ChevronRightIcon /></Button>
+                        <Button bg='#3AB8FF' _hover={{ bg: '#1FA8F6' }} color='white'>Login <ChevronRightIcon /></Button>
                     </Menu>
                 )
                 }
@@ -103,11 +108,12 @@ const NavBarContainer = ({ children, ...props }) => {
             justify="space-between"
             wrap="wrap"
             w="100%"
-            mb={8}
-            py={3}
+            mb={{ base:0, md:8 }}
+            py={{ base:0, md:3 }}
             px={20}
-            bg="transparent"
+            bg={{ base:'white', md:"white" }}
             {...props}
+            height={{ base:'0', md:'auto' }}
         >
             {children}
         </Flex>
