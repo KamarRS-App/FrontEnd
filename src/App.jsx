@@ -6,6 +6,7 @@ import TambahData from "./pages/TambahData";
 import DataDiriPasien from "./pages/DataDiriPasien";
 import DetailCariRumahSakit from "./pages/DetailCariRumahSakit";
 import Dashboard from "./pages/Admin/Dashboard";
+import DetailDaftarRumahSakit from "./pages/DetailDaftarRumahSakit";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
       {/* <DataDiriPasien /> */}
       {/* <Riwayat /> */}
       {/* <DetailCariRumahSakit /> */}
+      {/* <DetailDaftarRumahSakit />  */}
       <Dashboard />
     </div>
   );
