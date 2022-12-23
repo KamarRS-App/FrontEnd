@@ -25,7 +25,6 @@ function App() {
       {/* <HomePage /> */}
       {/* <TambahData /> */}
       {/* <DataDiriPasien /> */}
-      {/* <Riwayat /> */}
       {/* <DetailCariRumahSakit /> */}
       {/* <DetailDaftarRumahSakit />  */}
       {/* <Dashboard /> */}
