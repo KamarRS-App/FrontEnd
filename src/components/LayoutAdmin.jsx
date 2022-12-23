@@ -25,6 +25,7 @@ const LayoutAdmin = ({children}) => {
             <Box
                 width={{ base:'90%',sm:'90%',md:'75%', lg:'75%' }}
                 bg='#FAFAFA'
+                p='10'
             >
                 {children}
 

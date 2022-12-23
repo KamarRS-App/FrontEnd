@@ -9,9 +9,8 @@ const Dashboard = () => {
     return (
         <LayoutAdmin>
             <Flex
-                    my='10'
                     gap='10'
-                    justify='center'
+                    justify='space-between'
                     wrap='wrap'
                 >
                     <CardAdmin />
