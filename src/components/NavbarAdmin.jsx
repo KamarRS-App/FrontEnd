@@ -11,10 +11,12 @@ const NavbarAdmin = () => {
         <Flex
             alignItems='center'
             borderBottom='1px'
+            borderColor='#CDD1E0'
             wrap='wrap'
             justify='space-between'
             px={'10'}
             bg='white'
+            py='3'
             >
             <Box>
                 <Image
@@ -50,12 +52,15 @@ const NavbarAdmin = () => {
                     borderColor='#E0E0E0'
                     p={2}
                     borderRadius='md'
+                    display={{ base:'none', sm:'block' }}
                 >
                     <Text>
                         22 Desember 2022
                     </Text>
                 </Box>
-                <Box>
+                <Box
+                    display={{ base:'none', sm:'block' }}
+                >
                     <Text>John Doe</Text>
                     <Text>Super Admin</Text>
                 </Box>

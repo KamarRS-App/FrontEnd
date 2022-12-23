@@ -15,15 +15,16 @@ const Dashboard = () => {
             </Box>
             <Box
                 maxWidth='500px'
-                width='20%'
-                minHeight='screens'
+                width={{ base:'10%', md:'25%' }}
+                borderRight='1px'
+                borderColor='#CDD1E0'
+                minHeight='87vh'
             >
                 <SideBarAdmin />
             </Box>
             <Box
-                width='80%'
+                width={{ base:'90%',md:'80%' }}
                 bg='white'
-                borderLeft='1px'
             >
 
             </Box>
