@@ -9,8 +9,8 @@ import DetailCariRumahSakit from "./pages/DetailCariRumahSakit";
 function App() {
   return (
     <div className="App">
-      {/* <Login /> */}
-      <Register />
+      <Login />
+      {/* <Register /> */}
       {/* <HomePage /> */}
       {/* <TambahData /> */}
       {/* <DataDiriPasien /> */}
