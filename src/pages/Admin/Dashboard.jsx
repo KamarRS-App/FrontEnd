@@ -7,7 +7,7 @@ import LayoutAdmin from '../../components/LayoutAdmin';
 
 const Dashboard = () => {
     return (
-        <LayoutAdmin>
+        <LayoutAdmin activeMenu={'dashboard'}>
             <Flex
                     gap='10'
                     justify='space-between'

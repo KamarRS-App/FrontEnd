@@ -3,7 +3,7 @@ import React from 'react';
 import NavbarAdmin from './NavbarAdmin';
 import SideBarAdmin from './SideBarAdmin';
 
-const LayoutAdmin = ({children}) => {
+const LayoutAdmin = ({children, activeMenu}) => {
     return (
         <Flex
             wrap='wrap'
@@ -18,9 +18,9 @@ const LayoutAdmin = ({children}) => {
                 width={{ base:'10%', md:'25%' }}
                 borderRight='1px'
                 borderColor='#CDD1E0'
-                minHeight='87vh'
+                minHeight={'87vh'}
             >
-                <SideBarAdmin />
+                <SideBarAdmin active={activeMenu} />
             </Box>
             <Box
                 width={{ base:'90%',sm:'90%',md:'75%', lg:'75%' }}

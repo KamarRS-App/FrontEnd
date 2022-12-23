@@ -8,7 +8,7 @@ import { MdModeEdit, MdOutlineDeleteOutline } from 'react-icons/md';
 
 const UserPage = () => {
     return (
-        <LayoutAdmin>
+        <LayoutAdmin activeMenu={'user'}>
             <HeadAdmin title={'Manajemen Admin'} />
             <TableAdmin
                 headTable={
