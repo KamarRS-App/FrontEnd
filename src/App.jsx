@@ -7,6 +7,7 @@ import DataDiriPasien from "./pages/DataDiriPasien";
 import DetailCariRumahSakit from "./pages/DetailCariRumahSakit";
 import Dashboard from "./pages/Admin/Dashboard";
 import DetailDaftarRumahSakit from "./pages/DetailDaftarRumahSakit";
+import Pembayaran from "./pages/Pembayaran";
 
 function App() {
   return (
@@ -19,7 +20,8 @@ function App() {
       {/* <Riwayat /> */}
       {/* <DetailCariRumahSakit /> */}
       {/* <DetailDaftarRumahSakit />  */}
-      <Dashboard />
+      {/* <Dashboard /> */}
+      <Pembayaran />
     </div>
   );
 }
