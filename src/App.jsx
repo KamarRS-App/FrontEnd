@@ -13,8 +13,19 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/cari/rs" element={<CariRumahSakit />} />
+        {/* <Login /> */}
+      {/* <Register /> */}
+      {/* <HomePage /> */}
+      {/* <TambahData /> */}
+      {/* <DataDiriPasien /> */}
+      {/* <Riwayat /> */}
+      {/* <DetailCariRumahSakit /> */}
+      {/* <DetailDaftarRumahSakit />  */}
+      {/* <Dashboard /> */}
+      {/* <Pembayaran /> */}
       </Routes>
     </BrowserRouter>
+
   );
 }
 
