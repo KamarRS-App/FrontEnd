@@ -5,17 +5,19 @@ import HomePage from "./pages/HomePage";
 import TambahData from "./pages/TambahData";
 import DataDiriPasien from "./pages/DataDiriPasien";
 import DetailCariRumahSakit from "./pages/DetailCariRumahSakit";
+import DetailDaftarRumahSakit from "./pages/DetailDaftarRumahSakit";
 
 function App() {
   return (
     <div className="App">
-      <Login />
+      {/* <Login /> */}
       {/* <Register /> */}
       {/* <HomePage /> */}
       {/* <TambahData /> */}
       {/* <DataDiriPasien /> */}
       {/* <Riwayat /> */}
       {/* <DetailCariRumahSakit /> */}
+      <DetailDaftarRumahSakit />
     </div>
   );
 }
