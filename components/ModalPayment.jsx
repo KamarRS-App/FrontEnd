@@ -10,12 +10,10 @@ function ModalPayment() {
         </Text>
       </Center>
       <SimpleGrid columns={2} spacing={8} color="#072051">
-        <Option value="bca">
-          <Box h="40px">
-            <Image src="/public/logo/bank-bca.png" width={99} />
-          </Box>
-          <Text>Transfer Bank BCA</Text>
-        </Option>
+        <Box h="40px">
+          <Image src="/public/logo/bank-bca.png" width={99} />
+        </Box>
+        <Text>Transfer Bank BCA</Text>
 
         <Box h="40px">
           <Image src="/public/logo/mandiri.png" width={99} />
