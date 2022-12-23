@@ -4,7 +4,7 @@ import React from 'react';
 import { CiFilter, CiSearch } from 'react-icons/ci';
 import { IoAddOutline } from 'react-icons/io5';
 
-const HeadAdmin = ({ title }) => {
+const HeadAdmin = ({ title, isAdd }) => {
     return (
         <Flex
             bg='white'
@@ -28,6 +28,7 @@ const HeadAdmin = ({ title }) => {
             >
                 <ButtonGroup>
                     <Button
+                        onClick={isAdd}
                         bg='transparent'
                         border='1px'
                         borderColor={'#E0E0E0'}
