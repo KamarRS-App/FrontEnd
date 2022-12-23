@@ -5,11 +5,12 @@ import HomePage from "./pages/HomePage";
 import TambahData from "./pages/TambahData";
 import DataDiriPasien from "./pages/DataDiriPasien";
 import DetailCariRumahSakit from "./pages/DetailCariRumahSakit";
+import Dashboard from "./pages/Admin/Dashboard";
 import DetailDaftarRumahSakit from "./pages/DetailDaftarRumahSakit";
 
 function App() {
   return (
-    <div className="App">
+    <div className="App bg-white">
       {/* <Login /> */}
       {/* <Register /> */}
       {/* <HomePage /> */}
@@ -17,7 +18,8 @@ function App() {
       {/* <DataDiriPasien /> */}
       {/* <Riwayat /> */}
       {/* <DetailCariRumahSakit /> */}
-      <DetailDaftarRumahSakit />
+      {/* <DetailDaftarRumahSakit />  */}
+      <Dashboard />
     </div>
   );
 }
