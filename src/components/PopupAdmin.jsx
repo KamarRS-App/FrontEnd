@@ -13,9 +13,11 @@ import {
     FormLabel,
     Input,
     Select,
+    Text,
 } from '@chakra-ui/react'
+import { AiOutlineInfoCircle } from 'react-icons/ai';
 
-const PopupAdmin = ({ isOpen, onClose, modalBody, submitButton, formRef }) => {
+const PopupAdmin = ({ isOpen, onClose, modalBody, submitButton, modalTitle }) => {
     return (
         <Modal
             isOpen={isOpen}
@@ -24,9 +26,20 @@ const PopupAdmin = ({ isOpen, onClose, modalBody, submitButton, formRef }) => {
         >
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Buat Akun Untuk Admin</ModalHeader>
+                <ModalHeader
+                    color={'#1FA8F6'}
+                    fontSize='3xl'
+                >
+                    <AiOutlineInfoCircle />
+                    <Text
+                        fontSize={'20px'}
+                        mt={'5'}
+                    >
+                        {modalTitle}
+                    </Text>
+                </ModalHeader>
                 <ModalCloseButton />
-                <form onSubmit={submitButton} ref={formRef}>
+                <form onSubmit={submitButton}>
                     <ModalBody pb={6}>
                         {modalBody}
                     </ModalBody>

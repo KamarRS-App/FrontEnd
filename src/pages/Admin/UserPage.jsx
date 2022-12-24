@@ -16,7 +16,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 
 const UserPage = () => {
-    const { isOpen, onOpen, onClose } = useDisclosure()
+    const { isOpen: isModalCreateOpen, onOpen: onModalCreateOpen, onClose: onCloseModalCreate } = useDisclosure()
+    const { isOpen: isOpenModalEdit, onOpen: onOpenModalEdit, onClose: onCloseModalEdit } = useDisclosure()
 
     const [name, setName] = useState();
     const [email, setEmail] = useState();
@@ -43,28 +44,74 @@ const UserPage = () => {
         role: Yup.string().required('Wajib Memilih Role')
     });
 
-    const {register, handleSubmit, formState: {errors} } = useForm({
+    const { register, handleSubmit, formState: { errors } } = useForm({
         mode: "onTouched",
         reValidateMode: "onSubmit",
         resolver: yupResolver(schema),
         defaultValues: initialValue
     })
 
+
     const submitButton = (e) => {
         // e.preventDefault();
         console.log("Values::::", e)
     };
-    
+
     return (
         <LayoutAdmin activeMenu={'user'}>
             <HeadAdmin
                 title={'Manajemen Admin'}
-                isAdd={onOpen}
+                isAdd={onModalCreateOpen}
             />
+
             <PopupAdmin
-                isOpen={isOpen}
-                onClose={onClose}
-                titleModal={'Buat Akun Untuk Admin'}
+                isOpen={isOpenModalEdit}
+                onClose={onCloseModalEdit}
+                modalTitle={'Ubah Info Admin'}
+                modalBody={
+                    <>
+                        <FormControl isInvalid={errors.name}>
+                            <FormLabel>Nama</FormLabel>
+                            <Input placeholder='Full name' id="name" type='text' {...register('name')} />
+                            {errors.name && <FormErrorMessage>{errors.name.message}</FormErrorMessage>}
+                        </FormControl>
+
+                        <FormControl isInvalid={errors.email} mt={4}>
+                            <FormLabel>Email</FormLabel>
+                            <Input placeholder='Email' type={'email'} id='email' {...register('email')} />
+                            {errors.email && <FormErrorMessage>{errors.email.message}</FormErrorMessage>}
+
+                        </FormControl>
+
+                        <FormControl isInvalid={errors.handphone} mt={4}>
+                            <FormLabel>Handphone</FormLabel>
+                            <Input placeholder='Nomor Handphone' type={'text'} id='handphone' {...register('handphone')} />
+                            {errors.handphone && <FormErrorMessage>{errors.handphone.message}</FormErrorMessage>}
+
+                        </FormControl>
+
+                        <FormControl isInvalid={errors.role} mt={4}>
+                            <FormLabel>Role</FormLabel>
+                            <Select placeholder='Pilih Role' id='role' {...register('role')}>
+                                <option>Admin</option>
+                                <option>Super Admin</option>
+                            </Select>
+                            {errors.role && <FormErrorMessage>{errors.role.message}</FormErrorMessage>}
+                        </FormControl>
+
+                        <FormControl isInvalid={errors.password} mt={4}>
+                            <FormLabel>Password</FormLabel>
+                            <Input placeholder='Password' type={'password'} id='password' {...register('password')} />
+                            {errors.password && <FormErrorMessage>{errors.password.message}</FormErrorMessage>}
+                        </FormControl>
+                    </>
+                }
+            />
+
+            <PopupAdmin
+                isOpen={isModalCreateOpen}
+                onClose={onCloseModalCreate}
+                modalTitle={'Tambah Admin'}
                 submitButton={handleSubmit(submitButton)}
                 modalBody={
                     <>
@@ -76,7 +123,7 @@ const UserPage = () => {
 
                         <FormControl isInvalid={errors.email} mt={4}>
                             <FormLabel>Email</FormLabel>
-                            <Input placeholder='Email' type={'email'} id='email' {...register('email')}/>
+                            <Input placeholder='Email' type={'email'} id='email' {...register('email')} />
                             {errors.email && <FormErrorMessage>{errors.email.message}</FormErrorMessage>}
 
                         </FormControl>
@@ -171,6 +218,7 @@ const UserPage = () => {
                             >
                                 <ButtonGroup gap='4'>
                                     <Button
+                                        onClick={onOpenModalEdit}
                                         bg='transparent'
                                         border='1px'
                                         borderColor={'#E0E0E0'}
@@ -210,5 +258,6 @@ const testTable = [
         role: 'super admin'
     },
 ]
+
 
 export default UserPage;
