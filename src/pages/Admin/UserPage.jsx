@@ -17,79 +17,44 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 const UserPage = () => {
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const [errors, setErrors] = useState({});
 
     const [name, setName] = useState();
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [handphone, setHandphone] = useState();
     const [role, setRole] = useState();
-    const [submitted, setSubmitted] = useState([]);
-    const formRef = useRef();
 
-    let schema = Yup.object().shape({
+
+    const initialValues = {
+        name: '',
+        email: '',
+        password: '',
+        handphone: '',
+        role: '',
+    };
+
+    const [initialValue, setInitialValue] = useState(initialValues);
+
+    const schema = Yup.object().shape({
         name: Yup.string().required('Nama wajib diisi'),
-        email: Yup.string().email('Format email salah').required('Email wajib diisi'),
-        password: Yup.string().min(8, 'Password minimal 8 karakter').required('Password wajib diisi'),
-        handphone: Yup.string().min(11, 'Nomor hp belum lengkap').required('Nomor hp wajib diisi'),
+        email: Yup.string().required('Email wajib diisi').email('Format email salah'),
+        password: Yup.string().required('Password wajib diisi').min(8, 'Password minimal 8 karakter'),
+        handphone: Yup.string().required('Nomor hp wajib diisi').min(11, 'Nomor hp belum lengkap').max(13, 'Nomor HP salah, melebihi batas normal'),
         role: Yup.string().required('Wajib Memilih Role')
     });
 
-    // const InsertAdminInputs = {
-    //     name: string,
-    //     email: string,
-    //     password: string,
-    //     role: string,
-    //     handphone: string,
-    // }
-
+    const {register, handleSubmit, formState: {errors} } = useForm({
+        mode: "onTouched",
+        reValidateMode: "onSubmit",
+        resolver: yupResolver(schema),
+        defaultValues: initialValue
+    })
 
     const submitButton = (e) => {
-        e.preventDefault();
-        const formInputs = [...formRef.current.elements];
-        const newSubmitted = formInputs.reduce(
-            (acc, input) => {
-                return {
-                    acc,
-                    [input.name]: input.value
-                };
-            }
-        );
-        setSubmitted((prevSubmitted) => [...prevSubmitted, newSubmitted]);
-
-        // setName(nameRef.current.e);
-        // setEmail(emailRef.current.e);
-        // setPassword(passwordRef.current.e);
-        // setHandphone(handphoneRef.current.e);
-        // setRole(roleRef.current.value);
-        console.log(submitted)
-        // try {
-        //     schema.validateSync(
-        //         {
-        //             
-        //         },
-        //         {
-        //             abortEarly: false
-        //         }
-        //     )
-        //     onClose();
-        // }
-        // catch (err) {
-        //     const { inner } = err;
-        //     let formErrors = {};
-
-        //     if (inner && inner[0]) {
-        //         inner.forEach(error => {
-        //             const { path, message } = error;
-
-        //             if (!formErrors[path]) {
-        //                 formErrors[path] = message;
-        //             }
-        //         });
-        //     }
-        //     setErrors(formErrors);
-        // }
+        // e.preventDefault();
+        console.log("Values::::", e)
     };
+    
     return (
         <LayoutAdmin activeMenu={'user'}>
             <HeadAdmin
@@ -100,46 +65,45 @@ const UserPage = () => {
                 isOpen={isOpen}
                 onClose={onClose}
                 titleModal={'Buat Akun Untuk Admin'}
-                formRef={formRef}
+                submitButton={handleSubmit(submitButton)}
                 modalBody={
                     <>
                         <FormControl isInvalid={errors.name}>
                             <FormLabel>Nama</FormLabel>
-                            <Input placeholder='Full name' id="name-input" name='name' type={'text'} />
-                            {errors.name && <FormErrorMessage>Email is required.</FormErrorMessage>}
+                            <Input placeholder='Full name' id="name" type='text' {...register('name')} />
+                            {errors.name && <FormErrorMessage>{errors.name.message}</FormErrorMessage>}
                         </FormControl>
 
                         <FormControl isInvalid={errors.email} mt={4}>
                             <FormLabel>Email</FormLabel>
-                            <Input placeholder='Email' type={'email'} />
-                            {errors.email && <FormErrorMessage>Email is required.</FormErrorMessage>}
+                            <Input placeholder='Email' type={'email'} id='email' {...register('email')}/>
+                            {errors.email && <FormErrorMessage>{errors.email.message}</FormErrorMessage>}
 
                         </FormControl>
 
                         <FormControl isInvalid={errors.handphone} mt={4}>
                             <FormLabel>Handphone</FormLabel>
-                            <Input placeholder='Nomor Handphone' type={'text'} />
-                            {errors.handphone && <FormErrorMessage>Email is required.</FormErrorMessage>}
+                            <Input placeholder='Nomor Handphone' type={'text'} id='handphone' {...register('handphone')} />
+                            {errors.handphone && <FormErrorMessage>{errors.handphone.message}</FormErrorMessage>}
 
                         </FormControl>
 
                         <FormControl isInvalid={errors.role} mt={4}>
                             <FormLabel>Role</FormLabel>
-                            <Select placeholder='Pilih Role'>
+                            <Select placeholder='Pilih Role' id='role' {...register('role')}>
                                 <option>Admin</option>
                                 <option>Super Admin</option>
                             </Select>
-                            {errors.role && <FormErrorMessage>Email is required.</FormErrorMessage>}
+                            {errors.role && <FormErrorMessage>{errors.role.message}</FormErrorMessage>}
                         </FormControl>
 
                         <FormControl isInvalid={errors.password} mt={4}>
                             <FormLabel>Password</FormLabel>
-                            <Input placeholder='Password' type={'password'} />
-                            {errors.password && <FormErrorMessage>Email is required.</FormErrorMessage>}
+                            <Input placeholder='Password' type={'password'} id='password' {...register('password')} />
+                            {errors.password && <FormErrorMessage>{errors.password.message}</FormErrorMessage>}
                         </FormControl>
                     </>
                 }
-                submitButton={(e) => submitButton(e)}
             />
             <TableAdmin
                 headTable={
