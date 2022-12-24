@@ -10,6 +10,7 @@ import DetailCariRumahSakit from "./pages/DetailCariRumahSakit";
 import Dashboard from "./pages/Admin/Dashboard";
 import DetailDaftarRumahSakit from "./pages/DetailDaftarRumahSakit";
 import UserPage from "./pages/Admin/UserPage";
+import SettingPage from "./pages/Admin/SettingPage";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import '@fontsource/plus-jakarta-sans/700.css';
@@ -37,6 +38,7 @@ function App() {
             <Route path="/admin/dashboard" element={<Dashboard />} />
             <Route path="/payment" element={<Pembayaran />} />
             <Route path="/admin/user" element={<UserPage />} />
+            <Route path="/admin/profile" element={<SettingPage />} />
           </Routes>
         </Box>
       </ChakraProvider>
