@@ -7,7 +7,7 @@ import { Wrap, WrapItem, Heading } from '@chakra-ui/react';
 function Payment() {
   return (
     <Wrap>
-      <Heading fontWeight={700} fontSize={33} color="#1FA8F6" m={30}>
+      <Heading fontWeight={700} fontSize={30} color="#1FA8F6" m={40}>
         Pembayaran Pendaftaran Kamar Rawat Inap
       </Heading>
       <WrapItem>
