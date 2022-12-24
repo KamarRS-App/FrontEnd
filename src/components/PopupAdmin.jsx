@@ -46,9 +46,9 @@ const PopupAdmin = ({ isOpen, onClose, modalBody, submitButton, modalTitle }) =>
 
                     <ModalFooter>
                         <Button colorScheme='blue' type='submit' mr={3}>
-                            Save
+                            Simpan
                         </Button>
-                        <Button onClick={onClose}>Cancel</Button>
+                        {/* <Button onClick={onClose}>Cancel</Button> */}
                     </ModalFooter>
                 </form>
             </ModalContent>
