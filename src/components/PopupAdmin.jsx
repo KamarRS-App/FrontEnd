@@ -22,11 +22,11 @@ const PopupAdmin = ({ isOpen, onClose, modalBody, submitButton, modalTitle }) =>
         <Modal
             isOpen={isOpen}
             onClose={onClose}
-            size='xl'
+            size={{ base:'xs',sm:'sm',md:'lg',lg:'xl' }}
         >
             <ModalOverlay />
             <ModalContent
-                px={'10'}
+                px={{base:'5',sm:'8',md:'10'}}
                 py={'5'}
                 borderRadius={'3xl'}
             >
