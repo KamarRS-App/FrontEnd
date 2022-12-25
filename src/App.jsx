@@ -15,6 +15,7 @@ import Dashboard from "./pages/Admin/Dashboard";
 import DetailDaftarRumahSakit from "./pages/DetailDaftarRumahSakit";
 import UserPage from "./pages/Admin/UserPage";
 import RoomPage from "./pages/Admin/RoomPage";
+import PatientPage from "./pages/Admin/PatientPage";
 
 import '@fontsource/plus-jakarta-sans/700.css';
 import '@fontsource/plus-jakarta-sans/400.css';
@@ -43,6 +44,7 @@ function App() {
             <Route path="/admin/user" element={<UserPage />} />
             <Route path="/admin/profile" element={<SettingPage />} />
             <Route path="/admin/room" element={<RoomPage />} />
+            <Route path="/admin/patient" element={<PatientPage />} />
           </Routes>
         </Box>
       </ChakraProvider>
