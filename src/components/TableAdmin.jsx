@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/layout';
+import { Box, Divider } from '@chakra-ui/layout';
 import React from 'react';
 import {
     Table,
@@ -19,8 +19,11 @@ const TableAdmin = ({ headTable, bodyTable }) => {
             my={'10'}
         >
             <TableContainer>
-                <Table variant='simple'>
-                    <Thead>
+                <Table variant={'unstyled'}>
+                    <Thead
+                        borderBottom={'1px'}
+                        borderColor={'#E0E0E0'}
+                    >
                         {headTable}
                     </Thead>
                     <Tbody>
