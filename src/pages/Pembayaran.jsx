@@ -22,9 +22,12 @@ import Layout from "../components/Layout";
 function Pembayaran() {
   return (
     <Layout>
-      <Box px={36} py={10} my={10}>
-        <Flex>
-          <Box flexBasis={"70%"} mr={"30px"}>
+      <Box px={{ base: 10, xl: 36 }} py={10} my={10}>
+        <Flex direction={{ base: "column", xl: "row" }}>
+          <Box
+            flexBasis={{ base: "100%", lg: "70%" }}
+            mr={{ base: 0, xl: "30px" }}
+          >
             <Box borderWidth={"2px"} p="5" rounded={"10px"} py="10">
               <Box>
                 <Flex justifyContent={"space-between"}>
@@ -167,7 +170,7 @@ function Pembayaran() {
               </Accordion>
             </Box>
           </Box>
-          <Box flexBasis={"30%"}>
+          <Box flexBasis={"30%"} pt={{ base: 5, lg: "0" }}>
             <Box borderWidth={"2px"} p="12" rounded={"10px"}>
               <Text fontWeight={"semibold"} textAlign="center">
                 Pendaftaran Kamar Rawat Inap
