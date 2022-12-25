@@ -23,6 +23,7 @@ const TableAdmin = ({ headTable, bodyTable }) => {
                     <Thead
                         borderBottom={'1px'}
                         borderColor={'#E0E0E0'}
+                        color={'#828282'}
                     >
                         {headTable}
                     </Thead>
