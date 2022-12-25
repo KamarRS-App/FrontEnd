@@ -12,6 +12,7 @@ import DataDiriPasien from "./pages/DataDiriPasien";
 import DetailCariRumahSakit from "./pages/DetailCariRumahSakit";
 import Dashboard from "./pages/Admin/Dashboard";
 import DetailDaftarRumahSakit from "./pages/DetailDaftarRumahSakit";
+import DashboardDailyPraktek from "./pages/Admin/DashboardDailyPraktek";
 import UserPage from "./pages/Admin/UserPage";
 import RoomPage from "./pages/Admin/RoomPage";
 import "@fontsource/plus-jakarta-sans/700.css";
@@ -38,6 +39,10 @@ function App() {
               element={<DetailDaftarRumahSakit />}
             />
             <Route path="/admin/dashboard" element={<Dashboard />} />
+            <Route
+              path="/admin/daily_praktek"
+              element={<DashboardDailyPraktek />}
+            />
             <Route path="/payment" element={<Pembayaran />} />
             <Route path="/admin/user" element={<UserPage />} />
             <Route path="/admin/profile" element={<SettingPage />} />
