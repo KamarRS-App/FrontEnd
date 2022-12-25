@@ -1,8 +1,10 @@
+
 import Pembayaran from "./pages/Pembayaran";
 import { ChakraProvider } from "@chakra-ui/react";
 import { Box } from "@chakra-ui/layout";
 import SettingPage from "./pages/Admin/SettingPage";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import './App.css';
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import HomePage from "./pages/HomePage";
