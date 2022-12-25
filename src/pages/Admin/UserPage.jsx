@@ -14,11 +14,14 @@ import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box } from '@chakra-ui/layout';
+import PopupDelete from '../../components/PopupDelete';
 
 
 const UserPage = () => {
     const { isOpen: isModalCreateOpen, onOpen: onModalCreateOpen, onClose: onCloseModalCreate } = useDisclosure();
     const { isOpen: isOpenModalEdit, onOpen: onOpenModalEdit, onClose: onCloseModalEdit } = useDisclosure();
+    const { isOpen: isOpenModalDelete, onOpen: onOpenModalDelete, onClose: onCloseModalDelete } = useDisclosure();
+
 
     const [name, setName] = useState();
     const [email, setEmail] = useState();
@@ -143,6 +146,7 @@ const UserPage = () => {
                                             <MdModeEdit />
                                         </Button>
                                         <Button
+                                            onClick={onOpenModalDelete}
                                             bg='transparent'
                                             border='1px'
                                             borderColor={'#E0E0E0'}
@@ -243,6 +247,14 @@ const UserPage = () => {
                         </FormControl>
                     </>
                 }
+            />
+
+            <PopupDelete 
+                isOpen={isOpenModalDelete}
+                onClose={onCloseModalDelete}
+                modalTitle={'Hapus Akun'}
+                modalBody={'Apakah anda yakin untuk menghapus akun?'}
+                deletet_name={'Hapus Akun'}
             />
         </LayoutAdmin>
     );

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import {
     Modal,
     ModalOverlay,
@@ -7,12 +7,7 @@ import {
     ModalFooter,
     ModalBody,
     ModalCloseButton,
-    useDisclosure,
     Button,
-    FormControl,
-    FormLabel,
-    Input,
-    Select,
     Text,
 } from '@chakra-ui/react'
 import { AiOutlineInfoCircle } from 'react-icons/ai';

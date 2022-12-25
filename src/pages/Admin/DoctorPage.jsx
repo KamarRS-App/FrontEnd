@@ -10,10 +10,12 @@ import { useDisclosure } from '@chakra-ui/hooks';
 import PopupAdmin from '../../components/PopupAdmin';
 import { FormControl, FormLabel } from '@chakra-ui/form-control';
 import { Input } from '@chakra-ui/input';
+import PopupDelete from '../../components/PopupDelete';
 
 const DoctorPage = () => {
     const { isOpen: isModalCreateOpen, onOpen: onModalCreateOpen, onClose: onCloseModalCreate } = useDisclosure();
     const { isOpen: isOpenModalEdit, onOpen: onOpenModalEdit, onClose: onCloseModalEdit } = useDisclosure();
+    const { isOpen: isOpenModalDelete, onOpen: onOpenModalDelete, onClose: onCloseModalDelete } = useDisclosure();
     return (
         <LayoutAdmin activeMenu={'doctor'}>
             <HeadAdmin title={'Manajemen Dokter'} isAdd={onModalCreateOpen} />
@@ -90,6 +92,7 @@ const DoctorPage = () => {
                                             <MdModeEdit />
                                         </Button>
                                         <Button
+                                            onClick={onOpenModalDelete}
                                             bg='transparent'
                                             border='1px'
                                             borderColor={'#E0E0E0'}
@@ -168,6 +171,14 @@ const DoctorPage = () => {
                         </FormControl>
                     </>
                 }
+            />
+
+            <PopupDelete 
+                modalTitle={'Hapus Dokter'}
+                isOpen={isOpenModalDelete}
+                onClose={onCloseModalDelete}
+                modalBody={'Apakah anda yakin menghapus dokter ini?'}
+                deletet_name={'Hapus Dokter'}
             />
         </LayoutAdmin>
     );
