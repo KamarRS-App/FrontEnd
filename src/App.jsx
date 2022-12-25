@@ -1,6 +1,8 @@
+
 import Pembayaran from "./pages/Pembayaran";
 import { ChakraProvider } from "@chakra-ui/react";
 import { Box } from "@chakra-ui/layout";
+import './App.css';
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import HomePage from "./pages/HomePage";
