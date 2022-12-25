@@ -34,22 +34,22 @@ const SettingPage = () => {
                 >
                     <FormControl>
                         <FormLabel color={'#CDD1E0'}>Nama</FormLabel>
-                        <Input type='text' id='name' />
+                        <Input type='text' id='name' borderColor={'#CDD1E0'} />
                     </FormControl>
 
                     <FormControl mt={'4'}>
                         <FormLabel color={'#CDD1E0'}>Email</FormLabel>
-                        <Input type='email' id='email' />
+                        <Input type='email' id='email' borderColor={'#CDD1E0'} />
                     </FormControl>
 
                     <FormControl mt={'4'}>
                         <FormLabel color={'#CDD1E0'}>Handphone</FormLabel>
-                        <Input type='text' id='handphone' />
+                        <Input type='text' id='handphone' borderColor={'#CDD1E0'} />
                     </FormControl>
 
                     <FormControl mt={4}>
                         <FormLabel color={'#CDD1E0'}>Role</FormLabel>
-                        <Select placeholder='Pilih Role' id='role'>
+                        <Select placeholder='Pilih Role' id='role' borderColor={'#CDD1E0'}>
                             <option>Admin</option>
                             <option>Super Admin</option>
                         </Select>
@@ -83,12 +83,12 @@ const SettingPage = () => {
                 >
                     <FormControl>
                         <FormLabel color={'#CDD1E0'}>Password Lama</FormLabel>
-                        <Input type='password' id='oldPassword' />
+                        <Input type='password' id='oldPassword' borderColor={'#CDD1E0'} />
                     </FormControl>
 
                     <FormControl mt={'4'}>
                         <FormLabel color={'#CDD1E0'}>Password Baru</FormLabel>
-                        <Input type='password' id='newPassword' />
+                        <Input type='password' id='newPassword' borderColor={'#CDD1E0'} />
                     </FormControl>
                     <Button
                         type='submit'
