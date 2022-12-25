@@ -278,7 +278,6 @@ const PatientPage = () => {
                                 <option>pendaftaran</option>
                                 <option>selesai</option>
                             </Select>
-                            {/* {errors.role && <FormErrorMessage>{errors.role.message}</FormErrorMessage>} */}
                         </FormControl>
 
                         <FormControl mt={4}>
