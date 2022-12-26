@@ -17,9 +17,9 @@ import {
 function DetailDaftarRumahSakit() {
   return (
     <Layout>
-      <Box px={36} py={10} my={10}>
-        <Flex>
-          <Box flexBasis={"70%"} mr={"30px"}>
+      <Box px={{ base: "5", sm: "10", xl: "36" }} py={10} my={10}>
+        <Flex direction={{ base: "column", xl: "row" }}>
+          <Box mr={{ base: "0", lg: "30px" }} className="basis-3/4">
             <Box borderWidth={"2px"} p="5" rounded={"10px"}>
               <Text fontWeight={"semibold"}>Login sebagai Almira Mahsa</Text>
               <Text color={"gray"}>Almira Mahsa (Google)</Text>
@@ -36,26 +36,26 @@ function DetailDaftarRumahSakit() {
               <Box mx={5} mt={10}>
                 <FormControl>
                   <Box>
-                    <Flex>
+                    <Flex direction={{ base: "column", xl: "row" }}>
                       <Box flexBasis={"45%"}>
                         <FormLabel>Nama Depan</FormLabel>
                         <Input type="text" />
                       </Box>
                       <Spacer />
-                      <Box flexBasis={"45%"}>
+                      <Box flexBasis={"45%"} pt={{ base: "5", xl: "0" }}>
                         <FormLabel>Nama Belakang</FormLabel>
                         <Input type="text" />
                       </Box>
                     </Flex>
                   </Box>
                   <Box mt={5}>
-                    <Flex>
+                    <Flex direction={{ base: "column", xl: "row" }}>
                       <Box flexBasis={"45%"}>
                         <FormLabel>Email</FormLabel>
                         <Input type="email" />
                       </Box>
                       <Spacer />
-                      <Box flexBasis={"45%"}>
+                      <Box flexBasis={"45%"} pt={{ base: "5", xl: "0" }}>
                         <FormLabel>No. Handphone</FormLabel>
                         <Input type="number" />
                       </Box>
@@ -76,52 +76,52 @@ function DetailDaftarRumahSakit() {
               <Box mx={5} mt={10}>
                 <FormControl>
                   <Box>
-                    <Flex>
+                    <Flex direction={{ base: "column", xl: "row" }}>
                       <Box flexBasis={"45%"}>
                         <FormLabel>Nama Depan</FormLabel>
                         <Input type="text" />
                       </Box>
                       <Spacer />
-                      <Box flexBasis={"45%"}>
+                      <Box flexBasis={"45%"} pt={{ base: "5", xl: "0" }}>
                         <FormLabel>Nama Belakang</FormLabel>
                         <Input type="text" />
                       </Box>
                     </Flex>
                   </Box>
                   <Box mt={5}>
-                    <Flex>
+                    <Flex direction={{ base: "column", xl: "row" }}>
                       <Box flexBasis={"45%"}>
                         <FormLabel>No. KTP</FormLabel>
                         <Input type="number" />
                       </Box>
                       <Spacer />
-                      <Box flexBasis={"45%"}>
+                      <Box flexBasis={"45%"} pt={{ base: "5", xl: "0" }}>
                         <FormLabel>No. BPJS</FormLabel>
                         <Input type="number" />
                       </Box>
                     </Flex>
                   </Box>
                   <Box mt={5}>
-                    <Flex>
+                    <Flex direction={{ base: "column", xl: "row" }}>
                       <Box flexBasis={"45%"}>
                         <FormLabel>Jenis Kelamin</FormLabel>
                         <Input type="text" />
                       </Box>
                       <Spacer />
-                      <Box flexBasis={"45%"}>
+                      <Box flexBasis={"45%"} pt={{ base: "5", xl: "0" }}>
                         <FormLabel>Usia</FormLabel>
                         <Input type="number" />
                       </Box>
                     </Flex>
                   </Box>
                   <Box mt={5}>
-                    <Flex>
+                    <Flex direction={{ base: "column", xl: "row" }}>
                       <Box flexBasis={"45%"}>
                         <FormLabel>Email</FormLabel>
                         <Input type="email" />
                       </Box>
                       <Spacer />
-                      <Box flexBasis={"45%"}>
+                      <Box flexBasis={"45%"} pt={{ base: "5", xl: "0" }}>
                         <FormLabel>No. Handphone</FormLabel>
                         <Input type="number" />
                       </Box>
@@ -132,13 +132,13 @@ function DetailDaftarRumahSakit() {
                     <Input type="text" />
                   </Box>
                   <Box mt={5}>
-                    <Flex>
+                    <Flex direction={{ base: "column", xl: "row" }}>
                       <Box flexBasis={"45%"}>
                         <FormLabel>Provinsi</FormLabel>
                         <Input type="text" />
                       </Box>
                       <Spacer />
-                      <Box flexBasis={"45%"}>
+                      <Box flexBasis={"45%"} pt={{ base: "5", xl: "0" }}>
                         <FormLabel>Kabupaten / Kota</FormLabel>
                         <Input type="number" />
                       </Box>
@@ -149,13 +149,13 @@ function DetailDaftarRumahSakit() {
                     <Input type="text" />
                   </Box>
                   <Box mt={5}>
-                    <Flex>
+                    <Flex direction={{ base: "column", xl: "row" }}>
                       <Box flexBasis={"45%"}>
                         <FormLabel>Provinsi</FormLabel>
                         <Input type="text" />
                       </Box>
                       <Spacer />
-                      <Box flexBasis={"45%"}>
+                      <Box flexBasis={"45%"} pt={{ base: "5", xl: "0" }}>
                         <FormLabel>Kabupaten / Kota</FormLabel>
                         <Input type="number" />
                       </Box>
@@ -170,7 +170,7 @@ function DetailDaftarRumahSakit() {
               </Box>
             </Box>
           </Box>
-          <Box flexBasis={"30%"}>
+          <Box>
             <Box borderWidth={"2px"} p="12" rounded={"10px"}>
               <Text fontWeight={"semibold"} textAlign="center">
                 Pendaftaran Kamar Rawat Inap
