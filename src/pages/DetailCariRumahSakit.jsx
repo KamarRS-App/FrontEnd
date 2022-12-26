@@ -24,13 +24,22 @@ function DetailCariRumahSakit() {
   return (
     <Layout>
       <Box minW="100%" minH="100vh" h="100%">
-        <Box px={{ base:'10', sm:'12', md:'16',lg:'24', xl:'36' }} pt='10' pb='36' minH="100vh" h="100%">
+        <Box
+          px={{ base: "10", sm: "12", md: "16", lg: "24", xl: "36" }}
+          pt="10"
+          pb="36"
+          minH="100vh"
+          h="100%"
+        >
           <Box w="100%">
-            <Flex
-              direction={{ base:'column', sm:'column', md:'row' }}
-            >
+            <Flex direction={{ base: "column", sm: "column", md: "row" }}>
               <Box h="fit" rounded="20px" borderWidth="2px" flexBasis="1/2">
-                <Image src={gambarRoemahSakit} w="100%" rounded="20px" p="10px" />
+                <Image
+                  src={gambarRoemahSakit}
+                  w="100%"
+                  rounded="20px"
+                  p="10px"
+                />
               </Box>
               <Box
                 ml={{ base: "60px", lg: "40px", md: "20px" }}
@@ -40,15 +49,17 @@ function DetailCariRumahSakit() {
                 mx="0"
                 flexBasis="1/2"
               >
-                <Text fontWeight="bold">RS Haji Surabaya</Text>
-                <Text color="gray">
-                  Jalan Manyar Kertoadi No 13, Klampisngasem, Kec. Sukolilo, Kota
-                  Surabaya, Jawa Timur 60116
-                </Text>
-                <Text fontWeight="bold">Kontak:</Text>
-                <Text color="gray">0812121212</Text>
-                <Text fontWeight="bold">Jam Buka:</Text>
-                <Text color="gray">Open 24 hours</Text>
+                <Box mt={{ base: 5, md: 0 }}>
+                  <Text fontWeight="bold">RS Haji Surabaya</Text>
+                  <Text color="gray">
+                    Jalan Manyar Kertoadi No 13, Klampisngasem, Kec. Sukolilo,
+                    Kota Surabaya, Jawa Timur 60116
+                  </Text>
+                  <Text fontWeight="bold">Kontak:</Text>
+                  <Text color="gray">0812121212</Text>
+                  <Text fontWeight="bold">Jam Buka:</Text>
+                  <Text color="gray">Open 24 hours</Text>
+                </Box>
               </Box>
             </Flex>
           </Box>
@@ -114,8 +125,8 @@ function DetailCariRumahSakit() {
                     <Td color="green">Tersedia</Td>
                     <Td>
                       <Button
-                        bg='#3AB8FF'
-                        _hover={{ bg: 'alta.primary' }}
+                        bg="#3AB8FF"
+                        _hover={{ bg: "alta.primary" }}
                         color="white"
                         borderWidth="2px"
                       >
@@ -131,8 +142,8 @@ function DetailCariRumahSakit() {
                     <Td color="green">Tersedia</Td>
                     <Td>
                       <Button
-                        bg='#3AB8FF'
-                        _hover={{ bg: 'alta.primary' }}
+                        bg="#3AB8FF"
+                        _hover={{ bg: "alta.primary" }}
                         color="white"
                         borderWidth="2px"
                       >
@@ -148,8 +159,8 @@ function DetailCariRumahSakit() {
                     <Td color="green">Tersedia</Td>
                     <Td>
                       <Button
-                        bg='#3AB8FF'
-                        _hover={{ bg: 'alta.primary' }}
+                        bg="#3AB8FF"
+                        _hover={{ bg: "alta.primary" }}
                         color="white"
                         borderWidth="2px"
                       >

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../assets/images/logo.png";
 import roomImage from "../assets/images/room.png";
 import googleLogo from "../assets/images/googlelogo.png";
@@ -10,8 +10,20 @@ import { Divider } from "@chakra-ui/react";
 import { Flex, Spacer } from "@chakra-ui/react";
 import { Image } from "@chakra-ui/react";
 import { Box } from "@chakra-ui/react";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+let schema = yup.object().shape({
+  email: yup.string().required("Harap masukkan email").email("Email salah"),
+  password: yup.string().min(8).max(32).required("Harap masukkan password"),
+});
 
 function Login() {
+  const { register, handleSubmit, errors } = useForm({
+    resolver: yupResolver(schema),
+  });
+
   return (
     <Box minH={"100%"}>
       <Box>
@@ -112,13 +124,13 @@ function Login() {
                     Email:
                   </label>{" "}
                   <br />
-                  <Input placeholder="email@gmail.com" mb="5" />
+                  <Input placeholder="email@gmail.com" mb="5" name="email" />
                   <br />
                   <label for="password" className="text-slate-500">
                     Password:
                   </label>{" "}
                   <br />
-                  <Input placeholder="password" />
+                  <Input placeholder="password" name="password" />
                 </form>
               </Box>
             </Box>
@@ -138,6 +150,7 @@ function Login() {
               mt="10"
               backgroundColor="alta.primary"
               _hover={{ bg: "#3AB8FF" }}
+              onClick=""
             >
               Login
             </Button>

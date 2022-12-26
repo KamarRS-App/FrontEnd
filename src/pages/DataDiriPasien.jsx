@@ -26,8 +26,12 @@ function DataDiriPasien() {
             <Text fontSize="2xl" color="alta.primary" className="font-semibold">
               Data Diri Pasien
             </Text>
-            <Box className="text-end" pt={10}>
-              <Button bg='#3AB8FF' _hover={{ bg:'alta.primary' }} color="white">
+            <Box textAlign={{ base: "start", md: "end" }} pt={10}>
+              <Button
+                bg="#3AB8FF"
+                _hover={{ bg: "alta.primary" }}
+                color="white"
+              >
                 Hapus Akun x
               </Button>
             </Box>
@@ -47,7 +51,13 @@ function DataDiriPasien() {
               </Text>
             </Box>
             <Box mt={20}>
-              <Grid templateColumns="repeat(2, 1fr)" gap={10}>
+              <Grid
+                templateColumns={{
+                  base: "repeat(1, 1fr)",
+                  md: "repeat(2, 1fr)",
+                }}
+                gap={10}
+              >
                 <GridItem w="100%" h="100%">
                   <FormControl isRequired>
                     <FormLabel>Nama Depan:</FormLabel>
@@ -106,7 +116,14 @@ function DataDiriPasien() {
                   <Input />
                 </FormControl>
               </Box>
-              <Grid templateColumns="repeat(2, 1fr)" gap={10} mt="10">
+              <Grid
+                templateColumns={{
+                  base: "repeat(1, 1fr)",
+                  md: "repeat(2, 1fr)",
+                }}
+                gap={10}
+                mt="10"
+              >
                 <GridItem w="100%" h="100%">
                   <FormControl isRequired>
                     <FormLabel>Provinsi</FormLabel>
@@ -176,7 +193,9 @@ function DataDiriPasien() {
                           </label>
                         </span>
                       </Text>
-                      <Text color={"#676767"}>Supported formates: JPEG, PNG</Text>
+                      <Text color={"#676767"}>
+                        Supported formates: JPEG, PNG
+                      </Text>
                     </Grid>
                   </label>
                 </Box>
@@ -221,14 +240,22 @@ function DataDiriPasien() {
                           </label>
                         </span>
                       </Text>
-                      <Text color={"#676767"}>Supported formates: JPEG, PNG</Text>
+                      <Text color={"#676767"}>
+                        Supported formates: JPEG, PNG
+                      </Text>
                     </Grid>
                   </label>
                 </Box>
               </FormControl>
             </Box>
             <Box mt={16} textAlign="end">
-              <Button bg='#3AB8FF' color='white' _hover={{ bg:'alta.primary' }}>Simpan</Button>
+              <Button
+                bg="#3AB8FF"
+                color="white"
+                _hover={{ bg: "alta.primary" }}
+              >
+                Simpan
+              </Button>
             </Box>
           </Box>
         </Box>

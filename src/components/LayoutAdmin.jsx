@@ -25,7 +25,7 @@ const LayoutAdmin = ({children, activeMenu}) => {
             <Box
                 width={{ base:'90%',sm:'90%',md:'75%', lg:'75%' }}
                 bg='#FAFAFA'
-                p='10'
+                p={{ base:'5',sm:'8',md:'10' }}
             >
                 {children}
 
