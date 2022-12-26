@@ -10,8 +10,34 @@ import { Divider } from "@chakra-ui/react";
 import { Flex, Spacer } from "@chakra-ui/react";
 import { Image } from "@chakra-ui/react";
 import { Box } from "@chakra-ui/react";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+const schema = yup.object().shape({
+  username: yup.string().required("Harap masukkan username"),
+  email: yup
+    .string()
+    .required("Harap masukkan email")
+    .email("Format email salah"),
+  nomorhape: yup.number().typeError("Harap masukkan nomor hp").required(),
+  password: yup
+    .string()
+    .required("Harap masukkan password")
+    .min(8, "Password setidaknya 8 karakter"),
+});
 
 function Register() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  const onSubmit = (data) => console.log(data);
+
   return (
     <Box minH={"100%"}>
       <Box>
@@ -108,25 +134,40 @@ function Register() {
             <Box className="flex flex-col">
               <Box className="text-start w-full">
                 <form>
-                  <Input placeholder="Masukkan username" mb="5" />
+                  <Input
+                    {...register("username")}
+                    placeholder="Masukkan username"
+                    name="username"
+                  />
+                  <Text color={"red"}>{errors.username?.message}</Text>
                   <br />
-                  <Input placeholder="Masukkan email" mb="5" />
+                  <Input {...register("email")} placeholder="Masukkan email" />
+                  <Text color={"red"}>{errors.email?.message}</Text>
                   <br />
-                  <Input placeholder="Masukkan nomor hp" mb="5" />
+                  <Input
+                    {...register("nomorhape")}
+                    placeholder="Masukkan nomor hp"
+                  />
+                  <Text color="red">{errors.nomorhape?.message}</Text>
                   <br />
-                  <Input placeholder="Masukkan password" />
+                  <Input
+                    {...register("password")}
+                    placeholder="Masukkan password"
+                  />
+                  <Text color={"red"}>{errors.password?.message}</Text>
+                  <Button
+                    color="white"
+                    width="100%"
+                    mt="10"
+                    backgroundColor="alta.primary"
+                    _hover={{ bg: "#3AB8FF" }}
+                    onClick={handleSubmit(onSubmit)}
+                  >
+                    Sign Up
+                  </Button>
                 </form>
               </Box>
             </Box>
-            <Button
-              color="white"
-              width="100%"
-              mt="10"
-              backgroundColor="alta.primary"
-              _hover={{ bg: "#3AB8FF" }}
-            >
-              Sign Up
-            </Button>
             <Flex align="center" mt="8">
               <Divider />
               <Text width="100%" align="center">
