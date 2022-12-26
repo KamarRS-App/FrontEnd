@@ -11,7 +11,7 @@ import DetailDaftarRumahSakit from './pages/DetailDaftarRumahSakit';
 import Pembayaran from './pages/Pembayaran';
 import Payment from './pages/Payment';
 import PembayaranSelesai from './pages/PembayaranSelesai';
-
+import CariDokter from './pages/CariDokter';
 function App() {
   return (
     <BrowserRouter>
@@ -31,6 +31,7 @@ function App() {
         {/*<Pembayaran /> */}
         <Route path="/payment" element={<Payment />} />
         <Route path="pembayaran/selesai" element={<PembayaranSelesai />} />
+        <Route path="cari/dokter" element={<CariDokter />} />
       </Routes>
     </BrowserRouter>
   );
