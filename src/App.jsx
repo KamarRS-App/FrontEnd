@@ -21,6 +21,7 @@ import "@fontsource/plus-jakarta-sans/500.css";
 import "@fontsource/plus-jakarta-sans/600.css";
 import theme from "../utils/extendedTheme";
 import "./App.css";
+import ProfileHospitalPage from "./pages/Admin/ProfileHospitalPage";
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
             <Route path="/admin/user" element={<UserPage />} />
             <Route path="/admin/profile" element={<SettingPage />} />
             <Route path="/admin/room" element={<RoomPage />} />
+            <Route path="/admin/hospital/profile" element={<ProfileHospitalPage />} />
           </Routes>
         </Box>
       </ChakraProvider>

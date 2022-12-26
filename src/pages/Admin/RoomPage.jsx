@@ -210,7 +210,6 @@ const RoomPage = () => {
                             <FormLabel>Kelas</FormLabel>
                             <Input placeholder='Kelas Ruangan' type={'text'} id='kelas' />
                             {/* {errors.email && <FormErrorMessage>{errors.email.message}</FormErrorMessage>} */}
-
                         </FormControl>
 
                         <FormControl mt={4}>

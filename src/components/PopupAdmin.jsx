@@ -22,10 +22,14 @@ const PopupAdmin = ({ isOpen, onClose, modalBody, submitButton, modalTitle }) =>
         <Modal
             isOpen={isOpen}
             onClose={onClose}
-            size='xl'
+            size={{ base:'xs',sm:'sm',md:'lg',lg:'xl' }}
         >
             <ModalOverlay />
-            <ModalContent>
+            <ModalContent
+                px={{base:'5',sm:'8',md:'10'}}
+                py={'5'}
+                borderRadius={'3xl'}
+            >
                 <ModalHeader
                     color={'#1FA8F6'}
                     fontSize='3xl'
@@ -40,12 +44,22 @@ const PopupAdmin = ({ isOpen, onClose, modalBody, submitButton, modalTitle }) =>
                 </ModalHeader>
                 <ModalCloseButton />
                 <form onSubmit={submitButton}>
-                    <ModalBody pb={6}>
+                    <ModalBody pb={20}>
                         {modalBody}
                     </ModalBody>
 
                     <ModalFooter>
-                        <Button colorScheme='blue' type='submit' mr={3}>
+                        <Button
+                            type='submit'
+                            mr={3}
+                            bg='#3AB8FF'
+                            color={'white'}
+                            fontSize={'14px'}
+                            fontWeight={'700'}
+                            width={'150px'}
+                            height={'50px'}
+                            _hover={{ bg:'alta.primary' }}
+                        >
                             Simpan
                         </Button>
                         {/* <Button onClick={onClose}>Cancel</Button> */}
