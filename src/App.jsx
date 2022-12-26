@@ -24,6 +24,7 @@ import theme from "../utils/extendedTheme";
 import "./App.css";
 import DoctorPage from "./pages/Admin/DoctorPage";
 import ProfileHospitalPage from "./pages/Admin/ProfileHospitalPage";
+import LoginAdmin from "./pages/Admin/LoginAdmin";
 
 function App() {
   return (
@@ -53,6 +54,7 @@ function App() {
             <Route path="/admin/patient" element={<PatientPage />} />
             <Route path="/admin/doctor" element={<DoctorPage />} />
             <Route path="/admin/hospital/profile" element={<ProfileHospitalPage />} />
+            <Route path="/admin/login" element={<LoginAdmin />} />
           </Routes>
         </Box>
       </ChakraProvider>
