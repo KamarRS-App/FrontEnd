@@ -12,26 +12,13 @@ import LayoutAdmin from "../../components/LayoutAdmin";
 import addButton from "../../assets/images/addButton.svg";
 import filterButton from "../../assets/images/filterButton.svg";
 import searchIcon from "../../assets/images/searchIcon.svg";
+import HeadAdmin from "../../components/HeadAdmin";
 
 function DashboardDailyPraktek() {
   return (
     <LayoutAdmin activeMenu={"doctor"}>
+      <HeadAdmin title="Manajemen Dokter" />
       <Box>
-        <Box border={"2px"} borderColor="white" backgroundColor="white" p={5}>
-          <Flex justifyContent={"space-between"}>
-            <Text color={"alta.primary"} fontWeight="semibold" fontSize={"xl"}>
-              Manajemen Dokter
-            </Text>
-            <Box>
-              <Button color={"black"} variant="outline" mr={2}>
-                <Image src={addButton} />
-              </Button>
-              <Button color={"black"} variant="outline">
-                <Image src={filterButton} />
-              </Button>
-            </Box>
-          </Flex>
-        </Box>
         <Box backgroundColor="white" mt={5} minH="600px" p={5}>
           <Box>
             <Flex justifyContent={"end"}>
