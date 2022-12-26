@@ -13,11 +13,15 @@ import { Select } from '@chakra-ui/select';
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Box } from '@chakra-ui/layout';
+import PopupDelete from '../../components/PopupDelete';
 
 
 const UserPage = () => {
     const { isOpen: isModalCreateOpen, onOpen: onModalCreateOpen, onClose: onCloseModalCreate } = useDisclosure();
     const { isOpen: isOpenModalEdit, onOpen: onOpenModalEdit, onClose: onCloseModalEdit } = useDisclosure();
+    const { isOpen: isOpenModalDelete, onOpen: onOpenModalDelete, onClose: onCloseModalDelete } = useDisclosure();
+
 
     const [name, setName] = useState();
     const [email, setEmail] = useState();
@@ -63,7 +67,99 @@ const UserPage = () => {
                 title={'Manajemen Admin'}
                 isAdd={onModalCreateOpen}
             />
-
+            <Box
+                mt={'5'}
+                py={'10'}
+                bg='white'
+            >
+                <TableAdmin
+                    headTable={
+                        <Tr>
+                            <Td
+                                fontWeight={'400'}
+                                textAlign='center'
+                                fontSize={'18px'}
+                            >
+                                No
+                            </Td>
+                            <Td
+                                fontWeight={'400'}
+                                fontSize={'18px'}
+                                textAlign='center'
+                            >
+                                Nama
+                            </Td>
+                            <Td
+                                fontWeight={'400'}
+                                fontSize={'18px'}
+                                textAlign='center'
+                            >
+                                Email
+                            </Td>
+                            <Td
+                                fontWeight={'400'}
+                                fontSize={'18px'}
+                                textAlign='center'
+                            >
+                                Handphone
+                            </Td>
+                            <Td
+                                fontWeight={'400'}
+                                fontSize={'18px'}
+                                textAlign='center'
+                            >
+                                Role
+                            </Td>
+                            <Td
+                                fontWeight={'400'}
+                                fontSize={'18px'}
+                                textAlign='center'
+                            >
+                                Actions
+                            </Td>
+                        </Tr>
+                    }
+                    bodyTable={
+                        testTable.map(data => (
+                            <Tr key={data.no}>
+                                <Td
+                                    textAlign='center'
+                                >
+                                    {data.no}
+                                </Td>
+                                <Td>
+                                    {data.name}
+                                </Td>
+                                <Td>{data.email}</Td>
+                                <Td>{data.handphone}</Td>
+                                <Td>{data.role}</Td>
+                                <Td
+                                    textAlign='center'
+                                >
+                                    <ButtonGroup gap='4'>
+                                        <Button
+                                            onClick={onOpenModalEdit}
+                                            bg='transparent'
+                                            border='1px'
+                                            borderColor={'#E0E0E0'}
+                                        >
+                                            <MdModeEdit />
+                                        </Button>
+                                        <Button
+                                            onClick={onOpenModalDelete}
+                                            bg='transparent'
+                                            border='1px'
+                                            borderColor={'#E0E0E0'}
+                                        >
+                                            <MdOutlineDeleteOutline />
+                                        </Button>
+                                    </ButtonGroup>
+                                </Td>
+                            </Tr>
+                        ))
+                    }
+                />
+            </Box>
             <PopupAdmin
                 isOpen={isOpenModalEdit}
                 onClose={onCloseModalEdit}
@@ -152,91 +248,13 @@ const UserPage = () => {
                     </>
                 }
             />
-            <TableAdmin
-                headTable={
-                    <Tr>
-                        <Td
-                            fontWeight={'400'}
-                            textAlign='center'
-                            fontSize={'18px'}
-                        >
-                            No
-                        </Td>
-                        <Td
-                            fontWeight={'400'}
-                            fontSize={'18px'}
-                            textAlign='center'
-                        >
-                            Nama
-                        </Td>
-                        <Td
-                            fontWeight={'400'}
-                            fontSize={'18px'}
-                            textAlign='center'
-                        >
-                            Email
-                        </Td>
-                        <Td
-                            fontWeight={'400'}
-                            fontSize={'18px'}
-                            textAlign='center'
-                        >
-                            Handphone
-                        </Td>
-                        <Td
-                            fontWeight={'400'}
-                            fontSize={'18px'}
-                            textAlign='center'
-                        >
-                            Role
-                        </Td>
-                        <Td
-                            fontWeight={'400'}
-                            fontSize={'18px'}
-                            textAlign='center'
-                        >
-                            Actions
-                        </Td>
-                    </Tr>
-                }
-                bodyTable={
-                    testTable.map(data => (
-                        <Tr key={data.no}>
-                            <Td
-                                textAlign='center'
-                            >
-                                {data.no}
-                            </Td>
-                            <Td>
-                                {data.name}
-                            </Td>
-                            <Td>{data.email}</Td>
-                            <Td>{data.handphone}</Td>
-                            <Td>{data.role}</Td>
-                            <Td
-                                textAlign='center'
-                            >
-                                <ButtonGroup gap='4'>
-                                    <Button
-                                        onClick={onOpenModalEdit}
-                                        bg='transparent'
-                                        border='1px'
-                                        borderColor={'#E0E0E0'}
-                                    >
-                                        <MdModeEdit />
-                                    </Button>
-                                    <Button
-                                        bg='transparent'
-                                        border='1px'
-                                        borderColor={'#E0E0E0'}
-                                    >
-                                        <MdOutlineDeleteOutline />
-                                    </Button>
-                                </ButtonGroup>
-                            </Td>
-                        </Tr>
-                    ))
-                }
+
+            <PopupDelete 
+                isOpen={isOpenModalDelete}
+                onClose={onCloseModalDelete}
+                modalTitle={'Hapus Akun'}
+                modalBody={'Apakah anda yakin untuk menghapus akun?'}
+                deletet_name={'Hapus Akun'}
             />
         </LayoutAdmin>
     );

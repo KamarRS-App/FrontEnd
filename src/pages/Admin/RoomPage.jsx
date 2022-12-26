@@ -5,10 +5,12 @@ import TableAdmin from '../../components/TableAdmin';
 import { Box, Button, ButtonGroup, FormControl, FormLabel, HStack, Input, Select, Td, Tr, useDisclosure, useNumberInput } from '@chakra-ui/react';
 import { MdModeEdit, MdOutlineDeleteOutline } from 'react-icons/md';
 import PopupAdmin from '../../components/PopupAdmin';
+import PopupDelete from '../../components/PopupDelete';
 
 const RoomPage = () => {
     const { isOpen: isModalCreateOpen, onOpen: onModalCreateOpen, onClose: onCloseModalCreate } = useDisclosure();
-    const { isOpen: isOpenModalEdit, onOpen: onOpenModalEdit, onClose: onCloseModalEdit } = useDisclosure()
+    const { isOpen: isOpenModalEdit, onOpen: onOpenModalEdit, onClose: onCloseModalEdit } = useDisclosure();
+    const { isOpen: isOpenModalDelete, onOpen: onOpenModalDelete, onClose: onCloseModalDelete } = useDisclosure();
 
     const { getInputProps: inputBed, getIncrementButtonProps: incBed, getDecrementButtonProps: decBed } =
         useNumberInput({
@@ -181,6 +183,7 @@ const RoomPage = () => {
                                             <MdModeEdit />
                                         </Button>
                                         <Button
+                                            onClick={onOpenModalDelete}
                                             bg='transparent'
                                             border='1px'
                                             borderColor={'#E0E0E0'}
@@ -389,6 +392,14 @@ const RoomPage = () => {
                         </FormControl>
                     </>
                 }
+            />
+
+            <PopupDelete 
+                isOpen={isOpenModalDelete}
+                onClose={onCloseModalDelete}
+                modalBody={'Apakah anda yakin menghapus ruangan ini?'}
+                modalTitle={'Hapus Ruangan'}
+                deletet_name={'Hapus Ruangan'}
             />
         </LayoutAdmin>
 
