@@ -5,7 +5,7 @@ import { Grid, GridItem, SimpleGrid } from '@chakra-ui/react';
 function HeaderCariDokter() {
   return (
     <Center>
-      <SimpleGrid columns={2} align="flex-start">
+      <SimpleGrid columns={2} align="flex-start" flexBasis={{ base: '100%', md: 'auto' }}>
         <Center>
           <Box color="#1FA8F6" w={400} h={529} mt={50} mr={10}>
             <Heading fontWeight={600} fontSize={48}>

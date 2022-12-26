@@ -3,6 +3,7 @@ import { Card, CardHeader, CardBody, CardFooter, Stack, Heading, Text, Button, I
 import { Box } from '@chakra-ui/react';
 import { Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer, Icon } from '@chakra-ui/react';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
+import { Link } from '@chakra-ui/react';
 function CardCariDokter() {
   return (
     <Box m={10} w="full" cursor="pointer">
@@ -14,9 +15,10 @@ function CardCariDokter() {
         <Image objectFit="cover" maxW={{ base: '100%', sm: '200px' }} src="/public/images/doctor-dummy-3.png" alt="doctor achraf" />
         <Box>
           <CardHeader>
-            <Button colorScheme="teal" variant="link" mt={2} fontWeight={600} fontSize={24} color="#19345E">
+            <Link href="/detail/dokter" colorScheme="teal" variant="link" mt={2} fontWeight={600} fontSize={24} color="#19345E">
+              {' '}
               dr. Achraf Hakimi, Sp.An-KIC, FIP
-            </Button>
+            </Link>
           </CardHeader>
 
           <CardBody>
