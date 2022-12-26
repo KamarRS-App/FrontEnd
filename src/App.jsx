@@ -15,6 +15,7 @@ import DetailDaftarRumahSakit from "./pages/DetailDaftarRumahSakit";
 import DashboardDailyPraktek from "./pages/Admin/DashboardDailyPraktek";
 import UserPage from "./pages/Admin/UserPage";
 import RoomPage from "./pages/Admin/RoomPage";
+import PatientPage from "./pages/Admin/PatientPage";
 import "@fontsource/plus-jakarta-sans/700.css";
 import "@fontsource/plus-jakarta-sans/400.css";
 import "@fontsource/plus-jakarta-sans/500.css";
@@ -49,6 +50,7 @@ function App() {
             <Route path="/admin/user" element={<UserPage />} />
             <Route path="/admin/profile" element={<SettingPage />} />
             <Route path="/admin/room" element={<RoomPage />} />
+            <Route path="/admin/patient" element={<PatientPage />} />
             <Route path="/admin/doctor" element={<DoctorPage />} />
             <Route path="/admin/hospital/profile" element={<ProfileHospitalPage />} />
           </Routes>
