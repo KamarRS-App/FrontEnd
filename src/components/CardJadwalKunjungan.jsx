@@ -9,9 +9,9 @@ import { SearchIcon } from '@chakra-ui/icons';
 function CardJadwalKunjungan() {
   let navigate = useNavigate();
   return (
-    <Box>
+    <Box align="center">
       {' '}
-      <Card w={300}>
+      <Card w={300} mr={20}>
         <Box>
           <Text color="#072051" fontSize={15} fontWeight={500} m={7}>
             Pilih Jadwal Kunjungan
@@ -125,7 +125,9 @@ function CardJadwalKunjungan() {
             </AccordionPanel>
           </AccordionItem>
         </Accordion>
-        <Button>Buat Janji</Button>
+        <Button href="#" mt={10}>
+          Buat Janji
+        </Button>
       </Card>
     </Box>
   );

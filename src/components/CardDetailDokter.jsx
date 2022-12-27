@@ -1,16 +1,16 @@
-import { Box, SimpleGrid, Image, Center, Card, Flex } from '@chakra-ui/react';
+import { Box, SimpleGrid, Image, Center, Card, Flex, Wrap } from '@chakra-ui/react';
 import React from 'react';
 import CardProfilDokter from './CardProfilDokter';
 import CardJadwalKunjungan from './CardJadwalKunjungan';
 
 function CardDetailDokter() {
   return (
-    <SimpleGrid spacing={2} templateColumns="repeat(auto-fill, minmax(400px, 1fr))" m={10} align="center">
-      <Center>
+    <SimpleGrid spacing={2} templateColumns="repeat(auto-fill, minmax(400px, 1fr))">
+      <Wrap align="center">
         <Box flexDirection="row">
-          <Image w={[150, 250, 320]} src="/public/images/doctor-dummy-3-big.png" mb={100}></Image>
+          <Image w={[250, 250, 300]} src="/public/images/doctor-dummy-3-big.png" mb={100} ml={10}></Image>
         </Box>
-      </Center>
+      </Wrap>
       <CardProfilDokter />
       <CardJadwalKunjungan />
     </SimpleGrid>
