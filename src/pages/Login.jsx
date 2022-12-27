@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../assets/images/logo.png";
 import roomImage from "../assets/images/room.png";
 import googleLogo from "../assets/images/googlelogo.png";
@@ -10,8 +10,33 @@ import { Divider } from "@chakra-ui/react";
 import { Flex, Spacer } from "@chakra-ui/react";
 import { Image } from "@chakra-ui/react";
 import { Box } from "@chakra-ui/react";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+const schema = yup.object().shape({
+  email: yup
+    .string()
+    .required("Harap masukkan email")
+    .email("Format email salah"),
+  password: yup
+    .string()
+    .required("Harap masukkan password")
+    .min(8, "Password setidaknya harus 8 karakter")
+    .max(32, "Password maksimal 32 karakter"),
+});
 
 function Login() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  const onSubmit = (data) => console.log(data);
+
   return (
     <Box minH={"100%"}>
       <Box>
@@ -112,35 +137,46 @@ function Login() {
                     Email:
                   </label>{" "}
                   <br />
-                  <Input placeholder="email@gmail.com" mb="5" />
+                  <Input
+                    {...register("email")}
+                    placeholder="email@gmail.com"
+                    name="email"
+                  />
+                  <Text color="red">{errors.email?.message}</Text>
                   <br />
                   <label for="password" className="text-slate-500">
                     Password:
                   </label>{" "}
                   <br />
-                  <Input placeholder="password" />
+                  <Input
+                    {...register("password")}
+                    placeholder="password"
+                    name="password"
+                  />
+                  <Text color="red">{errors.password?.message}</Text>
+                  <Box className="flex flex-row mt-5 justify-between">
+                    <Box>
+                      <input
+                        type="checkbox"
+                        className="checkbox checkbox-xs mr-2 border-gray-500"
+                      />
+                      <label for="rememberme">Remember me</label>
+                    </Box>
+                    <Link color="red">Lupa Password</Link>
+                  </Box>
+                  <Button
+                    color="white"
+                    width="100%"
+                    mt="10"
+                    backgroundColor="alta.primary"
+                    _hover={{ bg: "#3AB8FF" }}
+                    onClick={handleSubmit(onSubmit)}
+                  >
+                    Login
+                  </Button>
                 </form>
               </Box>
             </Box>
-            <Box className="flex flex-row mt-5 justify-between">
-              <Box>
-                <input
-                  type="checkbox"
-                  className="checkbox checkbox-xs mr-2 border-gray-500"
-                />
-                <label for="rememberme">Remember me</label>
-              </Box>
-              <Link color="red">Lupa Password</Link>
-            </Box>
-            <Button
-              color="white"
-              width="100%"
-              mt="10"
-              backgroundColor="alta.primary"
-              _hover={{ bg: "#3AB8FF" }}
-            >
-              Login
-            </Button>
             <Flex align="center" mt="10">
               <Divider />
               <Text width="100%" align="center">

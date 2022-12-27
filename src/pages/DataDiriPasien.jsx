@@ -16,8 +16,53 @@ import { Input } from "@chakra-ui/react";
 import { Select } from "@chakra-ui/react";
 import UploadIcon from "../assets/images/UploadIcon.png";
 import Layout from "../components/Layout";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { error } from "daisyui/src/colors";
+
+const schema = yup.object().shape({
+  namaDepan: yup.string().required("Harap masukkan nama depan"),
+  namaBelakang: yup.string().required("Harap masukkan nama belakang"),
+  noKTP: yup.number().typeError("Harap masukkan nomor KTP").required(),
+  noBPJS: yup.number().typeError("Harap masukkan nomor BPJS").required(),
+  jenisKelamin: yup.string().required("Harap pilih satu jenis kelamin"),
+  usia: yup
+    .number()
+    .typeError("Harap masukkan usia")
+    .positive("Usia haruslah bilangan positif"),
+  email: yup.string().required("Harap isi email").email("Format email salah"),
+  nomorhape: yup.number().typeError("Harap masukkan nomor hp").required(),
+  domisili: yup.string().required("Harap masukkan alamat domisili"),
+  provinsi: yup.string().required("Harap pilih provinsi asal"),
+  kota: yup.string().required("Harap pilih kabupaten/kota asal"),
+  riwayat: yup.string().required("Harap masukkan riwayat penyakit pasien"),
+  fotoKTP: yup
+    .mixed()
+    .required("Harap upload foto KTP")
+    .test(
+      "fileSize",
+      "Ukuran file terlalu besar, max 10MB",
+      (value) => value && value.size <= 100 * 1024
+    )
+    .test(
+      "fileFormat",
+      "Format file tidak didukung",
+      (value) => value && ["image/jpg", "image/jpeg"].includes(value.type)
+    ),
+});
 
 function DataDiriPasien() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  const onSubmit = (data) => console.log(data);
+
   return (
     <Layout>
       <Box w="full" h="full" color="black">
@@ -26,8 +71,12 @@ function DataDiriPasien() {
             <Text fontSize="2xl" color="alta.primary" className="font-semibold">
               Data Diri Pasien
             </Text>
-            <Box className="text-end" pt={10}>
-              <Button bg='#3AB8FF' _hover={{ bg:'alta.primary' }} color="white">
+            <Box textAlign={{ base: "start", md: "end" }} pt={10}>
+              <Button
+                bg="#3AB8FF"
+                _hover={{ bg: "alta.primary" }}
+                color="white"
+              >
                 Hapus Akun x
               </Button>
             </Box>
@@ -47,87 +96,121 @@ function DataDiriPasien() {
               </Text>
             </Box>
             <Box mt={20}>
-              <Grid templateColumns="repeat(2, 1fr)" gap={10}>
+              <Grid
+                templateColumns={{
+                  base: "repeat(1, 1fr)",
+                  md: "repeat(2, 1fr)",
+                }}
+                gap={10}
+              >
                 <GridItem w="100%" h="100%">
                   <FormControl isRequired>
                     <FormLabel>Nama Depan:</FormLabel>
-                    <Input />
+                    <Input name="namaDepan" {...register("namaDepan")} />
+                    <Text color={"red"}>{errors.namaDepan?.message}</Text>
                   </FormControl>
                 </GridItem>
                 <GridItem w="100%" h="100%">
                   <FormControl isRequired>
                     <FormLabel>Nama Belakang</FormLabel>
-                    <Input />
+                    <Input {...register("namaBelakang")} />
+                    <Text color="red">{errors.namaBelakang?.message}</Text>
                   </FormControl>
                 </GridItem>
                 <GridItem w="100%" h="100%">
                   <FormControl isRequired>
                     <FormLabel>No. KTP</FormLabel>
-                    <Input type="number" />
+                    <Input {...register("noKTP")} type="number" />
+                    <Text color="red">{errors.noKTP?.message}</Text>
                   </FormControl>
                 </GridItem>
                 <GridItem w="100%" h="100%">
                   <FormControl isRequired>
                     <FormLabel>No BPJS</FormLabel>
-                    <Input type="number" />
+                    <Input {...register("noBPJS")} type="number" />
+                    <Text color="red">{errors.noBPJS?.message}</Text>
                   </FormControl>
                 </GridItem>
                 <GridItem w="100%" h="100%">
                   <FormControl isRequired>
                     <FormLabel>Jenis Kelamin</FormLabel>
-                    <Select placeholder="-- Pilih jenis kelamin --">
+                    <Select
+                      {...register("jenisKelamin")}
+                      placeholder="-- Pilih jenis kelamin --"
+                    >
                       <option value="option1">Laki-laki</option>
                       <option value="option2">Perempuan</option>
                     </Select>
+                    <Text color="red">{errors.jenisKelamin?.message}</Text>
                   </FormControl>
                 </GridItem>
                 <GridItem w="100%" h="100%">
                   <FormControl isRequired>
                     <FormLabel>Usia</FormLabel>
-                    <Input type="number" />
+                    <Input {...register("usia")} type="number" />
+                    <Text color="red">{errors.usia?.message}</Text>
                   </FormControl>
                 </GridItem>
                 <GridItem w="100%" h="100%">
                   <FormControl isRequired>
                     <FormLabel>Email</FormLabel>
-                    <Input />
+                    <Input {...register("email")} />
+                    <Text color="red">{errors.email?.message}</Text>
                   </FormControl>
                 </GridItem>
                 <GridItem w="100%" h="100%">
                   <FormControl isRequired>
                     <FormLabel>No Handphone</FormLabel>
-                    <Input type="number" />
+                    <Input {...register("nomorhape")} type="number" />
+                    <Text color={"red"}>{errors.nomorhape?.message}</Text>
                   </FormControl>
                 </GridItem>
               </Grid>
               <Box mt="10">
                 <FormControl isRequired>
                   <FormLabel>Alamat Domisili</FormLabel>
-                  <Input />
+                  <Input {...register("domisili")} />
+                  <Text color={"red"}>{errors.domisili?.message}</Text>
                 </FormControl>
               </Box>
-              <Grid templateColumns="repeat(2, 1fr)" gap={10} mt="10">
+              <Grid
+                templateColumns={{
+                  base: "repeat(1, 1fr)",
+                  md: "repeat(2, 1fr)",
+                }}
+                gap={10}
+                mt="10"
+              >
                 <GridItem w="100%" h="100%">
                   <FormControl isRequired>
                     <FormLabel>Provinsi</FormLabel>
-                    <Select placeholder="-- Pilih provinsi --">
+                    <Select
+                      {...register("provinsi")}
+                      placeholder="-- Pilih provinsi --"
+                    >
                       <option value="option1">Aceh</option>
                       <option value="papbaratdaya">Papua Barat Daya</option>
                     </Select>
+                    <Text color={"red"}>{errors.provinsi?.message}</Text>
                   </FormControl>
                 </GridItem>
                 <GridItem w="100%" h="100%">
                   <FormControl isRequired>
                     <FormLabel>Kabupaten / Kota</FormLabel>
-                    <Select placeholder="-- Pilih kabupaten/kota --">
+                    <Select
+                      {...register("kota")}
+                      placeholder="-- Pilih kabupaten/kota --"
+                    >
                       <option value="papbaratdaya">Papua Barat Daya</option>
                     </Select>
+                    <Text color={"red"}>{errors.kota?.message}</Text>
                   </FormControl>
                 </GridItem>
                 <GridItem w="100%" h="100%">
                   <FormControl isRequired>
                     <FormLabel>Riwayat Penyakit</FormLabel>
-                    <Input />
+                    <Input {...register("riwayat")} />
+                    <Text color={"red"}>{errors.riwayat?.message}</Text>
                   </FormControl>
                 </GridItem>
               </Grid>
@@ -138,7 +221,9 @@ function DataDiriPasien() {
               </Text>
               <FormControl mt={5}>
                 <FormLabel>Foto KTP</FormLabel>
+                <Text>{error.fotoKTP?.message}</Text>
                 <Input
+                  {...register("fotoKTP")}
                   type="file"
                   id="img"
                   name="img"
@@ -176,7 +261,9 @@ function DataDiriPasien() {
                           </label>
                         </span>
                       </Text>
-                      <Text color={"#676767"}>Supported formates: JPEG, PNG</Text>
+                      <Text color={"#676767"}>
+                        Supported formates: JPEG, PNG
+                      </Text>
                     </Grid>
                   </label>
                 </Box>
@@ -221,14 +308,23 @@ function DataDiriPasien() {
                           </label>
                         </span>
                       </Text>
-                      <Text color={"#676767"}>Supported formates: JPEG, PNG</Text>
+                      <Text color={"#676767"}>
+                        Supported formates: JPEG, PNG
+                      </Text>
                     </Grid>
                   </label>
                 </Box>
               </FormControl>
             </Box>
             <Box mt={16} textAlign="end">
-              <Button bg='#3AB8FF' color='white' _hover={{ bg:'alta.primary' }}>Simpan</Button>
+              <Button
+                bg="#3AB8FF"
+                color="white"
+                _hover={{ bg: "alta.primary" }}
+                onClick={handleSubmit(onSubmit)}
+              >
+                Simpan
+              </Button>
             </Box>
           </Box>
         </Box>

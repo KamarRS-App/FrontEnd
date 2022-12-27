@@ -7,11 +7,10 @@ import LayoutAdmin from '../../components/LayoutAdmin';
 
 const Dashboard = () => {
     return (
-        <LayoutAdmin>
+        <LayoutAdmin activeMenu={'dashboard'}>
             <Flex
-                    my='10'
                     gap='10'
-                    justify='center'
+                    justify='space-between'
                     wrap='wrap'
                 >
                     <CardAdmin />
