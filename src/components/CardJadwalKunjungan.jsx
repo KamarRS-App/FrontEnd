@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Center, Container, Grid, SimpleGrid, Skeleton } from '@chakra-ui/react';
-import { Box, Image, Heading, CardHeader, CardBody, CardFooter, Button, Link, Stack, StackDivider, Text, Card, Flex, IconButton } from '@chakra-ui/react';
+import { Box, Image, Heading, CardHeader, CardBody, CardFooter, Button, Stack, StackDivider, Text, Card, Flex, IconButton } from '@chakra-ui/react';
 import { Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer } from '@chakra-ui/react';
 import { MdBuild, MdArrowBack } from 'react-icons/md';
 import { Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { SearchIcon } from '@chakra-ui/icons';
+import { Link } from '@chakra-ui/react';
 function CardJadwalKunjungan() {
   let navigate = useNavigate();
   return (
@@ -125,9 +126,11 @@ function CardJadwalKunjungan() {
             </AccordionPanel>
           </AccordionItem>
         </Accordion>
-        <Button href="#" mt={10}>
-          Buat Janji
-        </Button>
+        <Link href="/buat/janji/dokter">
+          <Button href="/buat/janji/dokter" my={10}>
+            Buat Janji
+          </Button>
+        </Link>
       </Card>
     </Box>
   );
