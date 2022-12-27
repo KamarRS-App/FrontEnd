@@ -19,7 +19,7 @@ const TableAdmin = ({ headTable, bodyTable }) => {
             my={'10'}
         >
             <TableContainer>
-                <Table variant={'unstyled'}>
+                <Table variant={'unstyled'} overflow={'scroll'}>
                     <Thead
                         borderBottom={'1px'}
                         borderColor={'#E0E0E0'}
@@ -36,14 +36,5 @@ const TableAdmin = ({ headTable, bodyTable }) => {
     );
 }
 
-const TableWrap = ({ children }) => {
-    return (
-        <TableContainer>
-            <Table variant='simple'>
-                {children}
-            </Table>
-        </TableContainer>
-    );
-}
 
 export default TableAdmin;
