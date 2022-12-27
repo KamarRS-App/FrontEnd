@@ -1,10 +1,9 @@
-import Pembayaran from "./pages/Pembayaran";
 import { ChakraProvider } from "@chakra-ui/react";
 import { Box } from "@chakra-ui/layout";
-import SettingPage from "./pages/Admin/SettingPage";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import "./App.css";
+
 import Login from "./pages/Login";
+import SettingPage from "./pages/Admin/SettingPage";
 import Register from "./pages/Register";
 import HomePage from "./pages/HomePage";
 import TambahData from "./pages/TambahData";
@@ -16,15 +15,21 @@ import DashboardDailyPraktek from "./pages/Admin/DashboardDailyPraktek";
 import UserPage from "./pages/Admin/UserPage";
 import RoomPage from "./pages/Admin/RoomPage";
 import PatientPage from "./pages/Admin/PatientPage";
+import DoctorPage from "./pages/Admin/DoctorPage";
+import ProfileHospitalPage from "./pages/Admin/ProfileHospitalPage";
+import LoginAdmin from "./pages/Admin/LoginAdmin";
+import Pembayaran from './pages/Pembayaran';
+import Payment from './pages/Payment';
+import PembayaranSelesai from './pages/PembayaranSelesai';
+import CariDokter from './pages/CariDokter';
+import DetailDokter from './pages/DetailDokter';
+
+import "./App.css";
 import "@fontsource/plus-jakarta-sans/700.css";
 import "@fontsource/plus-jakarta-sans/400.css";
 import "@fontsource/plus-jakarta-sans/500.css";
 import "@fontsource/plus-jakarta-sans/600.css";
 import theme from "../utils/extendedTheme";
-import "./App.css";
-import DoctorPage from "./pages/Admin/DoctorPage";
-import ProfileHospitalPage from "./pages/Admin/ProfileHospitalPage";
-import LoginAdmin from "./pages/Admin/LoginAdmin";
 
 function App() {
   return (
@@ -55,6 +60,10 @@ function App() {
             <Route path="/admin/doctor" element={<DoctorPage />} />
             <Route path="/admin/hospital/profile" element={<ProfileHospitalPage />} />
             <Route path="/admin/login" element={<LoginAdmin />} />
+            <Route path="/payment" element={<Payment />} />
+            <Route path="pembayaran/selesai" element={<PembayaranSelesai />} />
+            <Route path="cari/dokter" element={<CariDokter />} />
+            <Route path="detail/dokter" element={<DetailDokter />} />
           </Routes>
         </Box>
       </ChakraProvider>
