@@ -1,25 +1,16 @@
 import React, { useState } from 'react';
-import { Box, Center, Stack } from '@chakra-ui/layout';
-import { Avatar, AvatarBadge } from '@chakra-ui/avatar';
+import { Box, Stack } from '@chakra-ui/layout';
+import { Avatar } from '@chakra-ui/avatar';
 import {
     Image,
     Button,
-    ButtonGroup,
     Flex,
-    Spacer,
     Link,
     Menu,
     MenuButton,
     MenuList,
     MenuItem,
-    MenuItemOption,
-    MenuGroup,
-    MenuOptionGroup,
-    MenuDivider,
     Text,
-    Hide,
-    Show,
-    IconButton,
 } from '@chakra-ui/react';
 import { ChevronDownIcon, HamburgerIcon, CloseIcon, ChevronRightIcon } from '@chakra-ui/icons';
 
