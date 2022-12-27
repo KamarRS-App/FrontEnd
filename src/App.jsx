@@ -24,6 +24,12 @@ import theme from "../utils/extendedTheme";
 import "./App.css";
 import DoctorPage from "./pages/Admin/DoctorPage";
 import ProfileHospitalPage from "./pages/Admin/ProfileHospitalPage";
+import DetailDaftarRumahSakit from './pages/DetailDaftarRumahSakit';
+import Pembayaran from './pages/Pembayaran';
+import Payment from './pages/Payment';
+import PembayaranSelesai from './pages/PembayaranSelesai';
+import CariDokter from './pages/CariDokter';
+import DetailDokter from './pages/DetailDokter';
 
 function App() {
   return (
@@ -53,6 +59,10 @@ function App() {
             <Route path="/admin/patient" element={<PatientPage />} />
             <Route path="/admin/doctor" element={<DoctorPage />} />
             <Route path="/admin/hospital/profile" element={<ProfileHospitalPage />} />
+            <Route path="/payment" element={<Payment />} />
+            <Route path="pembayaran/selesai" element={<PembayaranSelesai />} />
+            <Route path="cari/dokter" element={<CariDokter />} />
+            <Route path="detail/dokter" element={<DetailDokter />} />
           </Routes>
         </Box>
       </ChakraProvider>

@@ -1,6 +1,6 @@
 import React from 'react';
-import CardPayment from '../../components/CardPayment';
-import CardTotalTransfer from '../../components/CardTotalTransfer';
+import CardPayment from '../components/CardPayment';
+import CardTotalTransfer from '../components/CardTotalTransfer';
 import { Grid, SimpleGrid, Spacer } from '@chakra-ui/react';
 import { Center, Container } from '@chakra-ui/react';
 import { Wrap, WrapItem, Heading } from '@chakra-ui/react';
