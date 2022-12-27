@@ -24,8 +24,6 @@ import theme from "../utils/extendedTheme";
 import "./App.css";
 import DoctorPage from "./pages/Admin/DoctorPage";
 import ProfileHospitalPage from "./pages/Admin/ProfileHospitalPage";
-import DetailDaftarRumahSakit from './pages/DetailDaftarRumahSakit';
-import Pembayaran from './pages/Pembayaran';
 import Payment from './pages/Payment';
 import PembayaranSelesai from './pages/PembayaranSelesai';
 import CariDokter from './pages/CariDokter';
@@ -37,21 +35,25 @@ function App() {
       <ChakraProvider theme={theme}>
         <Box minHeight={"100vh"}>
           <Routes>
+
+            {/* user */}
+
             <Route path="/" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/home" element={<HomePage />} />
             <Route path="/patient/add" element={<TambahData />} />
             <Route path="/patient" element={<DataDiriPasien />} />
             <Route path="/search/detail" element={<DetailCariRumahSakit />} />
-            <Route
-              path="/detail/patient"
-              element={<DetailDaftarRumahSakit />}
-            />
+            <Route path="/detail/patient" element={<DetailDaftarRumahSakit />} />
+            <Route path="/payment" element={<Payment />} />
+            <Route path="pembayaran/selesai" element={<PembayaranSelesai />} />
+            <Route path="dokter" element={<CariDokter />} />
+            <Route path="detail/dokter" element={<DetailDokter />} />
+
+            {/* admin */}
+
             <Route path="/admin/dashboard" element={<Dashboard />} />
-            <Route
-              path="/admin/daily_praktek"
-              element={<DashboardDailyPraktek />}
-            />
+            <Route path="/admin/daily_praktek" element={<DashboardDailyPraktek />} />
             <Route path="/payment" element={<Pembayaran />} />
             <Route path="/admin/user" element={<UserPage />} />
             <Route path="/admin/profile" element={<SettingPage />} />
@@ -59,10 +61,6 @@ function App() {
             <Route path="/admin/patient" element={<PatientPage />} />
             <Route path="/admin/doctor" element={<DoctorPage />} />
             <Route path="/admin/hospital/profile" element={<ProfileHospitalPage />} />
-            <Route path="/payment" element={<Payment />} />
-            <Route path="pembayaran/selesai" element={<PembayaranSelesai />} />
-            <Route path="cari/dokter" element={<CariDokter />} />
-            <Route path="detail/dokter" element={<DetailDokter />} />
           </Routes>
         </Box>
       </ChakraProvider>
