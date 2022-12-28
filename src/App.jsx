@@ -39,9 +39,9 @@ function App() {
       <ChakraProvider theme={theme}>
         <Box minHeight={'100vh'}>
           <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/register" element={<Register />} />
             <Route path="/home" element={<HomePage />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/patient/add" element={<TambahData />} />
             <Route path="/patient" element={<DataDiriPasien />} />
             <Route path="/search/detail" element={<DetailCariRumahSakit />} />
