@@ -57,12 +57,12 @@ function App() {
             <Route path="/admin/hospital/profile" element={<ProfileHospitalPage />} />
             <Route path="/pilih/metode/pembayaran" element={<Payment />} />
             <Route path="pembayaran/selesai" element={<PembayaranSelesai />} />
-            <Route path="cari/dokter" element={<CariDokter />} />
-            <Route path="detail/dokter" element={<DetailDokter />} />
-            <Route path="buat/janji/dokter" element={<BuatJanjiDokter />} />
-            <Route path="tentang/kami" element={<TentangKami />} />
-            <Route path="halaman/privasi" element={<Privasi />} />
-            <Route path="syarat/dan/ketentuan" element={<SyaratDanKetentuan />} />
+            <Route path="/cari/dokter" element={<CariDokter />} />
+            <Route path="/detail/dokter" element={<DetailDokter />} />
+            <Route path="/buat/janji/dokter" element={<BuatJanjiDokter />} />
+            <Route path="/tentang/kami" element={<TentangKami />} />
+            <Route path="/halaman/privasi" element={<Privasi />} />
+            <Route path="/syarat/dan/ketentuan" element={<SyaratDanKetentuan />} />
           </Routes>
         </Box>
       </ChakraProvider>

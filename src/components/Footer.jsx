@@ -27,7 +27,7 @@ const Footer = () => {
                   <Link href="/tentang/kami">About Us</Link>
                 </ListItem>
                 <ListItem pt="3">
-                  <Link href="/privasi">Privacy</Link>
+                  <Link href="/halaman/privasi">Privacy</Link>
                 </ListItem>
                 <ListItem pt="3">
                   <Link href="/syarat/dan/ketentuan">Terms & Conditions</Link>
