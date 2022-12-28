@@ -28,6 +28,8 @@ import Payment from './pages/Payment';
 import PembayaranSelesai from './pages/PembayaranSelesai';
 import CariDokter from './pages/CariDokter';
 import DetailDokter from './pages/DetailDokter';
+import DashboardRoot from "./pages/Admin/DashboardRoot";
+import HospitalRootPages from "./pages/Admin/HospitalRootPages";
 
 function App() {
   return (
@@ -61,6 +63,11 @@ function App() {
             <Route path="/admin/patient" element={<PatientPage />} />
             <Route path="/admin/doctor" element={<DoctorPage />} />
             <Route path="/admin/hospital/profile" element={<ProfileHospitalPage />} />
+
+            {/* super admin */}
+            <Route path="/root/dashboard" element={<DashboardRoot />} />
+            <Route path="/root/hospital" element={<HospitalRootPages />} />
+
           </Routes>
         </Box>
       </ChakraProvider>
