@@ -1,15 +1,21 @@
-import React, { useState } from "react";
+import React from "react";
 import logo from "../assets/images/logo.png";
-import roomImage from "../assets/images/room.png";
 import googleLogo from "../assets/images/googlelogo.png";
-import { Button, Center } from "@chakra-ui/react";
-import { Input } from "@chakra-ui/react";
-import { Link } from "@chakra-ui/react";
-import { Text } from "@chakra-ui/react";
-import { Divider } from "@chakra-ui/react";
-import { Flex, Spacer } from "@chakra-ui/react";
-import { Image } from "@chakra-ui/react";
-import { Box } from "@chakra-ui/react";
+import { ViewOffIcon, ViewIcon } from "@chakra-ui/icons";
+import {
+  Button,
+  Center,
+  Input,
+  Link,
+  Text,
+  Divider,
+  Flex,
+  Spacer,
+  Image,
+  Box,
+  InputGroup,
+  InputRightElement,
+} from "@chakra-ui/react";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -19,23 +25,27 @@ const schema = yup.object().shape({
     .string()
     .required("Harap masukkan email")
     .email("Format email salah"),
-  password: yup
-    .string()
-    .required("Harap masukkan password")
-    .min(8, "Password setidaknya harus 8 karakter")
-    .max(32, "Password maksimal 32 karakter"),
+  password: yup.string().required("Harap masukkan password"),
 });
 
 function Login() {
+  const [show, setShow] = React.useState(false);
+  const showPassword = () => setShow(!show);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({
     resolver: yupResolver(schema),
+    mode: "onChange",
   });
 
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = (data) => {
+    console.log(data);
+    reset();
+  };
 
   return (
     <Box minH={"100%"}>
@@ -148,11 +158,24 @@ function Login() {
                     Password:
                   </label>{" "}
                   <br />
-                  <Input
-                    {...register("password")}
-                    placeholder="password"
-                    name="password"
-                  />
+                  <InputGroup>
+                    <Input
+                      type={show ? "text" : "password"}
+                      {...register("password")}
+                      placeholder="password"
+                      name="password"
+                    />
+                    <InputRightElement>
+                      {show ? (
+                        <ViewOffIcon
+                          onClick={showPassword}
+                          cursor={"pointer"}
+                        />
+                      ) : (
+                        <ViewIcon onClick={showPassword} cursor={"pointer"} />
+                      )}
+                    </InputRightElement>
+                  </InputGroup>
                   <Text color="red">{errors.password?.message}</Text>
                   <Box className="flex flex-row mt-5 justify-between">
                     <Box>
