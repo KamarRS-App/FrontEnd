@@ -48,7 +48,7 @@ function Privasi() {
                 iii. menangani atau menyelesaikan keluhan, pertanyaan, atau penyelidikan apa pun yang melibatkan Anda;
               </Text>
               <Text color="#072051" fontSize={14} fontWeight={300}>
-                vi. pmelakukan aktivitas apa pun terkait ketentuan kepatuhan internal Rawat Inap, termasuk yang berkaitan dengan peraturan, kebijakan, dan prosedur internal Rawat Inap;
+                vi. melakukan aktivitas apa pun terkait ketentuan kepatuhan internal Rawat Inap, termasuk yang berkaitan dengan peraturan, kebijakan, dan prosedur internal Rawat Inap;
               </Text>
               <Text color="#072051" fontSize={14} fontWeight={300}>
                 v. meninjau dan memantau komunikasi elektronik dan akun pribadi;
