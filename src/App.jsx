@@ -23,13 +23,15 @@ import theme from '../utils/extendedTheme';
 import './App.css';
 import DoctorPage from './pages/Admin/DoctorPage';
 import ProfileHospitalPage from './pages/Admin/ProfileHospitalPage';
-
 import Pembayaran from './pages/Pembayaran';
 import Payment from './pages/Payment';
 import PembayaranSelesai from './pages/PembayaranSelesai';
 import CariDokter from './pages/CariDokter';
 import DetailDokter from './pages/DetailDokter';
 import BuatJanjiDokter from './pages/BuatJanjiDokter';
+import TentangKami from './pages/TentangKami';
+import Privasi from './pages/Privasi';
+import SyaratDanKetentuan from './pages/SyaratDanKetentuan';
 
 function App() {
   return (
@@ -58,6 +60,9 @@ function App() {
             <Route path="cari/dokter" element={<CariDokter />} />
             <Route path="detail/dokter" element={<DetailDokter />} />
             <Route path="buat/janji/dokter" element={<BuatJanjiDokter />} />
+            <Route path="tentang/kami" element={<TentangKami />} />
+            <Route path="halaman/privasi" element={<Privasi />} />
+            <Route path="syarat/dan/ketentuan" element={<SyaratDanKetentuan />} />
           </Routes>
         </Box>
       </ChakraProvider>
