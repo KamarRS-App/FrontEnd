@@ -31,7 +31,7 @@ function SyaratDanKetentuan() {
             <Text color="#072051" fontSize={14} fontWeight={300}>
               C. Jenis-jenis Layanan yang dapat diakses melalui Platform adalah sebagai berikut:
               <Text>i. Cari Rumah Sakit</Text>
-              <Text>ii. Cari Dokter;</Text>
+              <Text>ii. Cari Dokter</Text>
               <Text>iii. layanan lain apa pun yang dapat kami tambahkan dari waktu ke waktu, (masing-masing disebut “Layanan” dan secara kolektif disebut “Layanan-Layanan”).</Text>
             </Text>
             <Text color="#072051" fontSize={14} fontWeight={300}>
