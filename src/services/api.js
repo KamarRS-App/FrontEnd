@@ -521,6 +521,7 @@ export default {
                 practice_id: practice_id,
             }
         }),
+        
     getAllCheckUpReservations: (token) =>
         instance({
             method: `GET`,
@@ -543,6 +544,7 @@ export default {
                 patient_id: patient_id
             },
         }),
+
     updateBedRegistrations: (token, id, { hospital_id, patient_id, bed_id, status_pasien, biaya_registrasi, kode_daftar, link_pembayaran, status_pembayaran }) =>
         instance({
             method: `PUT`,
@@ -561,6 +563,7 @@ export default {
                 status_pembayaran: status_pembayaran
             },
         }),
+
     getAllBedRegistrations: (token) =>
         instance({
             method: `GET`,
@@ -569,6 +572,7 @@ export default {
                 Authorization: `Bearer ${token}`,
             },
         }),
+
     getBedRegistrationsById: (token, id) =>
         instance({
             method: `GET`,
@@ -577,6 +581,7 @@ export default {
                 Authorization: `Bearer ${token}`,
             },
         }),
+
     DeleteBedRegistrationsById: (token, id) =>
         instance({
             method: `DELETE`,
@@ -598,6 +603,7 @@ export default {
                 metode_pembayaran: metode_pembayaran,
             }
         }),
+
     getPaymentsById: (token, kode_daftar) =>
         instance({
             method: `GET`,
