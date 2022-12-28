@@ -1,6 +1,7 @@
 import React from "react";
 import logo from "../assets/images/logo.png";
 import googleLogo from "../assets/images/googlelogo.png";
+import api from "../services/api";
 import { ViewOffIcon, ViewIcon } from "@chakra-ui/icons";
 import {
   Button,
@@ -25,13 +26,14 @@ const schema = yup.object().shape({
     .string()
     .required("Harap masukkan email")
     .email("Format email salah"),
-  password: yup.string().required("Harap masukkan password"),
+  kata_sandi: yup.string().required("Harap masukkan kata sandi"),
 });
 
 function Login() {
   const [show, setShow] = React.useState(false);
   const showPassword = () => setShow(!show);
 
+  //rhf configuration
   const {
     register,
     handleSubmit,
@@ -42,9 +44,20 @@ function Login() {
     mode: "onChange",
   });
 
+  //handle login
+  const handleLogin = async (data) => {
+    await api
+      .loginUser(data)
+      .then((response) => {
+        alert("Login berhasil sahabat");
+        reset();
+      })
+      .catch((error) => alert("Login gagal bosque"));
+  };
+
+  //submit function
   const onSubmit = (data) => {
-    console.log(data);
-    reset();
+    handleLogin(data);
   };
 
   return (
@@ -161,9 +174,9 @@ function Login() {
                   <InputGroup>
                     <Input
                       type={show ? "text" : "password"}
-                      {...register("password")}
-                      placeholder="password"
-                      name="password"
+                      {...register("kata_sandi")}
+                      placeholder="kata sandi"
+                      name="kata_sandi"
                     />
                     <InputRightElement>
                       {show ? (
@@ -176,7 +189,7 @@ function Login() {
                       )}
                     </InputRightElement>
                   </InputGroup>
-                  <Text color="red">{errors.password?.message}</Text>
+                  <Text color="red">{errors.kata_sandi?.message}</Text>
                   <Box className="flex flex-row mt-5 justify-between">
                     <Box>
                       <input
