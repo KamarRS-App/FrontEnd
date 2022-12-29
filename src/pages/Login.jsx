@@ -1,34 +1,64 @@
-import React, { useState } from 'react';
-import logo from '../assets/images/logo.png';
-import roomImage from '../assets/images/room.png';
-import googleLogo from '../assets/images/googlelogo.png';
-import { Button, Center } from '@chakra-ui/react';
-import { Input } from '@chakra-ui/react';
-import { Link } from '@chakra-ui/react';
-import { Text } from '@chakra-ui/react';
-import { Divider } from '@chakra-ui/react';
-import { Flex, Spacer } from '@chakra-ui/react';
-import { Image } from '@chakra-ui/react';
-import { Box } from '@chakra-ui/react';
-import * as yup from 'yup';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import React from "react";
+import logo from "../assets/images/logo.png";
+import googleLogo from "../assets/images/googlelogo.png";
+import api from "../services/api";
+import { ViewOffIcon, ViewIcon } from "@chakra-ui/icons";
+import {
+  Button,
+  Center,
+  Input,
+  Link,
+  Text,
+  Divider,
+  Flex,
+  Spacer,
+  Image,
+  Box,
+  InputGroup,
+  InputRightElement,
+} from "@chakra-ui/react";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const schema = yup.object().shape({
-  email: yup.string().required('Harap masukkan email').email('Format email salah'),
-  password: yup.string().required('Harap masukkan password').min(8, 'Password setidaknya harus 8 karakter').max(32, 'Password maksimal 32 karakter'),
+  email: yup
+    .string()
+    .required("Harap masukkan email")
+    .email("Format email salah"),
+  kata_sandi: yup.string().required("Harap masukkan kata sandi").min(8, 'Password setidaknya harus 8 karakter').max(32, 'Password maksimal 32 karakter'),
 });
 
 function Login() {
+  const [show, setShow] = React.useState(false);
+  const showPassword = () => setShow(!show);
+
+  //rhf configuration
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({
     resolver: yupResolver(schema),
+    mode: "onChange",
   });
 
-  const onSubmit = (data) => console.log(data);
+  //handle login
+  const handleLogin = async (data) => {
+    await api
+      .loginUser(data)
+      .then((response) => {
+        alert("Login berhasil sahabat");
+        reset();
+      })
+      .catch((error) => alert("Login gagal bosque"));
+  };
+
+  //submit function
+  const onSubmit = (data) => {
+    handleLogin(data);
+  };
 
   return (
     <Box minH={'100%'}>
@@ -92,8 +122,25 @@ function Login() {
                     Password:
                   </label>{' '}
                   <br />
-                  <Input {...register('password')} placeholder="password" name="password" />
-                  <Text color="red">{errors.password?.message}</Text>
+                  <InputGroup>
+                    <Input
+                      type={show ? "text" : "password"}
+                      {...register("kata_sandi")}
+                      placeholder="kata sandi"
+                      name="kata_sandi"
+                    />
+                    <InputRightElement>
+                      {show ? (
+                        <ViewOffIcon
+                          onClick={showPassword}
+                          cursor={"pointer"}
+                        />
+                      ) : (
+                        <ViewIcon onClick={showPassword} cursor={"pointer"} />
+                      )}
+                    </InputRightElement>
+                  </InputGroup>
+                  <Text color="red">{errors.kata_sandi?.message}</Text>
                   <Box className="flex flex-row mt-5 justify-between">
                     <Box>
                       <input type="checkbox" className="checkbox checkbox-xs mr-2 border-gray-500" />
