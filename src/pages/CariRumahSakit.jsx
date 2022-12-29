@@ -29,9 +29,9 @@ function CariRumahSakit() {
 
           <Box>
             <Flex direction="row" gap="2" wrap="wrap" mt={['50px', '100px', '20px']}>
-              <Image w={['90px', '150px', '200px']} objectFit="cover" src="/public/Images/rs-mitra-keluarga.png" alt="rs-mitra-keluarga" fallbackSrc="https://via.placeholder.com/150" />
-              <Image w={['90px', '150px', '200px']} objectFit="cover" src="/public/Images/rs-haji.png" alt="rs-haji-surabaya" fallbackSrc="https://via.placeholder.com/150" />
-              <Image w={['90px', '150px', '200px']} src="/public/Images/rs-sardjito.png" alt="rs-sardjito" fallbackSrc="https://via.placeholder.com/150" />
+              <Image w={['90px', '150px', '200px']} objectFit="cover" src="/src/assets/images/rs-mitra-keluarga.png" alt="rs-mitra-keluarga" fallbackSrc="https://via.placeholder.com/150" />
+              <Image w={['90px', '150px', '200px']} objectFit="cover" src="/src/assets/images/rs-haji.png" alt="rs-haji-surabaya" fallbackSrc="https://via.placeholder.com/150" />
+              <Image w={['90px', '150px', '200px']} src="/src/assets/images/rs-sardjito.png" alt="rs-sardjito" fallbackSrc="https://via.placeholder.com/150" />
             </Flex>
           </Box>
         </Flex>

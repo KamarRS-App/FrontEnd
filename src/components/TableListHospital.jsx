@@ -5,7 +5,7 @@ import { SearchIcon } from '@chakra-ui/icons';
 const TableListHospital = () => {
   return (
     <Box px="20">
-      <Text fontWeight="600" fontSize={['30px', '48px']} mb={['10']} color="#1FA8F6" textAlign={{ base: 'center', md: 'left' }}>
+      <Text fontWeight="600" fontSize={['30px', '42px']} mb={['10']} color="#1FA8F6" textAlign={{ base: 'center', md: 'left' }}>
         Daftar Rumah Sakit Mitra
       </Text>
       <Flex flexWrap="wrap" columnGap="4" rowGap="5" justify="flex-end">
