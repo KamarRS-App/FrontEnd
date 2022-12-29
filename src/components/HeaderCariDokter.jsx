@@ -22,7 +22,7 @@ function HeaderCariDokter() {
           </Box>
         </Center>
         <Box direction="cols" mt={50} w={500} h={529}>
-          <Image objectFit="cover" src="/images/doctor_hero.png" alt="doctor_hero" fallbackSrc="https://via.placeholder.com/150" />
+          <Image objectFit="cover" src="/src/assets/images/doctor_hero.png " alt="doctor_hero" fallbackSrc="https://via.placeholder.com/150" />
         </Box>
       </SimpleGrid>
     </Center>

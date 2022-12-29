@@ -20,7 +20,7 @@ function BuatJanjiDokter() {
         <Flex direction={{ base: 'column', xl: 'row' }}>
           <Box flexBasis={{ base: '100%', lg: '70%' }} mr={{ base: 0, xl: '30px' }}>
             <Box borderWidth={'2px'} p="5" rounded={'10px'} my={5}>
-              <Text fontSize={20} fontWeight={500} color="#072051">
+              <Text fontSize={18} fontWeight={500} color="#072051">
                 Login Sebagai Almira Mahsa
               </Text>
               <Text fontSize={16} fontWeight={400} color="#D0D0D0">
@@ -30,10 +30,10 @@ function BuatJanjiDokter() {
 
             <Box borderWidth={'2px'} p="5" rounded={'10px'} py="10">
               <Box>
-                <Text fontSize={20} fontWeight={500}>
+                <Text fontSize={18} fontWeight={500}>
                   Detail Pemesan
                 </Text>
-                <Text fontSize={13} fontWeight={500} color="#D0D0D0">
+                <Text fontSize={13} fontWeight={500} m={2} color="#D0D0D0">
                   Informasi terkait pembuatan janji chekup akan disampaikan melalui email dan nomor ponsel dibawah ini
                 </Text>
               </Box>
@@ -86,7 +86,7 @@ function BuatJanjiDokter() {
           </Box>
           <Card w={400} ml={[30, 40, 20]} justifyContent="end">
             <CardHeader>
-              <Text fontSize={18} fontWeight={600} color="#072051" textAlign="center">
+              <Text fontSize={18} fontWeight={600} my={2} color="#072051" textAlign="center">
                 Pendaftaran Medical Checkup
               </Text>
             </CardHeader>

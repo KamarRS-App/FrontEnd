@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button, Grid } from '@chakra-ui/react';
 import { Text } from '@chakra-ui/react';
-import { Box, Flex, VStack } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 import { Image } from '@chakra-ui/react';
-import finish from '/public/images/finish-img.png';
+import finish from '../assets/images/finish-img.png';
 import Layout from '../components/Layout';
 
 function PendaftaranSelesai() {
