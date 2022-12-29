@@ -57,6 +57,7 @@ function Login() {
         toast({
           title: `Sukses login, mengalihkan...`,
           status: "success",
+          position: "top",
           isClosable: true,
           duration: 1500,
         });
@@ -69,9 +70,11 @@ function Login() {
         toast({
           title: `Login gagal, silahkan coba lagi.`,
           status: "error",
+          position: "top",
           isClosable: true,
           duration: 1500,
         });
+        console.log(error);
       });
   };
 
