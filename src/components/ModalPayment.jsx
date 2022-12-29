@@ -9,38 +9,38 @@ function ModalPayment() {
           Selesaikan Pembayaran Dalam 19:59 menit
         </Text>
       </Center>
-      <SimpleGrid columns={2} spacing={8} color="#072051">
+      <SimpleGrid columns={2} spacing={8} color="#072051" align="center">
         <Box h="40px">
-          <Image src="/public/logo/bank-bca.png" width={99} />
+          <Image src="/public/logo/bank-bca.png" width={53} />
         </Box>
         <Text>Transfer Bank BCA</Text>
 
         <Box h="40px">
-          <Image src="/public/logo/mandiri.png" width={99} />
+          <Image src="/public/logo/mandiri.png" width={53} />
         </Box>
         <Text>Transfer Bank Mandiri</Text>
         <Box h="40px">
-          <Image src="/public/logo/bank-bni.png" width={99} />
+          <Image src="/public/logo/bank-bni.png" width={53} />
         </Box>
         <Text>Transfer Bank BNI</Text>
         <Box h="40px">
-          <Image src="/public/logo/bank-bri.png" width={99} />
+          <Image src="/public/logo/bank-bri.png" width={53} />
         </Box>
         <Text>Transfer Bank BRI</Text>
         <Box h="40px">
-          <Image src="/public/logo/permata.png" width={99} />
+          <Image src="/public/logo/permata.png" width={66} />
         </Box>
         <Text>Transfer Bank Permata</Text>
         <Box h="40px">
-          <Image src="/public/logo/bank-bsi.png" width={99} />
+          <Image src="/public/logo/bank-bsi.png" width={66} />
         </Box>
         <Text>Transfer Bank BSI</Text>
         <Box h="40px">
-          <Image src="/public/logo/bank-cimb.png" width={99} />
+          <Image src="/public/logo/bank-cimb.png" width={65} />
         </Box>
         <Text>Transfer Bank CIMB Niaga</Text>
         <Box h="40px">
-          <Image src="/public/logo/bank.png" width={99} />
+          <Image src="/public/logo/bank.png" width={90} />
         </Box>
         <Text>Transfer Bank Lain</Text>
       </SimpleGrid>

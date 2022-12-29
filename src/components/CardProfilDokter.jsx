@@ -9,7 +9,7 @@ function CardProfilDokter() {
   return (
     <Box>
       <Grid mb={100}>
-        <Card maxW="md">
+        <Card maxW="md" mr={10} variant="unstyled">
           <CardHeader>
             <Button colorScheme="teal" variant="link" mt={2} fontWeight={600} fontSize={18} color="#19345E">
               dr. Achraf Hakimi, Sp.An-KIC, FIP

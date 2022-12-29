@@ -1,15 +1,5 @@
 import React from 'react';
-import {
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
-    ModalBody,
-    ModalCloseButton,
-    Button,
-    Text,
-} from '@chakra-ui/react'
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Button, Text } from '@chakra-ui/react';
 import { AiOutlineInfoCircle } from 'react-icons/ai';
 
 const PopupAdmin = ({ isOpen, onClose, modalBody, submitButton, modalTitle }) => {
@@ -43,26 +33,16 @@ const PopupAdmin = ({ isOpen, onClose, modalBody, submitButton, modalTitle }) =>
                         {modalBody}
                     </ModalBody>
 
-                    <ModalFooter>
-                        <Button
-                            type='submit'
-                            mr={3}
-                            bg='#3AB8FF'
-                            color={'white'}
-                            fontSize={'14px'}
-                            fontWeight={'700'}
-                            width={'150px'}
-                            height={'50px'}
-                            _hover={{ bg:'alta.primary' }}
-                        >
-                            Simpan
-                        </Button>
-                        {/* <Button onClick={onClose}>Cancel</Button> */}
-                    </ModalFooter>
-                </form>
-            </ModalContent>
-        </Modal>
-    );
-}
+          <ModalFooter>
+            <Button type="submit" mr={3} bg="#3AB8FF" color={'white'} fontSize={'14px'} fontWeight={'700'} width={'150px'} height={'50px'} _hover={{ bg: 'alta.primary' }}>
+              Simpan
+            </Button>
+            {/* <Button onClick={onClose}>Cancel</Button> */}
+          </ModalFooter>
+        </form>
+      </ModalContent>
+    </Modal>
+  );
+};
 
 export default PopupAdmin;

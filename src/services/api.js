@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "https://virtserver.swaggerhub.com/kamar-rs/kamar-rs/1.0.0/",
+  baseURL: "34.143.247.242/",
 });
 
 export default {
