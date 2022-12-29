@@ -1,15 +1,22 @@
 import React from "react";
 import logo from "../assets/images/logo.png";
-import roomImage from "../assets/images/room.png";
 import googleLogo from "../assets/images/googlelogo.png";
-import { Button, Center } from "@chakra-ui/react";
-import { Input } from "@chakra-ui/react";
-import { Link } from "@chakra-ui/react";
-import { Text } from "@chakra-ui/react";
-import { Divider } from "@chakra-ui/react";
-import { Flex, Spacer } from "@chakra-ui/react";
-import { Image } from "@chakra-ui/react";
-import { Box } from "@chakra-ui/react";
+import { ViewOffIcon, ViewIcon } from "@chakra-ui/icons";
+import {
+  Button,
+  Center,
+  Input,
+  Link,
+  Text,
+  Divider,
+  Flex,
+  Spacer,
+  Image,
+  Box,
+  InputGroup,
+  InputRightElement,
+  Icon,
+} from "@chakra-ui/react";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -28,15 +35,24 @@ const schema = yup.object().shape({
 });
 
 function Register() {
+  const [show, setShow] = React.useState(false);
+  const showPassword = () => setShow(!show);
+
+  //react-hook-form
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({
     resolver: yupResolver(schema),
+    mode: "onChange",
   });
 
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = (data) => {
+    console.log(data);
+    reset();
+  };
 
   return (
     <Box minH={"100%"}>
@@ -145,15 +161,29 @@ function Register() {
                   <Text color={"red"}>{errors.email?.message}</Text>
                   <br />
                   <Input
+                    type="number"
                     {...register("nomorhape")}
                     placeholder="Masukkan nomor hp"
                   />
                   <Text color="red">{errors.nomorhape?.message}</Text>
                   <br />
-                  <Input
-                    {...register("password")}
-                    placeholder="Masukkan password"
-                  />
+                  <InputGroup>
+                    <Input
+                      type={show ? "text" : "password"}
+                      {...register("password")}
+                      placeholder="Masukkan password"
+                    />
+                    <InputRightElement>
+                      {show ? (
+                        <ViewOffIcon
+                          onClick={showPassword}
+                          cursor={"pointer"}
+                        />
+                      ) : (
+                        <ViewIcon onClick={showPassword} cursor={"pointer"} />
+                      )}
+                    </InputRightElement>
+                  </InputGroup>
                   <Text color={"red"}>{errors.password?.message}</Text>
                   <Button
                     color="white"
