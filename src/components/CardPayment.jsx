@@ -9,7 +9,7 @@ import Indomeret from './Indomaret';
 import Alfa from './Alfa';
 function CardPayment() {
   return (
-    <Card w={900} mt={50} ml={50} mb={50}>
+    <Card w={700} mt={50} ml={50} mb={50}>
       <Center>
         <Text fontSize={16} fontWeight={600} color="#1FA8F6" m="5">
           Selesaikan Pembayaran Dalam 19:59 menit
