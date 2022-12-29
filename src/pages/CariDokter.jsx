@@ -7,17 +7,17 @@ import { HStack, Select } from '@chakra-ui/react';
 import CariSpesialis from '../components/CariSpesialis';
 import CardCariDokter from '../components/CardCariDokter';
 import Footer from '../components/Footer';
-
+import Layout from '../components/Layout';
 function CariDokter() {
   return (
-    <Box w="full">
-      {' '}
-      <NavCariDokter />
-      <HeaderCariDokter />
-      <CariSpesialis />
-      <CardCariDokter />
-      <Footer />
-    </Box>
+    <Layout>
+      <Box w="full">
+        {' '}
+        <HeaderCariDokter />
+        <CariSpesialis />
+        <CardCariDokter />
+      </Box>
+    </Layout>
   );
 }
 
