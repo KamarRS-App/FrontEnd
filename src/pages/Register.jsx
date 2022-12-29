@@ -69,6 +69,7 @@ function Register() {
         toast({
           title: `Sukses membuat akun.`,
           status: "success",
+          position: "top",
           isClosable: true,
           duration: 1500,
         });
@@ -81,6 +82,7 @@ function Register() {
           toast({
             title: `Email sudah terdaftar`,
             status: "error",
+            position: "top",
             isClosable: true,
             duration: 1500,
           });
@@ -88,6 +90,7 @@ function Register() {
           toast({
             title: `Gagal membuat akun`,
             status: "error",
+            position: "top",
             isClosable: true,
             duration: 1500,
           });
