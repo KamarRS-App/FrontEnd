@@ -34,7 +34,7 @@ const HeadAdminPoli = ({ title, isAdd }) => {
       </Flex>
       <Flex color={'#333333'} gap="5" pt={{ base: '5', sm: '0' }} width={{ base: '100%', sm: 'auto' }} justifyContent={'center'}>
         <ButtonGroup>
-          <Button onClick={isAdd} bg="transparent" border="1px" borderColor={'#E0E0E0'}>
+          <Button onClick={onModalCreateOpen} bg="transparent" border="1px" borderColor={'#E0E0E0'}>
             <IoAddOutline fontSize={'30px'} />
           </Button>
           <Button bg="transparent" border="1px" borderColor={'#E0E0E0'}>
