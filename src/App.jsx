@@ -32,6 +32,7 @@ import BuatJanjiDokter from './pages/BuatJanjiDokter';
 import TentangKami from './pages/TentangKami';
 import Privasi from './pages/Privasi';
 import SyaratDanKetentuan from './pages/SyaratDanKetentuan';
+import Poliklinik from './pages/Admin/Poliklinik';
 
 function App() {
   return (
@@ -54,6 +55,7 @@ function App() {
             <Route path="/admin/room" element={<RoomPage />} />
             <Route path="/admin/patient" element={<PatientPage />} />
             <Route path="/admin/doctor" element={<DoctorPage />} />
+            <Route path="/admin/poliklinik" element={<Poliklinik />} />
             <Route path="/admin/hospital/profile" element={<ProfileHospitalPage />} />
             <Route path="/pilih/metode/pembayaran" element={<Payment />} />
             <Route path="pembayaran/selesai" element={<PembayaranSelesai />} />
