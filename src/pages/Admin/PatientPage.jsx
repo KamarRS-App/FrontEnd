@@ -178,7 +178,7 @@ const PatientPage = () => {
                 onClose={onCloseModalCreate}
                 modalBody={
                     <>
-                    <FormControl>
+                        <FormControl>
                             <FormLabel>Nama Pasien</FormLabel>
                             <Input placeholder='Nama Pasien' id="name" type='text' />
                             {/* {errors.name && <FormErrorMessage>{errors.name.message}</FormErrorMessage>} */}
@@ -245,7 +245,7 @@ const PatientPage = () => {
                 onClose={onCloseModalEdit}
                 modalBody={
                     <>
-                    <FormControl>
+                        <FormControl>
                             <FormLabel>Nama Pasien</FormLabel>
                             <Input placeholder='Nama Pasien' id="name" type='text' />
                             {/* {errors.name && <FormErrorMessage>{errors.name.message}</FormErrorMessage>} */}

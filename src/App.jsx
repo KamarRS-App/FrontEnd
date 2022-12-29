@@ -30,6 +30,7 @@ import CariDokter from './pages/CariDokter';
 import DetailDokter from './pages/DetailDokter';
 import DashboardRoot from "./pages/Admin/DashboardRoot";
 import HospitalRootPages from "./pages/Admin/HospitalRootPages";
+import AdminRoot from "./pages/Admin/AdminRoot";
 
 function App() {
   return (
@@ -67,6 +68,7 @@ function App() {
             {/* super admin */}
             <Route path="/root/dashboard" element={<DashboardRoot />} />
             <Route path="/root/hospital" element={<HospitalRootPages />} />
+            <Route path="/root/user" element={<AdminRoot />} />
 
           </Routes>
         </Box>

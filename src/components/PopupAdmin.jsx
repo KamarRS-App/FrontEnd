@@ -17,7 +17,7 @@ const PopupAdmin = ({ isOpen, onClose, modalBody, submitButton, modalTitle }) =>
         <Modal
             isOpen={isOpen}
             onClose={onClose}
-            size={{ base:'xs',sm:'sm',md:'lg',lg:'xl' }}
+            size={{ base:'xs',sm:'sm',md:'lg',lg:'2xl' }}
         >
             <ModalOverlay />
             <ModalContent
