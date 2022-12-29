@@ -6,8 +6,9 @@ import ChartPatient from '../../components/ChartPatient';
 import LayoutAdminRoot from '../../components/LayoutAdminRoot';
 
 const DashboardRoot = () => {
+    const dateNow = new Date();
     return (
-        <LayoutAdminRoot activeMenu={'dashboard'}>
+        <LayoutAdminRoot activeMenu={'dashboard'} name={'Team Rawat Inap'} role={'Super Admin'}>
             <Flex
                     gap='10'
                     justify='space-between'

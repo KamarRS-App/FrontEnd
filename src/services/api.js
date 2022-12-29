@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "34.143.247.242/",
+  baseURL: "http://34.143.247.242:80",
 });
 
 export default {
@@ -33,6 +33,16 @@ export default {
       data: {
         oauth: oauth,
       },
+    }),
+  
+  loginSuperAdmin: (data) =>
+    instance({
+      method: `POST`,
+      url: `/login/kamarrsteams`,
+      data: {
+        email: data.email,
+        kata_sandi: data.kata_sandi,
+      }
     }),
 
   //Users

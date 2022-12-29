@@ -39,6 +39,7 @@ import "@fontsource/plus-jakarta-sans/400.css";
 import "@fontsource/plus-jakarta-sans/500.css";
 import "@fontsource/plus-jakarta-sans/600.css";
 import theme from "../utils/extendedTheme";
+import LoginAdminRoot from "./pages/Admin/LoginAdminRoot";
 
 function App() {
   return (
@@ -80,6 +81,7 @@ function App() {
             <Route path="/admin/login" element={<LoginAdmin />} />
 
             {/* super admin */}
+            <Route path="/root/login" element={<LoginAdminRoot />} />
             <Route path="/root/dashboard" element={<DashboardRoot />} />
             <Route path="/root/hospital" element={<HospitalRootPages />} />
             <Route path="/root/user" element={<AdminRoot />} />
