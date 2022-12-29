@@ -35,10 +35,10 @@ const MenuLinks = ({ isOpen, Auth }) => {
             <Link _hover={{ textDecoration: 'none' }} to="/home">
               Beranda
             </Link>
-            <Link _hover={{ textDecoration: 'none' }} to="/how">
+            <Link _hover={{ textDecoration: 'none' }} to="/cari/rumah/sakit">
               Cari Rumah Sakit
             </Link>
-            <Link _hover={{ textDecoration: 'none' }} to="/faetures">
+            <Link _hover={{ textDecoration: 'none' }} to="/cari/dokter">
               Cari Dokter
             </Link>
             <Menu>

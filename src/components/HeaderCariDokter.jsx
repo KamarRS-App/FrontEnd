@@ -16,7 +16,7 @@ function HeaderCariDokter() {
             </Heading>
             <Box w={445}>
               <Text fontWeight={400} fontSize={18} color="#000000" pt={5}>
-                Kami meneydiakan pelayanan spesialils terbaik bagi anda dan keluarga
+                Kami menyediakan pelayanan spesialils terbaik bagi anda dan keluarga
               </Text>
             </Box>
           </Box>

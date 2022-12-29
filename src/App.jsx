@@ -33,6 +33,7 @@ import TentangKami from './pages/TentangKami';
 import Privasi from './pages/Privasi';
 import SyaratDanKetentuan from './pages/SyaratDanKetentuan';
 import Poliklinik from './pages/Admin/Poliklinik';
+import CariRumahSakit from './pages/CariRumahSakit';
 
 function App() {
   return (
@@ -65,6 +66,7 @@ function App() {
             <Route path="/tentang/kami" element={<TentangKami />} />
             <Route path="/halaman/privasi" element={<Privasi />} />
             <Route path="/syarat/dan/ketentuan" element={<SyaratDanKetentuan />} />
+            <Route path="/cari/rumah/sakit" element={<CariRumahSakit />} />
           </Routes>
         </Box>
       </ChakraProvider>
