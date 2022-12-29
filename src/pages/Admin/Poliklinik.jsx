@@ -14,7 +14,7 @@ import PopupDelete from '../../components/PopupDelete';
 import HeadAdminPoli from '../../components/HeadAdminPoli';
 import { IoAddOutline } from 'react-icons/io5';
 import { CiSearch } from 'react-icons/ci';
-const Poliklinik = ({ isAdd }) => {
+const Poliklinik = () => {
   const { isOpen: isModalCreateOpen, onOpen: onModalCreateOpen, onClose: onCloseModalCreate } = useDisclosure();
   const { isOpen: isOpenModalEdit, onOpen: onOpenModalEdit, onClose: onCloseModalEdit } = useDisclosure();
   const { isOpen: isOpenModalDelete, onOpen: onOpenModalDelete, onClose: onCloseModalDelete } = useDisclosure();
@@ -22,12 +22,7 @@ const Poliklinik = ({ isAdd }) => {
     <LayoutAdmin activeMenu={'poli'}>
       <HeadAdminPoli title={'Manajemen Poliklinik'} isAdd={onModalCreateOpen} />
       <Box mt={'5'} py={'10'} bg="white">
-        <Flex color={'#333333'} m={10} pt={{ base: '5', sm: '0' }} width={{ base: '100%', sm: 'auto' }} justifyContent={'end'}>
-          <Button bg="transparent" border="1px" borderColor={'#E0E0E0'}>
-            <IoAddOutline fontSize={'24px'} />
-            <Text mx={2}>Tambah Data</Text>
-          </Button>
-        </Flex>
+        <Flex color={'#333333'} pt={{ base: '5', sm: '0' }} width={{ base: '100%', sm: 'auto' }} justifyContent={'end'}></Flex>
         <TableAdmin
           headTable={
             <Tr>
