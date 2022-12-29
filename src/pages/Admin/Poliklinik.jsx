@@ -1,5 +1,5 @@
 import { Button, ButtonGroup } from '@chakra-ui/button';
-import { Box } from '@chakra-ui/layout';
+import { Box, Flex, Text } from '@chakra-ui/layout';
 import { Td, Tr } from '@chakra-ui/table';
 import React from 'react';
 import HeadAdmin from '../../components/HeadAdmin';
@@ -12,8 +12,9 @@ import { FormControl, FormLabel } from '@chakra-ui/form-control';
 import { Input } from '@chakra-ui/input';
 import PopupDelete from '../../components/PopupDelete';
 import HeadAdminPoli from '../../components/HeadAdminPoli';
-
-const Poliklinik = () => {
+import { IoAddOutline } from 'react-icons/io5';
+import { CiSearch } from 'react-icons/ci';
+const Poliklinik = ({ isAdd }) => {
   const { isOpen: isModalCreateOpen, onOpen: onModalCreateOpen, onClose: onCloseModalCreate } = useDisclosure();
   const { isOpen: isOpenModalEdit, onOpen: onOpenModalEdit, onClose: onCloseModalEdit } = useDisclosure();
   const { isOpen: isOpenModalDelete, onOpen: onOpenModalDelete, onClose: onCloseModalDelete } = useDisclosure();
@@ -21,6 +22,12 @@ const Poliklinik = () => {
     <LayoutAdmin activeMenu={'poli'}>
       <HeadAdminPoli title={'Manajemen Poliklinik'} isAdd={onModalCreateOpen} />
       <Box mt={'5'} py={'10'} bg="white">
+        <Flex color={'#333333'} m={10} pt={{ base: '5', sm: '0' }} width={{ base: '100%', sm: 'auto' }} justifyContent={'end'}>
+          <Button bg="transparent" border="1px" borderColor={'#E0E0E0'}>
+            <IoAddOutline fontSize={'24px'} />
+            <Text mx={2}>Tambah Data</Text>
+          </Button>
+        </Flex>
         <TableAdmin
           headTable={
             <Tr>
@@ -69,7 +76,38 @@ const Poliklinik = () => {
           ))}
         />
       </Box>
+      <PopupAdmin
+        modalTitle={'Tambah Data Poliklinik'}
+        isOpen={isModalCreateOpen}
+        onClose={onCloseModalCreate}
+        modalBody={
+          <>
+            <FormControl>
+              <FormLabel>Nama</FormLabel>
+              <Input placeholder="Nama Dokter" id="name" type="text" />
+              {/* {errors.name && <FormErrorMessage>{errors.name.message}</FormErrorMessage>} */}
+            </FormControl>
 
+            <FormControl mt={4}>
+              <FormLabel>Spesialis</FormLabel>
+              <Input placeholder="Spesialis Dokter" type={'text'} id="spesialis" />
+              {/* {errors.email && <FormErrorMessage>{errors.email.message}</FormErrorMessage>} */}
+            </FormControl>
+
+            <FormControl mt={4}>
+              <FormLabel>Email</FormLabel>
+              <Input placeholder="Email Dokter" type={'email'} id="email" />
+              {/* {errors.email && <FormErrorMessage>{errors.email.message}</FormErrorMessage>} */}
+            </FormControl>
+
+            <FormControl mt={4}>
+              <FormLabel>No Telephone</FormLabel>
+              <Input placeholder="Nomor Telephone Dokter" type={'text'} id="telephone" />
+              {/* {errors.email && <FormErrorMessage>{errors.email.message}</FormErrorMessage>} */}
+            </FormControl>
+          </>
+        }
+      />
       <PopupAdmin
         modalTitle={'Tambah Data Dokter'}
         isOpen={isModalCreateOpen}
@@ -102,23 +140,78 @@ const Poliklinik = () => {
           </>
         }
       />
-
       <PopupAdmin
-        modalTitle={'Ubah Data Poli'}
-        isOpen={isOpenModalEdit}
-        onClose={onCloseModalEdit}
+        modalTitle={'Edit data Poliklinik'}
+        isOpen={isModalCreateOpen}
+        onClose={onCloseModalCreate}
         modalBody={
           <>
             <FormControl>
-              <FormLabel>Nama Poliklinik</FormLabel>
-              <Input placeholder="Nama Poli" id="name" type="text" />
+              <FormLabel>Nama</FormLabel>
+              <Input placeholder="Nama Dokter" id="name" type="text" />
               {/* {errors.name && <FormErrorMessage>{errors.name.message}</FormErrorMessage>} */}
+            </FormControl>
+
+            <FormControl mt={4}>
+              <FormLabel>Spesialis</FormLabel>
+              <Input placeholder="Spesialis Dokter" type={'text'} id="spesialis" />
+              {/* {errors.email && <FormErrorMessage>{errors.email.message}</FormErrorMessage>} */}
+            </FormControl>
+
+            <FormControl mt={4}>
+              <FormLabel>Email</FormLabel>
+              <Input placeholder="Email Dokter" type={'email'} id="email" />
+              {/* {errors.email && <FormErrorMessage>{errors.email.message}</FormErrorMessage>} */}
+            </FormControl>
+
+            <FormControl mt={4}>
+              <FormLabel>No Telephone</FormLabel>
+              <Input placeholder="Nomor Telephone Dokter" type={'text'} id="telephone" />
+              {/* {errors.email && <FormErrorMessage>{errors.email.message}</FormErrorMessage>} */}
             </FormControl>
           </>
         }
       />
 
-      <PopupDelete modalTitle={'Hapus Poli'} isOpen={isOpenModalDelete} onClose={onCloseModalDelete} modalBody={'Apakah anda yakin menghapus Poliklinik ini?'} deletet_name={'Hapus Poliklinik'} />
+      <PopupAdmin
+        modalTitle={'Ubah Data Poliklinik'}
+        isOpen={isOpenModalEdit}
+        onClose={onCloseModalEdit}
+        modalBody={
+          <>
+            <FormControl>
+              <FormLabel>Nama</FormLabel>
+              <Input placeholder="Nama Dokter" id="name" type="text" />
+              {/* {errors.name && <FormErrorMessage>{errors.name.message}</FormErrorMessage>} */}
+            </FormControl>
+
+            <FormControl mt={4}>
+              <FormLabel>Spesialis</FormLabel>
+              <Input placeholder="Spesialis Dokter" type={'text'} id="spesialis" />
+              {/* {errors.email && <FormErrorMessage>{errors.email.message}</FormErrorMessage>} */}
+            </FormControl>
+
+            <FormControl mt={4}>
+              <FormLabel>Email</FormLabel>
+              <Input placeholder="Email Dokter" type={'email'} id="email" />
+              {/* {errors.email && <FormErrorMessage>{errors.email.message}</FormErrorMessage>} */}
+            </FormControl>
+
+            <FormControl mt={4}>
+              <FormLabel>No Telephone</FormLabel>
+              <Input placeholder="Nomor Telephone Dokter" type={'text'} id="telephone" />
+              {/* {errors.email && <FormErrorMessage>{errors.email.message}</FormErrorMessage>} */}
+            </FormControl>
+            <FormControl mt={4}>
+              <FormLabel>Jam Praktik</FormLabel>
+              <Input placeholder="Jam Praktik" type={'text'} id="jam_praktik" />
+              {/* {errors.email && <FormErrorMessage>{errors.email.message}</FormErrorMessage>} */}
+            </FormControl>
+          </>
+        }
+      />
+
+      <PopupDelete modalTitle={'Hapus Data Poli'} isOpen={isOpenModalDelete} onClose={onCloseModalDelete} modalBody={'Apakah anda yakin menghapus data poli ini?'} deletet_name={'Hapus Dokter'} />
     </LayoutAdmin>
   );
 };

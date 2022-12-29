@@ -4,8 +4,17 @@ import { data } from 'autoprefixer';
 import React from 'react';
 import { CiFilter, CiSearch } from 'react-icons/ci';
 import { IoAddOutline } from 'react-icons/io5';
+import { useDisclosure } from '@chakra-ui/hooks';
 import { Select } from '@chakra-ui/react';
+import { MdModeEdit } from 'react-icons/md';
+import PopupAdmin from './PopupAdmin';
+import { FormControl, FormLabel } from '@chakra-ui/form-control';
+import { Input } from '@chakra-ui/input';
+
 const HeadAdminPoli = ({ title, isAdd }) => {
+  const { isOpen: isModalCreateOpen, onOpen: onModalCreateOpen, onClose: onCloseModalCreate } = useDisclosure();
+  const { isOpen: isOpenModalEdit, onOpen: onOpenModalEdit, onClose: onCloseModalEdit } = useDisclosure();
+  const { isOpen: isOpenModalDelete, onOpen: onOpenModalDelete, onClose: onCloseModalDelete } = useDisclosure();
   return (
     <Flex bg="white" p={{ base: '2', sm: '5', md: '10' }} wrap="wrap" justifyContent={{ base: 'center', sm: 'space-between' }}>
       <Text fontSize={'20px'} fontWeight={'600'} color={'#1FA8F6'}>
@@ -31,11 +40,39 @@ const HeadAdminPoli = ({ title, isAdd }) => {
           <Button bg="transparent" border="1px" borderColor={'#E0E0E0'}>
             <CiSearch fontSize={'30px'} />
           </Button>
-          <Button bg="transparent" border="1px" borderColor={'#E0E0E0'}>
-            <CiFilter fontSize={'32px'} />
+          <Button onClick={onOpenModalEdit} bg="transparent" border="1px" borderColor={'#E0E0E0'}>
+            <MdModeEdit />
           </Button>
         </ButtonGroup>
       </Flex>
+      <PopupAdmin
+        modalTitle={'Tambah Poliklinik'}
+        isOpen={isModalCreateOpen}
+        onClose={onCloseModalCreate}
+        modalBody={
+          <>
+            <FormControl mt={4}>
+              <FormLabel>Nama Poliklinik</FormLabel>
+              <Input placeholder="Nama Poliklinik" id="name" type="text" />
+              {/* {errors.name && <FormErrorMessage>{errors.name.message}</FormErrorMessage>} */}
+            </FormControl>
+          </>
+        }
+      />
+      <PopupAdmin
+        modalTitle={'Ubah Data Poli'}
+        isOpen={isOpenModalEdit}
+        onClose={onCloseModalEdit}
+        modalBody={
+          <>
+            <FormControl>
+              <FormLabel>Nama Poliklinik</FormLabel>
+              <Input placeholder="Nama Poli" id="name" type="text" />
+              {/* {errors.name && <FormErrorMessage>{errors.name.message}</FormErrorMessage>} */}
+            </FormControl>
+          </>
+        }
+      />
     </Flex>
   );
 };
