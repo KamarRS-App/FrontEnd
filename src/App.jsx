@@ -24,6 +24,9 @@ import Payment from './pages/Payment';
 import PembayaranSelesai from './pages/PembayaranSelesai';
 import CariDokter from './pages/CariDokter';
 import DetailDokter from './pages/DetailDokter';
+import DashboardRoot from "./pages/Admin/DashboardRoot";
+import HospitalRootPages from "./pages/Admin/HospitalRootPages";
+import AdminRoot from "./pages/Admin/AdminRoot";
 import BuatJanjiDokter from './pages/BuatJanjiDokter';
 import TentangKami from './pages/TentangKami';
 import Privasi from './pages/Privasi';
@@ -43,6 +46,10 @@ function App() {
       <ChakraProvider theme={theme}>
         <Box minHeight={'100vh'}>
           <Routes>
+            {/* user */}
+
+            <Route path="/" element={<Login />} />
+            <Route path="/register" element={<Register />} />
             <Route path="/home" element={<HomePage />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
@@ -50,6 +57,16 @@ function App() {
             <Route path="/patient" element={<DataDiriPasien />} />
             <Route path="/search/detail" element={<DetailCariRumahSakit />} />
             <Route path="/detail/patient" element={<DetailDaftarRumahSakit />} />
+            <Route path="/pilih/metode/pembayaran" element={<Payment />} />
+            <Route path="pembayaran/selesai" element={<PembayaranSelesai />} />
+            <Route path="dokter" element={<CariDokter />} />
+            <Route path="detail/dokter" element={<DetailDokter />} />
+            <Route path="/buat/janji/dokter" element={<BuatJanjiDokter />} />
+            <Route path="/tentang/kami" element={<TentangKami />} />
+            <Route path="/halaman/privasi" element={<Privasi />} />
+            <Route path="/syarat/dan/ketentuan" element={<SyaratDanKetentuan />} />
+
+            {/* admin */}
             <Route path="/admin/dashboard" element={<Dashboard />} />
             <Route path="/admin/daily_praktek" element={<DashboardDailyPraktek />} />
             <Route path="/payment" element={<Pembayaran />} />
@@ -60,15 +77,13 @@ function App() {
             <Route path="/admin/doctor" element={<DoctorPage />} />
             <Route path="/admin/poliklinik" element={<Poliklinik />} />
             <Route path="/admin/hospital/profile" element={<ProfileHospitalPage />} />
-            <Route path="/pilih/metode/pembayaran" element={<Payment />} />
             <Route path="/admin/login" element={<LoginAdmin />} />
-            <Route path="pembayaran/selesai" element={<PembayaranSelesai />} />
-            <Route path="/cari/dokter" element={<CariDokter />} />
-            <Route path="/detail/dokter" element={<DetailDokter />} />
-            <Route path="/buat/janji/dokter" element={<BuatJanjiDokter />} />
-            <Route path="/tentang/kami" element={<TentangKami />} />
-            <Route path="/halaman/privasi" element={<Privasi />} />
-            <Route path="/syarat/dan/ketentuan" element={<SyaratDanKetentuan />} />
+
+            {/* super admin */}
+            <Route path="/root/dashboard" element={<DashboardRoot />} />
+            <Route path="/root/hospital" element={<HospitalRootPages />} />
+            <Route path="/root/user" element={<AdminRoot />} />
+
           </Routes>
         </Box>
       </ChakraProvider>

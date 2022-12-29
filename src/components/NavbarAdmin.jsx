@@ -31,7 +31,7 @@ const NavbarAdmin = () => {
                 gap='10'
                 alignItems='center'
             >
-                <InputGroup
+                {/* <InputGroup
                     width={{ base: 'full', sm: '300px', md: '400px' }}
                     shadow='md'
                     borderRadius='md'
@@ -46,7 +46,7 @@ const NavbarAdmin = () => {
                         borderLeft='none'
                         bg='transparent'
                     />
-                </InputGroup>
+                </InputGroup> */}
                 <Box
                     border='1px'
                     borderColor='#E0E0E0'
