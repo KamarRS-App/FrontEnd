@@ -66,7 +66,7 @@ const AdminRoot = () => {
         hospital_id: Yup.number().required('Rumah Sakit Bekerja tidak boleh kosong'),
     })
 
-    const { register: createAdmin, handleSubmit, formState: { errors } } = useForm({
+    const { register: createAdmin, handleSubmit, setValue: setValueCreate, formState: { errors } } = useForm({
         mode: "onTouched",
         reValidateMode: "onSubmit",
         resolver: yupResolver(schema),
@@ -224,6 +224,14 @@ const AdminRoot = () => {
         onCloseModalDelete();
     }
 
+    const onCloseHandler = () => {
+        onCloseModalCreate()
+        setValueCreate('nama', '');
+        setValueCreate('email', '');
+        setValueCreate('kata_sandi', '');
+        setValueCreate('hospital_id', null);
+    }
+
     const onShowPassword = (e) => {
         setShow(e.target.value)
     }
@@ -361,7 +369,7 @@ const AdminRoot = () => {
             <PopupAdmin
                 modalTitle={'Tambahkan Akun Admin Rumah Sakit'}
                 isOpen={isModalCreateOpen}
-                onClose={onCloseModalCreate}
+                onClose={onCloseHandler}
                 submitButton={handleSubmit(onSubmitCreate)}
                 modalBody={
                     <>

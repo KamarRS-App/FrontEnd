@@ -73,7 +73,7 @@ const HospitalRootPages = () => {
         biaya_registrasi: Yup.number('Harus Angka').required('Biaya registrasi wajib diisi'),
     })
 
-    const { register: createHospital, handleSubmit, formState: { errors } } = useForm({
+    const { register: createHospital, handleSubmit, setValue: setValueCreate , formState: { errors } } = useForm({
         mode: "onTouched",
         reValidateMode: "onSubmit",
         resolver: yupResolver(schema),
@@ -246,44 +246,42 @@ const HospitalRootPages = () => {
         data.append('foto', hospitalImage);
 
         createHospitalHandler(data)
-        setUpdate("nama", '');
-        setUpdate("foto", '');
-        setUpdate("kode_rs", '');
-        setUpdate("alamat", '');
-        setUpdate("kode_pos", '');
-        setUpdate("no_telepon", '');
-        setUpdate("email", '');
-        setUpdate("kelas_rs", '');
-        setUpdate("jumlah_tempat_tidur", null);
-        setUpdate("pemilik_pengelola", '');
-        setUpdate("biaya_registrasi", null);
-        setUpdate('status_penggunaan', '');
-        setUpdate("provinsi", '');
-        setUpdate("kecamatan", '');
-        setUpdate("kabupaten_kota", '');
+        setValueCreate("nama", '');
+        setValueCreate("foto", '');
+        setValueCreate("kode_rs", '');
+        setValueCreate("alamat", '');
+        setValueCreate("kode_pos", '');
+        setValueCreate("no_telepon", '');
+        setValueCreate("email", '');
+        setValueCreate("kelas_rs", '');
+        setValueCreate("jumlah_tempat_tidur", null);
+        setValueCreate("pemilik_pengelola", '');
+        setValueCreate("biaya_registrasi", null);
+        setValueCreate('status_penggunaan', '');
+        setValueCreate("provinsi", '');
+        setValueCreate("kecamatan", '');
+        setValueCreate("kabupaten_kota", '');
+        onCloseModalCreate();
     }
 
     const onUpdateHandler = (values) => {
         const data = new FormData();
 
-        const jumlah_tempat_tidur = values.jumlah_tempat_tidur !== '' ? parseInt(values.jumlah_tempat_tidur) : currentHospital.jumlah_tempat_tidur;
-        const biaya_registrasi = values.biaya_registrasi !== '' ? parseInt(values.biaya_registrasi) : currentHospital.biaya_registrasi;
-
-        data.append('kode_rs', values.kode_rs !== '' ? values.kode_rs : currentHospital.kode_rs);
-        data.append('nama', values.nama !== '' ? values.nama : currentHospital.nama);
-        data.append('alamat', values.alamat !== '' ? values.alamat : currentHospital.alamat);
-        data.append('provinsi', values.provinsi !== '' ? values.provinsi : currentHospital.provinsi);
-        data.append('kabupaten_kota', values.kabupaten_kota !== '' ? values.kabupaten_kota : currentHospital.kabupaten_kota);
-        data.append('kecamatan', values.kecamatan !== '' ? values.kecamatan : currentHospital.kecamatan);
-        data.append('kode_pos', values.kode_pos !== '' ? values.kode_pos : currentHospital.kode_pos);
-        data.append('no_telpon', values.no_telepon !== '' ? values.no_telepon : currentHospital.no_telpon);
-        data.append('email', values.email !== '' ? values.email : currentHospital.email);
-        data.append('kelas_rs', values.kelas_rs !== '' ? values.kelas_rs : currentHospital.kelas_rs);
-        data.append('pemilik_pengelola', values.pemilik_pengelola !== '' ? values.pemilik_pengelola : currentHospital.pemilik_pengelola);
-        data.append('jumlah_tempat_tidur', jumlah_tempat_tidur);
-        data.append('status_penggunaan', values.status_penggunaan !== '' ? values.status_penggunaan : currentHospital.status_penggunaan);
-        data.append('biaya_registrasi', biaya_registrasi);
-        data.append('foto', hospitalImage !== undefined ? hospitalImage : currentHospital.foto);
+        data.append('kode_rs', values.kode_rs);
+        data.append('nama', values.nama);
+        data.append('alamat', values.alamat);
+        data.append('provinsi', values.provinsi);
+        data.append('kabupaten_kota', values.kabupaten_kota);
+        data.append('kecamatan', values.kecamatan);
+        data.append('kode_pos', values.kode_pos);
+        data.append('no_telpon', values.no_telepon);
+        data.append('email', values.email);
+        data.append('kelas_rs', values.kelas_rs);
+        data.append('pemilik_pengelola', values.pemilik_pengelola);
+        data.append('jumlah_tempat_tidur', values.jumlah_tempat_tidur);
+        data.append('status_penggunaan', values.status_penggunaan);
+        data.append('biaya_registrasi', values.biaya_registrasi);
+        data.append('foto', hospitalImage !== undefined && hospitalImage);
 
         updateHospitalHandler(data)
     }
@@ -291,6 +289,25 @@ const HospitalRootPages = () => {
     const onCloseHandler = () => {
         setHospitalImage(undefined);
         onCloseModalEdit();
+    }
+
+    const onCloseCreateHandler = () => {
+        setValueCreate("nama", '');
+        setValueCreate("foto", '');
+        setValueCreate("kode_rs", '');
+        setValueCreate("alamat", '');
+        setValueCreate("kode_pos", '');
+        setValueCreate("no_telepon", '');
+        setValueCreate("email", '');
+        setValueCreate("kelas_rs", '');
+        setValueCreate("jumlah_tempat_tidur", null);
+        setValueCreate("pemilik_pengelola", '');
+        setValueCreate("biaya_registrasi", null);
+        setValueCreate('status_penggunaan', '');
+        setValueCreate("provinsi", '');
+        setValueCreate("kecamatan", '');
+        setValueCreate("kabupaten_kota", '');
+        onCloseModalCreate();
     }
 
     const onDeleteClicked = (id) => {
@@ -520,7 +537,7 @@ const HospitalRootPages = () => {
             <PopupAdmin
                 modalTitle={'Tambah Rumah Sakit'}
                 isOpen={isModalCreateOpen}
-                onClose={onCloseModalCreate}
+                onClose={onCloseCreateHandler}
                 submitButton={handleSubmit(onSubmit, onError)}
                 modalBody={
                     <>
