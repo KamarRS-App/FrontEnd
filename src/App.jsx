@@ -32,6 +32,7 @@ import TentangKami from './pages/TentangKami';
 import Privasi from './pages/Privasi';
 import SyaratDanKetentuan from './pages/SyaratDanKetentuan';
 import Poliklinik from './pages/Admin/Poliklinik';
+import LoginAdminRoot from "./pages/Admin/LoginAdminRoot";
 
 import "./App.css";
 import "@fontsource/plus-jakarta-sans/700.css";
@@ -39,7 +40,6 @@ import "@fontsource/plus-jakarta-sans/400.css";
 import "@fontsource/plus-jakarta-sans/500.css";
 import "@fontsource/plus-jakarta-sans/600.css";
 import theme from "../utils/extendedTheme";
-import LoginAdminRoot from "./pages/Admin/LoginAdminRoot";
 
 function App() {
   return (
@@ -79,12 +79,11 @@ function App() {
             <Route path="/admin/poliklinik" element={<Poliklinik />} />
             <Route path="/admin/hospital/profile" element={<ProfileHospitalPage />} />
             <Route path="/admin/login" element={<LoginAdmin />} />
-
-            {/* super admin */}
             <Route path="/root/login" element={<LoginAdminRoot />} />
             <Route path="/root/dashboard" element={<DashboardRoot />} />
             <Route path="/root/hospital" element={<HospitalRootPages />} />
             <Route path="/root/user" element={<AdminRoot />} />
+            {/* super admin */}
 
           </Routes>
         </Box>

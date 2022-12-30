@@ -1,11 +1,10 @@
-import { Box, Button, FormControl, FormErrorMessage, FormLabel, HStack, Image, Input, Stack, Text } from '@chakra-ui/react';
+import { Box, Button, FormControl, FormErrorMessage, FormLabel, HStack, Image, Input, Stack, Text, useToast } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import api from '../../services/api';
-import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
@@ -13,6 +12,8 @@ const LoginAdminRoot = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [show, setShow] = useState('');
     const navigate = useNavigate();
+    const toast = useToast();
+
 
     const initialValues = {
         email: '',
@@ -37,23 +38,24 @@ const LoginAdminRoot = () => {
         await api.loginSuperAdmin(data)
             .then(response => {
                 const data = response.data.data;
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    text: 'Login Berhasil',
-                    showConfirmButton: false,
-                    timer: 1500,
+                toast({
+                    position: 'top',
+                    title: 'Login Berhasil',
+                    status: 'success',
+                    duration: '1500',
+                    isClosable: true
                 })
                 Cookies.set('token', data.token)
+                Cookies.set('role', data.peran)
                 navigate('/root/dashboard')
             })
             .catch(error => (
-                Swal.fire({
-                    position: 'center',
-                    icon: 'error',
-                    text: 'Login Gagal',
-                    showConfirmButton: false,
-                    timer: 1500,
+                toast({
+                    position: 'top',
+                    title: 'Login Gagal',
+                    status: 'error',
+                    duration: '1500',
+                    isClosable: true
                 })
             ))
     }

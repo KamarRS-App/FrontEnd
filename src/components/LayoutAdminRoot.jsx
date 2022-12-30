@@ -5,10 +5,11 @@ import SideBarAdminRoot from './SideBarAdminRoot';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 
-const LayoutAdminRoot = ({activeMenu, children, name, role}) => {
+const LayoutAdminRoot = ({activeMenu, children}) => {
     const navigate = useNavigate();
     const onLogoutHandler = () => {
         Cookies.remove('token');
+        Cookies.remove('role');
         navigate('/root/login');
     }
     return (
@@ -18,7 +19,7 @@ const LayoutAdminRoot = ({activeMenu, children, name, role}) => {
             <Box
                 width='full'
             >
-                <NavbarAdmin name={name} role={role} onLogout={onLogoutHandler} />
+                <NavbarAdmin name={'Team Rawat Inap'} role={'Super Admin'} onLogout={onLogoutHandler} />
             </Box>
             <Box
                 maxWidth='500px'
