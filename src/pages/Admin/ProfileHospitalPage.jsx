@@ -15,7 +15,7 @@ function ProfileHospitalPage() {
   const token = Cookies.get('token');
   const role = Cookies.get('role');
   const toast = useToast();
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const getHospitalById = async () => {
     await api.getHospitalByID(token, id)

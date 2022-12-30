@@ -46,9 +46,10 @@ const LoginAdmin = () => {
                     duration: '1500',
                     isClosable: true
                 })
-                Cookies.set('token', data.token)
-                Cookies.set('role', 'Admin - Staff')
-                Cookies.set('name', data.name)
+                Cookies.set('token', data.token);
+                Cookies.set('role', 'Admin - Staff');
+                Cookies.set('name', data.name);
+                Cookies.set('id', data.staff_id);
                 navigate('/admin/dashboard');
             })
             .catch(error => {
