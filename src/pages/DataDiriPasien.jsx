@@ -20,48 +20,87 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { error } from "daisyui/src/colors";
-
-const schema = yup.object().shape({
-  namaDepan: yup.string().required("Harap masukkan nama depan"),
-  namaBelakang: yup.string().required("Harap masukkan nama belakang"),
-  noKTP: yup.number().typeError("Harap masukkan nomor KTP").required(),
-  noBPJS: yup.number().typeError("Harap masukkan nomor BPJS").required(),
-  jenisKelamin: yup.string().required("Harap pilih satu jenis kelamin"),
-  usia: yup
-    .number()
-    .typeError("Harap masukkan usia")
-    .positive("Usia haruslah bilangan positif"),
-  email: yup.string().required("Harap isi email").email("Format email salah"),
-  nomorhape: yup.number().typeError("Harap masukkan nomor hp").required(),
-  domisili: yup.string().required("Harap masukkan alamat domisili"),
-  provinsi: yup.string().required("Harap pilih provinsi asal"),
-  kota: yup.string().required("Harap pilih kabupaten/kota asal"),
-  riwayat: yup.string().required("Harap masukkan riwayat penyakit pasien"),
-  fotoKTP: yup
-    .mixed()
-    .required("Harap upload foto KTP")
-    .test(
-      "fileSize",
-      "Ukuran file terlalu besar, max 10MB",
-      (value) => value && value.size <= 100 * 1024
-    )
-    .test(
-      "fileFormat",
-      "Format file tidak didukung",
-      (value) => value && ["image/jpg", "image/jpeg"].includes(value.type)
-    ),
-});
+import axios from "axios";
 
 function DataDiriPasien() {
+  const [provinsi, setProvinsi] = React.useState();
+  const [kabupaten, setKabupaten] = React.useState(null);
+  const [listKabupaten, setListKabupaten] = React.useState([]);
+
+  //yup schema
+  const schema = yup.object().shape({
+    namaDepan: yup.string().required("Harap masukkan nama depan"),
+    namaBelakang: yup.string().required("Harap masukkan nama belakang"),
+    noKTP: yup.number().typeError("Harap masukkan nomor KTP").required(),
+    noBPJS: yup.number().typeError("Harap masukkan nomor BPJS").required(),
+    jenisKelamin: yup.string().required("Harap pilih satu jenis kelamin"),
+    usia: yup
+      .number()
+      .typeError("Harap masukkan usia")
+      .positive("Usia haruslah bilangan positif"),
+    email: yup.string().required("Harap isi email").email("Format email salah"),
+    nomorhape: yup.number().typeError("Harap masukkan nomor hp").required(),
+    domisili: yup.string().required("Harap masukkan alamat domisili"),
+    provinsi: yup.string().required("Harap pilih provinsi asal"),
+    kota: yup.string().required("Harap pilih kabupaten/kota asal"),
+    riwayat: yup.string().required("Harap masukkan riwayat penyakit pasien"),
+    // fotoKTP: yup
+    //   .mixed()
+    //   .required("Harap upload foto KTP")
+    //   .test(
+    //     "fileSize",
+    //     "Ukuran file terlalu besar, max 10MB",
+    //     (value) => value && value.size <= 100 * 1024
+    //   )
+    //   .test(
+    //     "fileFormat",
+    //     "Format file tidak didukung",
+    //     (value) => value && ["image/jpg", "image/jpeg"].includes(value.type)
+    //   ),
+  });
+
+  //rfh configuration
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
+    mode: "onChange",
   });
 
+  //handle data provinsi
+  const getProvinsi = async () => {
+    await axios
+      .get("https://dev.farizdotid.com/api/daerahindonesia/provinsi")
+      .then((response) => {
+        setProvinsi(response.data.provinsi);
+        console.log(response);
+      });
+  };
+
+  //handle kabupaten/kota
+  const getSpecificCity = async (id) => {
+    await axios
+      .get(
+        `https://dev.farizdotid.com/api/daerahindonesia/kota?id_provinsi=${id}`
+      )
+      .then((response) => {
+        setListKabupaten(response.data.kota_kabupaten);
+      });
+  };
+
+  //handle submit data
   const onSubmit = (data) => console.log(data);
+
+  React.useEffect(() => {
+    getProvinsi();
+  }, []);
+
+  React.useEffect(() => {
+    getSpecificCity(kabupaten);
+    console.log(kabupaten);
+  }, [kabupaten]);
 
   return (
     <Layout>
@@ -104,35 +143,35 @@ function DataDiriPasien() {
                 gap={10}
               >
                 <GridItem w="100%" h="100%">
-                  <FormControl isRequired>
+                  <FormControl isInvalid={errors.namaDepan}>
                     <FormLabel>Nama Depan:</FormLabel>
                     <Input name="namaDepan" {...register("namaDepan")} />
                     <Text color={"red"}>{errors.namaDepan?.message}</Text>
                   </FormControl>
                 </GridItem>
                 <GridItem w="100%" h="100%">
-                  <FormControl isRequired>
+                  <FormControl isInvalid={errors.namaBelakang}>
                     <FormLabel>Nama Belakang</FormLabel>
                     <Input {...register("namaBelakang")} />
                     <Text color="red">{errors.namaBelakang?.message}</Text>
                   </FormControl>
                 </GridItem>
                 <GridItem w="100%" h="100%">
-                  <FormControl isRequired>
+                  <FormControl isInvalid={errors.noKTP}>
                     <FormLabel>No. KTP</FormLabel>
                     <Input {...register("noKTP")} type="number" />
                     <Text color="red">{errors.noKTP?.message}</Text>
                   </FormControl>
                 </GridItem>
                 <GridItem w="100%" h="100%">
-                  <FormControl isRequired>
+                  <FormControl isInvalid={errors.noBPJS}>
                     <FormLabel>No BPJS</FormLabel>
                     <Input {...register("noBPJS")} type="number" />
                     <Text color="red">{errors.noBPJS?.message}</Text>
                   </FormControl>
                 </GridItem>
                 <GridItem w="100%" h="100%">
-                  <FormControl isRequired>
+                  <FormControl isInvalid={errors.jenisKelamin}>
                     <FormLabel>Jenis Kelamin</FormLabel>
                     <Select
                       {...register("jenisKelamin")}
@@ -145,21 +184,21 @@ function DataDiriPasien() {
                   </FormControl>
                 </GridItem>
                 <GridItem w="100%" h="100%">
-                  <FormControl isRequired>
+                  <FormControl isInvalid={errors.usia}>
                     <FormLabel>Usia</FormLabel>
                     <Input {...register("usia")} type="number" />
                     <Text color="red">{errors.usia?.message}</Text>
                   </FormControl>
                 </GridItem>
                 <GridItem w="100%" h="100%">
-                  <FormControl isRequired>
+                  <FormControl isInvalid={errors.email}>
                     <FormLabel>Email</FormLabel>
                     <Input {...register("email")} />
                     <Text color="red">{errors.email?.message}</Text>
                   </FormControl>
                 </GridItem>
                 <GridItem w="100%" h="100%">
-                  <FormControl isRequired>
+                  <FormControl isInvalid={errors.nomorhape}>
                     <FormLabel>No Handphone</FormLabel>
                     <Input {...register("nomorhape")} type="number" />
                     <Text color={"red"}>{errors.nomorhape?.message}</Text>
@@ -167,7 +206,7 @@ function DataDiriPasien() {
                 </GridItem>
               </Grid>
               <Box mt="10">
-                <FormControl isRequired>
+                <FormControl isInvalid={errors.domisili}>
                   <FormLabel>Alamat Domisili</FormLabel>
                   <Input {...register("domisili")} />
                   <Text color={"red"}>{errors.domisili?.message}</Text>
@@ -182,32 +221,39 @@ function DataDiriPasien() {
                 mt="10"
               >
                 <GridItem w="100%" h="100%">
-                  <FormControl isRequired>
+                  <FormControl isInvalid={errors.provinsi}>
                     <FormLabel>Provinsi</FormLabel>
                     <Select
                       {...register("provinsi")}
                       placeholder="-- Pilih provinsi --"
+                      onChange={(e) => setKabupaten(e.target.value)}
                     >
-                      <option value="option1">Aceh</option>
-                      <option value="papbaratdaya">Papua Barat Daya</option>
+                      {provinsi?.map((prov) => {
+                        return <option value={prov.id}>{prov.nama}</option>;
+                      })}
+                      {/* <option value="option1">Aceh</option>
+                      <option value="papbaratdaya">Papua Barat Daya</option> */}
                     </Select>
                     <Text color={"red"}>{errors.provinsi?.message}</Text>
                   </FormControl>
                 </GridItem>
                 <GridItem w="100%" h="100%">
-                  <FormControl isRequired>
+                  <FormControl isInvalid={errors.kota}>
                     <FormLabel>Kabupaten / Kota</FormLabel>
                     <Select
                       {...register("kota")}
                       placeholder="-- Pilih kabupaten/kota --"
                     >
-                      <option value="papbaratdaya">Papua Barat Daya</option>
+                      {listKabupaten?.map((kota) => {
+                        return <option value={kota.nama}>{kota.nama}</option>;
+                      })}
+                      {/* <option value="papbaratdaya">Papua Barat Daya</option> */}
                     </Select>
                     <Text color={"red"}>{errors.kota?.message}</Text>
                   </FormControl>
                 </GridItem>
                 <GridItem w="100%" h="100%">
-                  <FormControl isRequired>
+                  <FormControl isInvalid={errors.riwayat}>
                     <FormLabel>Riwayat Penyakit</FormLabel>
                     <Input {...register("riwayat")} />
                     <Text color={"red"}>{errors.riwayat?.message}</Text>
