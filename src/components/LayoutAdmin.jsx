@@ -1,9 +1,22 @@
 import { Box, Flex } from '@chakra-ui/react';
+import Cookies from 'js-cookie';
 import React from 'react';
+import { useNavigate } from 'react-router';
 import NavbarAdmin from './NavbarAdmin';
 import SideBarAdmin from './SideBarAdmin';
 
 const LayoutAdmin = ({children, activeMenu}) => {
+    const name = Cookies.get('name');
+    const role = Cookies.get('role');
+    const navigate = useNavigate();
+
+    const onLogoutHandler = () => {
+        Cookies.remove('name');
+        Cookies.remove('token');
+        Cookies.remove('role');
+        navigate('/admin/login');
+    }
+
     return (
         <Flex
             wrap='wrap'
@@ -11,7 +24,7 @@ const LayoutAdmin = ({children, activeMenu}) => {
             <Box
                 width='full'
             >
-                <NavbarAdmin />
+                <NavbarAdmin name={name} onLogout={() => onLogoutHandler()} role={role} />
             </Box>
             <Box
                 maxWidth='500px'

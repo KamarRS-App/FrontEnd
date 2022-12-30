@@ -1,12 +1,32 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import LayoutAdmin from '../../components/LayoutAdmin';
 import { Box, Stack, Text } from '@chakra-ui/layout';
 import { FormControl, FormLabel } from '@chakra-ui/form-control';
 import { Input } from '@chakra-ui/input';
 import { Select } from '@chakra-ui/select';
 import { Button } from '@chakra-ui/button';
+import Cookies from 'js-cookie';
+import { useToast } from '@chakra-ui/toast';
+import { useNavigate } from 'react-router';
 
 const SettingPage = () => {
+    const token = Cookies.get('token');
+    const role = Cookies.get('role');
+    const toast = useToast();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (role !== 'Admin - Staff' && token === undefined) {
+          toast({
+            position: 'top',
+            title: 'Kamu Harus Login Dulu',
+            status: 'warning',
+            duration: '2000',
+            isClosable: true
+          })
+          navigate('/admin/login');
+        }
+      }, []);
     return (
         <LayoutAdmin activeMenu={'profile'}>
             <Stack

@@ -1,24 +1,31 @@
-import { Box, Button, Checkbox, Flex, FormControl, FormErrorMessage, FormLabel, HStack, Image, Input, Stack, Text } from '@chakra-ui/react';
-import React, { useRef, useState } from 'react';
+import { Box, Button, Checkbox, Flex, FormControl, FormErrorMessage, FormLabel, HStack, Image, Input, Stack, Text, useToast } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import api from '../../services/api';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router';
 
 const LoginAdmin = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [show, setShow] = useState('');
+    const toast = useToast();
+    const navigate = useNavigate();
+    const token = Cookies.get('token');
+    const role = Cookies.get('role');
 
     const initialValues = {
         email: '',
-        password: '',
+        kata_sandi: '',
     }
 
     const [initialValue, setInitialValue] = useState(initialValues);
 
     const schema = Yup.object().shape({
         email: Yup.string().email('Email tidak sesuai').required('Email wajib diisi'),
-        password: Yup.string().required('Password wajib diisi').min(8, 'Password minimal 8 karakter')
+        kata_sandi: Yup.string().required('Password wajib diisi').min(6, 'Password minimal 6 karakter')
     })
 
     const { register: loginAdmin, handleSubmit, formState: { errors } } = useForm({
@@ -28,17 +35,46 @@ const LoginAdmin = () => {
         defaultValues: initialValue,
     })
 
-    const onError = (error) => {
-        console.log(error)
+    const onLoginHandler = async(data) => {
+        await api.loginAdmin(data)
+            .then(response => {
+                const data = response.data.data;
+                toast({
+                    position: 'top',
+                    title: 'Login Berhasil',
+                    status: 'success',
+                    duration: '1500',
+                    isClosable: true
+                })
+                Cookies.set('token', data.token)
+                Cookies.set('role', 'Admin - Staff')
+                Cookies.set('name', data.name)
+                navigate('/admin/dashboard');
+            })
+            .catch(error => {
+                toast({
+                    position: 'top',
+                    title: 'Login Gagal',
+                    status: 'error',
+                    duration: '1500',
+                    isClosable: true
+                })
+            })
     }
 
     const onSubmit = (values) => {
-        console.log(values)
+        onLoginHandler(values)
     }
 
     const onShowPassword = (e) => {
         setShow(e.target.value)
     }
+
+    useEffect(() => {
+        if (role === 'Admin - Staff' && token !== undefined) {
+          navigate(-1);
+        }
+      }, []);
 
     return (
         <Stack
@@ -80,7 +116,7 @@ const LoginAdmin = () => {
                     >
                         Login as Admin
                     </Text>
-                    <form onSubmit={handleSubmit(onSubmit, onError)}>
+                    <form onSubmit={handleSubmit(onSubmit)}>
                         <FormControl
                             mt={'8'}
                             isInvalid={errors.email}
@@ -106,7 +142,7 @@ const LoginAdmin = () => {
                         </FormControl>
                         <FormControl
                             mt={'5'}
-                            isInvalid={errors.password}
+                            isInvalid={errors.kata_sandi}
                         >
                             <FormLabel
                                 fontSize={'14px'}
@@ -119,7 +155,7 @@ const LoginAdmin = () => {
                             >
                                 <Input
                                     placeholder='password'
-                                    id="password"
+                                    id="kata_sandi"
                                     type={showPassword ? 'text' : 'password'}
                                     border={'1px'}
                                     borderColor={'#00000066'}
@@ -127,7 +163,7 @@ const LoginAdmin = () => {
                                     borderRadius={'xl'}
                                     _placeholder={{ color: '#000000B2' }}
                                     onInput={onShowPassword}
-                                    {...loginAdmin('password')}
+                                    {...loginAdmin('kata_sandi')}
                                 />
                                 {
                                     show &&
@@ -143,7 +179,7 @@ const LoginAdmin = () => {
                                         }
                                     </Box>
                                 }
-                                {errors.password && <FormErrorMessage>{errors.password.message}</FormErrorMessage>}
+                                {errors.kata_sandi && <FormErrorMessage>{errors.kata_sandi.message}</FormErrorMessage>}
                             </Stack>
                         </FormControl>
                         <Flex

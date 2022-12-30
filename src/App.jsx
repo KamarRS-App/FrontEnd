@@ -14,7 +14,7 @@ import DetailDaftarRumahSakit from "./pages/DetailDaftarRumahSakit";
 import DashboardDailyPraktek from "./pages/Admin/DashboardDailyPraktek";
 import UserPage from "./pages/Admin/UserPage";
 import RoomPage from "./pages/Admin/RoomPage";
-import PatientPage from "./pages/Admin/PatientPage";
+import PatientRegistrationPage from "./pages/Admin/PatientRegistrationPage";
 import DoctorPage from "./pages/Admin/DoctorPage";
 import ProfileHospitalPage from "./pages/Admin/ProfileHospitalPage";
 import LoginAdmin from "./pages/Admin/LoginAdmin";
@@ -74,7 +74,7 @@ function App() {
             <Route path="/admin/user" element={<UserPage />} />
             <Route path="/admin/profile" element={<SettingPage />} />
             <Route path="/admin/room" element={<RoomPage />} />
-            <Route path="/admin/patient" element={<PatientPage />} />
+            <Route path="/admin/patient" element={<PatientRegistrationPage />} />
             <Route path="/admin/doctor" element={<DoctorPage />} />
             <Route path="/admin/poliklinik" element={<Poliklinik />} />
             <Route path="/admin/hospital/profile" element={<ProfileHospitalPage />} />

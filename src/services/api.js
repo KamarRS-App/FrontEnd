@@ -16,13 +16,13 @@ export default {
             },
         }),
 
-    loginAdmin: ({ email, password }) =>
+    loginAdmin: (data) =>
         instance({
             method: `POST`,
-            url: `login/staff`,
+            url: `/login/staffs`,
             data: {
-                email: email,
-                password: password,
+                email: data.email,
+                kata_sandi: data.kata_sandi,
             },
         }),
 
