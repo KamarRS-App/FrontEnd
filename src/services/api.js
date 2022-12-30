@@ -775,7 +775,6 @@ export default {
                 status: status
             }
         }),
-}
 
   getAllBedRegistrations: (token) =>
     instance({
