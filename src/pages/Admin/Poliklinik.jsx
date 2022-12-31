@@ -1,7 +1,7 @@
 import { Button, ButtonGroup } from '@chakra-ui/button';
 import { Box, Flex, Text } from '@chakra-ui/layout';
 import { Td, Tr } from '@chakra-ui/table';
-import React from 'react';
+import React, { useEffect } from 'react';
 import HeadAdmin from '../../components/HeadAdmin';
 import LayoutAdmin from '../../components/LayoutAdmin';
 import TableAdmin from '../../components/TableAdmin';
@@ -14,10 +14,33 @@ import PopupDelete from '../../components/PopupDelete';
 import HeadAdminPoli from '../../components/HeadAdminPoli';
 import { IoAddOutline } from 'react-icons/io5';
 import { CiSearch } from 'react-icons/ci';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router';
+import { useToast } from '@chakra-ui/toast';
+
+
 const Poliklinik = () => {
   const { isOpen: isModalCreateOpen, onOpen: onModalCreateOpen, onClose: onCloseModalCreate } = useDisclosure();
   const { isOpen: isOpenModalEdit, onOpen: onOpenModalEdit, onClose: onCloseModalEdit } = useDisclosure();
   const { isOpen: isOpenModalDelete, onOpen: onOpenModalDelete, onClose: onCloseModalDelete } = useDisclosure();
+
+  const token = Cookies.get('token');
+  const role = Cookies.get('role');
+  const toast = useToast();
+    const navigate = useNavigate();
+
+  useEffect(() => {
+    if (role !== 'Admin - Staff' && token === undefined) {
+      toast({
+        position: 'top',
+        title: 'Kamu Harus Login Dulu',
+        status: 'warning',
+        duration: '2000',
+        isClosable: true
+      })
+      navigate('/admin/login');
+    }
+  }, []);
   return (
     <LayoutAdmin activeMenu={'poli'}>
       <HeadAdminPoli title={'Manajemen Poliklinik'} isAdd={onModalCreateOpen} />

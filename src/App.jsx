@@ -1,6 +1,7 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import { Box } from "@chakra-ui/layout";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Provider } from "react-redux";
 
 import Login from "./pages/Login";
 import SettingPage from "./pages/Admin/SettingPage";
@@ -14,7 +15,7 @@ import DetailDaftarRumahSakit from "./pages/DetailDaftarRumahSakit";
 import DashboardDailyPraktek from "./pages/Admin/DashboardDailyPraktek";
 import UserPage from "./pages/Admin/UserPage";
 import RoomPage from "./pages/Admin/RoomPage";
-import PatientPage from "./pages/Admin/PatientPage";
+import PatientRegistrationPage from "./pages/Admin/PatientRegistrationPage";
 import DoctorPage from "./pages/Admin/DoctorPage";
 import ProfileHospitalPage from "./pages/Admin/ProfileHospitalPage";
 import LoginAdmin from "./pages/Admin/LoginAdmin";
@@ -40,55 +41,58 @@ import "@fontsource/plus-jakarta-sans/400.css";
 import "@fontsource/plus-jakarta-sans/500.css";
 import "@fontsource/plus-jakarta-sans/600.css";
 import theme from "../utils/extendedTheme";
+import store from "../store";
 
 function App() {
   return (
-    <BrowserRouter>
-      <ChakraProvider theme={theme}>
-        <Box minHeight={'100vh'}>
-          <Routes>
-            {/* user */}
+    <Provider store={store}>
+      <BrowserRouter>
+        <ChakraProvider theme={theme}>
+          <Box minHeight={'100vh'}>
+            <Routes>
+              {/* user */}
 
-            <Route path="/" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/home" element={<HomePage />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/patient/add" element={<TambahData />} />
-            <Route path="/patient" element={<DataDiriPasien />} />
-            <Route path="/search/detail" element={<DetailCariRumahSakit />} />
-            <Route path="/detail/patient" element={<DetailDaftarRumahSakit />} />
-            <Route path="/pilih/metode/pembayaran" element={<Payment />} />
-            <Route path="pembayaran/selesai" element={<PembayaranSelesai />} />
-            <Route path="dokter" element={<CariDokter />} />
-            <Route path="detail/dokter" element={<DetailDokter />} />
-            <Route path="/buat/janji/dokter" element={<BuatJanjiDokter />} />
-            <Route path="/tentang/kami" element={<TentangKami />} />
-            <Route path="/halaman/privasi" element={<Privasi />} />
-            <Route path="/syarat/dan/ketentuan" element={<SyaratDanKetentuan />} />
+              <Route path="/" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/home" element={<HomePage />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/patient/add" element={<TambahData />} />
+              <Route path="/patient" element={<DataDiriPasien />} />
+              <Route path="/search/detail" element={<DetailCariRumahSakit />} />
+              <Route path="/detail/patient" element={<DetailDaftarRumahSakit />} />
+              <Route path="/pilih/metode/pembayaran" element={<Payment />} />
+              <Route path="pembayaran/selesai" element={<PembayaranSelesai />} />
+              <Route path="dokter" element={<CariDokter />} />
+              <Route path="detail/dokter" element={<DetailDokter />} />
+              <Route path="/buat/janji/dokter" element={<BuatJanjiDokter />} />
+              <Route path="/tentang/kami" element={<TentangKami />} />
+              <Route path="/halaman/privasi" element={<Privasi />} />
+              <Route path="/syarat/dan/ketentuan" element={<SyaratDanKetentuan />} />
 
-            {/* admin */}
-            <Route path="/admin/dashboard" element={<Dashboard />} />
-            <Route path="/admin/daily_praktek" element={<DashboardDailyPraktek />} />
-            <Route path="/payment" element={<Pembayaran />} />
-            <Route path="/admin/user" element={<UserPage />} />
-            <Route path="/admin/profile" element={<SettingPage />} />
-            <Route path="/admin/room" element={<RoomPage />} />
-            <Route path="/admin/patient" element={<PatientPage />} />
-            <Route path="/admin/doctor" element={<DoctorPage />} />
-            <Route path="/admin/poliklinik" element={<Poliklinik />} />
-            <Route path="/admin/hospital/profile" element={<ProfileHospitalPage />} />
-            <Route path="/admin/login" element={<LoginAdmin />} />
-            <Route path="/root/login" element={<LoginAdminRoot />} />
-            <Route path="/root/dashboard" element={<DashboardRoot />} />
-            <Route path="/root/hospital" element={<HospitalRootPages />} />
-            <Route path="/root/user" element={<AdminRoot />} />
-            {/* super admin */}
+              {/* admin */}
+              <Route path="/admin/dashboard" element={<Dashboard />} />
+              <Route path="/admin/daily_praktek" element={<DashboardDailyPraktek />} />
+              <Route path="/payment" element={<Pembayaran />} />
+              <Route path="/admin/user" element={<UserPage />} />
+              <Route path="/admin/profile" element={<SettingPage />} />
+              <Route path="/admin/room" element={<RoomPage />} />
+              <Route path="/admin/patient" element={<PatientRegistrationPage />} />
+              <Route path="/admin/doctor" element={<DoctorPage />} />
+              <Route path="/admin/poliklinik" element={<Poliklinik />} />
+              <Route path="/admin/hospital/profile" element={<ProfileHospitalPage />} />
+              <Route path="/admin/login" element={<LoginAdmin />} />
+              <Route path="/root/login" element={<LoginAdminRoot />} />
+              <Route path="/root/dashboard" element={<DashboardRoot />} />
+              <Route path="/root/hospital" element={<HospitalRootPages />} />
+              <Route path="/root/user" element={<AdminRoot />} />
+              {/* super admin */}
 
-          </Routes>
-        </Box>
-      </ChakraProvider>
-    </BrowserRouter>
+            </Routes>
+          </Box>
+        </ChakraProvider>
+      </BrowserRouter>
+    </Provider>
   );
 }
 

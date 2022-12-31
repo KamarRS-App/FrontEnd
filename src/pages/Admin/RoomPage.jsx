@@ -1,16 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import LayoutAdmin from '../../components/LayoutAdmin';
 import HeadAdmin from '../../components/HeadAdmin';
 import TableAdmin from '../../components/TableAdmin';
-import { Box, Button, ButtonGroup, FormControl, FormLabel, HStack, Input, Select, Td, Tr, useDisclosure, useNumberInput } from '@chakra-ui/react';
+import { Box, Button, ButtonGroup, FormControl, FormLabel, HStack, Input, Select, Td, Tr, useDisclosure, useNumberInput, useToast } from '@chakra-ui/react';
 import { MdModeEdit, MdOutlineDeleteOutline } from 'react-icons/md';
 import PopupAdmin from '../../components/PopupAdmin';
 import PopupDelete from '../../components/PopupDelete';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router';
 
 const RoomPage = () => {
     const { isOpen: isModalCreateOpen, onOpen: onModalCreateOpen, onClose: onCloseModalCreate } = useDisclosure();
     const { isOpen: isOpenModalEdit, onOpen: onOpenModalEdit, onClose: onCloseModalEdit } = useDisclosure();
     const { isOpen: isOpenModalDelete, onOpen: onOpenModalDelete, onClose: onCloseModalDelete } = useDisclosure();
+
+    const toast = useToast();
+    const navigate = useNavigate();
 
     const { getInputProps: inputBed, getIncrementButtonProps: incBed, getDecrementButtonProps: decBed } =
         useNumberInput({
@@ -64,6 +69,22 @@ const RoomPage = () => {
     const incAvailableInfo = incBedAvailableInfo();
     const decAvailableInfo = decBedAvailableInfo();
     const inputAvailableInfo = inputBedAvailableInfo();
+
+    const token = Cookies.get('token');
+    const role = Cookies.get('role');
+
+    useEffect(() => {
+        if (role !== 'Admin - Staff' && token === undefined) {
+            toast({
+                position: 'top',
+                title: 'Kamu Harus Login Dulu',
+                status: 'warning',
+                duration: '2000',
+                isClosable: true
+            })
+            navigate('/admin/login');
+        }
+    }, []);
 
     return (
         <LayoutAdmin activeMenu={'room'}>
@@ -394,7 +415,7 @@ const RoomPage = () => {
                 }
             />
 
-            <PopupDelete 
+            <PopupDelete
                 isOpen={isOpenModalDelete}
                 onClose={onCloseModalDelete}
                 modalBody={'Apakah anda yakin menghapus ruangan ini?'}
