@@ -7,6 +7,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import api from '../../services/api';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
+import { addStaffs } from '../../features/adminSlice';
 
 const LoginAdmin = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -15,6 +17,8 @@ const LoginAdmin = () => {
     const navigate = useNavigate();
     const token = Cookies.get('token');
     const role = Cookies.get('role');
+
+    const dispatch = useDispatch();
 
     const initialValues = {
         email: '',
@@ -35,7 +39,24 @@ const LoginAdmin = () => {
         defaultValues: initialValue,
     })
 
-    const onLoginHandler = async(data) => {
+    const getAdminStaff = async (id) => {
+        await api.getAdminById(token, id)
+            .then(response => {
+                const data = response.data.data;
+                dispatch(addStaffs({
+                    id: data.id,
+                    nama: data.nama,
+                    hospital_id: data.hospital_id
+                }));
+                console.log(data)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+
+    }
+
+    const onLoginHandler = async (data) => {
         await api.loginAdmin(data)
             .then(response => {
                 const data = response.data.data;
@@ -50,7 +71,7 @@ const LoginAdmin = () => {
                 Cookies.set('role', 'Admin - Staff');
                 Cookies.set('name', data.name);
                 Cookies.set('id', data.staff_id);
-                navigate('/admin/dashboard');
+                getAdminStaff(data.staff_id);
             })
             .catch(error => {
                 toast({
@@ -63,6 +84,7 @@ const LoginAdmin = () => {
             })
     }
 
+
     const onSubmit = (values) => {
         onLoginHandler(values)
     }
@@ -73,9 +95,9 @@ const LoginAdmin = () => {
 
     useEffect(() => {
         if (role === 'Admin - Staff' && token !== undefined) {
-          navigate(-1);
+            navigate(-1);
         }
-      }, []);
+    }, []);
 
     return (
         <Stack

@@ -7,12 +7,16 @@ import LayoutAdmin from '../../components/LayoutAdmin';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router';
 import { useToast } from '@chakra-ui/toast';
+import { useSelector } from 'react-redux';
 
 const Dashboard = () => {
     const token = Cookies.get('token');
     const role = Cookies.get('role');
     const toast = useToast();
     const navigate = useNavigate();
+    const staffs = useSelector((state) => state.staffs);
+
+    console.log(staffs)
 
     useEffect(() => {
         if (role !== 'Admin - Staff' && token === undefined) {
