@@ -39,7 +39,7 @@ const LoginAdmin = () => {
         defaultValues: initialValue,
     })
 
-    const getAdminStaff = async (id) => {
+    const getAdminStaff = async (token,id) => {
         await api.getAdminById(token, id)
             .then(response => {
                 const data = response.data.data;
@@ -71,7 +71,8 @@ const LoginAdmin = () => {
                 Cookies.set('role', 'Admin - Staff');
                 Cookies.set('name', data.name);
                 Cookies.set('id', data.staff_id);
-                getAdminStaff(data.staff_id);
+                getAdminStaff(data.token, data.staff_id);
+                navigate('/admin/dashboard')
             })
             .catch(error => {
                 toast({
@@ -95,7 +96,7 @@ const LoginAdmin = () => {
 
     useEffect(() => {
         if (role === 'Admin - Staff' && token !== undefined) {
-            navigate(-1);
+            navigate('/admin/dashboard');
         }
     }, []);
 
@@ -202,8 +203,8 @@ const LoginAdmin = () => {
                                         }
                                     </Box>
                                 }
-                                {errors.kata_sandi && <FormErrorMessage>{errors.kata_sandi.message}</FormErrorMessage>}
                             </Stack>
+                            {errors.kata_sandi && <FormErrorMessage>{errors.kata_sandi.message}</FormErrorMessage>}
                         </FormControl>
                         <Flex
                             mt={'8'}

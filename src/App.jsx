@@ -42,6 +42,7 @@ import "@fontsource/plus-jakarta-sans/500.css";
 import "@fontsource/plus-jakarta-sans/600.css";
 import theme from "../utils/extendedTheme";
 import store from "../store";
+import PoliclinicPages from "./pages/Admin/PoliclinicPages";
 
 function App() {
   return (
@@ -79,7 +80,7 @@ function App() {
               <Route path="/admin/room" element={<RoomPage />} />
               <Route path="/admin/patient" element={<PatientRegistrationPage />} />
               <Route path="/admin/doctor" element={<DoctorPage />} />
-              <Route path="/admin/poliklinik" element={<Poliklinik />} />
+              <Route path="/admin/poliklinik" element={<PoliclinicPages />} />
               <Route path="/admin/hospital/profile" element={<ProfileHospitalPage />} />
               <Route path="/admin/login" element={<LoginAdmin />} />
               <Route path="/root/login" element={<LoginAdminRoot />} />
