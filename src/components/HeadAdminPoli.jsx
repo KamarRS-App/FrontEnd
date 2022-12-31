@@ -39,20 +39,6 @@ const HeadAdminPoli = ({ title, onAdd, nama_poli, select_poli }) => {
           </Button>
         </ButtonGroup>
       </Flex>
-      {/* <PopupAdmin
-        modalTitle={'Ubah Data Poli'}
-        isOpen={isOpenModalEdit}
-        onClose={onCloseModalEdit}
-        modalBody={
-          <>
-            <FormControl>
-              <FormLabel>Nama Poliklinik</FormLabel>
-              <Input placeholder="Nama Poli" id="name" type="text" />
-              {errors.name && <FormErrorMessage>{errors.name.message}</FormErrorMessage>}
-            </FormControl>
-          </>
-        }
-      /> */}
     </Flex>
   );
 };

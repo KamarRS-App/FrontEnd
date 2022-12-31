@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import LayoutAdmin from '../../components/LayoutAdmin';
 import TableAdmin from '../../components/TableAdmin';
 import { MdModeEdit, MdOutlineDeleteOutline } from 'react-icons/md';
+import { AiOutlineInfoCircle } from 'react-icons/ai';
 import { useDisclosure } from '@chakra-ui/hooks';
 import PopupAdmin from '../../components/PopupAdmin';
 import { FormControl, FormLabel } from '@chakra-ui/form-control';
@@ -18,13 +19,14 @@ import { useSelector } from 'react-redux';
 import { Select } from '@chakra-ui/select';
 import api from '../../services/api';
 import * as Yup from 'yup';
-import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
+import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/modal';
 
 const Poliklinik = () => {
   const { isOpen: isModalCreateOpen, onOpen: onModalCreateOpen, onClose: onCloseModalCreate } = useDisclosure();
-  const { isOpen: isOpenModalEdit, onOpen: onOpenModalEdit, onClose: onCloseModalEdit } = useDisclosure();
-  const { isOpen: isOpenModalDelete, onOpen: onOpenModalDelete, onClose: onCloseModalDelete } = useDisclosure();
+  // const { isOpen: isOpenModalEdit, onOpen: onOpenModalEdit, onClose: onCloseModalEdit } = useDisclosure();
+  // const { isOpen: isOpenModalDelete, onOpen: onOpenModalDelete, onClose: onCloseModalDelete } = useDisclosure();
 
   const staff = useSelector((state) => state.staffs);
   const [policlinics, setPoliclinics] = useState([]);
@@ -46,12 +48,12 @@ const Poliklinik = () => {
   const [initialValue, setInitialValue] = useState(initialValues);
 
   const schema = Yup.object().shape({
-    nama_poli: Yup.string().required('Nama Poliklinik tidak boleh kosong'),
+    nama_poli: Yup.number().required('Nama Poliklinik tidak boleh kosong'),
     jam_praktik: Yup.string().required('Jam praktik tidak boleh kosong'),
     hospital_id: Yup.number().required()
   })
 
-  const { register: createPoliclinic, handleSubmit, formState: { errors } } = useForm({
+  const { register, handleSubmit, formState: { errors } } = useForm({
     mode: "onTouched",
     reValidateMode: "onSubmit",
     resolver: yupResolver(schema),
@@ -94,8 +96,9 @@ const Poliklinik = () => {
     setPoliclinicId(values)
   }
 
-  const onSubmitPoliclinic = (values) => {
-    console.log(values)
+  const onSubmitPoliclinic = (e) => {
+    e.preventDefault();
+    handleSubmit()
   }
 
   const onErrorPoliclinic = (error) => {
@@ -120,6 +123,7 @@ const Poliklinik = () => {
     getPoliclinicByHospital();
     getDoctorsByPoliclinic();
   }, []);
+
   return (
     <LayoutAdmin activeMenu={'poli'}>
       <HeadAdminPoli
@@ -177,10 +181,20 @@ const Poliklinik = () => {
                 <Td textAlign={'center'}>{praktik}</Td>
                 <Td textAlign="center">
                   <ButtonGroup gap="4">
-                    <Button onClick={onOpenModalEdit} bg="transparent" border="1px" borderColor={'#E0E0E0'}>
+                    <Button
+                      // onClick={onOpenModalEdit}
+                      bg="transparent"
+                      border="1px"
+                      borderColor={'#E0E0E0'}
+                    >
                       <MdModeEdit />
                     </Button>
-                    <Button onClick={onOpenModalDelete} bg="transparent" border="1px" borderColor={'#E0E0E0'}>
+                    <Button
+                      // onClick={onOpenModalDelete}
+                      bg="transparent"
+                      border="1px"
+                      borderColor={'#E0E0E0'}
+                    >
                       <MdOutlineDeleteOutline />
                     </Button>
                   </ButtonGroup>
@@ -190,7 +204,7 @@ const Poliklinik = () => {
         />
       </Box>
 
-      <PopupAdmin
+      {/* <PopupAdmin
         modalTitle={'Tambahkan Poliklinik'}
         isOpen={isModalCreateOpen}
         onClose={onCloseModalCreate}
@@ -199,55 +213,75 @@ const Poliklinik = () => {
           <>
             <FormControl isInvalid={errors.nama_poli}>
               <FormLabel>Nama Poliklinik</FormLabel>
-              <Input placeholder="Nama PoliKlinik" id="nama_poli" type="text" {...createPoliclinic('nama_poli')} />
+              <Input placeholder="Nama PoliKlinik" id="nama_poli" type="text" {...register('nama_poli')} />
               {errors.nama_poli && <FormErrorMessage>{errors.nama_poli.message}</FormErrorMessage>}
             </FormControl>
 
             <FormControl mt={4} isInvalid={errors.jam_praktik}>
               <FormLabel>Jam Praktik</FormLabel>
-              <Input placeholder="Jam Praktik Poliklinik" type={'text'} id="jam_praktik" {...createPoliclinic('jam_praktik')} />
+              <Input placeholder="Jam Praktik Poliklinik" type={'text'} id="jam_praktik" {...register('jam_praktik')} />
               {errors.jam_praktik && <FormErrorMessage>{errors.jam_praktik.message}</FormErrorMessage>}
             </FormControl>
           </>
         }
-      />
+      /> */}
 
-      <PopupDelete
+      <Modal
+        isOpen={isModalCreateOpen}
+        onClose={onCloseModalCreate}
+        size={{ base: 'xs', sm: 'sm', md: 'lg', lg: '2xl' }}
+      >
+        <ModalOverlay />
+        <ModalContent
+          px={{ base: '5', sm: '8', md: '10' }}
+          py={'5'}
+          borderRadius={'3xl'}
+        >
+          <ModalHeader
+            color={'#1FA8F6'}
+            fontSize='3xl'
+          >
+            <AiOutlineInfoCircle />
+            <Text
+              fontSize={'20px'}
+              mt={'5'}
+            >
+              Tambahkan Poliklinik Baru
+            </Text>
+          </ModalHeader>
+          <ModalCloseButton />
+          <form onSubmit={handleSubmit}>
+            <ModalBody pb={20}>
+              {/* {modalBody} */}
+            </ModalBody>
+
+            <ModalFooter>
+              <Button
+                type="submit"
+                bg="#3AB8FF"
+                color={'white'}
+                fontSize={'14px'}
+                fontWeight={'700'}
+                width={'150px'}
+                height={'50px'}
+                _hover={{ bg: 'alta.primary' }}
+              >
+                Simpan
+              </Button>
+            </ModalFooter>
+          </form>
+        </ModalContent>
+      </Modal>
+
+      {/* <PopupDelete
         modalTitle={'Hapus Data Poli'}
         isOpen={isOpenModalDelete}
-        onClose={onCloseModalDelete}
+         onClose={onCloseModalDelete}
         modalBody={'Apakah anda yakin menghapus data poli ini?'}
         deletet_name={'Hapus Dokter'}
-      />
+      /> */}
     </LayoutAdmin>
   );
 };
-
-const dataDoctor = [
-  {
-    no: 1,
-    name: 'dr. Amrabat, Sp.A, M.Sc',
-    spesialis: 'anak',
-    email: 'amrabat@mail.com',
-    telephone: '087665778990',
-    jam_praktik: '08.00 - 11.00',
-  },
-  {
-    no: 2,
-    name: 'dr. Achraf Hakimi, Sp.An-KIC, FIP',
-    spesialis: 'jantung',
-    email: 'hakimi@mail.com',
-    telephone: '087665778990',
-    jam_praktik: '08.00 - 11.00',
-  },
-  {
-    no: 3,
-    name: 'dr. Ziyech Hakimi, Sp.An-KIC, FIP',
-    spesialis: 'mata',
-    email: 'ziyech@mail.com',
-    telephone: '087665778990',
-    jam_praktik: '08.00 - 11.00',
-  },
-];
 
 export default Poliklinik;
