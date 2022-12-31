@@ -386,11 +386,6 @@ const AdminRoot = () => {
                                     placeholder='password'
                                     id="kata_sandi"
                                     type={showPassword ? 'text' : 'password'}
-                                    border={'1px'}
-                                    borderColor={'#00000066'}
-                                    height={'50px'}
-                                    borderRadius={'xl'}
-                                    _placeholder={{ color: '#000000B2' }}
                                     onInput={onShowPassword}
                                     {...createAdmin('kata_sandi')}
                                 />

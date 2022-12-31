@@ -1,8 +1,7 @@
 import { Button, ButtonGroup } from '@chakra-ui/button';
 import { Box, Flex, Text } from '@chakra-ui/layout';
 import { Td, Tr } from '@chakra-ui/table';
-import React, { useEffect } from 'react';
-import HeadAdmin from '../../components/HeadAdmin';
+import React, { useEffect, useState } from 'react';
 import LayoutAdmin from '../../components/LayoutAdmin';
 import TableAdmin from '../../components/TableAdmin';
 import { MdModeEdit, MdOutlineDeleteOutline } from 'react-icons/md';
@@ -12,22 +11,100 @@ import { FormControl, FormLabel } from '@chakra-ui/form-control';
 import { Input } from '@chakra-ui/input';
 import PopupDelete from '../../components/PopupDelete';
 import HeadAdminPoli from '../../components/HeadAdminPoli';
-import { IoAddOutline } from 'react-icons/io5';
-import { CiSearch } from 'react-icons/ci';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router';
 import { useToast } from '@chakra-ui/toast';
-
+import { useSelector } from 'react-redux';
+import { Select } from '@chakra-ui/select';
+import api from '../../services/api';
+import * as Yup from 'yup';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 const Poliklinik = () => {
   const { isOpen: isModalCreateOpen, onOpen: onModalCreateOpen, onClose: onCloseModalCreate } = useDisclosure();
   const { isOpen: isOpenModalEdit, onOpen: onOpenModalEdit, onClose: onCloseModalEdit } = useDisclosure();
   const { isOpen: isOpenModalDelete, onOpen: onOpenModalDelete, onClose: onCloseModalDelete } = useDisclosure();
 
+  const staff = useSelector((state) => state.staffs);
+  const [policlinics, setPoliclinics] = useState([]);
+  const [doctors, setDoctors] = useState([]);
+  const [policlinicId, setPoliclinicId] = useState();
+  const [praktik, setPraktik] = useState('');
+
   const token = Cookies.get('token');
   const role = Cookies.get('role');
   const toast = useToast();
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+
+  const initialValues = {
+    nama_poli: '',
+    jam_praktik: '',
+    hospital_id: staff.hospital_id
+  }
+
+  const [initialValue, setInitialValue] = useState(initialValues);
+
+  const schema = Yup.object().shape({
+    nama_poli: Yup.string().required('Nama Poliklinik tidak boleh kosong'),
+    jam_praktik: Yup.string().required('Jam praktik tidak boleh kosong'),
+    hospital_id: Yup.number().required()
+  })
+
+  const { register: createPoliclinic, handleSubmit, formState: { errors } } = useForm({
+    mode: "onTouched",
+    reValidateMode: "onSubmit",
+    resolver: yupResolver(schema),
+    defaultValues: initialValue,
+  });
+
+  const searchIdDefault = (item) => {
+    item.map((data, index) => {
+      if (index === 0) {
+        setPoliclinicId(data.id)
+        setPraktik(data.jam_praktik)
+      }
+    })
+  }
+
+  const getPoliclinicByHospital = async () => {
+    await api.getAllPoliclinics(token)
+      .then(response => {
+        const data = response.data.data
+        setPoliclinics(data);
+        searchIdDefault(data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }
+
+  const getDoctorsByPoliclinic = async () => {
+    await api.getAllDoctors(token)
+      .then(response => {
+        const data = response.data.data
+        setDoctors(data);
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }
+
+  const onChangePoliclinic = (values) => {
+    setPoliclinicId(values)
+  }
+
+  const onSubmitPoliclinic = (values) => {
+    console.log(values)
+  }
+
+  const onErrorPoliclinic = (error) => {
+    console.log(error)
+  }
+
+  const newDoctors = doctors.filter((data) => {
+    return data.policlinic_id == policlinicId
+  });
 
   useEffect(() => {
     if (role !== 'Admin - Staff' && token === undefined) {
@@ -40,10 +117,27 @@ const Poliklinik = () => {
       })
       navigate('/admin/login');
     }
+    getPoliclinicByHospital();
+    getDoctorsByPoliclinic();
   }, []);
   return (
     <LayoutAdmin activeMenu={'poli'}>
-      <HeadAdminPoli title={'Manajemen Poliklinik'} isAdd={onModalCreateOpen} />
+      <HeadAdminPoli
+        title={'Manajemen Poliklinik'}
+        onAdd={onModalCreateOpen}
+        nama_poli={'Poli'}
+        select_poli={
+          <Select id={'policlinic_id'} value={policlinicId} onChange={(e) => onChangePoliclinic(e.target.value)}>
+            {
+              policlinics.map((data, index) => {
+                return (
+                  <option value={data.id} key={index}>{data.nama_poli}</option>
+                )
+              })
+            }
+          </Select>
+        }
+      />
       <Box mt={'5'} py={'10'} bg="white">
         <Flex color={'#333333'} pt={{ base: '5', sm: '0' }} width={{ base: '100%', sm: 'auto' }} justifyContent={'end'}></Flex>
         <TableAdmin
@@ -72,164 +166,59 @@ const Poliklinik = () => {
               </Td>
             </Tr>
           }
-          bodyTable={dataDoctor.map((doctor) => (
-            <Tr>
-              <Td textAlign={'center'}>{doctor.no}</Td>
-              <Td textAlign={'center'}>{doctor.name}</Td>
-              <Td textAlign={'center'}>{doctor.spesialis}</Td>
-              <Td textAlign={'center'}>{doctor.email}</Td>
-              <Td textAlign={'center'}>{doctor.telephone}</Td>
-              <Td textAlign={'center'}>{doctor.jam_praktik}</Td>
-              <Td textAlign="center">
-                <ButtonGroup gap="4">
-                  <Button onClick={onOpenModalEdit} bg="transparent" border="1px" borderColor={'#E0E0E0'}>
-                    <MdModeEdit />
-                  </Button>
-                  <Button onClick={onOpenModalDelete} bg="transparent" border="1px" borderColor={'#E0E0E0'}>
-                    <MdOutlineDeleteOutline />
-                  </Button>
-                </ButtonGroup>
-              </Td>
-            </Tr>
-          ))}
+          bodyTable={
+            newDoctors.map((doctor, index) => (
+              <Tr key={index}>
+                <Td textAlign={'center'}>{index + 1}</Td>
+                <Td textAlign={'center'}>{doctor.nama}</Td>
+                <Td textAlign={'center'}>{doctor.spesialis}</Td>
+                <Td textAlign={'center'}>{doctor.email}</Td>
+                <Td textAlign={'center'}>{doctor.no_telpon}</Td>
+                <Td textAlign={'center'}>{praktik}</Td>
+                <Td textAlign="center">
+                  <ButtonGroup gap="4">
+                    <Button onClick={onOpenModalEdit} bg="transparent" border="1px" borderColor={'#E0E0E0'}>
+                      <MdModeEdit />
+                    </Button>
+                    <Button onClick={onOpenModalDelete} bg="transparent" border="1px" borderColor={'#E0E0E0'}>
+                      <MdOutlineDeleteOutline />
+                    </Button>
+                  </ButtonGroup>
+                </Td>
+              </Tr>
+            ))}
         />
       </Box>
+
       <PopupAdmin
-        modalTitle={'Tambah Data Poliklinik'}
+        modalTitle={'Tambahkan Poliklinik'}
         isOpen={isModalCreateOpen}
         onClose={onCloseModalCreate}
+        submitButton={handleSubmit}
         modalBody={
           <>
-            <FormControl>
-              <FormLabel>Nama</FormLabel>
-              <Input placeholder="Nama Dokter" id="name" type="text" />
-              {/* {errors.name && <FormErrorMessage>{errors.name.message}</FormErrorMessage>} */}
+            <FormControl isInvalid={errors.nama_poli}>
+              <FormLabel>Nama Poliklinik</FormLabel>
+              <Input placeholder="Nama PoliKlinik" id="nama_poli" type="text" {...createPoliclinic('nama_poli')} />
+              {errors.nama_poli && <FormErrorMessage>{errors.nama_poli.message}</FormErrorMessage>}
             </FormControl>
 
-            <FormControl mt={4}>
-              <FormLabel>Spesialis</FormLabel>
-              <Input placeholder="Spesialis Dokter" type={'text'} id="spesialis" />
-              {/* {errors.email && <FormErrorMessage>{errors.email.message}</FormErrorMessage>} */}
-            </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>Email</FormLabel>
-              <Input placeholder="Email Dokter" type={'email'} id="email" />
-              {/* {errors.email && <FormErrorMessage>{errors.email.message}</FormErrorMessage>} */}
-            </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>No Telephone</FormLabel>
-              <Input placeholder="Nomor Telephone Dokter" type={'text'} id="telephone" />
-              {/* {errors.email && <FormErrorMessage>{errors.email.message}</FormErrorMessage>} */}
-            </FormControl>
-          </>
-        }
-      />
-      <PopupAdmin
-        modalTitle={'Tambah Data Dokter'}
-        isOpen={isModalCreateOpen}
-        onClose={onCloseModalCreate}
-        modalBody={
-          <>
-            <FormControl>
-              <FormLabel>Nama</FormLabel>
-              <Input placeholder="Nama Dokter" id="name" type="text" />
-              {/* {errors.name && <FormErrorMessage>{errors.name.message}</FormErrorMessage>} */}
-            </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>Spesialis</FormLabel>
-              <Input placeholder="Spesialis Dokter" type={'text'} id="spesialis" />
-              {/* {errors.email && <FormErrorMessage>{errors.email.message}</FormErrorMessage>} */}
-            </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>Email</FormLabel>
-              <Input placeholder="Email Dokter" type={'email'} id="email" />
-              {/* {errors.email && <FormErrorMessage>{errors.email.message}</FormErrorMessage>} */}
-            </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>No Telephone</FormLabel>
-              <Input placeholder="Nomor Telephone Dokter" type={'text'} id="telephone" />
-              {/* {errors.email && <FormErrorMessage>{errors.email.message}</FormErrorMessage>} */}
-            </FormControl>
-          </>
-        }
-      />
-      <PopupAdmin
-        modalTitle={'Edit data Poliklinik'}
-        isOpen={isModalCreateOpen}
-        onClose={onCloseModalCreate}
-        modalBody={
-          <>
-            <FormControl>
-              <FormLabel>Nama</FormLabel>
-              <Input placeholder="Nama Dokter" id="name" type="text" />
-              {/* {errors.name && <FormErrorMessage>{errors.name.message}</FormErrorMessage>} */}
-            </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>Spesialis</FormLabel>
-              <Input placeholder="Spesialis Dokter" type={'text'} id="spesialis" />
-              {/* {errors.email && <FormErrorMessage>{errors.email.message}</FormErrorMessage>} */}
-            </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>Email</FormLabel>
-              <Input placeholder="Email Dokter" type={'email'} id="email" />
-              {/* {errors.email && <FormErrorMessage>{errors.email.message}</FormErrorMessage>} */}
-            </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>No Telephone</FormLabel>
-              <Input placeholder="Nomor Telephone Dokter" type={'text'} id="telephone" />
-              {/* {errors.email && <FormErrorMessage>{errors.email.message}</FormErrorMessage>} */}
-            </FormControl>
-          </>
-        }
-      />
-
-      <PopupAdmin
-        modalTitle={'Ubah Data Poliklinik'}
-        isOpen={isOpenModalEdit}
-        onClose={onCloseModalEdit}
-        modalBody={
-          <>
-            <FormControl>
-              <FormLabel>Nama</FormLabel>
-              <Input placeholder="Nama Dokter" id="name" type="text" />
-              {/* {errors.name && <FormErrorMessage>{errors.name.message}</FormErrorMessage>} */}
-            </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>Spesialis</FormLabel>
-              <Input placeholder="Spesialis Dokter" type={'text'} id="spesialis" />
-              {/* {errors.email && <FormErrorMessage>{errors.email.message}</FormErrorMessage>} */}
-            </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>Email</FormLabel>
-              <Input placeholder="Email Dokter" type={'email'} id="email" />
-              {/* {errors.email && <FormErrorMessage>{errors.email.message}</FormErrorMessage>} */}
-            </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>No Telephone</FormLabel>
-              <Input placeholder="Nomor Telephone Dokter" type={'text'} id="telephone" />
-              {/* {errors.email && <FormErrorMessage>{errors.email.message}</FormErrorMessage>} */}
-            </FormControl>
-            <FormControl mt={4}>
+            <FormControl mt={4} isInvalid={errors.jam_praktik}>
               <FormLabel>Jam Praktik</FormLabel>
-              <Input placeholder="Jam Praktik" type={'text'} id="jam_praktik" />
-              {/* {errors.email && <FormErrorMessage>{errors.email.message}</FormErrorMessage>} */}
+              <Input placeholder="Jam Praktik Poliklinik" type={'text'} id="jam_praktik" {...createPoliclinic('jam_praktik')} />
+              {errors.jam_praktik && <FormErrorMessage>{errors.jam_praktik.message}</FormErrorMessage>}
             </FormControl>
           </>
         }
       />
 
-      <PopupDelete modalTitle={'Hapus Data Poli'} isOpen={isOpenModalDelete} onClose={onCloseModalDelete} modalBody={'Apakah anda yakin menghapus data poli ini?'} deletet_name={'Hapus Dokter'} />
+      <PopupDelete
+        modalTitle={'Hapus Data Poli'}
+        isOpen={isOpenModalDelete}
+        onClose={onCloseModalDelete}
+        modalBody={'Apakah anda yakin menghapus data poli ini?'}
+        deletet_name={'Hapus Dokter'}
+      />
     </LayoutAdmin>
   );
 };

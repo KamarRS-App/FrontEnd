@@ -16,8 +16,6 @@ const Dashboard = () => {
     const navigate = useNavigate();
     const staffs = useSelector((state) => state.staffs);
 
-    console.log(staffs)
-
     useEffect(() => {
         if (role !== 'Admin - Staff' && token === undefined) {
             toast({
