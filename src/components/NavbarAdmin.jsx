@@ -5,8 +5,10 @@ import { Box, Flex, Text } from '@chakra-ui/layout';
 import { IoLogOutOutline } from 'react-icons/io5'
 import React from 'react';
 import { Button } from '@chakra-ui/button';
+import moment from 'moment';
 
-const NavbarAdmin = () => {
+const NavbarAdmin = ({name, role, onLogout}) => {
+    const dateTime = new Date()
     return (
         <Flex
             alignItems='center'
@@ -31,7 +33,7 @@ const NavbarAdmin = () => {
                 gap='10'
                 alignItems='center'
             >
-                <InputGroup
+                {/* <InputGroup
                     width={{ base: 'full', sm: '300px', md: '400px' }}
                     shadow='md'
                     borderRadius='md'
@@ -46,7 +48,7 @@ const NavbarAdmin = () => {
                         borderLeft='none'
                         bg='transparent'
                     />
-                </InputGroup>
+                </InputGroup> */}
                 <Box
                     border='1px'
                     borderColor='#E0E0E0'
@@ -55,18 +57,19 @@ const NavbarAdmin = () => {
                     display={{ base:'none', sm:'block' }}
                 >
                     <Text>
-                        22 Desember 2022
+                        {moment(dateTime).format('ll')}
                     </Text>
                 </Box>
                 <Box
                     display={{ base:'none', sm:'block' }}
                 >
-                    <Text>John Doe</Text>
-                    <Text>Super Admin</Text>
+                    <Text>{name}</Text>
+                    <Text>{role}</Text>
                 </Box>
                 <Button
                     bg='transparent'
                     _hover={{ bg: 'transparent' }}
+                    onClick={onLogout}
                 >
                     <IoLogOutOutline className='text-3xl' />
                 </Button>

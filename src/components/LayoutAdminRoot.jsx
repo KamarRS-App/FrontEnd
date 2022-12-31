@@ -1,22 +1,17 @@
-import { Box, Flex } from '@chakra-ui/react';
-import Cookies from 'js-cookie';
+import { Box, Flex } from '@chakra-ui/layout';
 import React from 'react';
-import { useNavigate } from 'react-router';
 import NavbarAdmin from './NavbarAdmin';
-import SideBarAdmin from './SideBarAdmin';
+import SideBarAdminRoot from './SideBarAdminRoot';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 
-const LayoutAdmin = ({children, activeMenu}) => {
-    const name = Cookies.get('name');
-    const role = Cookies.get('role');
+const LayoutAdminRoot = ({activeMenu, children}) => {
     const navigate = useNavigate();
-
     const onLogoutHandler = () => {
-        Cookies.remove('name');
         Cookies.remove('token');
         Cookies.remove('role');
-        navigate('/admin/login');
+        navigate('/root/login');
     }
-
     return (
         <Flex
             wrap='wrap'
@@ -24,7 +19,7 @@ const LayoutAdmin = ({children, activeMenu}) => {
             <Box
                 width='full'
             >
-                <NavbarAdmin name={name} onLogout={() => onLogoutHandler()} role={role} />
+                <NavbarAdmin name={'Team Rawat Inap'} role={'Super Admin'} onLogout={onLogoutHandler} />
             </Box>
             <Box
                 maxWidth='500px'
@@ -33,7 +28,7 @@ const LayoutAdmin = ({children, activeMenu}) => {
                 borderColor='#CDD1E0'
                 minHeight={'87vh'}
             >
-                <SideBarAdmin active={activeMenu} />
+                <SideBarAdminRoot active={activeMenu} />
             </Box>
             <Box
                 width={{ base:'90%',sm:'90%',md:'75%', lg:'75%' }}
@@ -47,4 +42,4 @@ const LayoutAdmin = ({children, activeMenu}) => {
     );
 }
 
-export default LayoutAdmin;
+export default LayoutAdminRoot;

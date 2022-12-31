@@ -1,7 +1,7 @@
 import { Button, ButtonGroup } from "@chakra-ui/button";
 import { Box } from "@chakra-ui/layout";
 import { Td, Tr } from "@chakra-ui/table";
-import React from "react";
+import React, { useEffect } from "react";
 import HeadAdmin from "../../components/HeadAdmin";
 import LayoutAdmin from "../../components/LayoutAdmin";
 import TableAdmin from "../../components/TableAdmin";
@@ -18,8 +18,16 @@ import PopupDelete from "../../components/PopupDelete";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router";
+import { useToast } from "@chakra-ui/toast";
 
 const DoctorPage = () => {
+  const token = Cookies.get('token');
+  const role = Cookies.get('role');
+  const toast = useToast();
+    const navigate = useNavigate();
+
   //schema
   const schema = yup.object().shape({
     nama: yup.string().required("Harap masukkan nama"),
@@ -58,6 +66,19 @@ const DoctorPage = () => {
     onOpen: onOpenModalDelete,
     onClose: onCloseModalDelete,
   } = useDisclosure();
+
+  useEffect(() => {
+    if (role !== 'Admin - Staff' && token === undefined) {
+        toast({
+            position: 'top',
+            title: 'Kamu Harus Login Dulu',
+            status: 'warning',
+            duration: '2000',
+            isClosable: true
+        })
+        navigate('/admin/login');
+    }
+}, []);
   return (
     <LayoutAdmin activeMenu={"doctor"}>
       <HeadAdmin title={"Manajemen Dokter"} isAdd={onModalCreateOpen} />
