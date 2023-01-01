@@ -1,19 +1,20 @@
 import { Box, Flex } from '@chakra-ui/react';
 import Cookies from 'js-cookie';
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
+import { destroyStaffs } from '../features/adminSlice';
 import NavbarAdmin from './NavbarAdmin';
 import SideBarAdmin from './SideBarAdmin';
 
 const LayoutAdmin = ({children, activeMenu}) => {
     const name = Cookies.get('name');
     const role = Cookies.get('role');
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const onLogoutHandler = () => {
-        Cookies.remove('name');
-        Cookies.remove('token');
-        Cookies.remove('role');
+        dispatch(destroyStaffs())
         navigate('/admin/login');
     }
 
