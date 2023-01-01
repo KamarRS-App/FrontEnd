@@ -31,6 +31,11 @@ function Register() {
   const showPassword = () => setShow(!show);
   const toast = useToast();
   const navigate = useNavigate();
+  const [passwordType, setPasswordType] = React.useState('');
+
+  const onShowPassword = (e) => {
+    setPasswordType(e.target.value);
+  }
 
   //yup schema
   const schema = yup.object().shape({
@@ -248,17 +253,21 @@ function Register() {
                         type={show ? "text" : "password"}
                         {...register("kata_sandi")}
                         placeholder="Masukkan password"
+                        onInput={onShowPassword}
                       />
-                      <InputRightElement>
-                        {show ? (
-                          <ViewOffIcon
-                            onClick={showPassword}
-                            cursor={"pointer"}
-                          />
-                        ) : (
-                          <ViewIcon onClick={showPassword} cursor={"pointer"} />
-                        )}
-                      </InputRightElement>
+                      {
+                        passwordType &&
+                        <InputRightElement>
+                          {show ? (
+                            <ViewOffIcon
+                              onClick={showPassword}
+                              cursor={"pointer"}
+                            />
+                          ) : (
+                            <ViewIcon onClick={showPassword} cursor={"pointer"} />
+                          )}
+                        </InputRightElement>
+                      }
                     </InputGroup>
                   </FormControl>
                   <Text color={"red"}>{errors.kata_sandi?.message}</Text>
