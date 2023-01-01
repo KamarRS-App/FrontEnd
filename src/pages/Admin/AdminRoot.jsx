@@ -69,6 +69,7 @@ const AdminRoot = () => {
     const { register: createAdmin, handleSubmit, formState: { errors } } = useForm({
         mode: "onTouched",
         reValidateMode: "onSubmit",
+        
         resolver: yupResolver(schema),
         defaultValues: initialValue,
     });
