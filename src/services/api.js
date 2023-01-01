@@ -472,21 +472,23 @@ export default {
     }),
 
   //doctors
-  createDoctor: (token, { nama, email, bidang, no_telpon }) =>
+  createDoctor: (token, data) =>
     instance({
       method: `POST`,
       url: `/doctors`,
       headers: {
         Authorization: `Bearer ${token}`,
+        "content-type": "multipart/form-data",
       },
       data: {
-        nama: nama,
-        email: email,
-        bidang: bidang,
-        no_telpon: no_telpon,
+        nama: data.nama,
+        email: data.email,
+        spesialis: data.bidang,
+        no_telpon: data.no_telpon,
+        foto: data.foto
       },
     }),
-  updateDoctor: (token, id, { nama, email, bidang, no_telpon }) =>
+  updateDoctor: (token, id, data) =>
     instance({
       method: `PUT`,
       url: `/doctors/${id}`,
@@ -494,10 +496,10 @@ export default {
         Authorization: `Bearer ${token}`,
       },
       data: {
-        nama: nama,
-        email: email,
-        bidang: bidang,
-        no_telpon: no_telpon,
+        nama: data.nama,
+        email: data.email,
+        bidang: data.bidang,
+        no_telpon: data.no_telpon,
       },
     }),
   deleteDoctor: (token, id) =>
@@ -527,8 +529,7 @@ export default {
 
   //policlinics
   createPoliclinic: (
-    token,
-    { hospital_id, doctors_id, nama_poli, jam_praktik }
+    token, data
   ) =>
     instance({
       method: `POST`,
@@ -537,16 +538,13 @@ export default {
         Authorization: `Bearer ${token}`,
       },
       data: {
-        hospital_id: hospital_id,
-        doctors_id: doctors_id,
-        nama_poli: nama_poli,
-        jam_praktik: jam_praktik,
+        hospital_id: data.hospital_id,
+        nama_poli: data.nama_poli,
+        jam_praktik: data.jam_praktik,
       },
     }),
   updatePoliclinic: (
-    token,
-    id,
-    { hospital_id, doctors_id, nama_poli, jam_praktik }
+    token, id, data
   ) =>
     instance({
       method: `PUT`,
@@ -555,10 +553,9 @@ export default {
         Authorization: `Bearer ${token}`,
       },
       data: {
-        hospital_id: hospital_id,
-        doctors_id: doctors_id,
-        nama_poli: nama_poli,
-        jam_praktik: jam_praktik,
+        hospital_id: data.hospital_id,
+        nama_poli: data.nama_poli,
+        jam_praktik: data.jam_praktik,
       },
     }),
   getAllPoliclinics: (token) =>

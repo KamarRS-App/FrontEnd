@@ -34,7 +34,17 @@ const PopupAdmin = ({ isOpen, onClose, modalBody, submitButton, modalTitle }) =>
                     </ModalBody>
 
                     <ModalFooter>
-                        <Button type="submit" mr={3} bg="#3AB8FF" color={'white'} fontSize={'14px'} fontWeight={'700'} width={'150px'} height={'50px'} _hover={{ bg: 'alta.primary' }}>
+                        <Button
+                            type="submit"
+                            onClick={submitButton}
+                            mr={3}
+                            bg="#3AB8FF"
+                            color={'white'}
+                            fontSize={'14px'}
+                            fontWeight={'700'}
+                            width={'150px'}
+                            height={'50px'}
+                            _hover={{ bg: 'alta.primary' }}>
                             Simpan
                         </Button>
                         {/* <Button onClick={onClose}>Cancel</Button> */}

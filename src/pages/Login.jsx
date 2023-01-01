@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../assets/images/logo.png";
 import googleLogo from "../assets/images/googlelogo.png";
 import api from "../services/api";
@@ -30,6 +30,12 @@ function Login() {
   const showPassword = () => setShow(!show);
   const navigate = useNavigate();
   const toast = useToast();
+  const [passwordType, setPasswordType] = useState('');
+
+  const onShowPassword = (e) => {
+    setPasswordType(e.target.value);
+  }
+
   //yup schema
   const schema = yup.object().shape({
     email: yup
@@ -203,17 +209,20 @@ function Login() {
                         {...register("kata_sandi")}
                         placeholder="kata sandi"
                         name="kata_sandi"
+                        onInput={onShowPassword}
                       />
-                      <InputRightElement>
-                        {show ? (
-                          <ViewOffIcon
-                            onClick={showPassword}
-                            cursor={"pointer"}
-                          />
-                        ) : (
-                          <ViewIcon onClick={showPassword} cursor={"pointer"} />
-                        )}
-                      </InputRightElement>
+                      {passwordType !== '' &&
+                        <InputRightElement>
+                          {show ? (
+                            <ViewOffIcon
+                              onClick={showPassword}
+                              cursor={"pointer"}
+                            />
+                          ) : (
+                            <ViewIcon onClick={showPassword} cursor={"pointer"} />
+                          )}
+                        </InputRightElement>
+                      }
                     </InputGroup>
                     <Text color="red">{errors.kata_sandi?.message}</Text>
                   </FormControl>
