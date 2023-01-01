@@ -27,3 +27,8 @@ body {
 html {
   margin: 0px;
 }
+
+.titleAlert {
+  color: #1FA8F6;
+  font-size: 20px;
+}

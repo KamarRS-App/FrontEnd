@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   Text,
@@ -7,14 +7,34 @@ import {
   Flex,
   Select,
   Input,
+  useToast,
 } from "@chakra-ui/react";
 import LayoutAdmin from "../../components/LayoutAdmin";
 import addButton from "../../assets/images/addButton.svg";
 import filterButton from "../../assets/images/filterButton.svg";
 import searchIcon from "../../assets/images/searchIcon.svg";
 import HeadAdmin from "../../components/HeadAdmin";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router";
 
 function DashboardDailyPraktek() {
+  const token = Cookies.get('token');
+  const role = Cookies.get('role');
+  const toast = useToast();
+    const navigate = useNavigate();
+
+  useEffect(() => {
+    if (role !== 'Admin - Staff' && token === undefined) {
+        toast({
+            position: 'top',
+            title: 'Kamu Harus Login Dulu',
+            status: 'warning',
+            duration: '2000',
+            isClosable: true
+        })
+        navigate('/admin/login');
+    }
+}, []);
   return (
     <LayoutAdmin activeMenu={"doctor"}>
       <HeadAdmin title="Manajemen Dokter" />
