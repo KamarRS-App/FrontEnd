@@ -1,18 +1,18 @@
 import React from "react";
-import { Box } from "@chakra-ui/react";
-import { Text } from "@chakra-ui/react";
-import { Button } from "@chakra-ui/react";
-import { Image } from "@chakra-ui/react";
-import Cookies from "js-cookie";
 import {
+  Box,
+  Text,
+  Button,
+  Image,
   FormControl,
   FormLabel,
-  FormErrorMessage,
-  FormHelperText,
+  Grid,
+  GridItem,
+  Input,
+  Select,
+  useToast,
 } from "@chakra-ui/react";
-import { Grid, GridItem } from "@chakra-ui/react";
-import { Input } from "@chakra-ui/react";
-import { Select } from "@chakra-ui/react";
+import Cookies from "js-cookie";
 import UploadIcon from "../assets/images/UploadIcon.png";
 import Layout from "../components/Layout";
 import * as yup from "yup";
@@ -26,6 +26,8 @@ function DataDiriPasien() {
   const [kabupaten, setKabupaten] = React.useState(null);
   const [kabupatenKtp, setKabupatenKtp] = React.useState([]);
   const [noKK, setNoKk] = React.useState();
+  const toast = useToast();
+
   //yup schema
   const schema = yup.object().shape({
     no_kk: yup.number().typeError("Harap masukkan nomor kartu keluarga"),
@@ -70,7 +72,6 @@ function DataDiriPasien() {
       .get("https://dev.farizdotid.com/api/daerahindonesia/provinsi")
       .then((response) => {
         setProvinsi(response.data.provinsi);
-        console.log(response);
       });
   };
 
@@ -79,27 +80,36 @@ function DataDiriPasien() {
     await api
       .createPatient(token, data)
       .then((response) => {
-        console.log(response);
+        toast({
+          title: `Berhasil menambahkan pasien.`,
+          status: "success",
+          position: "top",
+          isClosable: true,
+          duration: 2000,
+        });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        toast({
+          title: `Gagal menambahkan pasien, silahkan hubungi administrator.`,
+          status: "error",
+          position: "top",
+          isClosable: true,
+          duration: 2000,
+        });
+      });
   };
 
   //get kartu keluarga
   const getNomorKk = async () => {
     const token = Cookies.get("token");
-    await api
-      .getUser(token)
-      .then((response) => {
-        console.log(response);
-        setNoKk(response.data.data.no_kk);
-      })
-      .catch((err) => console.log(err));
+    await api.getUser(token).then((response) => {
+      setNoKk(response.data.data.no_kk);
+    });
   };
 
   //handle submit data
   const onSubmit = (data) => {
     const ngab = Cookies.get("token");
-    console.log(data);
     handleSendData(data, ngab);
   };
 
@@ -234,7 +244,6 @@ function DataDiriPasien() {
                       placeholder="-- Pilih provinsi --"
                       onChange={(e) => {
                         setKabupatenKtp(e.target.value);
-                        console.log(kabupatenKtp);
                       }}
                     >
                       {provinsi?.map((prov) => {
