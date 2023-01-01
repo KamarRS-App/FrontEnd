@@ -445,10 +445,10 @@ export default {
         status: status,
       },
     }),
-  getAllBeds: (token) =>
+  getAllBeds: (token, id) =>
     instance({
       method: `GET`,
-      url: `/beds`,
+      url: `hospitals/${id}/beds`,
       headers: {
         Authorization: `Bearer ${token}`,
       },

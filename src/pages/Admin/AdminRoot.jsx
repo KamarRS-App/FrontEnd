@@ -21,228 +21,239 @@ import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import PopupDelete from '../../components/PopupDelete';
 
 const AdminRoot = () => {
-    const { isOpen: isModalCreateOpen, onOpen: onModalCreateOpen, onClose: onCloseModalCreate } = useDisclosure();
-    const { isOpen: isModalEditOpen, onOpen: onModalEditOpen, onClose: onCloseModalEdit } = useDisclosure();
-    const { isOpen: isModalDeleteOpen, onOpen: onModalDeleteOpen, onClose: onCloseModalDelete } = useDisclosure();
+  const { isOpen: isModalCreateOpen, onOpen: onModalCreateOpen, onClose: onCloseModalCreate } = useDisclosure();
+  const { isOpen: isModalEditOpen, onOpen: onModalEditOpen, onClose: onCloseModalEdit } = useDisclosure();
+  const { isOpen: isModalDeleteOpen, onOpen: onModalDeleteOpen, onClose: onCloseModalDelete } = useDisclosure();
 
-    const role = Cookies.get('role');
-    const token = Cookies.get('token');
-    const navigate = useNavigate();
-    const toast = useToast();
-    const [adminStaff, setAdminStaff] = useState([]);
-    const [hospitals, setHospitals] = useState([]);
-    const [showPassword, setShowPassword] = useState(false);
-    const [show, setShow] = useState('');
-    const [adminId, setAdminId] = useState('');
+  const role = Cookies.get('role');
+  const token = Cookies.get('token');
+  const navigate = useNavigate();
+  const toast = useToast();
+  const [adminStaff, setAdminStaff] = useState([]);
+  const [hospitals, setHospitals] = useState([]);
+  const [showPassword, setShowPassword] = useState(false);
+  const [show, setShow] = useState('');
+  const [adminId, setAdminId] = useState('');
 
-    const initialValues = {
-        nama: '',
-        email: '',
-        kata_sandi: '',
-        peran: 'Admin',
-        hospital_id: null,
-    }
+  const initialValues = {
+    nama: '',
+    email: '',
+    kata_sandi: '',
+    peran: 'Admin',
+    hospital_id: null,
+  };
 
-    const initialValuesUpdate = {
-        nama: '',
-        email: '',
-        peran: 'Admin',
-        hospital_id: null,
-    }
+  const initialValuesUpdate = {
+    nama: '',
+    email: '',
+    peran: 'Admin',
+    hospital_id: null,
+  };
 
-    const [initialValue, setInitialValue] = useState(initialValues);
-    const [initialValueUpdate, setInitialValueUpdate] = useState(initialValuesUpdate);
+  const [initialValue, setInitialValue] = useState(initialValues);
+  const [initialValueUpdate, setInitialValueUpdate] = useState(initialValuesUpdate);
 
-    const schema = Yup.object().shape({
-        nama: Yup.string().required('Nama tidak boleh kosong'),
-        email: Yup.string().email('Format Email salah').required('Email tidak boleh kosong'),
-        kata_sandi: Yup.string().min(6, 'Password tidak boleh kurang dari 6 karakter').max(32, 'Password tidak boleh lebih dari 32 karakter').required('Password tidak boleh kosong'),
-        hospital_id: Yup.number().required('Rumah Sakit Bekerja tidak boleh kosong'),
-    })
+  const schema = Yup.object().shape({
+    nama: Yup.string().required('Nama tidak boleh kosong'),
+    email: Yup.string().email('Format Email salah').required('Email tidak boleh kosong'),
+    kata_sandi: Yup.string().min(6, 'Password tidak boleh kurang dari 6 karakter').max(32, 'Password tidak boleh lebih dari 32 karakter').required('Password tidak boleh kosong'),
+    hospital_id: Yup.number().required('Rumah Sakit Bekerja tidak boleh kosong'),
+  });
 
-    const schemaUpdate = Yup.object().shape({
-        nama: Yup.string().required('Nama tidak boleh kosong'),
-        email: Yup.string().email('Format Email salah').required('Email tidak boleh kosong'),
-        hospital_id: Yup.number().required('Rumah Sakit Bekerja tidak boleh kosong'),
-    })
+  const schemaUpdate = Yup.object().shape({
+    nama: Yup.string().required('Nama tidak boleh kosong'),
+    email: Yup.string().email('Format Email salah').required('Email tidak boleh kosong'),
+    hospital_id: Yup.number().required('Rumah Sakit Bekerja tidak boleh kosong'),
+  });
 
-    const { register: createAdmin, handleSubmit, formState: { errors } } = useForm({
-        mode: "onTouched",
-        reValidateMode: "onSubmit",
-        resolver: yupResolver(schema),
-        defaultValues: initialValue,
+  const {
+    register: createAdmin,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    mode: 'onTouched',
+    reValidateMode: 'onSubmit',
+    resolver: yupResolver(schema),
+    defaultValues: initialValue,
+  });
+
+  const {
+    register: updateAdminFunc,
+    handleSubmit: handleUpdateAdmin,
+    setValue: setValueUpdate,
+    formState: { errors: errorsUpdate },
+  } = useForm({
+    mode: 'onTouched',
+    reValidateMode: 'onSubmit',
+    resolver: yupResolver(schemaUpdate),
+    defaultValues: initialValueUpdate,
+  });
+
+  const getAllAdminStaff = async () => {
+    await api
+      .getAdmin(token)
+      .then((response) => {
+        const data = response.data.data;
+        setAdminStaff(data);
+      })
+      .catch((error) => {
+        toast({
+          position: 'top',
+          title: 'Gagal Mengambil Data Admin',
+          status: 'error',
+          duration: '2000',
+          isClosable: true,
+        });
+      });
+  };
+
+  const getAdminStaffById = async (id) => {
+    await api.getAdminById(token, id).then((response) => {
+      const data = response.data.data;
+      setValueUpdate('nama', data.nama);
+      setValueUpdate('email', data.email);
+      setValueUpdate('hospital_id', data.hospital_id);
     });
+  };
 
-    const { register: updateAdminFunc, handleSubmit: handleUpdateAdmin, setValue: setValueUpdate, formState: { errors: errorsUpdate } } = useForm({
-        mode: "onTouched",
-        reValidateMode: "onSubmit",
-        resolver: yupResolver(schemaUpdate),
-        defaultValues: initialValueUpdate,
-    });
-
-
-    const getAllAdminStaff = async () => {
-        await api.getAdmin(token)
-            .then(response => {
-                const data = response.data.data;
-                setAdminStaff(data);
-            })
-            .catch(error => {
-                toast({
-                    position: 'top',
-                    title: 'Gagal Mengambil Data Admin',
-                    status: 'error',
-                    duration: '2000',
-                    isClosable: true
-                })
-            })
-    }
-
-    const getAdminStaffById = async (id) => {
-        await api.getAdminById(token, id)
-            .then(response => {
-                const data = response.data.data;
-                setValueUpdate('nama', data.nama);
-                setValueUpdate('email', data.email);
-                setValueUpdate('hospital_id', data.hospital_id);
-            })
-    }
-
-    const createAdminStaff = async (data) => {
-        await api.createAdmin(token, data)
-            .then(response => {
-                toast({
-                    position: 'top',
-                    title: 'Berhasil membuat Admin Baru',
-                    status: 'success',
-                    duration: '2000',
-                    isClosable: true
-                })
-                getAllHospitalsHandler();
-                getAllAdminStaff();
-            })
-            .catch(error => {
-                console.log(error)
-                toast({
-                    position: 'top',
-                    title: 'Gagal membuat Admin Baru',
-                    status: 'error',
-                    duration: '2000',
-                    isClosable: true
-                })
-            })
-    }
-
-    const getAllHospitalsHandler = async () => {
-        await api.getHospitals(token)
-            .then(response => {
-                const data = response.data.data;
-                setHospitals(data)
-            })
-            .catch(error => {
-                toast({
-                    position: 'top',
-                    title: 'Gagal Mengambil Data Rumah Sakit',
-                    status: 'error',
-                    duration: '2000',
-                    isClosable: true
-                })
-            })
-    }
-
-    const updateAdminStaff = async (id, data) => {
-        await api.updateAdmin(token, id, data)
-            .then(response => {
-                toast({
-                    position: 'top',
-                    title: 'Berhasil Mengubah Data Admin',
-                    status: 'success',
-                    duration: '2000',
-                    isClosable: true
-                })
-                getAllAdminStaff();
-            })
-            .catch(error => {
-                console.log(error)
-                toast({
-                    position: 'top',
-                    title: 'Gagal Mengubah Data Admin',
-                    status: 'error',
-                    duration: '2000',
-                    isClosable: true
-                })
-            })
-    }
-
-    const adminDeleteHandler = async(id) => {
-        await api.deleteAdmin(token, id)
-            .then(response => {
-                toast({
-                    position: 'top',
-                    title: 'Berhasil Menghapus Data Admin',
-                    status: 'success',
-                    duration: '2000',
-                    isClosable: true
-                })
-                getAllAdminStaff();
-            })
-            .catch(error => {
-                console.log(error)
-                toast({
-                    position: 'top',
-                    title: 'Gagal Menghapus Data Admin',
-                    status: 'error',
-                    duration: '2000',
-                    isClosable: true
-                })
-            })
-    }
-
-    const onSubmitCreate = (values) => {
-        createAdminStaff(values)
-        onCloseModalCreate();
-    }
-
-    const onUpdateSubmit = (data) => {
-        updateAdminStaff(adminId ,data);
-        onCloseModalEdit();
-    }
-
-    const onEditHandler = (id) => {
-        setAdminId(id);
-        getAdminStaffById(id);
-        onModalEditOpen();
-    }
-
-    const onDeleteClicked = (id) => {
-        onModalDeleteOpen()
-        setAdminId(id);
-    }
-
-    const onDeleteHandler = () => {
-        adminDeleteHandler(adminId);
-        onCloseModalDelete();
-    }
-
-    const onShowPassword = (e) => {
-        setShow(e.target.value)
-    }
-
-    useEffect(() => {
-        if (role !== 'super admin' && token === undefined) {
-            toast({
-                position: 'top',
-                title: 'Kamu Harus Login Dulu',
-                status: 'warning',
-                duration: '2000',
-                isClosable: true
-            })
-            navigate('/root/login');
-        }
-        getAllAdminStaff();
+  const createAdminStaff = async (data) => {
+    await api
+      .createAdmin(token, data)
+      .then((response) => {
+        toast({
+          position: 'top',
+          title: 'Berhasil membuat Admin Baru',
+          status: 'success',
+          duration: '2000',
+          isClosable: true,
+        });
         getAllHospitalsHandler();
-    }, []);
+        getAllAdminStaff();
+      })
+      .catch((error) => {
+        console.log(error);
+        toast({
+          position: 'top',
+          title: 'Gagal membuat Admin Baru',
+          status: 'error',
+          duration: '2000',
+          isClosable: true,
+        });
+      });
+  };
 
+  const getAllHospitalsHandler = async () => {
+    await api
+      .getHospitals(token)
+      .then((response) => {
+        const data = response.data.data;
+        setHospitals(data);
+      })
+      .catch((error) => {
+        toast({
+          position: 'top',
+          title: 'Gagal Mengambil Data Rumah Sakit',
+          status: 'error',
+          duration: '2000',
+          isClosable: true,
+        });
+      });
+  };
+
+  const updateAdminStaff = async (id, data) => {
+    await api
+      .updateAdmin(token, id, data)
+      .then((response) => {
+        toast({
+          position: 'top',
+          title: 'Berhasil Mengubah Data Admin',
+          status: 'success',
+          duration: '2000',
+          isClosable: true,
+        });
+        getAllAdminStaff();
+      })
+      .catch((error) => {
+        console.log(error);
+        toast({
+          position: 'top',
+          title: 'Gagal Mengubah Data Admin',
+          status: 'error',
+          duration: '2000',
+          isClosable: true,
+        });
+      });
+  };
+
+  const adminDeleteHandler = async (id) => {
+    await api
+      .deleteAdmin(token, id)
+      .then((response) => {
+        toast({
+          position: 'top',
+          title: 'Berhasil Menghapus Data Admin',
+          status: 'success',
+          duration: '2000',
+          isClosable: true,
+        });
+        getAllAdminStaff();
+      })
+      .catch((error) => {
+        console.log(error);
+        toast({
+          position: 'top',
+          title: 'Gagal Menghapus Data Admin',
+          status: 'error',
+          duration: '2000',
+          isClosable: true,
+        });
+      });
+  };
+
+  const onSubmitCreate = (values) => {
+    createAdminStaff(values);
+    onCloseModalCreate();
+  };
+
+  const onUpdateSubmit = (data) => {
+    updateAdminStaff(adminId, data);
+    onCloseModalEdit();
+  };
+
+  const onEditHandler = (id) => {
+    setAdminId(id);
+    getAdminStaffById(id);
+    onModalEditOpen();
+  };
+
+  const onDeleteClicked = (id) => {
+    onModalDeleteOpen();
+    setAdminId(id);
+  };
+
+  const onDeleteHandler = () => {
+    adminDeleteHandler(adminId);
+    onCloseModalDelete();
+  };
+
+  const onShowPassword = (e) => {
+    setShow(e.target.value);
+  };
+
+  useEffect(() => {
+    if (role !== 'super admin' && token === undefined) {
+      toast({
+        position: 'top',
+        title: 'Kamu Harus Login Dulu',
+        status: 'warning',
+        duration: '2000',
+        isClosable: true,
+      });
+      navigate('/root/login');
+    }
+    getAllAdminStaff();
+    getAllHospitalsHandler();
+  }, []);
     return (
         <LayoutAdminRoot activeMenu={'user'}>
             <HeadAdmin title={'Manajemen Akun Super Admin Rumah Sakit'} isAdd={onModalCreateOpen} />
@@ -455,17 +466,9 @@ const AdminRoot = () => {
                     </>
                 }
             />
-
-            <PopupDelete 
-                isOpen={isModalDeleteOpen}
-                modalTitle={'Haspus Admin Rumah Sakit'}
-                modalBody={'Apakah kamu yakin menghapus admin?'}
-                onClose={onCloseModalDelete}
-                deletet_name={'Hapus Akun'}
-                onDelete={() => onDeleteHandler(adminId)}
-            />
-        </LayoutAdminRoot>
-    );
-}
+      <PopupDelete isOpen={isModalDeleteOpen} modalTitle={'Hapus Admin Rumah Sakit'} modalBody={'Apakah kamu yakin menghapus admin?'} onClose={onCloseModalDelete} deletet_name={'Hapus Akun'} onDelete={() => onDeleteHandler(adminId)} />
+    </LayoutAdminRoot>
+  );
+};
 
 export default AdminRoot;
