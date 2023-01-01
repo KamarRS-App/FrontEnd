@@ -5,8 +5,8 @@ import TableAdmin from '../../components/TableAdmin';
 import { Box, Button, ButtonGroup, FormControl, FormLabel, HStack, Input, Select, Td, Tr, useDisclosure, useNumberInput, useToast } from '@chakra-ui/react';
 import { MdModeEdit, MdOutlineDeleteOutline } from 'react-icons/md';
 import PopupAdmin from '../../components/PopupAdmin';
-import { FormControl, FormErrorMessage, FormLabel } from '@chakra-ui/form-control';
-import { useDisclosure } from '@chakra-ui/hooks';
+import { FormErrorMessage } from '@chakra-ui/form-control';
+
 import PopupDelete from '../../components/PopupDelete';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router';
@@ -16,6 +16,7 @@ import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { async } from 'postcss-js';
+import { useSelector } from 'react-redux';
 
 const RoomPage = () => {
   const { isOpen: isModalCreateOpen, onOpen: onModalCreateOpen, onClose: onCloseModalCreate } = useDisclosure();
@@ -25,69 +26,7 @@ const RoomPage = () => {
   const toast = useToast();
   const navigate = useNavigate();
 
-  const {
-    getInputProps: inputBed,
-    getIncrementButtonProps: incBed,
-    getDecrementButtonProps: decBed,
-  } = useNumberInput({
-    step: 1,
-    defaultValue: 10,
-    min: 1,
-    max: 100,
-    precision: 0,
-  });
-
-  const {
-    getInputProps: inputBedAvailable,
-    getIncrementButtonProps: incBedAvailable,
-    getDecrementButtonProps: decBedAvailable,
-  } = useNumberInput({
-    step: 1,
-    defaultValue: 10,
-    min: 1,
-    max: 100,
-    precision: 0,
-  });
-
-  const {
-    getInputProps: inputBedAvailableInfo,
-    getIncrementButtonProps: incBedAvailableInfo,
-    getDecrementButtonProps: decBedAvailableInfo,
-  } = useNumberInput({
-    step: 1,
-    defaultValue: 10,
-    min: 1,
-    max: 100,
-    precision: 0,
-  });
-
-  const {
-    getInputProps: inputBedInfo,
-    getIncrementButtonProps: incBedInfo,
-    getDecrementButtonProps: decBedInfo,
-  } = useNumberInput({
-    step: 1,
-    defaultValue: 10,
-    min: 1,
-    max: 100,
-    precision: 0,
-  });
-
-  const inc = incBed();
-  const dec = decBed();
-  const input = inputBed();
-
-  const incAvailable = incBedAvailable();
-  const decAvailable = decBedAvailable();
-  const inputAvailable = inputBedAvailable();
-
-  const incInfo = incBedInfo();
-  const decInfo = decBedInfo();
-  const inputInfo = inputBedInfo();
-
-  const incAvailableInfo = incBedAvailableInfo();
-  const decAvailableInfo = decBedAvailableInfo();
-  const inputAvailableInfo = inputBedAvailableInfo();
+  const staff = useSelector((state) => state.staffs);
 
   const token = Cookies.get('token');
   const role = Cookies.get('role');
@@ -97,7 +36,7 @@ const RoomPage = () => {
   const [currentBed, setCurrentBed] = useState([]);
 
   const initialValues = {
-    hospital_id: 'null',
+    hospital_id: staff.hospital_id,
     nama_tempat_tidur: '',
     ruangan: '',
     kelas: '',
@@ -110,6 +49,7 @@ const RoomPage = () => {
     hospital_id: Yup.number().required('Kode Rumah Sakit tidak boleh kosong'),
     nama_tempat_tidur: Yup.string().required('Nama Tempat Tidur tidak boleh kosong'),
     ruangan: Yup.string().required('Ruangan tidak boleh kosong'),
+    kelas: Yup.string().required('Kelas tidak boleh kosong'),
     status: Yup.string().required('Status tidak boleh kosong'),
   });
 
@@ -117,8 +57,9 @@ const RoomPage = () => {
     register: createHospitalBed,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm({
-    mode: 'onTouched',
+    mode: 'onClick',
     reValidateMode: 'onSubmit',
     resolver: yupResolver(schema),
     defaultValues: initialValue,
@@ -131,7 +72,7 @@ const RoomPage = () => {
     setValue: setUpdate,
   } = useForm({
     mode: 'onChange',
-    reValidateMode: 'onChange',
+    reValidateMode: 'onSubmit',
     resolver: yupResolver(schema),
     defaultValues: initialValue,
   });
@@ -141,18 +82,18 @@ const RoomPage = () => {
       .getBedById(token, id)
       .then((response) => {
         const data = response.data.data;
-        setValueUpdate('hospital_id', data.hospital_id);
-        setValueUpdate('nama_tempat_tidur', data.nama_tempat_tidur);
-        setValueUpdate('ruangan', data.ruangan);
-        setValueUpdate('kelas', data.kelas);
-        setValueUpdate('status', data.status);
+        setUpdate('hospital_id', data.hospital_id);
+        setUpdate('nama_tempat_tidur', data.nama_tempat_tidur);
+        setUpdate('ruangan', data.ruangan);
+        setUpdate('kelas', data.kelas);
+        setUpdate('status', data.status);
         setCurrentBed(data);
       })
       .catch((error) => {
         if (error) {
           toast({
             position: 'top',
-            title: 'Gagal Mendapatkan Data Rumah Sakit',
+            title: 'Gagal Mendapatkan Data Bed',
             status: 'error',
             duration: '1500',
             isClosable: true,
@@ -164,14 +105,20 @@ const RoomPage = () => {
   const onHandlerEdit = (id) => {
     getBedHandler(id);
     if (currentBed) {
+      setUpdate('hospital_id', staff.hospital_id);
       onModalEditOpen();
     }
   };
 
+  const onOpenAdd = () => {
+    // setValue('hospital_id', staff.hospital_id);
+    onModalCreateOpen();
+  };
+
   const getAllHospitalBedHandler = async () => {
-    await api.getBedById(token).then((response) => {
+    await api.getAllBeds(token, staff.hospital_id).then((response) => {
       const data = response.data.data;
-      setBeds;
+      setBeds(data);
     });
   };
 
@@ -207,7 +154,7 @@ const RoomPage = () => {
 
   const updateHospitalBedHandler = async (data) => {
     await axios
-      .put(`http://34.143.247.242/beds/${currentHospital.id}`, data, {
+      .put(`http://34.143.247.242/beds/${currentBed.id}`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
           'content-type': 'multipart/form-data',
@@ -239,7 +186,6 @@ const RoomPage = () => {
     await api
       .DeleteBedById(token, id)
       .then((response) => {
-        console.log(response.data);
         toast({
           position: 'top',
           title: 'Berhasil Menghapus Data Bed',
@@ -250,7 +196,6 @@ const RoomPage = () => {
         getAllHospitalBedHandler();
       })
       .catch((error) => {
-        console.log(error);
         toast({
           position: 'top',
           title: 'Gagal Menghapus Data Bed',
@@ -271,7 +216,6 @@ const RoomPage = () => {
     data.append('status', values.status);
 
     createHospitalBedHandler(data);
-    setUpdate('hospital_id', '');
     setUpdate('nama_tempat_tidur', '');
     setUpdate('ruangan', '');
     setUpdate('kelas', '');
@@ -281,10 +225,10 @@ const RoomPage = () => {
   const onUpdateHandler = (values) => {
     const data = new FormData();
 
-    const nama_tempat_tidur = values.nama_tempat_tidur !== '' ? parseInt(values.nama_tempat_tidur) : currentBed.nama_tempat_tidur;
-    const ruangan = values.ruangan !== '' ? parseInt(values.ruangan) : currentBed.ruangan;
-    const kelas = values.kelas !== '' ? parseInt(values.kelas) : currentBed.kelas;
-    const status = values.status !== '' ? parseInt(values.status) : currentBed.status;
+    const nama_tempat_tidur = values.nama_tempat_tidur;
+    const ruangan = values.ruangan;
+    const kelas = values.kelas;
+    const status = values.status;
 
     data.append('nama_tempat_tidur', nama_tempat_tidur);
     data.append('ruangan', ruangan);
@@ -303,7 +247,7 @@ const RoomPage = () => {
   };
 
   const onError = (error) => {
-    console.log(error);
+    alert(error);
   };
 
   useEffect(() => {
@@ -317,11 +261,12 @@ const RoomPage = () => {
       });
       navigate('/admin/login');
     }
+    getAllHospitalBedHandler();
   }, []);
 
   return (
     <LayoutAdmin activeMenu={'room'}>
-      <HeadAdmin title={'Manajemen Tempat Tidur Pasien'} isAdd={onModalCreateOpen} />
+      <HeadAdmin title={'Manajemen Tempat Tidur Pasien'} isAdd={onOpenAdd} />
       <Box mt={'5'} py={'10'} bg="white">
         <TableAdmin
           headTable={
@@ -329,58 +274,63 @@ const RoomPage = () => {
               <Td fontWeight={'400'} textAlign="center" fontSize={'18px'}>
                 No
               </Td>
+
+              <Td fontWeight={'400'} fontSize={'18px'} textAlign="center">
+                Nama Tempat Tidur
+              </Td>
               <Td fontWeight={'400'} fontSize={'18px'} textAlign="center">
                 Ruangan
               </Td>
               <Td fontWeight={'400'} fontSize={'18px'} textAlign="center">
-                Bed Tersedia
-              </Td>
-              <Td fontWeight={'400'} fontSize={'18px'} textAlign="center">
-                BPJS
-              </Td>
-              <Td fontWeight={'400'} fontSize={'18px'} textAlign="center">
-                Bed Kosong
+                Kelas
               </Td>
               <Td fontWeight={'400'} fontSize={'18px'} textAlign="center">
                 Status
               </Td>
+
               <Td fontWeight={'400'} fontSize={'18px'} textAlign="center">
                 Actions
               </Td>
             </Tr>
           }
-          bodyTable={DataRoom.map((room) => (
-            <Tr>
-              <Td fontWeight={'400'} textAlign="center">
-                {room.no}
-              </Td>
-              <Td fontWeight={'400'} textAlign="center">
-                {room.ruang}
-              </Td>
-              <Td fontWeight={'400'} textAlign="center">
-                {room.bed_total}
-              </Td>
-              <Td fontWeight={'400'} textAlign="center">
-                {room.BPJS}
-              </Td>
-              <Td fontWeight={'400'} textAlign="center">
-                {room.bed_available}
-              </Td>
-              <Td fontWeight={'400'} textAlign="center">
-                {room.status}
-              </Td>
-              <Td fontWeight={'400'} textAlign="center">
-                <ButtonGroup gap="4">
-                  <Button onClick={() => onHandlerEdit(data.id)} bg="transparent" border="1px" borderColor={'#E0E0E0'}>
-                    <MdModeEdit />
-                  </Button>
-                  <Button onClick={() => onDeleteClicked(data.id)} bg="transparent" border="1px" borderColor={'#E0E0E0'}>
-                    <MdOutlineDeleteOutline />
-                  </Button>
-                </ButtonGroup>
-              </Td>
-            </Tr>
-          ))}
+          bodyTable={
+            beds.length !== 0 ? (
+              beds?.map((data, index) => (
+                <Tr key={index + 1}>
+                  <Td textAlign={'center'}>{index + 1}</Td>
+
+                  <Td fontWeight={'400'} textAlign="center">
+                    {data.nama_tempat_tidur}
+                  </Td>
+                  <Td fontWeight={'400'} textAlign="center">
+                    {data.ruangan}
+                  </Td>
+                  <Td fontWeight={'400'} textAlign="center">
+                    {data.kelas}
+                  </Td>
+                  <Td fontWeight={'400'} textAlign="center">
+                    {data.status}
+                  </Td>
+                  <Td fontWeight={'400'} textAlign="center">
+                    <ButtonGroup gap="4">
+                      <Button onClick={() => onHandlerEdit(data.id)} bg="transparent" border="1px" borderColor={'#E0E0E0'}>
+                        <MdModeEdit />
+                      </Button>
+                      <Button onClick={() => onDeleteClicked(data.id)} bg="transparent" border="1px" borderColor={'#E0E0E0'}>
+                        <MdOutlineDeleteOutline />
+                      </Button>
+                    </ButtonGroup>
+                  </Td>
+                </Tr>
+              ))
+            ) : (
+              <Tr>
+                <Td colSpan={'12'} textAlign={'center'}>
+                  Data Kosong
+                </Td>
+              </Tr>
+            )
+          }
         />
       </Box>
       <PopupAdmin
@@ -390,59 +340,31 @@ const RoomPage = () => {
         submitButton={handleSubmit(onSubmit, onError)}
         modalBody={
           <>
-            <FormControl isInvalid={errors.nama_tempat_tidur}>
+            {/* <FormControl isInvalid={errors.hospital_id}>
+              <FormLabel>Hospital ID</FormLabel>
+              <Input placeholder="ID Rumah Sakit" id="hospital_id" type="number" {...createHospitalBed('hospital_id')} />
+              {errors.hospital_id && <FormErrorMessage>{errors.hospital_id.message}</FormErrorMessage>}
+            </FormControl> */}
+
+            <FormControl mt={4} isInvalid={errors.nama_tempat_tidur}>
               <FormLabel>Nama Tempat Tidur</FormLabel>
               <Input placeholder="Nama Tempat Tidur" id="nama_tempat_tidur" type="text" {...createHospitalBed('nama_tempat_tidur')} />
               {errors.nama_tempat_tidur && <FormErrorMessage>{errors.nama_tempat_tidur.message}</FormErrorMessage>}
             </FormControl>
 
-            <FormControl isInvalid={errors.ruangan}>
+            <FormControl mt={4} isInvalid={errors.ruangan}>
               <FormLabel>Ruangan</FormLabel>
-              <Input placeholder="Ruangan" id="ruang" type="text" {...createHospitalBed('ruangan')} />
-              {errors.ruangan && <FormErrorMessage>{errors.ruangan.message}</FormErrorMessage>}
+              <Select placeholder="Pilih Ruangan" id="ruangan" {...createHospitalBed('ruangan')}>
+                <option>Anggrek</option>
+                <option>Melati</option>
+              </Select>
+              {/* {errors.role && <FormErrorMessage>{errors.role.message}</FormErrorMessage>} */}
             </FormControl>
 
             <FormControl mt={4} isInvalid={errors.kelas}>
               <FormLabel>Kelas</FormLabel>
               <Input placeholder="Kelas " type={'text'} id="kelas" {...createHospitalBed('kelas')} />
               {errors.kelas && <FormErrorMessage>{errors.kelas.message}</FormErrorMessage>}
-            </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>Bed Tersedia</FormLabel>
-              <HStack maxW={'80'} bg="#F5F6F8">
-                <Button {...dec} color="white" bg={'#E74C3C'} _hover={{ bg: '#E74C3C' }}>
-                  -
-                </Button>
-                <Input borderRadius="0" {...input} bg="#F5F6F8" border={'none'} />
-                <Button {...inc} bg={'#2F80ED'} color="white" _hover={{ bg: '#2F80ED' }}>
-                  +
-                </Button>
-              </HStack>
-              {/* {errors.handphone && <FormErrorMessage>{errors.handphone.message}</FormErrorMessage>} */}
-            </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>BPJS</FormLabel>
-              <Select placeholder="Pilih Layanan BPJS" id="bpjs">
-                <option>iya</option>
-                <option>tidak</option>
-              </Select>
-              {/* {errors.role && <FormErrorMessage>{errors.role.message}</FormErrorMessage>} */}
-            </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>Bed Kosong</FormLabel>
-              <HStack maxW={'80'} bg="#F5F6F8">
-                <Button {...decAvailable} color="white" bg={'#E74C3C'} _hover={{ bg: '#E74C3C' }}>
-                  -
-                </Button>
-                <Input borderRadius="0" {...inputAvailable} bg="#F5F6F8" border={'none'} />
-                <Button {...incAvailable} bg={'#2F80ED'} color="white" _hover={{ bg: '#2F80ED' }}>
-                  +
-                </Button>
-              </HStack>
-              {/* {errors.password && <FormErrorMessage>{errors.password.message}</FormErrorMessage>} */}
             </FormControl>
 
             <FormControl mt={4} isInvalid={errors.status}>
@@ -480,43 +402,6 @@ const RoomPage = () => {
               <FormLabel>Kelas</FormLabel>
               <Input placeholder="Kelas Ruangan" type={'text'} id="kelas" {...updateHospitalBed('kelas')} />
               {errorsUpdate.kelas && <FormErrorMessage>{errors.kelas.message}</FormErrorMessage>}
-            </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>Bed Tersedia</FormLabel>
-              <HStack maxW={'80'} bg="#F5F6F8">
-                <Button {...decInfo} color="white" bg={'#E74C3C'} _hover={{ bg: '#E74C3C' }}>
-                  -
-                </Button>
-                <Input borderRadius="0" {...inputInfo} bg="#F5F6F8" border={'none'} />
-                <Button {...incInfo} bg={'#2F80ED'} color="white" _hover={{ bg: '#2F80ED' }}>
-                  +
-                </Button>
-              </HStack>
-              {/* {errors.handphone && <FormErrorMessage>{errors.handphone.message}</FormErrorMessage>} */}
-            </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>BPJS</FormLabel>
-              <Select placeholder="Pilih Layanan BPJS" id="bpjs">
-                <option>iya</option>
-                <option>tidak</option>
-              </Select>
-              {/* {errors.role && <FormErrorMessage>{errors.role.message}</FormErrorMessage>} */}
-            </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>Bed Kosong</FormLabel>
-              <HStack maxW={'80'} bg="#F5F6F8">
-                <Button {...decAvailableInfo} color="white" bg={'#E74C3C'} _hover={{ bg: '#E74C3C' }}>
-                  -
-                </Button>
-                <Input borderRadius="0" {...inputAvailableInfo} bg="#F5F6F8" border={'none'} />
-                <Button {...incAvailableInfo} bg={'#2F80ED'} color="white" _hover={{ bg: '#2F80ED' }}>
-                  +
-                </Button>
-              </HStack>
-              {/* {errors.password && <FormErrorMessage>{errors.password.message}</FormErrorMessage>} */}
             </FormControl>
 
             <FormControl mt={4} isInvalid={errorsUpdate.status}>
