@@ -2,6 +2,8 @@ import React from "react";
 import logo from "../assets/images/logo.png";
 import googleLogo from "../assets/images/googlelogo.png";
 import { ViewOffIcon, ViewIcon } from "@chakra-ui/icons";
+import api from "../services/api";
+import { useNavigate } from "react-router-dom";
 import {
   Button,
   Center,
@@ -16,42 +18,94 @@ import {
   InputGroup,
   InputRightElement,
   Icon,
+  useToast,
+  Wrap,
+  FormControl,
 } from "@chakra-ui/react";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-const schema = yup.object().shape({
-  username: yup.string().required("Harap masukkan username"),
-  email: yup
-    .string()
-    .required("Harap masukkan email")
-    .email("Format email salah"),
-  nomorhape: yup.number().typeError("Harap masukkan nomor hp").required(),
-  password: yup
-    .string()
-    .required("Harap masukkan password")
-    .min(8, "Password setidaknya 8 karakter"),
-});
-
 function Register() {
   const [show, setShow] = React.useState(false);
   const showPassword = () => setShow(!show);
+  const toast = useToast();
+  const navigate = useNavigate();
+  const [passwordType, setPasswordType] = React.useState('');
+
+  const onShowPassword = (e) => {
+    setPasswordType(e.target.value);
+  }
+
+  //yup schema
+  const schema = yup.object().shape({
+    username: yup.string().required("Harap masukkan username"),
+    email: yup
+      .string()
+      .required("Harap masukkan email")
+      .email("Format email salah"),
+    nomorhape: yup.number().typeError("Harap masukkan nomor hp").required(),
+    kata_sandi: yup
+      .string()
+      .required("Harap masukkan password")
+      .min(8, "Password setidaknya 8 karakter"),
+    nik: yup.number().typeError("Harap masukkan NIK").required(),
+    no_kk: yup
+      .number()
+      .typeError("Harap masukkan Nomor Kartu Keluarga")
+      .required(),
+  });
 
   //react-hook-form
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
   } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
   });
 
+  //handle register
+  const handleRegister = async (data) => {
+    await api
+      .register(data)
+      .then((response) => {
+        toast({
+          title: `Sukses membuat akun.`,
+          status: "success",
+          position: "top",
+          isClosable: true,
+          duration: 1500,
+        });
+      })
+      .catch((err) => {
+        if (
+          (err.response.data.message =
+            "erorr: Gagal membuat akun, Email sudah terdaftar")
+        ) {
+          toast({
+            title: `Email sudah terdaftar`,
+            status: "error",
+            position: "top",
+            isClosable: true,
+            duration: 1500,
+          });
+        } else {
+          toast({
+            title: `Gagal membuat akun`,
+            status: "error",
+            position: "top",
+            isClosable: true,
+            duration: 1500,
+          });
+        }
+      });
+  };
+
   const onSubmit = (data) => {
     console.log(data);
-    reset();
+    handleRegister(data);
   };
 
   return (
@@ -125,7 +179,7 @@ function Register() {
             mx={{ base: "auto", lg: "0" }}
             width={{ base: "350px", sm: "500px", md: "700px", lg: "700px" }}
             px={{ base: "10", lg: "24" }}
-            py={{ base: "16" }}
+            pb={{ base: "16" }}
           >
             <Box
               textAlign="center"
@@ -142,7 +196,6 @@ function Register() {
                 fontSize={{ md: "4xl", lg: "5xl" }}
                 fontWeight="semibold"
                 color="alta.primary"
-                mb="5"
               >
                 Save Life
               </Text>
@@ -150,41 +203,74 @@ function Register() {
             <Box className="flex flex-col">
               <Box className="text-start w-full">
                 <form>
-                  <Input
-                    {...register("username")}
-                    placeholder="Masukkan username"
-                    name="username"
-                  />
-                  <Text color={"red"}>{errors.username?.message}</Text>
-                  <br />
-                  <Input {...register("email")} placeholder="Masukkan email" />
-                  <Text color={"red"}>{errors.email?.message}</Text>
-                  <br />
-                  <Input
-                    type="number"
-                    {...register("nomorhape")}
-                    placeholder="Masukkan nomor hp"
-                  />
-                  <Text color="red">{errors.nomorhape?.message}</Text>
-                  <br />
-                  <InputGroup>
+                  <FormControl isInvalid={errors.username}>
                     <Input
-                      type={show ? "text" : "password"}
-                      {...register("password")}
-                      placeholder="Masukkan password"
+                      {...register("username")}
+                      placeholder="Masukkan username"
+                      name="username"
                     />
-                    <InputRightElement>
-                      {show ? (
-                        <ViewOffIcon
-                          onClick={showPassword}
-                          cursor={"pointer"}
-                        />
-                      ) : (
-                        <ViewIcon onClick={showPassword} cursor={"pointer"} />
-                      )}
-                    </InputRightElement>
-                  </InputGroup>
-                  <Text color={"red"}>{errors.password?.message}</Text>
+                    <Text color={"red"}>{errors.username?.message}</Text>
+                  </FormControl>
+                  <br />
+                  <FormControl isInvalid={errors.email}>
+                    <Input
+                      {...register("email")}
+                      placeholder="Masukkan email"
+                    />
+                    <Text color={"red"}>{errors.email?.message}</Text>
+                    <br />
+                  </FormControl>
+                  <FormControl isInvalid={errors.nik}>
+                    <Input
+                      {...register("nik")}
+                      type={"number"}
+                      placeholder="Masukkan NIK"
+                    />
+                    <Text color={"red"}>{errors.nik?.message}</Text>
+                    <br />
+                  </FormControl>
+                  <FormControl isInvalid={errors.no_kk}>
+                    <Input
+                      {...register("no_kk")}
+                      type={"number"}
+                      placeholder="Masukkan No. Kartu Keluarga"
+                    />
+                    <Text color={"red"}>{errors.no_kk?.message}</Text>
+                    <br />
+                  </FormControl>
+                  <FormControl isInvalid={errors.nomorhape}>
+                    <Input
+                      type="number"
+                      {...register("nomorhape")}
+                      placeholder="Masukkan nomor hp"
+                    />
+                    <Text color="red">{errors.nomorhape?.message}</Text>
+                  </FormControl>
+                  <br />
+                  <FormControl isInvalid={errors.kata_sandi}>
+                    <InputGroup>
+                      <Input
+                        type={show ? "text" : "password"}
+                        {...register("kata_sandi")}
+                        placeholder="Masukkan password"
+                        onInput={onShowPassword}
+                      />
+                      {
+                        passwordType &&
+                        <InputRightElement>
+                          {show ? (
+                            <ViewOffIcon
+                              onClick={showPassword}
+                              cursor={"pointer"}
+                            />
+                          ) : (
+                            <ViewIcon onClick={showPassword} cursor={"pointer"} />
+                          )}
+                        </InputRightElement>
+                      }
+                    </InputGroup>
+                  </FormControl>
+                  <Text color={"red"}>{errors.kata_sandi?.message}</Text>
                   <Button
                     color="white"
                     width="100%"
@@ -228,7 +314,12 @@ function Register() {
               <Center>
                 <Text mt="5">
                   Already have an account?{" "}
-                  <Link color="alta.primary" href="#" fontWeight="semibold">
+                  <Link
+                    color="alta.primary"
+                    href="#"
+                    fontWeight="semibold"
+                    onClick={() => navigate("/login")}
+                  >
                     Login
                   </Link>
                 </Text>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Stack, StackDivider, VStack, Box } from '@chakra-ui/react';
-import { Center, Text, SimpleGrid, Image, Grid, Button, Card, IconButton, ButtonGroup } from '@chakra-ui/react';
+import { Center, Text, SimpleGrid, Image, Grid, Button, Card, IconButton, ButtonGroup, Link } from '@chakra-ui/react';
 import { ArrowForwardIcon, AddIcon } from '@chakra-ui/icons';
 import { Avatar, AvatarBadge, AvatarGroup } from '@chakra-ui/react';
 import { useDisclosure } from '@chakra-ui/react';
@@ -32,19 +32,10 @@ function ModalDataPasien() {
         <StackDivider borderColor="gray.200" />
         <Center>
           <ButtonGroup size="sm" isAttached variant="unstyled" mt={10} mb={5} color="#072051">
-            <Button>Tambah Data Pasien Baru</Button>
+            <Link href="/data/pasien/checkup">Tambah Data Pasien Baru</Link>
             <IconButton aria-label="Tambah Data Baru" icon={<AddIcon />} onClick={onOpen} />
           </ButtonGroup>
         </Center>
-        <Modal isOpen={isOpen} onClose={onClose}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalCloseButton />
-            <ModalBody>
-              <ModalTambahPasien />
-            </ModalBody>
-          </ModalContent>
-        </Modal>
       </Grid>
     </VStack>
   );

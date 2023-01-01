@@ -25,7 +25,7 @@ const SideBarAdmin = ({ active }) => {
           </Text>
         </Flex>
       </Link>
-      <Link to="/admin/user">
+      {/* <Link to="/admin/user">
         <Flex
           px={{ base: '0', md: '0', lg: '14' }}
           pl={{ base: '0', md: '5' }}
@@ -43,7 +43,7 @@ const SideBarAdmin = ({ active }) => {
             Admin
           </Text>
         </Flex>
-      </Link>
+      </Link> */}
       <Link to="/admin/room">
         <Flex
           px={{ base: '0', md: '0', lg: '14' }}
@@ -101,7 +101,7 @@ const SideBarAdmin = ({ active }) => {
           </Text>
         </Flex>
       </Link>
-      <Link to="/admin/doctor">
+      {/* <Link to="/admin/doctor">
         <Flex
           px={{ base: '0', md: '0', lg: '14' }}
           pl={{ base: '0', md: '5' }}
@@ -119,7 +119,7 @@ const SideBarAdmin = ({ active }) => {
             Dokter
           </Text>
         </Flex>
-      </Link>
+      </Link> */}
       <Link to="/admin/hospital/profile">
         <Flex
           px={{ base: '0', md: '0', lg: '14' }}

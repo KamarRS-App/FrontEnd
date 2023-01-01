@@ -8,6 +8,7 @@ import CariSpesialis from '../components/CariSpesialis';
 import CardCariDokter from '../components/CardCariDokter';
 import Footer from '../components/Footer';
 import Layout from '../components/Layout';
+
 function CariDokter() {
   return (
     <Layout>

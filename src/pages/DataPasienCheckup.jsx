@@ -4,10 +4,13 @@ import Layout from '../components/Layout';
 import { useDisclosure } from '@chakra-ui/react';
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton } from '@chakra-ui/react';
 import ModalDataPasien from '../components/ModalDataPasien';
+import { AlertDialog, AlertDialogBody, AlertDialogFooter, AlertDialogHeader, AlertDialogContent, AlertDialogOverlay } from '@chakra-ui/react';
 import { MdBuild, MdArrowBack } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
-function BuatJanjiDokter() {
+import { Link } from 'react-router-dom';
+function DataPasienCheckup() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const cancelRef = React.useRef();
   let navigate = useNavigate();
   return (
     <Layout>
@@ -20,7 +23,7 @@ function BuatJanjiDokter() {
         <Flex direction={{ base: 'column', xl: 'row' }}>
           <Box flexBasis={{ base: '100%', lg: '70%' }} mr={{ base: 0, xl: '30px' }}>
             <Box borderWidth={'2px'} p="5" rounded={'10px'} my={5}>
-              <Text fontSize={18} fontWeight={500} color="#072051">
+              <Text fontSize={20} fontWeight={500} color="#072051">
                 Login Sebagai Almira Mahsa
               </Text>
               <Text fontSize={16} fontWeight={400} color="#D0D0D0">
@@ -30,10 +33,10 @@ function BuatJanjiDokter() {
 
             <Box borderWidth={'2px'} p="5" rounded={'10px'} py="10">
               <Box>
-                <Text fontSize={18} fontWeight={500}>
+                <Text fontSize={20} fontWeight={500}>
                   Detail Pemesan
                 </Text>
-                <Text fontSize={13} fontWeight={500} m={2} color="#D0D0D0">
+                <Text fontSize={13} fontWeight={500} color="#D0D0D0">
                   Informasi terkait pembuatan janji chekup akan disampaikan melalui email dan nomor ponsel dibawah ini
                 </Text>
               </Box>
@@ -66,27 +69,86 @@ function BuatJanjiDokter() {
                     </Flex>
                   </Box>
                 </FormControl>
-                <Center>
-                  {' '}
-                  <Button onClick={onOpen} mt={20} bg="#1FA8F6" color="#FFFFFFE5">
-                    Lanjutkan ke Data Pasien
-                  </Button>
-                </Center>
-                <Modal isOpen={isOpen} onClose={onClose}>
-                  <ModalOverlay />
-                  <ModalContent>
-                    <ModalCloseButton />
-                    <ModalBody>
-                      <ModalDataPasien />
-                    </ModalBody>
-                  </ModalContent>
-                </Modal>
               </Box>
+            </Box>
+            <Box borderWidth={'2px'} p="5" rounded={'10px'} py="10" my={5}>
+              <Box>
+                <Text fontSize={20} fontWeight={500}>
+                  Detail Pasien
+                </Text>
+                <Text fontSize={13} fontWeight={500} color="#D0D0D0">
+                  Informasi terkait pasien yang akan melakukan Check-Up
+                </Text>
+              </Box>
+              <Box mx={5} mt={10}>
+                <FormControl>
+                  <Box mt={5}>
+                    <Flex>
+                      <Box flexBasis={'45%'}>
+                        <FormLabel>Nama Depan</FormLabel>
+                        <Input type="text" placeholder="Mitro " />
+                      </Box>
+                      <Spacer />
+                      <Box flexBasis={'45%'}>
+                        <FormLabel>Nama Belakang</FormLabel>
+                        <Input type="text" placeholder="Ubaid" />
+                      </Box>
+                    </Flex>
+                  </Box>
+                  <Box mt={5}>
+                    <Flex>
+                      <Box flexBasis={'45%'}>
+                        <FormLabel>Email</FormLabel>
+                        <Input type="email" placeholder="mitroubaid@gmail.com" />
+                      </Box>
+                      <Spacer />
+                      <Box flexBasis={'45%'}>
+                        <FormLabel>No Handphone</FormLabel>
+                        <Input type="number" placeholder="085646087878" />
+                      </Box>
+                    </Flex>
+                  </Box>
+                </FormControl>
+              </Box>
+            </Box>
+            <Checkbox defaultChecked m={5} pl={2}>
+              {' '}
+              Saya mengkonfirmasi bahwa Informasi yang diberikan terkait pasien adalah infomasi yang sebenar-benarnya
+            </Checkbox>
+            <Box align="end">
+              <Button m={3} onClick={onOpen}>
+                {' '}
+                Batal
+              </Button>
+              <AlertDialog isOpen={isOpen} leastDestructiveRef={cancelRef} onClose={onClose}>
+                <AlertDialogOverlay>
+                  <AlertDialogContent>
+                    <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                      Batalkan Jadwal Konsultasi?
+                    </AlertDialogHeader>
+
+                    <AlertDialogBody>Apakah Anda yakin membatalkan jadwal konsultasi dengan dr. Amrabat, Sp.PD di RS Haji Surabaya pada Jumat, 2 Januari 2023 07:00 ? .</AlertDialogBody>
+
+                    <AlertDialogFooter>
+                      <Button ref={cancelRef} onClick={onClose}>
+                        Kembali
+                      </Button>
+                      <Button colorScheme="red" onClick={onClose} ml={3}>
+                        Batalkan Janji
+                      </Button>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialogOverlay>
+              </AlertDialog>
+              <Button as={Link} to="/pendaftaran/selesai" bg="#1FA8F6" color="#FFFFFF">
+                {' '}
+                Selesai & Buat Janji
+              </Button>
             </Box>
           </Box>
           <Card w={400} ml={[30, 40, 20]} justifyContent="end">
             <CardHeader>
-              <Text fontSize={18} fontWeight={600} my={2} color="#072051" textAlign="center">
+              <Text fontSize={18} fontWeight={600} color="#072051" textAlign="center">
                 Pendaftaran Medical Checkup
               </Text>
             </CardHeader>
@@ -114,4 +176,4 @@ function BuatJanjiDokter() {
   );
 }
 
-export default BuatJanjiDokter;
+export default DataPasienCheckup;

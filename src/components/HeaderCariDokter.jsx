@@ -16,13 +16,13 @@ function HeaderCariDokter() {
             </Heading>
             <Box w={445}>
               <Text fontWeight={400} fontSize={18} color="#000000" pt={5}>
-                Kami meneydiakan pelayanan spesialils terbaik bagi anda dan keluarga
+                Kami menyediakan pelayanan spesialils terbaik bagi anda dan keluarga
               </Text>
             </Box>
           </Box>
         </Center>
         <Box direction="cols" mt={50} w={500} h={529}>
-          <Image objectFit="cover" src="/images/doctor_hero.png" alt="doctor_hero" fallbackSrc="https://via.placeholder.com/150" />
+          <Image objectFit="cover" src="/src/assets/images/doctor_hero.png " alt="doctor_hero" fallbackSrc="https://via.placeholder.com/150" />
         </Box>
       </SimpleGrid>
     </Center>
