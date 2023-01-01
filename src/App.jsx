@@ -43,6 +43,7 @@ import "@fontsource/plus-jakarta-sans/600.css";
 import theme from "../utils/extendedTheme";
 import store from "../store";
 import PoliclinicPages from "./pages/Admin/PoliclinicPages";
+import EditProfileUser from "./pages/EditProfileUser";
 
 function App() {
   return (
@@ -53,7 +54,7 @@ function App() {
             <Routes>
               {/* user */}
               <Route path="/" element={<Login />} />
-              <Route path="/register" element={<Register />} />
+              <Route path="/edit" element={<EditProfileUser />} />
               <Route path="/home" element={<HomePage />} />
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />} />
