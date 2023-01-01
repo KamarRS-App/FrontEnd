@@ -93,7 +93,7 @@ function App() {
                 path="/admin/patient"
                 element={<PatientRegistrationPage />}
               />
-              {/* <Route path="/admin/doctor" element={<DoctorPage />} /> */}
+              <Route path="/admin/doctor" element={<DoctorPage />} />
               <Route path="/admin/poliklinik" element={<PoliclinicPages />} />
               <Route path="/admin/policlinic" element={<PoliclinicPages />} />
               <Route
