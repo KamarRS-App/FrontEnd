@@ -20,11 +20,11 @@ import DoctorPage from "./pages/Admin/DoctorPage";
 import ProfileHospitalPage from "./pages/Admin/ProfileHospitalPage";
 import LoginAdmin from "./pages/Admin/LoginAdmin";
 
-import Pembayaran from './pages/Pembayaran';
-import Payment from './pages/Payment';
-import PembayaranSelesai from './pages/PembayaranSelesai';
-import CariDokter from './pages/CariDokter';
-import DetailDokter from './pages/DetailDokter';
+import Pembayaran from "./pages/Pembayaran";
+import Payment from "./pages/Payment";
+import PembayaranSelesai from "./pages/PembayaranSelesai";
+import CariDokter from "./pages/CariDokter";
+import DetailDokter from "./pages/DetailDokter";
 import DashboardRoot from "./pages/Admin/DashboardRoot";
 import HospitalRootPages from "./pages/Admin/HospitalRootPages";
 import AdminRoot from "./pages/Admin/AdminRoot";
@@ -53,41 +53,54 @@ function App() {
             <Routes>
               {/* user */}
 
-              <Route path="/" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/home" element={<HomePage />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/patient/add" element={<TambahData />} />
-              <Route path="/patient" element={<DataDiriPasien />} />
-              <Route path="/search/detail" element={<DetailCariRumahSakit />} />
-              <Route path="/detail/patient" element={<DetailDaftarRumahSakit />} />
-              <Route path="/pilih/metode/pembayaran" element={<Payment />} />
-              <Route path="pembayaran/selesai" element={<PembayaranSelesai />} />
-              <Route path="dokter" element={<CariDokter />} />
-              <Route path="detail/dokter" element={<DetailDokter />} />
-              <Route path="/buat/janji/dokter" element={<BuatJanjiDokter />} />
-              <Route path="/tentang/kami" element={<TentangKami />} />
-              <Route path="/halaman/privasi" element={<Privasi />} />
-              <Route path="/syarat/dan/ketentuan" element={<SyaratDanKetentuan />} />
+            <Route path="/" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/home" element={<HomePage />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/pasien" element={<TambahData />} />
+            <Route path="/pasien/tambah/" element={<DataDiriPasien />} />
+            <Route path="/search/detail" element={<DetailCariRumahSakit />} />
+            <Route
+              path="/detail/patient"
+              element={<DetailDaftarRumahSakit />}
+            />
+            <Route path="/pilih/metode/pembayaran" element={<Payment />} />
+            <Route path="pembayaran/selesai" element={<PembayaranSelesai />} />
+            <Route path="dokter" element={<CariDokter />} />
+            <Route path="detail/dokter" element={<DetailDokter />} />
+            <Route path="/buat/janji/dokter" element={<BuatJanjiDokter />} />
+            <Route path="/tentang/kami" element={<TentangKami />} />
+            <Route path="/halaman/privasi" element={<Privasi />} />
+            <Route
+              path="/syarat/dan/ketentuan"
+              element={<SyaratDanKetentuan />}
+            />
 
-              {/* admin */}
-              <Route path="/admin/dashboard" element={<Dashboard />} />
-              <Route path="/admin/daily_praktek" element={<DashboardDailyPraktek />} />
-              <Route path="/payment" element={<Pembayaran />} />
-              <Route path="/admin/user" element={<UserPage />} />
-              <Route path="/admin/profile" element={<SettingPage />} />
-              <Route path="/admin/room" element={<RoomPage />} />
-              <Route path="/admin/patient" element={<PatientRegistrationPage />} />
-              <Route path="/admin/doctor" element={<DoctorPage />} />
-              <Route path="/admin/poliklinik" element={<PoliclinicPages />} />
-              <Route path="/admin/hospital/profile" element={<ProfileHospitalPage />} />
-              <Route path="/admin/login" element={<LoginAdmin />} />
-              <Route path="/root/login" element={<LoginAdminRoot />} />
-              <Route path="/root/dashboard" element={<DashboardRoot />} />
-              <Route path="/root/hospital" element={<HospitalRootPages />} />
-              <Route path="/root/user" element={<AdminRoot />} />
-              {/* super admin */}
+            {/* admin */}
+            <Route path="/admin/dashboard" element={<Dashboard />} />
+            <Route
+              path="/admin/daily_praktek"
+              element={<DashboardDailyPraktek />}
+            />
+            <Route path="/payment" element={<Pembayaran />} />
+            <Route path="/admin/user" element={<UserPage />} />
+            <Route path="/admin/profile" element={<SettingPage />} />
+            <Route path="/admin/room" element={<RoomPage />} />
+            <Route path="/admin/patient" element={<PatientPage />} />
+            <Route path="/admin/doctor" element={<DoctorPage />} />
+            <Route path="/admin/poliklinik" element={<Poliklinik />} />
+            <Route
+              path="/admin/hospital/profile"
+              element={<ProfileHospitalPage />}
+            />
+            <Route path="/admin/login" element={<LoginAdmin />} />
+
+            {/* super admin */}
+            <Route path="/root/dashboard" element={<DashboardRoot />} />
+            <Route path="/root/hospital" element={<HospitalRootPages />} />
+            <Route path="/root/user" element={<AdminRoot />} />
+          </Routes>
 
             </Routes>
           </Box>
