@@ -12,7 +12,7 @@ function CardCariDokter() {
       </Box>
 
       <Card direction={{ base: 'column', sm: 'row' }} overflow="hidden" variant="outline" mb={10}>
-        <Image objectFit="cover" maxW={{ base: '100%', sm: '200px' }} src="/public/images/doctor-dummy-3.png" alt="doctor achraf" />
+        <Image objectFit="cover" maxW={{ base: '100%', sm: '200px' }} src="/src/assets/images/doctor-dummy-3.png" alt="doctor achraf" />
         <Box>
           <CardHeader>
             <Link href="/detail/dokter" colorScheme="teal" variant="link" mt={2} fontWeight={600} fontSize={24} color="#19345E">
@@ -52,7 +52,7 @@ function CardCariDokter() {
         </Box>
       </Card>
       <Card direction={{ base: 'column', sm: 'row' }} overflow="hidden" variant="outline" mb={10}>
-        <Image objectFit="cover" maxW={{ base: '100%', sm: '200px' }} src="/public/images/doctor-dummy-2.png" alt="doctor achraf" />
+        <Image objectFit="cover" maxW={{ base: '100%', sm: '200px' }} src="/src/assets/images/doctor-dummy-2.png" alt="doctor achraf" />
         <Box>
           <Box columns={2} spacing={10}>
             <CardHeader>
@@ -93,7 +93,7 @@ function CardCariDokter() {
         </Box>
       </Card>
       <Card direction={{ base: 'column', sm: 'row' }} overflow="hidden" variant="outline" mb={10}>
-        <Image objectFit="cover" maxW={{ base: '100%', sm: '200px' }} src="/public/images/doctor-dummy-1.png" alt="doctor amrabat" />
+        <Image objectFit="cover" maxW={{ base: '100%', sm: '200px' }} src="/src/assets/images/doctor-dummy-1.png" alt="doctor amrabat" />
         <Box>
           <CardHeader>
             <Button colorScheme="teal" variant="link" mt={2} fontWeight={600} fontSize={24} color="#19345E">
