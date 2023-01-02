@@ -1,70 +1,120 @@
-import { Button, ButtonGroup } from '@chakra-ui/button';
-import { Td, Tr } from '@chakra-ui/table';
-import React, { useEffect, useState } from 'react';
-import HeadAdmin from '../../components/HeadAdmin';
-import LayoutAdminRoot from '../../components/LayoutAdminRoot';
-import TableAdmin from '../../components/TableAdmin';
-import { MdModeEdit, MdOutlineDeleteOutline } from 'react-icons/md';
-import PopupAdmin from '../../components/PopupAdmin';
-import { useDisclosure } from '@chakra-ui/hooks';
-import { FormControl, FormErrorMessage, FormLabel } from '@chakra-ui/form-control';
-import { Input } from '@chakra-ui/input';
-import { Select } from '@chakra-ui/select';
-import Cookies from 'js-cookie';
-import { useNavigate } from 'react-router-dom';
-import { Box, Stack, useToast } from '@chakra-ui/react';
-import api from '../../services/api';
-import * as Yup from 'yup';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
-import PopupDelete from '../../components/PopupDelete';
+import { Button, ButtonGroup } from "@chakra-ui/button";
+import { Td, Tr } from "@chakra-ui/table";
+import React, { useEffect, useState } from "react";
+import HeadAdmin from "../../components/HeadAdmin";
+import LayoutAdminRoot from "../../components/LayoutAdminRoot";
+import TableAdmin from "../../components/TableAdmin";
+import { MdModeEdit, MdOutlineDeleteOutline } from "react-icons/md";
+import PopupAdmin from "../../components/PopupAdmin";
+import { useDisclosure } from "@chakra-ui/hooks";
+import {
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+} from "@chakra-ui/form-control";
+import { Input } from "@chakra-ui/input";
+import { Select } from "@chakra-ui/select";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
+import { Box, Stack, useToast } from "@chakra-ui/react";
+import api from "../../services/api";
+import * as Yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { BsFillEyeFill, BsFillEyeSlashFill } from "react-icons/bs";
+import PopupDelete from "../../components/PopupDelete";
 
 const AdminRoot = () => {
-    const { isOpen: isModalCreateOpen, onOpen: onModalCreateOpen, onClose: onCloseModalCreate } = useDisclosure();
-    const { isOpen: isModalEditOpen, onOpen: onModalEditOpen, onClose: onCloseModalEdit } = useDisclosure();
-    const { isOpen: isModalDeleteOpen, onOpen: onModalDeleteOpen, onClose: onCloseModalDelete } = useDisclosure();
+  const {
+    isOpen: isModalCreateOpen,
+    onOpen: onModalCreateOpen,
+    onClose: onCloseModalCreate,
+  } = useDisclosure();
+  const {
+    isOpen: isModalEditOpen,
+    onOpen: onModalEditOpen,
+    onClose: onCloseModalEdit,
+  } = useDisclosure();
+  const {
+    isOpen: isModalDeleteOpen,
+    onOpen: onModalDeleteOpen,
+    onClose: onCloseModalDelete,
+  } = useDisclosure();
 
-    const role = Cookies.get('role');
-    const token = Cookies.get('token');
-    const navigate = useNavigate();
-    const toast = useToast();
-    const [adminStaff, setAdminStaff] = useState([]);
-    const [hospitals, setHospitals] = useState([]);
-    const [showPassword, setShowPassword] = useState(false);
-    const [show, setShow] = useState('');
-    const [adminId, setAdminId] = useState('');
+  const role = Cookies.get("role");
+  const token = Cookies.get("token");
+  const navigate = useNavigate();
+  const toast = useToast();
+  const [adminStaff, setAdminStaff] = useState([]);
+  const [hospitals, setHospitals] = useState([]);
+  const [showPassword, setShowPassword] = useState(false);
+  const [show, setShow] = useState("");
+  const [adminId, setAdminId] = useState("");
 
-    const initialValues = {
-        nama: '',
-        email: '',
-        kata_sandi: '',
-        peran: 'Admin',
-        hospital_id: null,
-    }
+  const initialValues = {
+    nama: "",
+    email: "",
+    kata_sandi: "",
+    peran: "Admin",
+    hospital_id: null,
+  };
 
-    const initialValuesUpdate = {
-        nama: '',
-        email: '',
-        peran: 'Admin',
-        hospital_id: null,
-    }
+  const initialValuesUpdate = {
+    nama: "",
+    email: "",
+    peran: "Admin",
+    hospital_id: null,
+  };
 
-    const [initialValue, setInitialValue] = useState(initialValues);
-    const [initialValueUpdate, setInitialValueUpdate] = useState(initialValuesUpdate);
+  const [initialValue, setInitialValue] = useState(initialValues);
+  const [initialValueUpdate, setInitialValueUpdate] = useState(initialValuesUpdate);
 
-    const schema = Yup.object().shape({
-        nama: Yup.string().required('Nama tidak boleh kosong'),
-        email: Yup.string().email('Format Email salah').required('Email tidak boleh kosong'),
-        kata_sandi: Yup.string().min(6, 'Password tidak boleh kurang dari 6 karakter').max(32, 'Password tidak boleh lebih dari 32 karakter').required('Password tidak boleh kosong'),
-        hospital_id: Yup.number().required('Rumah Sakit Bekerja tidak boleh kosong'),
-    })
+  const schema = Yup.object().shape({
+    nama: Yup.string().required("Nama tidak boleh kosong"),
+    email: Yup.string()
+      .email("Format Email salah")
+      .required("Email tidak boleh kosong"),
+    kata_sandi: Yup.string()
+      .min(6, "Password tidak boleh kurang dari 6 karakter")
+      .max(32, "Password tidak boleh lebih dari 32 karakter")
+      .required("Password tidak boleh kosong"),
+    hospital_id: Yup.number().required(
+      "Rumah Sakit Bekerja tidak boleh kosong"
+    ),
+  });
 
-    const schemaUpdate = Yup.object().shape({
-        nama: Yup.string().required('Nama tidak boleh kosong'),
-        email: Yup.string().email('Format Email salah').required('Email tidak boleh kosong'),
-        hospital_id: Yup.number().required('Rumah Sakit Bekerja tidak boleh kosong'),
-    })
+  const schemaUpdate = Yup.object().shape({
+    nama: Yup.string().required("Nama tidak boleh kosong"),
+    email: Yup.string()
+      .email("Format Email salah")
+      .required("Email tidak boleh kosong"),
+    hospital_id: Yup.number().required(
+      "Rumah Sakit Bekerja tidak boleh kosong"
+    ),
+  });
+
+  const {
+    register: createAdmin,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    mode: "onTouched",
+    reValidateMode: "onSubmit",
+    resolver: yupResolver(schema),
+    defaultValues: initialValue,
+  });
+
+  const {
+    register: updateAdminFunc,
+    handleSubmit: handleUpdateAdmin,
+    setValue: setValueUpdate,
+    formState: { errors: errorsUpdate },
+  } = useForm({
+    mode: "onTouched",
+    reValidateMode: "onSubmit",
+    resolver: yupResolver(schemaUpdate),
+    defaultValues: initialValueUpdate,
+  });
 
     const { register: createAdmin, handleSubmit, setValue: setValueCreate, formState: { errors } } = useForm({
         mode: "onTouched",
@@ -73,15 +123,7 @@ const AdminRoot = () => {
         defaultValues: initialValue,
     });
 
-    const { register: updateAdminFunc, handleSubmit: handleUpdateAdmin, setValue: setValueUpdate, formState: { errors: errorsUpdate } } = useForm({
-        mode: "onTouched",
-        reValidateMode: "onSubmit",
-        resolver: yupResolver(schemaUpdate),
-        defaultValues: initialValueUpdate,
-    });
-
-
-    const getAllAdminStaff = async () => {
+  const getAllAdminStaff = async () => {
         await api.getAdmin(token)
             .then(response => {
                 const data = response.data.data;
