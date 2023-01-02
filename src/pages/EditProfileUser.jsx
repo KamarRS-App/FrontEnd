@@ -32,7 +32,6 @@ function EditProfileUser() {
   const [email, setEmail] = React.useState("");
   const [noNik, setNoNik] = React.useState();
   const [noKK, setNoKK] = React.useState();
-  const [kataSandi, setKataSandi] = React.useState("");
   const [noTelp, setNoTelp] = React.useState();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
