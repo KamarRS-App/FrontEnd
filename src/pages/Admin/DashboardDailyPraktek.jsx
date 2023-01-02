@@ -55,7 +55,7 @@ function DashboardDailyPraktek() {
     status: yup.string().required("Harap masukkan status sekarang"),
   });
 
-  //rfh configuration
+  //rhf configuration
   const {
     register,
     handleSubmit,
