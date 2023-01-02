@@ -24,6 +24,8 @@ import {
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useDispatch } from "react-redux";
+import { addUsers } from "../features/userSlice";
 
 function Login() {
   const [show, setShow] = useState(false);
@@ -32,6 +34,7 @@ function Login() {
   const toast = useToast();
   const [passwordType, setPasswordType] = useState('');
   const token = Cookies.get('token');
+  const dispatch = useDispatch();
 
   const onShowPassword = (e) => {
     setPasswordType(e.target.value);
@@ -61,6 +64,7 @@ function Login() {
     await api
       .loginUser(data)
       .then((response) => {
+        const data = response.data.data;
         toast({
           title: `Sukses login, mengalihkan...`,
           status: "success",
@@ -68,8 +72,8 @@ function Login() {
           isClosable: true,
           duration: 1500,
         });
-        Cookies.set("token", response.data.data.token);
-        Cookies.set("name", response.data.data.name);
+        getUser(data.token);
+        Cookies.set("token", data.token);
         setTimeout(() => {
           navigate("/home");
         }, 2000);
@@ -85,6 +89,17 @@ function Login() {
         console.log(error);
       });
   };
+
+  const getUser = async (token) => {
+    await api.getUser(token)
+      .then(response => {
+        const data = response.data.data;
+        dispatch(addUsers(data))
+      })
+      .catch(error => {
+        console.log(error);
+      })
+  }
 
   //submit function
   const onSubmit = (data) => {

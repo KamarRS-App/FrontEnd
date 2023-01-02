@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Box, Stack } from '@chakra-ui/layout';
 import { Avatar } from '@chakra-ui/avatar';
-import { Image, Button, Flex, Link, Menu, MenuButton, MenuList, MenuItem, Text } from '@chakra-ui/react';
+import { Image, Button, Flex, Menu, MenuButton, MenuList, MenuItem, Text } from '@chakra-ui/react';
 import { ChevronDownIcon, HamburgerIcon, CloseIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
 
 const Navbar = ({ isAuth, nameUser, isActive }) => {
   const [isOpen, SetIsOpen] = useState(false);
@@ -51,28 +52,34 @@ const MenuLinks = ({ isOpen, Auth, onLoginHandler, nameUser, isActive }) => {
         {Auth ? (
           <>
             <Link
-              _hover={{ textDecoration: "none" }}
               to="/home"
-              color={isActive === 'home' && 'alta.primary'}
             >
-              Beranda
+              <Text
+                color={isActive === 'home' && 'alta.primary'}
+              >
+                Beranda
+              </Text>
             </Link>
             <Link
-              _hover={{ textDecoration: "none" }}
-              to="/how"
-              color={isActive === 'hospital' && 'alta.primary'}
+              to="/rumahsakit"
             >
-              Cari Rumah Sakit
+              <Text
+                color={isActive === 'hospital' && 'alta.primary'}
+              >
+                Cari Rumah Sakit
+              </Text>
             </Link>
             <Link
-              _hover={{ textDecoration: 'none' }}
               to="/dokter"
-              color={isActive === 'doctor' && 'alta.primary'}
             >
-              Cari Dokter
+              <Text
+                color={isActive === 'doctor' && 'alta.primary'}
+              >
+                Cari Dokter
+              </Text>
             </Link>
             <Menu>
-              <MenuButton rightIcon={<ChevronDownIcon />}>
+              <MenuButton righticon={<ChevronDownIcon />}>
                 <Flex align="center" gap="3">
                   <Avatar width="30px" height="30px">
                   </Avatar>
