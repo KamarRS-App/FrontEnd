@@ -55,39 +55,20 @@ export default {
         nik: JSON.stringify(data.nik),
         no_kk: JSON.stringify(data.no_kk),
         kata_sandi: data.kata_sandi,
-        no_telepon: JSON.stringify(data.nomorhape),
+        no_telpon: JSON.stringify(data.nomorhape),
       },
     }),
-
-  //Users
-  register: (token, { nama, email, no_nik, no_kk, kata_sandi, no_telepon }) =>
-    instance({
-      method: `POST`,
-      url: `/users`,
-      data: {
-        nama: nama,
-        email: email,
-        no_nik: no_nik,
-        no_kk: no_kk,
-        kata_sandi: kata_sandi,
-        no_telepon: no_telepon,
-      },
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }),
-
-  updateUser: (token, { nama, email, no_nik, no_kk, kata_sandi, no_telepon }) =>
+  updateUser: (token, data) =>
     instance({
       method: `PUT`,
       url: `/users`,
       data: {
-        nama: nama,
-        email: email,
-        no_nik: no_nik,
-        no_kk: no_kk,
-        kata_sandi: kata_sandi,
-        no_telepon: no_telepon,
+        nama: data.nama,
+        email: data.email,
+        no_nik: data.no_nik,
+        no_kk: data.no_kk,
+        kata_sandi: data.kata_sandi,
+        no_telpon: data.no_telpon,
       },
       headers: {
         Authorization: `Bearer ${token}`,
