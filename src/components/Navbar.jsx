@@ -1,39 +1,23 @@
-import React, { useState } from "react";
-import { Box, Stack } from "@chakra-ui/layout";
-import { Avatar } from "@chakra-ui/avatar";
-import {
-  Image,
-  Button,
-  Flex,
-  Link,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  Text,
-} from "@chakra-ui/react";
-import {
-  ChevronDownIcon,
-  HamburgerIcon,
-  CloseIcon,
-  ChevronRightIcon,
-} from "@chakra-ui/icons";
+import React, { useState } from 'react';
+import { Box, Stack } from '@chakra-ui/layout';
+import { Avatar } from '@chakra-ui/avatar';
+import { Image, Button, Flex, Link, Menu, MenuButton, MenuList, MenuItem, Text } from '@chakra-ui/react';
+import { ChevronDownIcon, HamburgerIcon, CloseIcon, ChevronRightIcon } from '@chakra-ui/icons';
+import { useNavigate } from 'react-router';
 
 const Navbar = ({ isAuth }) => {
   const [isOpen, SetIsOpen] = useState(false);
   const toggle = () => SetIsOpen(!isOpen);
+  const navigate = useNavigate();
+
   return (
     <div className="sticky top-0 z-10">
       <NavBarContainer>
-        <Image
-          height="75px"
-          width="100px"
-          objectFit="contain"
-          src="/src/assets/images/logo_rawat_inap.svg"
-          alt="Logo Rawat Inap"
-        />
+        <Link to='/home'>
+          <Image height="75px" width="100px" objectFit="contain" src="/src/assets/images/logo_rawat_inap.svg" alt="Logo Rawat Inap" />
+        </Link>
         <MenuToggle toggle={toggle} isOpen={isOpen} />
-        <MenuLinks isOpen={isOpen} Auth={isAuth} />
+        <MenuLinks isOpen={isOpen} Auth={isAuth} onLoginHandler={() => navigate('/login')} />
       </NavBarContainer>
     </div>
   );
@@ -47,7 +31,7 @@ const MenuToggle = ({ toggle, isOpen }) => {
   );
 };
 
-const MenuLinks = ({ isOpen, Auth }) => {
+const MenuLinks = ({ isOpen, Auth, onLoginHandler }) => {
   return (
     <Box
       display={{ base: isOpen ? "block" : "none", md: "block" }}
@@ -72,7 +56,7 @@ const MenuLinks = ({ isOpen, Auth }) => {
             <Link _hover={{ textDecoration: "none" }} to="/how">
               Cari Rumah Sakit
             </Link>
-            <Link _hover={{ textDecoration: "none" }} to="/faetures">
+            <Link _hover={{ textDecoration: 'none' }} to="/dokter">
               Cari Dokter
             </Link>
             <Menu>
@@ -104,11 +88,7 @@ const MenuLinks = ({ isOpen, Auth }) => {
             >
               Beranda
             </Link>
-            <Link
-              color="#3AB8FF"
-              _hover={{ textDecoration: "none" }}
-              href="/home"
-            >
+            {/* <Link color="#3AB8FF" _hover={{ textDecoration: 'none' }} href="/home">
               Cari Rumah Sakit
             </Link>
             <Link
@@ -117,8 +97,8 @@ const MenuLinks = ({ isOpen, Auth }) => {
               href="/cari/dokter"
             >
               Cari Dokter
-            </Link>
-            <Button bg="#3AB8FF" _hover={{ bg: "#1FA8F6" }} color="white">
+            </Link> */}
+            <Button bg="#3AB8FF" _hover={{ bg: '#1FA8F6' }} color="white" onClick={onLoginHandler}>
               Login <ChevronRightIcon />
             </Button>
           </Menu>

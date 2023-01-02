@@ -1,49 +1,49 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "http://34.143.247.242/"
+  baseURL: "http://34.143.247.242/",
 });
 
 export default {
-    //Auth
-    loginUser: (data) =>
-        instance({
-            method: `POST`,
-            url: `login/users`,
-            data: {
-                email: data.email,
-                kata_sandi: data.kata_sandi,
-            },
-        }),
+  //Auth
+  loginUser: (data) =>
+    instance({
+      method: `POST`,
+      url: `login/users`,
+      data: {
+        email: data.email,
+        kata_sandi: data.kata_sandi,
+      },
+    }),
 
-    loginAdmin: (data) =>
-        instance({
-            method: `POST`,
-            url: `/login/staffs`,
-            data: {
-                email: data.email,
-                kata_sandi: data.kata_sandi,
-            },
-        }),
+  loginAdmin: (data) =>
+    instance({
+      method: `POST`,
+      url: `/login/staffs`,
+      data: {
+        email: data.email,
+        kata_sandi: data.kata_sandi,
+      },
+    }),
 
-    loginUserOauth: ({ oauth }) =>
-        instance({
-            method: `POST`,
-            url: `oauth/login/user`,
-            data: {
-                oauth: oauth,
-            },
-        }),
+  loginUserOauth: ({ oauth }) =>
+    instance({
+      method: `POST`,
+      url: `oauth/login/user`,
+      data: {
+        oauth: oauth,
+      },
+    }),
 
-    loginSuperAdmin: (data) =>
-        instance({
-            method: `POST`,
-            url: `/login/kamarrsteams`,
-            data: {
-                email: data.email,
-                kata_sandi: data.kata_sandi,
-            }
-        }),
+  loginSuperAdmin: (data) =>
+    instance({
+      method: `POST`,
+      url: `/login/kamarrsteams`,
+      data: {
+        email: data.email,
+        kata_sandi: data.kata_sandi,
+      },
+    }),
   //Users
   register: (data) =>
     instance({
@@ -59,225 +59,141 @@ export default {
       },
     }),
 
-    //Users
-    register: (token, { nama, email, no_nik, no_kk, kata_sandi, no_telepon }) =>
-        instance({
-            method: `POST`,
-            url: `/users`,
-            data: {
-                nama: nama,
-                email: email,
-                no_nik: no_nik,
-                no_kk: no_kk,
-                kata_sandi: kata_sandi,
-                no_telepon: no_telepon,
-            },
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }),
+  //Users
+  register: (token, { nama, email, no_nik, no_kk, kata_sandi, no_telepon }) =>
+    instance({
+      method: `POST`,
+      url: `/users`,
+      data: {
+        nama: nama,
+        email: email,
+        no_nik: no_nik,
+        no_kk: no_kk,
+        kata_sandi: kata_sandi,
+        no_telepon: no_telepon,
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
 
-    updateUser: (token, { nama, email, no_nik, no_kk, kata_sandi, no_telepon }) =>
-        instance({
-            method: `PUT`,
-            url: `/users`,
-            data: {
-                nama: nama,
-                email: email,
-                no_nik: no_nik,
-                no_kk: no_kk,
-                kata_sandi: kata_sandi,
-                no_telepon: no_telepon,
-            },
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }),
-    getUser: (token) =>
-        instance({
-            method: `GET`,
-            url: `/users`,
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }),
-    deleteUser: (token) =>
-        instance({
-            method: `DELETE`,
-            url: `/users`,
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }),
+  updateUser: (token, { nama, email, no_nik, no_kk, kata_sandi, no_telepon }) =>
+    instance({
+      method: `PUT`,
+      url: `/users`,
+      data: {
+        nama: nama,
+        email: email,
+        no_nik: no_nik,
+        no_kk: no_kk,
+        kata_sandi: kata_sandi,
+        no_telepon: no_telepon,
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
+  getUser: (token) =>
+    instance({
+      method: `GET`,
+      url: `/users`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
+  deleteUser: (token) =>
+    instance({
+      method: `DELETE`,
+      url: `/users`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
 
-    //Hospital Staff (Admin)
-    createAdmin: (token, data) =>
-        instance({
-            method: `POST`,
-            url: `/staffs`,
-            data: {
-                nama: data.nama,
-                email: data.email,
-                kata_sandi: data.kata_sandi,
-                peran: data.peran,
-                hospital_id: data.hospital_id,
-            },
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }),
-    updateAdmin: (token, id, data) =>
-        instance({
-            method: `PUT`,
-            url: `/staffs/${id}`,
-            data: {
-                nama: data.nama,
-                email: data.email,
-                peran: data.peran,
-                hospital_id: data.hospital_id,
-            },
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }),
-    deleteAdmin: (token, id) =>
-        instance({
-            method: `DELETE`,
-            url: `/staffs/${id}`,
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }),
-    getAdmin: (token) =>
-        instance({
-            method: `GET`,
-            url: `/staffs`,
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }),
+  //Hospital Staff (Admin)
+  createAdmin: (token, data) =>
+    instance({
+      method: `POST`,
+      url: `/staffs`,
+      data: {
+        nama: data.nama,
+        email: data.email,
+        kata_sandi: data.kata_sandi,
+        peran: data.peran,
+        hospital_id: data.hospital_id,
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
+  updateAdmin: (token, id, data) =>
+    instance({
+      method: `PUT`,
+      url: `/staffs/${id}`,
+      data: {
+        nama: data.nama,
+        email: data.email,
+        peran: data.peran,
+        hospital_id: data.hospital_id,
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
+  deleteAdmin: (token, id) =>
+    instance({
+      method: `DELETE`,
+      url: `/staffs/${id}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
+  getAdmin: (token) =>
+    instance({
+      method: `GET`,
+      url: `/staffs`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
 
-    getAdminById: (token, id) =>
-        instance({
-            method: `GET`,
-            url: `/staffs/${id}`,
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }),
+  getAdminById: (token, id) =>
+    instance({
+      method: `GET`,
+      url: `/staffs/${id}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
 
-    //Hospital
-    deleteHospital: (token, id) =>
-        instance({
-            method: `DELETE`,
-            url: `/hospitals/${id}`,
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }),
+  //Hospital
+  deleteHospital: (token, id) =>
+    instance({
+      method: `DELETE`,
+      url: `/hospitals/${id}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
 
-    getHospitals: (token) =>
-        instance({
-            method: `GET`,
-            url: `/hospitals`,
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }),
+  getHospitals: (token) =>
+    instance({
+      method: `GET`,
+      url: `/hospitals`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
 
-    getHospitalByID: (token, id) =>
-        instance({
-            method: `GET`,
-            url: `/hospitals/${id}`,
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }),
+  getHospitalByID: (token, id) =>
+    instance({
+      method: `GET`,
+      url: `/hospitals/${id}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
 
-    //patient
-    createPatient: (token, { no_kk, nik, nama_pasien, jenis_kelamin, usia, nama_wali, email_wali, no_telepon_wali, alamat_ktp, kabupaten_kota_ktp, alamat_domisili, provinsi_domisili, kabupaten_kota_domisili, tanggal_lahir, no_bpjs, kelas_bpjs, foto_ktp, foto_bpjs }) =>
-        instance({
-            method: `POST`,
-            url: `/patients`,
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'content-type': 'multipart/form-data'
-            },
-            data: {
-                no_kk: no_kk,
-                nik: nik,
-                nama_pasien: nama_pasien,
-                jenis_kelamin: jenis_kelamin,
-                usia: usia,
-                nama_wali: nama_wali,
-                email_wali: email_wali,
-                no_telepon_wali: no_telepon_wali,
-                alamat_ktp: alamat_ktp,
-                kabupaten_kota_ktp: kabupaten_kota_ktp,
-                alamat_domisili: alamat_domisili,
-                provinsi_domisili: provinsi_domisili,
-                kabupaten_kota_domisili: kabupaten_kota_domisili,
-                tanggal_lahir: tanggal_lahir,
-                no_bpjs: no_bpjs,
-                kelas_bpjs: kelas_bpjs,
-                foto_ktp: foto_ktp,
-                foto_bpjs: foto_bpjs
-            }
-        }),
-    updatePatient: (token, id, { no_kk, nik, nama_pasien, jenis_kelamin, usia, nama_wali, email_wali, no_telepon_wali, alamat_ktp, kabupaten_kota_ktp, alamat_domisili, provinsi_domisili, kabupaten_kota_domisili, tanggal_lahir, no_bpjs, kelas_bpjs, foto_ktp, foto_bpjs }) =>
-        instance({
-            method: `PUT`,
-            url: `/patients/${id}`,
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'content-type': 'multipart/form-data'
-            },
-            data: {
-                no_kk: no_kk,
-                nik: nik,
-                nama_pasien: nama_pasien,
-                jenis_kelamin: jenis_kelamin,
-                usia: usia,
-                nama_wali: nama_wali,
-                email_wali: email_wali,
-                no_telepon_wali: no_telepon_wali,
-                alamat_ktp: alamat_ktp,
-                kabupaten_kota_ktp: kabupaten_kota_ktp,
-                alamat_domisili: alamat_domisili,
-                provinsi_domisili: provinsi_domisili,
-                kabupaten_kota_domisili: kabupaten_kota_domisili,
-                tanggal_lahir: tanggal_lahir,
-                no_bpjs: no_bpjs,
-                kelas_bpjs: kelas_bpjs,
-                foto_ktp: foto_ktp,
-                foto_bpjs: foto_bpjs
-            }
-        }),
-    deletePatient: (token, id) =>
-        instance({
-            method: `DELETE`,
-            url: `/patients/${id}`,
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }),
-    getPatientById: (token, id) =>
-        instance({
-            method: `GET`,
-            url: `/patients/${id}`,
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }),
-    getPatientByUserId: (token, user_id) =>
-        instance({
-            method: `GET`,
-            url: `/users/${user_id}/patients`,
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }),
-        
   //patient
   createPatient: (
     token,
@@ -328,6 +244,113 @@ export default {
         kelas_bpjs: kelas_bpjs,
         foto_ktp: foto_ktp,
         foto_bpjs: foto_bpjs,
+      },
+    }),
+  updatePatient: (
+    token,
+    id,
+    {
+      no_kk,
+      nik,
+      nama_pasien,
+      jenis_kelamin,
+      usia,
+      nama_wali,
+      email_wali,
+      no_telepon_wali,
+      alamat_ktp,
+      kabupaten_kota_ktp,
+      alamat_domisili,
+      provinsi_domisili,
+      kabupaten_kota_domisili,
+      tanggal_lahir,
+      no_bpjs,
+      kelas_bpjs,
+      foto_ktp,
+      foto_bpjs,
+    }
+  ) =>
+    instance({
+      method: `PUT`,
+      url: `/patients/${id}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "content-type": "multipart/form-data",
+      },
+      data: {
+        no_kk: no_kk,
+        nik: nik,
+        nama_pasien: nama_pasien,
+        jenis_kelamin: jenis_kelamin,
+        usia: usia,
+        nama_wali: nama_wali,
+        email_wali: email_wali,
+        no_telepon_wali: no_telepon_wali,
+        alamat_ktp: alamat_ktp,
+        kabupaten_kota_ktp: kabupaten_kota_ktp,
+        alamat_domisili: alamat_domisili,
+        provinsi_domisili: provinsi_domisili,
+        kabupaten_kota_domisili: kabupaten_kota_domisili,
+        tanggal_lahir: tanggal_lahir,
+        no_bpjs: no_bpjs,
+        kelas_bpjs: kelas_bpjs,
+        foto_ktp: foto_ktp,
+        foto_bpjs: foto_bpjs,
+      },
+    }),
+  deletePatient: (token, id) =>
+    instance({
+      method: `DELETE`,
+      url: `/patients/${id}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
+  getPatientById: (token, id) =>
+    instance({
+      method: `GET`,
+      url: `/patients/${id}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
+  getPatientByUserId: (token, user_id) =>
+    instance({
+      method: `GET`,
+      url: `/users/${user_id}/patients`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
+
+  //patient
+  createPatient: (token, data) =>
+    instance({
+      method: `POST`,
+      url: `/patients`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "content-type": "multipart/form-data",
+      },
+      data: {
+        no_kk: data.no_kk,
+        nik: data.nik,
+        nama_pasien: data.nama_pasien,
+        jenis_kelamin: data.jenisKelamin,
+        tanggal_lahir: data.tanggalLahir,
+        usia: data.usia,
+        nama_wali: data.namaWali,
+        email_wali: data.emailWali,
+        no_telepon_wali: data.noTelpWali,
+        alamat_ktp: data.alamat_ktp,
+        kabupaten_kota_ktp: data.kota_ktp,
+        alamat_domisili: data.domisili,
+        provinsi_domisili: data.provinsi,
+        kabupaten_kota_domisili: data.kota,
+        no_bpjs: data.noBPJS,
+        kelas_bpjs: data.kelas_bpjs,
+        foto_ktp: data.fotoKTP[0],
+        foto_bpjs: data.fotoBPJS[0],
       },
     }),
   updatePatient: (
@@ -471,21 +494,23 @@ export default {
     }),
 
   //doctors
-  createDoctor: (token, { nama, email, bidang, no_telpon }) =>
+  createDoctor: (token, data) =>
     instance({
       method: `POST`,
       url: `/doctors`,
       headers: {
         Authorization: `Bearer ${token}`,
+        "content-type": "multipart/form-data",
       },
       data: {
-        nama: nama,
-        email: email,
-        bidang: bidang,
-        no_telpon: no_telpon,
+        nama: data.nama,
+        email: data.email,
+        spesialis: data.bidang,
+        no_telpon: data.no_telpon,
+        foto: data.foto,
       },
     }),
-  updateDoctor: (token, id, { nama, email, bidang, no_telpon }) =>
+  updateDoctor: (token, id, data) =>
     instance({
       method: `PUT`,
       url: `/doctors/${id}`,
@@ -493,10 +518,10 @@ export default {
         Authorization: `Bearer ${token}`,
       },
       data: {
-        nama: nama,
-        email: email,
-        bidang: bidang,
-        no_telpon: no_telpon,
+        nama: data.nama,
+        email: data.email,
+        bidang: data.bidang,
+        no_telpon: data.no_telpon,
       },
     }),
   deleteDoctor: (token, id) =>
@@ -525,10 +550,7 @@ export default {
     }),
 
   //policlinics
-  createPoliclinic: (
-    token,
-    { hospital_id, doctors_id, nama_poli, jam_praktik }
-  ) =>
+  createPoliclinic: (token, data) =>
     instance({
       method: `POST`,
       url: `/policlinics`,
@@ -536,17 +558,12 @@ export default {
         Authorization: `Bearer ${token}`,
       },
       data: {
-        hospital_id: hospital_id,
-        doctors_id: doctors_id,
-        nama_poli: nama_poli,
-        jam_praktik: jam_praktik,
+        hospital_id: data.hospital_id,
+        nama_poli: data.nama_poli,
+        jam_praktik: data.jam_praktik,
       },
     }),
-  updatePoliclinic: (
-    token,
-    id,
-    { hospital_id, doctors_id, nama_poli, jam_praktik }
-  ) =>
+  updatePoliclinic: (token, id, data) =>
     instance({
       method: `PUT`,
       url: `/policlinics/${id}`,
@@ -554,10 +571,9 @@ export default {
         Authorization: `Bearer ${token}`,
       },
       data: {
-        hospital_id: hospital_id,
-        doctors_id: doctors_id,
-        nama_poli: nama_poli,
-        jam_praktik: jam_praktik,
+        hospital_id: data.hospital_id,
+        nama_poli: data.nama_poli,
+        jam_praktik: data.jam_praktik,
       },
     }),
   getAllPoliclinics: (token) =>
@@ -584,35 +600,32 @@ export default {
         Authorization: `Bearer ${token}`,
       },
     }),
-    
-    //checkup reservations
-    createCheckUpReservation: (token, { patient_id, practice_id }) =>
-        instance({
-            method: `POST`,
-            url: `/reservations`,
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-            data: {
-                patient_id: patient_id,
-                practice_id: practice_id,
-            }
-        }),
 
-    getAllCheckUpReservations: (token) =>
-        instance({
-            method: `GET`,
-            url: `/reservations`,
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }),
-        
+  //checkup reservations
+  createCheckUpReservation: (token, { patient_id, practice_id }) =>
+    instance({
+      method: `POST`,
+      url: `/reservations`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
+        patient_id: patient_id,
+        practice_id: practice_id,
+      },
+    }),
+
+  getAllCheckUpReservations: (token) =>
+    instance({
+      method: `GET`,
+      url: `/reservations`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
+
   //daily practice
-  createDailyPractice: (
-    token,
-    { policlinic_id, tanggal_praktik, kuota_harian, status }
-  ) =>
+  createDailyPractice: (token, data) =>
     instance({
       method: `POST`,
       url: `/practices`,
@@ -620,10 +633,10 @@ export default {
         Authorization: `Bearer ${token}`,
       },
       data: {
-        policlinic_id: policlinic_id,
-        tanggal_praktik: tanggal_praktik,
-        kuota_harian: kuota_harian,
-        status: status,
+        policlinic_id: parseInt(data.policlinic_id),
+        tanggal_praktik: data.tanggal_praktik,
+        kuota_harian: parseInt(data.kuota_harian),
+        status: data.status,
       },
     }),
   updateDailyPractice: (
@@ -730,51 +743,51 @@ export default {
       },
     }),
 
-    DeleteBedRegistrationsById: (token, id) =>
-        instance({
-            method: `DELETE`,
-            url: `/registrations/${id}`,
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }),
+  DeleteBedRegistrationsById: (token, id) =>
+    instance({
+      method: `DELETE`,
+      url: `/registrations/${id}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
 
-    //payment
-    updatePayments: (token, kode_daftar, { metode_pembayaran }) =>
-        instance({
-            method: `PUT`,
-            url: `/payments/${kode_daftar}`,
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-            data: {
-                metode_pembayaran: metode_pembayaran,
-            }
-        }),
+  //payment
+  updatePayments: (token, kode_daftar, { metode_pembayaran }) =>
+    instance({
+      method: `PUT`,
+      url: `/payments/${kode_daftar}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
+        metode_pembayaran: metode_pembayaran,
+      },
+    }),
 
-    getPaymentsById: (token, kode_daftar) =>
-        instance({
-            method: `GET`,
-            url: `/payments/${kode_daftar}`,
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }),
+  getPaymentsById: (token, kode_daftar) =>
+    instance({
+      method: `GET`,
+      url: `/payments/${kode_daftar}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
 
-    //invoice
-    updateInvoiceMidtrans: (token, { kode_daftar, gross_amount, status }) =>
-        instance({
-            method: `PUT`,
-            url: `/midtrans`,
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-            data: {
-                kode_daftar: kode_daftar,
-                gross_amount: gross_amount,
-                status: status
-            }
-        }),
+  //invoice
+  updateInvoiceMidtrans: (token, { kode_daftar, gross_amount, status }) =>
+    instance({
+      method: `PUT`,
+      url: `/midtrans`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
+        kode_daftar: kode_daftar,
+        gross_amount: gross_amount,
+        status: status,
+      },
+    }),
 
   getAllBedRegistrations: (token) =>
     instance({

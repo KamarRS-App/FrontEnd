@@ -3,8 +3,6 @@ import { Box } from "@chakra-ui/react";
 import { Text } from "@chakra-ui/react";
 import { Button } from "@chakra-ui/react";
 import { Image } from "@chakra-ui/react";
-import defaultProfile from "../assets/images/defaultProfile.png";
-import { Link } from "@chakra-ui/react";
 import Cookies from "js-cookie";
 import {
   FormControl,
@@ -20,39 +18,33 @@ import Layout from "../components/Layout";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { error } from "daisyui/src/colors";
 import axios from "axios";
 import api from "../services/api";
-import { Form } from "react-router-dom";
 
 function DataDiriPasien() {
   const [provinsi, setProvinsi] = React.useState();
   const [kabupaten, setKabupaten] = React.useState(null);
   const [kabupatenKtp, setKabupatenKtp] = React.useState([]);
+  const [noKK, setNoKk] = React.useState();
   //yup schema
   const schema = yup.object().shape({
-    no_kartukeluarga: yup
-      .number()
-      .typeError("Harap masukkan nomor kartu keluarga"),
     no_kk: yup.number().typeError("Harap masukkan nomor kartu keluarga"),
     nik: yup.number().typeError("Harap masukkan Nomor Induk Kependudukan"),
     nama_pasien: yup.string().required("Harap masukkan nama pasien"),
     jenisKelamin: yup.string().required("Harap pilih salah satu jenis kelamin"),
     namaWali: yup.string().required("Harap masukkan nama wali"),
+    tanggalLahir: yup.string().required("Harap masukkan tanggal lahir"),
     emailWali: yup
       .string()
       .required("Harap masukkan email  wali")
       .email("Format email salah"),
-    noKTP: yup.number().typeError("Harap masukkan nomor KTP").required(),
-    noBPJS: yup.number().typeError("Harap masukkan nomor BPJS").required(),
-    tanggalLahir: yup.string().nullable().required("Harap pilih tanggal lahir"),
-    usia: yup.number().typeError("Harap masukkan usia").required(),
-    noTelpWali: yup
-      .number()
-      .typeError("Harap masukkan nomor telpon wali")
-      .required(),
+    noKTP: yup.number().typeError("Harap masukkan nomor KTP"),
+    noBPJS: yup.number().typeError("Harap masukkan nomor BPJS"),
+    kelas_bpjs: yup.number().typeError("Harap masukkan kelas BPJS"),
+    usia: yup.number().typeError("Harap masukkan usia"),
+    noTelpWali: yup.number().typeError("Harap masukkan nomor telpon wali"),
     alamatKTP: yup.string().required("Harap masukkan alamat sesuai KTP"),
-    nomorhape: yup.number().typeError("Harap masukkan nomor hp").required(),
+    nomorhape: yup.number().typeError("Harap masukkan nomor hp"),
     domisili: yup.string().required("Harap masukkan alamat domisili"),
     provinsi: yup.string().required("Harap pilih provinsi asal domisili"),
     kota: yup.string().required("Harap pilih kabupaten/kota asal domisili"),
@@ -72,8 +64,6 @@ function DataDiriPasien() {
     mode: "onChange",
   });
 
-  const handleReset = () => resetField("no_kk");
-
   //handle data provinsi
   const getProvinsi = async () => {
     await axios
@@ -85,25 +75,38 @@ function DataDiriPasien() {
   };
 
   //handle send data to database
-  const handleSendData = async (data, cookies) => {
+  const handleSendData = async (data, token) => {
     await api
-      .createPatient(cookies, data)
+      .createPatient(token, data)
       .then((response) => {
         console.log(response);
       })
       .catch((err) => console.log(err));
   };
 
-  //handle submit data
-  const onSubmit = (data) => {
+  //get kartu keluarga
+  const getNomorKk = async () => {
     const token = Cookies.get("token");
-    console.log(token);
-    console.log(data.file);
-    // handleSendData(data, token);
+    await api
+      .getUser(token)
+      .then((response) => {
+        console.log(response);
+        setNoKk(response.data.data.no_kk);
+      })
+      .catch((err) => console.log(err));
   };
 
+  //handle submit data
+  const onSubmit = (data) => {
+    const ngab = Cookies.get("token");
+    console.log(data);
+    handleSendData(data, ngab);
+  };
+
+  // handleSendData(data, token);
   React.useEffect(() => {
     getProvinsi();
+    getNomorKk();
   }, []);
 
   return (
@@ -132,29 +135,32 @@ function DataDiriPasien() {
                 gap={10}
               >
                 <GridItem>
-                  <FormControl isInvalid={errors.no_kartukeluarga}>
+                  <FormControl isInvalid={errors.no_kk}>
                     <FormLabel>No. Kartu Keluarga</FormLabel>
                     <Input
-                      {...register("no_kartukeluarga")}
+                      {...register("no_kk")}
                       type={"number"}
-                      name={"no_kartukeluarga"}
+                      name={"no_kk"}
+                      value={noKK}
                     />
-                    <Text color={"red"}>
-                      {errors.no_kartukeluarga?.message}
-                    </Text>
+                    <Text color={"red"}>{errors.no_kk?.message}</Text>
                   </FormControl>
                 </GridItem>
                 <GridItem w="100%" h="100%">
                   <FormControl isInvalid={errors.nik}>
                     <FormLabel>Nomor Induk Kependudukan</FormLabel>
-                    <Input type={"number"} {...register("nik")} />
+                    <Input {...register("nik")} type={"number"} />
                     <Text color="red">{errors.nik?.message}</Text>
                   </FormControl>
                 </GridItem>
                 <GridItem w="100%" h="100%">
                   <FormControl isInvalid={errors.nama_pasien}>
                     <FormLabel>Nama Pasien:</FormLabel>
-                    <Input name="nama_pasien" {...register("nama_pasien")} />
+                    <Input
+                      {...register("nama_pasien")}
+                      type={"string"}
+                      name="nama_pasien"
+                    />
                     <Text color={"red"}>{errors.nama_pasien?.message}</Text>
                   </FormControl>
                 </GridItem>
@@ -162,9 +168,9 @@ function DataDiriPasien() {
                   <FormControl isInvalid={errors.jenisKelamin}>
                     <FormLabel>Jenis Kelamin:</FormLabel>
                     <Select
+                      {...register("jenisKelamin")}
                       placeholder="-- Pilih Jenis Kelamin --"
                       name="jenisKelamin"
-                      {...register("jenisKelamin")}
                     >
                       <option value="Laki-laki">Laki-laki</option>
                       <option value="Perempuan">Perempuan</option>
@@ -195,7 +201,7 @@ function DataDiriPasien() {
                 <GridItem w="100%" h="100%">
                   <FormControl isInvalid={errors.namaWali}>
                     <FormLabel>Nama Wali</FormLabel>
-                    <Input {...register("namaWali")} {...register("no_kk")} />
+                    <Input {...register("namaWali")} />
                     <Text color="red">{errors.namaWali?.message}</Text>
                   </FormControl>
                 </GridItem>
@@ -232,10 +238,8 @@ function DataDiriPasien() {
                       }}
                     >
                       {provinsi?.map((prov) => {
-                        return <option value={prov.id}>{prov.nama}</option>;
+                        return <option value={prov.nama}>{prov.nama}</option>;
                       })}
-                      {/* <option value="option1">Aceh</option>
-                      <option value="papbaratdaya">Papua Barat Daya</option> */}
                     </Select>
                     <Text color={"red"}>{errors.provinsi_ktp?.message}</Text>
                   </FormControl>
@@ -311,10 +315,8 @@ function DataDiriPasien() {
                       onChange={(e) => setKabupaten(e.target.value)}
                     >
                       {provinsi?.map((prov) => {
-                        return <option value={prov.id}>{prov.nama}</option>;
+                        return <option value={prov.nama}>{prov.nama}</option>;
                       })}
-                      {/* <option value="option1">Aceh</option>
-                      <option value="papbaratdaya">Papua Barat Daya</option> */}
                     </Select>
                     <Text color={"red"}>{errors.provinsi?.message}</Text>
                   </FormControl>
@@ -325,6 +327,7 @@ function DataDiriPasien() {
                     <Select
                       {...register("kota")}
                       placeholder="-- Pilih kabupaten/kota --"
+                      name={"kota"}
                     >
                       <option value="Kabupaten Pacitan">
                         Kabupaten Pacitan
@@ -380,6 +383,13 @@ function DataDiriPasien() {
                     <Text color="red">{errors.noBPJS?.message}</Text>
                   </FormControl>
                 </GridItem>
+                <GridItem w="100%" h="100%">
+                  <FormControl isInvalid={errors.kelas_bpjs}>
+                    <FormLabel>Kelas BPJS</FormLabel>
+                    <Input {...register("kelas_bpjs")} type="number" />
+                    <Text color="red">{errors.kelas_bpjs?.message}</Text>
+                  </FormControl>
+                </GridItem>
               </Grid>
             </Box>
             <Box mt={10}>
@@ -389,15 +399,15 @@ function DataDiriPasien() {
               <FormControl mt={5}>
                 <FormLabel>Foto KTP</FormLabel>
                 <Input
-                  {...register("file", { required: "Harap masukkan file" })}
+                  {...register("fotoKTP")}
                   type="file"
                   id="img"
-                  name="file"
+                  name="fotoKTP"
                   accept="image/*"
                   display={"none"}
                 />
                 <Box h={300} borderWidth="1px" rounded={10} w="100%">
-                  <FormControl isInvalid={error.file}>
+                  <FormControl>
                     <label for="img" style={{ cursor: "pointer" }}>
                       <Grid
                         justifyContent={"center"}
@@ -439,14 +449,15 @@ function DataDiriPasien() {
               <FormControl mt={5}>
                 <FormLabel>Foto Kartu BPJS</FormLabel>
                 <Input
+                  {...register("fotoBPJS")}
                   type="file"
-                  id="img"
-                  name="img"
+                  id="bpjs"
+                  name="fotoBPJS"
                   accept="image/*"
                   display={"none"}
                 />
                 <Box h={300} borderWidth="1px" rounded={10} w="100%">
-                  <label for="img" style={{ cursor: "pointer" }}>
+                  <label for="bpjs" style={{ cursor: "pointer" }}>
                     <Grid
                       justifyContent={"center"}
                       alignItems="center"

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../assets/images/logo.png";
 import googleLogo from "../assets/images/googlelogo.png";
 import api from "../services/api";
@@ -30,6 +30,17 @@ function Login() {
   const showPassword = () => setShow(!show);
   const navigate = useNavigate();
   const toast = useToast();
+  const [passwordType, setPasswordType] = useState("");
+  const [rememberMe, setRememberMe] = React.useState({
+    email: "",
+    password: "",
+    isChecked: false,
+  });
+
+  const onShowPassword = (e) => {
+    setPasswordType(e.target.value);
+  };
+
   //yup schema
   const schema = yup.object().shape({
     email: yup
@@ -48,6 +59,21 @@ function Login() {
     resolver: yupResolver(schema),
     mode: "onChange",
   });
+
+  //handle changes from input
+  const handleChanges = (e) => {
+    const newData = { ...rememberMe };
+    newData[e.target.id] = e.target.value;
+    setRememberMe(newData);
+    console.log(newData);
+  };
+
+  //checkbox handler
+  const handleCheckbox = (e) => {
+    setRememberMe({
+      isChecked: e.target.checked,
+    });
+  };
 
   //handle login
   const handleLogin = async (data) => {
@@ -81,7 +107,23 @@ function Login() {
   //submit function
   const onSubmit = (data) => {
     handleLogin(data);
+    const { email, password, isChecked } = rememberMe;
+    if (isChecked === true && email) {
+      localStorage.setItem("email", JSON.stringify(email));
+      localStorage.setItem("password", JSON.stringify(password));
+      localStorage.setItem("isChecked", JSON.stringify(isChecked));
+    }
   };
+
+  React.useEffect(() => {
+    if (localStorage.email && localStorage.isChecked) {
+      setRememberMe({
+        email: localStorage.email,
+        password: localStorage.password,
+        isChecked: localStorage.isChecked,
+      });
+    }
+  }, []);
 
   return (
     <Box minH={"100%"}>
@@ -188,6 +230,9 @@ function Login() {
                       {...register("email")}
                       placeholder="email@gmail.com"
                       name="email"
+                      id="email"
+                      value={rememberMe.email ? rememberMe.email : ""}
+                      onChange={(e) => handleChanges(e)}
                     />
                     <Text color="red">{errors.email?.message}</Text>
                   </FormControl>
@@ -203,17 +248,25 @@ function Login() {
                         {...register("kata_sandi")}
                         placeholder="kata sandi"
                         name="kata_sandi"
+                        id="password"
+                        onInput={onShowPassword}
+                        onChange={(e) => handleChanges(e)}
                       />
-                      <InputRightElement>
-                        {show ? (
-                          <ViewOffIcon
-                            onClick={showPassword}
-                            cursor={"pointer"}
-                          />
-                        ) : (
-                          <ViewIcon onClick={showPassword} cursor={"pointer"} />
-                        )}
-                      </InputRightElement>
+                      {passwordType !== "" && (
+                        <InputRightElement>
+                          {show ? (
+                            <ViewOffIcon
+                              onClick={showPassword}
+                              cursor={"pointer"}
+                            />
+                          ) : (
+                            <ViewIcon
+                              onClick={showPassword}
+                              cursor={"pointer"}
+                            />
+                          )}
+                        </InputRightElement>
+                      )}
                     </InputGroup>
                     <Text color="red">{errors.kata_sandi?.message}</Text>
                   </FormControl>
@@ -221,7 +274,10 @@ function Login() {
                     <Box>
                       <input
                         type="checkbox"
+                        checked={rememberMe.isChecked}
                         className="checkbox checkbox-xs mr-2 border-gray-500"
+                        id={"isChecked"}
+                        onChange={(e) => handleCheckbox(e)}
                       />
                       <label for="rememberme">Remember me</label>
                     </Box>

@@ -43,6 +43,7 @@ import "@fontsource/plus-jakarta-sans/600.css";
 import theme from "../utils/extendedTheme";
 import store from "../store";
 import PoliclinicPages from "./pages/Admin/PoliclinicPages";
+import EditProfileUser from "./pages/EditProfileUser";
 
 function App() {
   return (
@@ -52,14 +53,13 @@ function App() {
           <Box minHeight={"100vh"}>
             <Routes>
               {/* user */}
-
               <Route path="/" element={<Login />} />
-              <Route path="/register" element={<Register />} />
+              <Route path="/edit" element={<EditProfileUser />} />
               <Route path="/home" element={<HomePage />} />
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />} />
               <Route path="/pasien" element={<TambahData />} />
-              <Route path="/pasien/tambah/" element={<DataDiriPasien />} />
+              <Route path="/pasien/tambah" element={<DataDiriPasien />} />
               <Route path="/search/detail" element={<DetailCariRumahSakit />} />
               <Route
                 path="/detail/patient"
@@ -87,12 +87,16 @@ function App() {
                 element={<DashboardDailyPraktek />}
               />
               <Route path="/payment" element={<Pembayaran />} />
-              <Route path="/admin/user" element={<UserPage />} />
+              {/* <Route path="/admin/user" element={<UserPage />} /> */}
               <Route path="/admin/profile" element={<SettingPage />} />
               <Route path="/admin/room" element={<RoomPage />} />
-              <Route path="/admin/patient" element={<PatientPage />} />
+              <Route
+                path="/admin/patient"
+                element={<PatientRegistrationPage />}
+              />
               <Route path="/admin/doctor" element={<DoctorPage />} />
-              <Route path="/admin/poliklinik" element={<Poliklinik />} />
+              <Route path="/admin/poliklinik" element={<PoliclinicPages />} />
+              <Route path="/admin/policlinic" element={<PoliclinicPages />} />
               <Route
                 path="/admin/hospital/profile"
                 element={<ProfileHospitalPage />}
@@ -100,9 +104,10 @@ function App() {
               <Route path="/admin/login" element={<LoginAdmin />} />
 
               {/* super admin */}
+              <Route path="/root/login" element={<LoginAdminRoot />} />
               <Route path="/root/dashboard" element={<DashboardRoot />} />
               <Route path="/root/hospital" element={<HospitalRootPages />} />
-              <Route path="/root/user" element={<AdminRoot />} />
+              {/* <Route path="/root/user" element={<AdminRoot />} /> */}
             </Routes>
           </Box>
         </ChakraProvider>

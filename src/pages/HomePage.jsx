@@ -32,7 +32,7 @@ const HomePage = () => {
                     Alur Pendaftaran
                 </Text>
                 <Flex
-                    templateColumns='repeat(3, 1fr)'
+                    gridTemplateColumns={'repeat(3, 1fr)'}
                     rowGap='20'
                     columnGap='10'
                     flexWrap='wrap'
