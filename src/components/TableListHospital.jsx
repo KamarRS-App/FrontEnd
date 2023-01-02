@@ -2,13 +2,13 @@ import React from 'react';
 import { Box, Flex, Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableContainer, Text, Select, Input, Button, InputLeftAddon, InputGroup } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
 
-const TableListHospital = () => {
+const TableListHospital = ({headTable, bodyTable}) => {
   return (
     <Box px="20">
       <Text fontWeight="600" fontSize={['30px', '42px']} mb={['10']} color="#1FA8F6" textAlign={{ base: 'center', md: 'left' }}>
         Daftar Rumah Sakit Mitra
       </Text>
-      <Flex flexWrap="wrap" columnGap="4" rowGap="5" justify="flex-end">
+      {/* <Flex flexWrap="wrap" columnGap="4" rowGap="5" justify="flex-end">
         <Box width={{ base: 'full', sm: 'full', md: '250px', lg: '300px' }}>
           <Select placeholder="Provinsi" shadow="md" borderRadius="md">
             <option value="option1">Option 1</option>
@@ -38,46 +38,15 @@ const TableListHospital = () => {
         <Text>ditemukan</Text>
         <Text fontWeight="bold">43</Text>
         <Text>Rumah Sakit</Text>
-      </Flex>
-      <TableContainer my={'20'}>
+      </Flex> */}
+      <TableContainer mt={{ base:'10',sm:'16',md:'20' }}>
         <Table variant="simple">
           <Thead>
-            <Tr>
-              <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
-                No
-              </Th>
-              <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
-                Nama Rumah Sakit
-              </Th>
-              <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
-                Alamat
-              </Th>
-            </Tr>
+            {headTable}
           </Thead>
           <Tbody>
-            <Tr>
-              <Td>inches</Td>
-              <Td>millimetres (mm)</Td>
-              <Td isNumeric>25.4</Td>
-            </Tr>
-            <Tr>
-              <Td>feet</Td>
-              <Td>centimetres (cm)</Td>
-              <Td isNumeric>30.48</Td>
-            </Tr>
-            <Tr>
-              <Td>yards</Td>
-              <Td>metres (m)</Td>
-              <Td isNumeric>0.91444</Td>
-            </Tr>
+            {bodyTable}
           </Tbody>
-          <Tfoot>
-            <Tr>
-              <Th>To convert</Th>
-              <Th>into</Th>
-              <Th isNumeric>multiply by</Th>
-            </Tr>
-          </Tfoot>
         </Table>
       </TableContainer>
     </Box>

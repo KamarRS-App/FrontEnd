@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../assets/images/logo.png";
 import googleLogo from "../assets/images/googlelogo.png";
 import api from "../services/api";
@@ -26,11 +26,12 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 function Login() {
-  const [show, setShow] = React.useState(false);
+  const [show, setShow] = useState(false);
   const showPassword = () => setShow(!show);
   const navigate = useNavigate();
   const toast = useToast();
   const [passwordType, setPasswordType] = useState('');
+  const token = Cookies.get('token');
 
   const onShowPassword = (e) => {
     setPasswordType(e.target.value);
@@ -68,6 +69,7 @@ function Login() {
           duration: 1500,
         });
         Cookies.set("token", response.data.data.token);
+        Cookies.set("name", response.data.data.name);
         setTimeout(() => {
           navigate("/home");
         }, 2000);
@@ -88,6 +90,19 @@ function Login() {
   const onSubmit = (data) => {
     handleLogin(data);
   };
+
+  useEffect(() => {
+    if(token){
+        toast({
+            position: 'top',
+            title: 'Kamu sudah Login',
+            status: 'warning',
+            duration: '2000',
+            isClosable: true
+        });
+        navigate('/home');
+    }
+},[]);
 
   return (
     <Box minH={"100%"}>
