@@ -1,47 +1,48 @@
-import { ChakraProvider } from "@chakra-ui/react";
-import { Box } from "@chakra-ui/layout";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Provider } from "react-redux";
+import { ChakraProvider } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/layout';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Provider } from 'react-redux';
 
-import Login from "./pages/Login";
-import SettingPage from "./pages/Admin/SettingPage";
-import Register from "./pages/Register";
-import HomePage from "./pages/HomePage";
-import TambahData from "./pages/TambahData";
-import DataDiriPasien from "./pages/DataDiriPasien";
-import DetailCariRumahSakit from "./pages/DetailCariRumahSakit";
-import Dashboard from "./pages/Admin/Dashboard";
-import DetailDaftarRumahSakit from "./pages/DetailDaftarRumahSakit";
-import DashboardDailyPraktek from "./pages/Admin/DashboardDailyPraktek";
-import UserPage from "./pages/Admin/UserPage";
-import RoomPage from "./pages/Admin/RoomPage";
-import PatientRegistrationPage from "./pages/Admin/PatientRegistrationPage";
-import DoctorPage from "./pages/Admin/DoctorPage";
-import ProfileHospitalPage from "./pages/Admin/ProfileHospitalPage";
-import LoginAdmin from "./pages/Admin/LoginAdmin";
+import Login from './pages/Login';
+import SettingPage from './pages/Admin/SettingPage';
+import Register from './pages/Register';
+import HomePage from './pages/HomePage';
+import TambahData from './pages/TambahData';
+import DataDiriPasien from './pages/DataDiriPasien';
+import DetailCariRumahSakit from './pages/DetailCariRumahSakit';
+import Dashboard from './pages/Admin/Dashboard';
+import DetailDaftarRumahSakit from './pages/DetailDaftarRumahSakit';
+import DashboardDailyPraktek from './pages/Admin/DashboardDailyPraktek';
+import UserPage from './pages/Admin/UserPage';
+import RoomPage from './pages/Admin/RoomPage';
+import PatientRegistrationPage from './pages/Admin/PatientRegistrationPage';
+import DoctorPage from './pages/Admin/DoctorPage';
+import ProfileHospitalPage from './pages/Admin/ProfileHospitalPage';
+import LoginAdmin from './pages/Admin/LoginAdmin';
 
 import Pembayaran from './pages/Pembayaran';
 import Payment from './pages/Payment';
 import PembayaranSelesai from './pages/PembayaranSelesai';
 import CariDokter from './pages/CariDokter';
 import DetailDokter from './pages/DetailDokter';
-import DashboardRoot from "./pages/Admin/DashboardRoot";
-import HospitalRootPages from "./pages/Admin/HospitalRootPages";
-import AdminRoot from "./pages/Admin/AdminRoot";
+import DashboardRoot from './pages/Admin/DashboardRoot';
+import HospitalRootPages from './pages/Admin/HospitalRootPages';
+import AdminRoot from './pages/Admin/AdminRoot';
 import BuatJanjiDokter from './pages/BuatJanjiDokter';
 import TentangKami from './pages/TentangKami';
 import Privasi from './pages/Privasi';
 import SyaratDanKetentuan from './pages/SyaratDanKetentuan';
 import Poliklinik from './pages/Admin/Poliklinik';
-import LoginAdminRoot from "./pages/Admin/LoginAdminRoot";
+import LoginAdminRoot from './pages/Admin/LoginAdminRoot';
 
-import "./App.css";
-import "@fontsource/plus-jakarta-sans/700.css";
-import "@fontsource/plus-jakarta-sans/400.css";
-import "@fontsource/plus-jakarta-sans/500.css";
-import "@fontsource/plus-jakarta-sans/600.css";
-import theme from "../utils/extendedTheme";
-import store from "../store";
+import './App.css';
+import '@fontsource/plus-jakarta-sans/700.css';
+import '@fontsource/plus-jakarta-sans/400.css';
+import '@fontsource/plus-jakarta-sans/500.css';
+import '@fontsource/plus-jakarta-sans/600.css';
+import theme from '../utils/extendedTheme';
+import store from '../store';
+import ReservasiRawatJalan from './pages/ReservasiRawatJalan';
 
 function App() {
   return (
@@ -69,7 +70,7 @@ function App() {
               <Route path="/tentang/kami" element={<TentangKami />} />
               <Route path="/halaman/privasi" element={<Privasi />} />
               <Route path="/syarat/dan/ketentuan" element={<SyaratDanKetentuan />} />
-
+              <Route path="/reservasi/rawat/jalan" element={<ReservasiRawatJalan />} />
               {/* admin */}
               <Route path="/admin/dashboard" element={<Dashboard />} />
               <Route path="/admin/daily_praktek" element={<DashboardDailyPraktek />} />
@@ -87,7 +88,6 @@ function App() {
               <Route path="/root/hospital" element={<HospitalRootPages />} />
               <Route path="/root/user" element={<AdminRoot />} />
               {/* super admin */}
-
             </Routes>
           </Box>
         </ChakraProvider>

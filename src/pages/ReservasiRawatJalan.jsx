@@ -17,7 +17,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { error } from 'daisyui/src/colors';
 import axios from 'axios';
 
-function DataDiriPasien() {
+function ReservasiRawatJalan() {
   const [provinsi, setProvinsi] = React.useState();
   const [kabupaten, setKabupaten] = React.useState(null);
   const [listKabupaten, setListKabupaten] = React.useState([]);
@@ -303,4 +303,4 @@ function DataDiriPasien() {
   );
 }
 
-export default DataDiriPasien;
+export default ReservasiRawatJalan;
