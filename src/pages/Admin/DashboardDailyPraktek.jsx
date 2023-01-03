@@ -98,7 +98,7 @@ function DashboardDailyPraktek() {
 
   return (
     <LayoutAdmin activeMenu={"doctor"}>
-      <HeadAdmin title="Manajemen Dokter" isAdd={onModalCreateOpen} />
+      <HeadAdmin title="Manajemen Praktek" isAdd={onModalCreateOpen} />
       <Box>
         <Box backgroundColor="white" mt={5} minH="600px" p={5}>
           <Box>
