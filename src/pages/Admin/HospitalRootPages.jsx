@@ -20,6 +20,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import api from '../../services/api';
 import axios from 'axios';
 import PopupDelete from '../../components/PopupDelete';
+import apiProvinsi from '../../services/apiProvinsi';
+import { AuthToken } from '../../services/authToken';
 
 const HospitalRootPages = () => {
     const { isOpen: isModalCreateOpen, onOpen: onModalCreateOpen, onClose: onCloseModalCreate } = useDisclosure();
@@ -33,6 +35,13 @@ const HospitalRootPages = () => {
     const [currentHospital, setCurrentHospital] = useState([]);
     const [hospitalImage, setHospitalImage] = useState();
     const [hospitalId, setHospitalId] = useState('');
+    const [provinsi, setProvinsi] = useState([]);
+    const [nameProvinsi, setNameProvinsi] = useState('');
+    const [kota, setKota] = useState([]);
+    const [nameKota, setNameKota] = useState('');
+    const [kecamatan, setKecamatan] = useState([]);
+
+    const auth = AuthToken();
 
 
     const initialValues = {
@@ -73,7 +82,7 @@ const HospitalRootPages = () => {
         biaya_registrasi: Yup.number('Harus Angka').required('Biaya registrasi wajib diisi'),
     })
 
-    const { register: createHospital, handleSubmit, setValue: setValueCreate , formState: { errors } } = useForm({
+    const { register: createHospital, handleSubmit, setValue: setValueCreate, formState: { errors } } = useForm({
         mode: "onTouched",
         reValidateMode: "onSubmit",
         resolver: yupResolver(schema),
@@ -86,6 +95,8 @@ const HospitalRootPages = () => {
         resolver: yupResolver(schema),
         defaultValues: initialValue,
     })
+
+    //consume api
 
     const getHospitalHandler = async (id) => {
         await api.getHospitalByID(token, id)
@@ -119,13 +130,6 @@ const HospitalRootPages = () => {
                     })
                 }
             })
-    }
-
-    const onHandlerEdit = (id) => {
-        getHospitalHandler(id)
-        if (currentHospital) {
-            onModalEditOpen();
-        }
     }
 
     const getAllHospitalsHandler = async () => {
@@ -163,11 +167,6 @@ const HospitalRootPages = () => {
                     isClosable: true
                 })
             })
-    }
-
-    const handleHospitalImage = (e) => {
-        const file = e.target.files[0];
-        setHospitalImage(file)
     }
 
     const updateHospitalHandler = async (data) => {
@@ -224,16 +223,78 @@ const HospitalRootPages = () => {
             })
     }
 
+    //api dearah
+    const getProvinsi = async () => {
+        await apiProvinsi.getProvinsi()
+            .then((response) => {
+                const data = response.data.provinsi
+                setProvinsi(data);
+            });
+    };
+
+    const getDetailProvinsi = async (id) => {
+        await apiProvinsi.getDetailProvinsi(id)
+            .then(response => {
+                const data = response.data;
+                setNameProvinsi(data.nama)
+            })
+    }
+
+    const getKotaKabupatenByProvinsi = async (id) => {
+        await apiProvinsi.getKotaKabupateByProvinsi(id)
+            .then(response => {
+                const data = response.data.kota_kabupaten;
+                setKota(data);
+            })
+    }
+
+    const getDetailKota = async (id) => {
+        await apiProvinsi.getDetailKotaKabupaten(id)
+            .then(response => {
+                const data = response.data;
+                setNameKota(data.nama);
+            })
+    }
+
+    const getKecamatanByKota = async (id) => {
+        await apiProvinsi.getKecamatanByKota(id)
+            .then(response => {
+                const data = response.data.kecamatan;
+                setKecamatan(data);
+            })
+    }
+
+    //handler daerah
+    const handlerProvinsi = (id) => {
+        getDetailProvinsi(id);
+        getKotaKabupatenByProvinsi(id);
+    }
+
+    const handlerKota = (id) => {
+        getDetailKota(id);
+        getKecamatanByKota(id);
+    }
+
+    //handler
+    const handleHospitalImage = (e) => {
+        const file = e.target.files[0];
+        setHospitalImage(file)
+    }
+
+    const onHandlerEdit = (id) => {
+        getHospitalHandler(id)
+        if (currentHospital) {
+            onModalEditOpen();
+        }
+    }
+
     const onSubmit = (values) => {
         const data = new FormData();
-        // const jumlah_tempat_tidur = parseInt(values.jumlah_tempat_tidur);
-        // const biaya_registrasi = parseInt(values.biaya_registrasi);
-
         data.append('kode_rs', values.kode_rs);
         data.append('nama', values.nama);
         data.append('alamat', values.alamat);
-        data.append('provinsi', values.provinsi);
-        data.append('kabupaten_kota', values.kabupaten_kota);
+        data.append('provinsi', nameProvinsi);
+        data.append('kabupaten_kota', nameKota);
         data.append('kecamatan', values.kecamatan);
         data.append('kode_pos', values.kode_pos);
         data.append('no_telpon', values.no_telepon);
@@ -320,12 +381,8 @@ const HospitalRootPages = () => {
         onCloseModalDelete();
     }
 
-    const onError = (error) => {
-        console.log(error)
-    }
-
     useEffect(() => {
-        if (role !== 'super admin' && token === undefined) {
+        if (role !== 'super admin' || token !== '') {
             toast({
                 position: 'top',
                 title: 'Kamu Harus Login Dulu',
@@ -336,7 +393,7 @@ const HospitalRootPages = () => {
             navigate('/root/login');
         }
         getAllHospitalsHandler();
-
+        getProvinsi();
     }, []);
     return (
         <LayoutAdminRoot activeMenu={'hospital'}>
@@ -485,7 +542,7 @@ const HospitalRootPages = () => {
                                 <Td
                                     textAlign={'center'}
                                 >
-                                    {data.alamat + " " + data.kecamatan + " " + data.kabupaten_kota + " " + data.provinsi + " " + data.kode_pos}
+                                    {data.alamat + ", kec." + data.kecamatan + ", " + data.kabupaten_kota + ", " + data.provinsi + ", " + data.kode_pos}
                                 </Td>
                                 <Td
                                     textAlign={'center'}
@@ -538,7 +595,7 @@ const HospitalRootPages = () => {
                 modalTitle={'Tambah Rumah Sakit'}
                 isOpen={isModalCreateOpen}
                 onClose={onCloseCreateHandler}
-                submitButton={handleSubmit(onSubmit, onError)}
+                submitButton={handleSubmit(onSubmit)}
                 modalBody={
                     <>
                         <FormControl isInvalid={errors.kode_rs}>
@@ -566,36 +623,50 @@ const HospitalRootPages = () => {
                         >
                             <FormControl isInvalid={errors.provinsi}>
                                 <FormLabel>Provinsi</FormLabel>
-                                <Select placeholder='Provinsi' id='provinsi' {...createHospital('provinsi')}>
-                                    <option>Jawa Timur</option>
-                                    <option>rawat jalan</option>
-                                    <option>verifikasi</option>
-                                    <option>pendaftaran</option>
-                                    <option>selesai</option>
+                                <Select
+                                    placeholder='Provinsi'
+                                    id='provinsi'
+                                    {...createHospital('provinsi')}
+                                    onChange={(e) => handlerProvinsi(e.target.value)}
+                                >
+                                    {
+                                        provinsi.map(data => (
+                                            <option value={data.id} key={data.id}>{data.nama}</option>
+                                        ))
+                                    }
                                 </Select>
                                 {errors.provinsi && <FormErrorMessage>{errors.provinsi.message}</FormErrorMessage>}
                             </FormControl>
 
                             <FormControl isInvalid={errors.kabupaten_kota}>
                                 <FormLabel>Kabupaten / Kota</FormLabel>
-                                <Select placeholder='Kabupaten/Kota' id='kabupaten_kota' {...createHospital('kabupaten_kota')}>
-                                    <option>Surabaya</option>
-                                    <option>rawat jalan</option>
-                                    <option>verifikasi</option>
-                                    <option>pendaftaran</option>
-                                    <option>selesai</option>
+                                <Select
+                                    placeholder='Kabupaten/Kota'
+                                    id='kabupaten_kota'
+                                    {...createHospital('kabupaten_kota')}
+                                    onChange={(e) => handlerKota(e.target.value)}
+                                >
+                                    {
+                                        kota.map(data => (
+                                            <option value={data.id} key={data.id}>{data.nama}</option>
+                                        ))
+                                    }
                                 </Select>
                                 {errors.kabupaten_kota && <FormErrorMessage>{errors.kabupaten_kota.message}</FormErrorMessage>}
                             </FormControl>
 
                             <FormControl isInvalid={errors.kecamatan}>
                                 <FormLabel>Kecamatan</FormLabel>
-                                <Select placeholder='Kecamatan' id='kecamatan' {...createHospital('kecamatan')}>
-                                    <option>Rungkut</option>
-                                    <option>rawat jalan</option>
-                                    <option>verifikasi</option>
-                                    <option>pendaftaran</option>
-                                    <option>selesai</option>
+                                <Select
+                                    placeholder='Kecamatan'
+                                    id='kecamatan'
+                                    {...createHospital('kecamatan')}
+                                >
+                                    {
+                                        kecamatan.map(data => (
+                                            <option value={data.nama} key={data.id}>{data.nama}</option>
+                                        ))
+                                    }
                                 </Select>
                                 {errors.kecamatan && <FormErrorMessage>{errors.kecamatan.message}</FormErrorMessage>}
                             </FormControl>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../assets/images/logo.png";
 import googleLogo from "../assets/images/googlelogo.png";
 import api from "../services/api";
@@ -24,25 +24,29 @@ import {
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useDispatch } from "react-redux";
+import { addUsers } from "../features/userSlice";
 
 function Login() {
-  const [show, setShow] = React.useState(false);
+  const [show, setShow] = useState(false);
   const showPassword = () => setShow(!show);
   const navigate = useNavigate();
   const toast = useToast();
-  const [passwordType, setPasswordType] = useState('');
+  const [passwordType, setPasswordType] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isChecked, setIsChecked] = useState(true);
+  const token = Cookies.get("token");
+  const dispatch = useDispatch();
 
   const onShowPassword = (e) => {
     setPasswordType(e.target.value);
-  }
+  };
 
   //yup schema
   const schema = yup.object().shape({
-    email: yup
-      .string()
-      .required("Harap masukkan email")
-      .email("Format email salah"),
-    kata_sandi: yup.string().required("Harap masukkan kata sandi"),
+    email: yup.string().email("Format email salah"),
+    kata_sandi: yup.string(),
   });
 
   //rhf configuration
@@ -55,11 +59,18 @@ function Login() {
     mode: "onChange",
   });
 
+  //checkbox handler
+  const handleCheckbox = (e) => {
+    setIsChecked(e.target.checked);
+    console.log(e.target.checked);
+  };
+
   //handle login
-  const handleLogin = async (data) => {
+  const handleLogin = async (email, password) => {
     await api
-      .loginUser(data)
+      .loginUser(email, password)
       .then((response) => {
+        const data = response.data.data;
         toast({
           title: `Sukses login, mengalihkan...`,
           status: "success",
@@ -67,7 +78,8 @@ function Login() {
           isClosable: true,
           duration: 1500,
         });
-        Cookies.set("token", response.data.data.token);
+        getUser(data.token);
+        Cookies.set("token", data.token);
         setTimeout(() => {
           navigate("/home");
         }, 2000);
@@ -84,10 +96,50 @@ function Login() {
       });
   };
 
+  const getUser = async (token) => {
+    await api
+      .getUser(token)
+      .then((response) => {
+        const data = response.data.data;
+        dispatch(addUsers(data));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   //submit function
   const onSubmit = (data) => {
-    handleLogin(data);
+    handleLogin(email, password);
+    if (isChecked === true) {
+      localStorage.setItem("email", email);
+      localStorage.setItem("password", password);
+      localStorage.setItem("isChecked", isChecked);
+    } else {
+      localStorage.removeItem("email");
+      localStorage.removeItem("password");
+      localStorage.removeItem("isChecked");
+    }
   };
+
+  React.useEffect(() => {
+    if (localStorage.email) {
+      setEmail(localStorage.email);
+      setPassword(localStorage.password);
+      setIsChecked(localStorage.isChecked);
+    }
+
+    if (token) {
+      toast({
+        position: "top",
+        title: "Kamu sudah Login",
+        status: "warning",
+        duration: "2000",
+        isClosable: true,
+      });
+      navigate("/home");
+    }
+  }, []);
 
   return (
     <Box minH={"100%"}>
@@ -191,9 +243,12 @@ function Login() {
                   <br />
                   <FormControl isInvalid={errors.email}>
                     <Input
-                      {...register("email")}
+                      // {...register("email")}
                       placeholder="email@gmail.com"
                       name="email"
+                      id="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                     />
                     <Text color="red">{errors.email?.message}</Text>
                   </FormControl>
@@ -206,12 +261,15 @@ function Login() {
                     <InputGroup>
                       <Input
                         type={show ? "text" : "password"}
-                        {...register("kata_sandi")}
+                        // {...register("kata_sandi")}
                         placeholder="kata sandi"
                         name="kata_sandi"
+                        id="password"
                         onInput={onShowPassword}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                       />
-                      {passwordType !== '' &&
+                      {passwordType !== "" && (
                         <InputRightElement>
                           {show ? (
                             <ViewOffIcon
@@ -219,10 +277,13 @@ function Login() {
                               cursor={"pointer"}
                             />
                           ) : (
-                            <ViewIcon onClick={showPassword} cursor={"pointer"} />
+                            <ViewIcon
+                              onClick={showPassword}
+                              cursor={"pointer"}
+                            />
                           )}
                         </InputRightElement>
-                      }
+                      )}
                     </InputGroup>
                     <Text color="red">{errors.kata_sandi?.message}</Text>
                   </FormControl>
@@ -230,7 +291,10 @@ function Login() {
                     <Box>
                       <input
                         type="checkbox"
+                        checked={isChecked}
                         className="checkbox checkbox-xs mr-2 border-gray-500"
+                        id={"isChecked"}
+                        onChange={(e) => handleCheckbox(e)}
                       />
                       <label for="rememberme">Remember me</label>
                     </Box>
