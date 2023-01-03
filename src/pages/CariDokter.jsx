@@ -16,7 +16,6 @@ function CariDokter() {
         {' '}
         <HeaderCariDokter />
         <CariSpesialis />
-        <CardCariDokter />
       </Box>
     </Layout>
   );
