@@ -44,6 +44,7 @@ import theme from "../utils/extendedTheme";
 import store from "../store";
 import PoliclinicPages from "./pages/Admin/PoliclinicPages";
 import EditProfileUser from "./pages/EditProfileUser";
+import CariRumahSakit from "./pages/CariRumahSakit";
 
 function App() {
   return (
@@ -60,47 +61,30 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/pasien" element={<TambahData />} />
               <Route path="/pasien/tambah" element={<DataDiriPasien />} />
-              <Route path="/search/detail" element={<DetailCariRumahSakit />} />
-              <Route
-                path="/detail/patient"
-                element={<DetailDaftarRumahSakit />}
-              />
+              <Route path="/rumahsakit" element={<CariRumahSakit />} />
+              <Route path="/rumahsakit/:id/detail" element={<DetailCariRumahSakit />} />
+              <Route path="/registrasi/pasien" element={<DetailDaftarRumahSakit />} />
               <Route path="/pilih/metode/pembayaran" element={<Payment />} />
-              <Route
-                path="pembayaran/selesai"
-                element={<PembayaranSelesai />}
-              />
+              <Route path="pembayaran/selesai" element={<PembayaranSelesai />} />
               <Route path="dokter" element={<CariDokter />} />
               <Route path="detail/dokter" element={<DetailDokter />} />
               <Route path="/buat/janji/dokter" element={<BuatJanjiDokter />} />
               <Route path="/tentang/kami" element={<TentangKami />} />
               <Route path="/halaman/privasi" element={<Privasi />} />
-              <Route
-                path="/syarat/dan/ketentuan"
-                element={<SyaratDanKetentuan />}
-              />
+              <Route path="/syarat/dan/ketentuan" element={<SyaratDanKetentuan />} />
 
               {/* admin */}
               <Route path="/admin/dashboard" element={<Dashboard />} />
-              <Route
-                path="/admin/daily_praktek"
-                element={<DashboardDailyPraktek />}
-              />
+              <Route path="/admin/daily_praktek" element={<DashboardDailyPraktek />} />
               <Route path="/payment" element={<Pembayaran />} />
               {/* <Route path="/admin/user" element={<UserPage />} /> */}
               <Route path="/admin/profile" element={<SettingPage />} />
               <Route path="/admin/room" element={<RoomPage />} />
-              <Route
-                path="/admin/patient"
-                element={<PatientRegistrationPage />}
-              />
+              <Route path="/admin/patient" element={<PatientRegistrationPage />} />
               <Route path="/admin/doctor" element={<DoctorPage />} />
               <Route path="/admin/poliklinik" element={<PoliclinicPages />} />
               <Route path="/admin/policlinic" element={<PoliclinicPages />} />
-              <Route
-                path="/admin/hospital/profile"
-                element={<ProfileHospitalPage />}
-              />
+              <Route path="/admin/hospital/profile" element={<ProfileHospitalPage />} />
               <Route path="/admin/login" element={<LoginAdmin />} />
 
               {/* super admin */}
