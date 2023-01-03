@@ -58,12 +58,7 @@ export default {
         no_telpon: JSON.stringify(data.nomorhape),
       },
     }),
-<<<<<<< HEAD
-
-  updateUser: (token, { nama, email, no_nik, no_kk, kata_sandi, no_telepon }) =>
-=======
   updateUser: (token, data) =>
->>>>>>> 04551ce913d8f9bfac1fd147986113882479ae14
     instance({
       method: `PUT`,
       url: `/users`,

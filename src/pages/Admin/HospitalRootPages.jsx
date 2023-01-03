@@ -21,7 +21,7 @@ import api from '../../services/api';
 import axios from 'axios';
 import PopupDelete from '../../components/PopupDelete';
 import apiProvinsi from '../../services/apiProvinsi';
-import { AuthToken } from '../../services/authToken';
+// import { AuthToken } from '../../services/authToken';
 
 const HospitalRootPages = () => {
     const { isOpen: isModalCreateOpen, onOpen: onModalCreateOpen, onClose: onCloseModalCreate } = useDisclosure();
