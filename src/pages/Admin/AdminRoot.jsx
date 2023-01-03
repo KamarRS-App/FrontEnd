@@ -45,6 +45,7 @@ const AdminRoot = () => {
         kata_sandi: "",
         peran: "Admin",
         hospital_id: null,
+        hospital_name: '',
     };
 
     const initialValuesUpdate = {
@@ -52,6 +53,7 @@ const AdminRoot = () => {
         email: "",
         peran: "Admin",
         hospital_id: null,
+        hospital_name: '',
     };
 
     const [initialValue, setInitialValue] = useState(initialValues);
@@ -69,6 +71,7 @@ const AdminRoot = () => {
         hospital_id: Yup.number().required(
             "Rumah Sakit Bekerja tidak boleh kosong"
         ),
+        hospital_name: Yup.string().required('Hospital Name tidak boleh kosong')
     });
 
     const schemaUpdate = Yup.object().shape({
@@ -79,10 +82,11 @@ const AdminRoot = () => {
         hospital_id: Yup.number().required(
             "Rumah Sakit Bekerja tidak boleh kosong"
         ),
+        hospital_name: Yup.string().required('Hospital Name tidak boleh kosong')
     });
 
     const {
-        register: createAdmin, handleSubmit, formState: { errors }, } = useForm({
+        register: createAdmin, handleSubmit, formState: { errors }, setValue} = useForm({
             mode: "onTouched",
             reValidateMode: "onSubmit",
             resolver: yupResolver(schema),
@@ -165,6 +169,15 @@ const AdminRoot = () => {
             })
     }
 
+    const getHospitalName = async (id) => {
+        await api.getHospitalByID(token, id)
+            .then(response => {
+                const data = response.data.data;
+                setValue('hospital_name', data.nama);
+                console.log(data)
+            })
+    }
+
     const updateAdminStaff = async (id, data) => {
         await api.updateAdmin(token, id, data)
             .then(response => {
@@ -213,8 +226,14 @@ const AdminRoot = () => {
             })
     }
 
+    const onChangeHospital = (id) => {
+        getHospitalName(id);
+        console.log(id);
+    }
+
     const onSubmitCreate = (values) => {
-        createAdminStaff(values)
+        console.log(values);
+        // createAdminStaff(values)
         onCloseModalCreate();
     }
 
@@ -249,6 +268,10 @@ const AdminRoot = () => {
 
     const onShowPassword = (e) => {
         setShow(e.target.value)
+    }
+
+    const onError = (error) => {
+        console.log(error)
     }
 
     useEffect(() => {
@@ -385,7 +408,7 @@ const AdminRoot = () => {
                 modalTitle={'Tambahkan Akun Admin Rumah Sakit'}
                 isOpen={isModalCreateOpen}
                 onClose={onCloseHandler}
-                submitButton={handleSubmit(onSubmitCreate)}
+                submitButton={handleSubmit(onSubmitCreate, onError)}
                 modalBody={
                     <>
                         <FormControl isInvalid={errors.nama}>
@@ -432,7 +455,7 @@ const AdminRoot = () => {
 
                         <FormControl mt={'4'} isInvalid={errors.hospital_id}>
                             <FormLabel>Rumah Sakit</FormLabel>
-                            <Select placeholder='Pilih Rumah Sakit' id='hospital_id' {...createAdmin('hospital_id')}>
+                            <Select placeholder='Pilih Rumah Sakit' id='hospital_id' onChange={(e)=>onChangeHospital(e.target.value)} {...createAdmin('hospital_id')}>
                                 {
                                     hospitals.map(data => {
                                         return <option value={data.id} key={data.id}>{data.nama}</option>

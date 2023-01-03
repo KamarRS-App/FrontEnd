@@ -91,7 +91,7 @@ function App() {
               <Route path="/root/login" element={<LoginAdminRoot />} />
               <Route path="/root/dashboard" element={<DashboardRoot />} />
               <Route path="/root/hospital" element={<HospitalRootPages />} />
-              {/* <Route path="/root/user" element={<AdminRoot />} /> */}
+              <Route path="/root/user" element={<AdminRoot />} />
             </Routes>
           </Box>
         </ChakraProvider>
