@@ -22,6 +22,7 @@ function CariSpesialis() {
   const [doctors, setDoctors] = useState([]);
   const [idHospital, setIdHospital] = useState();
   const [time, setTime] = useState();
+  const navigate = useNavigate();
 
   const token = Cookies.get('token');
 
@@ -40,6 +41,10 @@ function CariSpesialis() {
     namaPoli: yup.string().required('Harap pilih Nama Poliklinik Tujuan'),
     namaDokter: yup.string().required('Harap pilih Nama Dokter'),
   });
+
+  const handlerRegister = () => {
+    navigate('/reservasi/rawat/jalan', {});
+  };
   const {
     register,
     handleSubmit,
@@ -217,7 +222,7 @@ function CariSpesialis() {
           </Stack>
         </Card>
 
-        <Button href="/reservasi/rawat/jalan" m={20} color="#FFFFFF" bg="#3AB8FF" submitButton={handleSubmit(onSubmit)}>
+        <Button onClick={() => handlerRegister()} m={20} color="#FFFFFF" bg="#3AB8FF" submitButton={handleSubmit(onSubmit)}>
           Selanjutnya
         </Button>
       </Box>

@@ -1,7 +1,7 @@
-import axios from "axios";
+import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: "https://rawatinap.online",
+  baseURL: 'https://rawatinap.online',
 });
 
 export default {
@@ -55,39 +55,20 @@ export default {
         nik: JSON.stringify(data.nik),
         no_kk: JSON.stringify(data.no_kk),
         kata_sandi: data.kata_sandi,
-        no_telepon: JSON.stringify(data.nomorhape),
+        no_telpon: JSON.stringify(data.nomorhape),
       },
     }),
-
-  //Users
-  register: (token, { nama, email, no_nik, no_kk, kata_sandi, no_telepon }) =>
-    instance({
-      method: `POST`,
-      url: `/users`,
-      data: {
-        nama: nama,
-        email: email,
-        no_nik: no_nik,
-        no_kk: no_kk,
-        kata_sandi: kata_sandi,
-        no_telepon: no_telepon,
-      },
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }),
-
-  updateUser: (token, { nama, email, no_nik, no_kk, kata_sandi, no_telepon }) =>
+  updateUser: (token, data) =>
     instance({
       method: `PUT`,
       url: `/users`,
       data: {
-        nama: nama,
-        email: email,
-        no_nik: no_nik,
-        no_kk: no_kk,
-        kata_sandi: kata_sandi,
-        no_telepon: no_telepon,
+        nama: data.nama,
+        email: data.email,
+        no_nik: data.no_nik,
+        no_kk: data.no_kk,
+        kata_sandi: data.kata_sandi,
+        no_telpon: data.no_telpon,
       },
       headers: {
         Authorization: `Bearer ${token}`,
@@ -223,7 +204,7 @@ export default {
       url: `/patients`,
       headers: {
         Authorization: `Bearer ${token}`,
-        "content-type": "multipart/form-data",
+        'content-type': 'multipart/form-data',
       },
       data: {
         no_kk: no_kk,
@@ -275,7 +256,7 @@ export default {
       url: `/patients/${id}`,
       headers: {
         Authorization: `Bearer ${token}`,
-        "content-type": "multipart/form-data",
+        'content-type': 'multipart/form-data',
       },
       data: {
         no_kk: no_kk,
@@ -330,7 +311,7 @@ export default {
       url: `/patients`,
       headers: {
         Authorization: `Bearer ${token}`,
-        "content-type": "multipart/form-data",
+        'content-type': 'multipart/form-data',
       },
       data: {
         no_kk: data.no_kk,
@@ -382,7 +363,7 @@ export default {
       url: `/patients/${id}`,
       headers: {
         Authorization: `Bearer ${token}`,
-        "content-type": "multipart/form-data",
+        'content-type': 'multipart/form-data',
       },
       data: {
         no_kk: no_kk,
@@ -431,10 +412,7 @@ export default {
     }),
 
   //hospital bed
-  createHospitalBed: (
-    token,
-    { hospital_id, nama_tempat_tidur, ruangan, kelas, status }
-  ) =>
+  createHospitalBed: (token, { hospital_id, nama_tempat_tidur, ruangan, kelas, status }) =>
     instance({
       method: `POST`,
       url: `/beds`,
@@ -449,11 +427,7 @@ export default {
         status: status,
       },
     }),
-  updateHospitalBed: (
-    token,
-    id,
-    { hospital_id, nama_tempat_tidur, ruangan, kelas, status }
-  ) =>
+  updateHospitalBed: (token, id, { hospital_id, nama_tempat_tidur, ruangan, kelas, status }) =>
     instance({
       method: `PUT`,
       url: `/beds/${id}`,
@@ -500,7 +474,7 @@ export default {
       url: `/doctors`,
       headers: {
         Authorization: `Bearer ${token}`,
-        "content-type": "multipart/form-data",
+        'content-type': 'multipart/form-data',
       },
       data: {
         nama: data.nama,
@@ -639,11 +613,7 @@ export default {
         status: data.status,
       },
     }),
-  updateDailyPractice: (
-    token,
-    id,
-    { policlinic_id, tanggal_praktik, kuota_harian, status }
-  ) =>
+  updateDailyPractice: (token, id, { policlinic_id, tanggal_praktik, kuota_harian, status }) =>
     instance({
       method: `PUT`,
       url: `/practices/${id}`,
@@ -698,7 +668,7 @@ export default {
     }),
 
   //bed Register
-  createBedRegistrations: (token, { hospital_id, patient_id}) =>
+  createBedRegistrations: (token, { hospital_id, patient_id }) =>
     instance({
       method: `POST`,
       url: `/registrations`,
@@ -711,20 +681,7 @@ export default {
       },
     }),
 
-  updateBedRegistrations: (
-    token,
-    id,
-    {
-      hospital_id,
-      patient_id,
-      bed_id,
-      status_pasien,
-      biaya_registrasi,
-      kode_daftar,
-      link_pembayaran,
-      status_pembayaran,
-    }
-  ) =>
+  updateBedRegistrations: (token, id, { hospital_id, patient_id, bed_id, status_pasien, biaya_registrasi, kode_daftar, link_pembayaran, status_pembayaran }) =>
     instance({
       method: `PUT`,
       url: `/registrations/${id}`,

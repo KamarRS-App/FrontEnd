@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Text, Image, Flex, Img, Spacer, Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer, Button } from '@chakra-ui/react';
 import Layout from '../components/Layout';
 import { useNavigate, useParams } from 'react-router';

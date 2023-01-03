@@ -12,7 +12,6 @@ import TableListHospital from '../components/TableListHospital';
 import apiProvinsi from '../services/apiProvinsi';
 import { Link } from 'react-router-dom';
 
-
 function CariRumahSakit() {
   const token = Cookies.get('token');
   const toast = useToast();
@@ -25,56 +24,56 @@ function CariRumahSakit() {
   const [selectKota, setSelectKota] = useState('');
 
   const getAllHospitalsHandler = async () => {
-    await api.getHospitals(token)
-      .then(response => {
+    await api
+      .getHospitals(token)
+      .then((response) => {
         const data = response.data.data;
         setHospitals(data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
-      })
-  }
-
-  const getProvinsi = async () => {
-    await apiProvinsi.getProvinsi()
-      .then((response) => {
-        const data = response.data.provinsi
-        setProvinsi(data);
       });
   };
 
+  const getProvinsi = async () => {
+    await apiProvinsi.getProvinsi().then((response) => {
+      const data = response.data.provinsi;
+      setProvinsi(data);
+    });
+  };
+
   const getDetailProvinsi = async (id) => {
-    await apiProvinsi.getDetailProvinsi(id)
-      .then(response => {
+    await apiProvinsi
+      .getDetailProvinsi(id)
+      .then((response) => {
         const data = response.data;
-        setNameProvinsi(data.nama)
+        setNameProvinsi(data.nama);
       })
-      .catch(error => {
-        setNameProvinsi('all')
-      })
-  }
+      .catch((error) => {
+        setNameProvinsi('all');
+      });
+  };
 
   const getKotaKabupatenByProvinsi = async (id) => {
-    await apiProvinsi.getKotaKabupateByProvinsi(id)
-      .then(response => {
-        const data = response.data.kota_kabupaten;
-        setKota(data);
-      })
-  }
+    await apiProvinsi.getKotaKabupateByProvinsi(id).then((response) => {
+      const data = response.data.kota_kabupaten;
+      setKota(data);
+    });
+  };
 
   const handlerChangeProvinsi = (e) => {
     setSelectKota('');
     getDetailProvinsi(e);
     getKotaKabupatenByProvinsi(e);
-  }
+  };
 
   const resultHospital = hospitals.filter((data) => {
     return data.provinsi == nameProvinsi;
-  })
+  });
 
   const resultRegionHospital = resultHospital.filter((data) => {
     return data.kabupaten_kota == selectKota;
-  })
+  });
 
   useEffect(() => {
     if (!token) {
@@ -83,7 +82,7 @@ function CariRumahSakit() {
         title: 'Kamu Harus Login Dulu',
         status: 'warning',
         duration: '2000',
-        isClosable: true
+        isClosable: true,
       });
       navigate('/login');
     }
@@ -146,27 +145,19 @@ function CariRumahSakit() {
               </Th>
             </Tr>
           }
-          bodyTable={
-            (nameProvinsi === 'all' || nameProvinsi === '' ? hospitals : selectKota === 'all' || selectKota === '' ? resultHospital : resultRegionHospital)
-              .map((data, index) => (
-                <Tr key={index}>
-                  <Td>{index + 1}</Td>
-                  <Link
-                    to={`/rumahsakit/${data.id}/detail`}
-                  >
-                    <Td
-                      textDecoration={'underline'}
-                      _hover={{ color: '#1FA8F6' }}
-                    >
-                      {data.nama}
-                    </Td>
-                  </Link>
-                  <Td>{data.pemilik_pengelola}</Td>
-                  <Td>{data.no_telpon}</Td>
-                  <Td>{data.alamat + " " + data.kecamatan + " " + data.kabupaten_kota + ", " + data.provinsi + "," + data.kode_pos}</Td>
-                </Tr>
-              ))
-          }
+          bodyTable={(nameProvinsi === 'all' || nameProvinsi === '' ? hospitals : selectKota === 'all' || selectKota === '' ? resultHospital : resultRegionHospital).map((data, index) => (
+            <Tr key={index}>
+              <Td>{index + 1}</Td>
+              <Link to={`/rumahsakit/${data.id}/detail`}>
+                <Td textDecoration={'underline'} _hover={{ color: '#1FA8F6' }}>
+                  {data.nama}
+                </Td>
+              </Link>
+              <Td>{data.pemilik_pengelola}</Td>
+              <Td>{data.no_telpon}</Td>
+              <Td>{data.alamat + ' ' + data.kecamatan + ' ' + data.kabupaten_kota + ', ' + data.provinsi + ',' + data.kode_pos}</Td>
+            </Tr>
+          ))}
         />
       </Box>
     </Layout>
