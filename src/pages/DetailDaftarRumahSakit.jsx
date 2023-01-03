@@ -38,6 +38,19 @@ function DetailDaftarRumahSakit() {
   const [patientId, setPatientId] = useState();
   const [patientSelected, setPatientSelected] = useState();
   const location = useLocation();
+  const [nameHospital, setNameHospital] = useState();
+  const hospital_id = parseInt(location.state?.hospital_id);
+  const patient_id = parseInt(patientId);
+
+  const date = new Date();
+  const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+  const myDays = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum&#39;at', 'Sabtu'];
+
+  const day = date.getDate();
+  const month = date.getMonth();
+  const thisDay = date.getDate();
+  const yy = date.getFullYear();
+
 
   const getPatientsByUserId = async () => {
     await api.getPatientByUserId(token, user.id)
@@ -61,6 +74,18 @@ function DetailDaftarRumahSakit() {
           duration: '2000',
           isClosable: true
         });
+      })
+  }
+
+  const getDetailHospitalHandler = async () => {
+    await api.getHospitalByID(token, location.state?.hospital_id)
+      .then(response => {
+        const data = response.data.data;
+        console.log(response)
+        setNameHospital(data.nama);
+      })
+      .catch(error => {
+        console.log(error);
       })
   }
 
@@ -88,8 +113,8 @@ function DetailDaftarRumahSakit() {
       })
   }
 
-  const registrationPatient = async(hospital, patient) => {
-    await api.createBedRegistrations(token, hospital, patient)
+  const registrationPatient = async () => {
+    await api.createBedRegistrations(token, {hospital_id, patient_id})
       .then(response => {
         console.log(response)
         toast({
@@ -118,7 +143,8 @@ function DetailDaftarRumahSakit() {
   }
 
   const handlerRegistrasi = () => {
-    registrationPatient(location.hospital_id, patientId);
+    console.log(hospital_id, patient_id)
+    registrationPatient();
   }
 
   useEffect(() => {
@@ -133,7 +159,9 @@ function DetailDaftarRumahSakit() {
       navigate('/login');
     }
     getPatientsByUserId();
+    getDetailHospitalHandler();
   }, []);
+
   return (
     <Layout>
       <Box px={{ base: "5", sm: "10", xl: "36" }} py={10} my={10}>
@@ -265,11 +293,11 @@ function DetailDaftarRumahSakit() {
               textAlign={'end'}
             >
               <Button
-                bg={ patientId ? '#3AB8FF' : '#f7f7f7' }
+                bg={patientId ? '#3AB8FF' : '#f7f7f7'}
                 _hover={{ bg: 'alta.primary' }}
                 color={patientId ? 'white' : '#15192080'}
                 p={6}
-                onClick={()=>handlerRegistrasi()}
+                onClick={() => handlerRegistrasi()}
                 disabled={patientId ? false : true}
               >
                 Lanjutkan Pembayaran →
@@ -284,20 +312,16 @@ function DetailDaftarRumahSakit() {
               <Box borderTop={"1px"} mt={"5"} pt={"5"}>
                 <Flex justifyContent={"space-between"}>
                   <Text>Hari:</Text>
-                  <Text>Senin</Text>
+                  <Text>{myDays[thisDay - 1]}</Text>
                 </Flex>
               </Box>
               <Flex justifyContent={"space-between"} mt={5}>
                 <Text>Tanggal:</Text>
-                <Text>26 Desember 2022</Text>
-              </Flex>
-              <Flex justifyContent={"space-between"} mt={5}>
-                <Text>Tipe Kamar:</Text>
-                <Text>Kelas I</Text>
+                <Text>{day + " " + months[month] + " " + yy }</Text>
               </Flex>
               <Flex justifyContent={"space-between"} mt={5}>
                 <Text>Rumah Sakit:</Text>
-                <Text>RS Haji Surabaya</Text>
+                <Text>{nameHospital}</Text>
               </Flex>
             </Box>
           </Box>

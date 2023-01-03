@@ -54,7 +54,7 @@ function DetailCariRumahSakit() {
   const handlerRegister = () => {
     navigate('/registrasi/pasien', {
       state: {
-        hospital_id: id
+        hospital_id: id,
       }
     });
   }
