@@ -1,153 +1,47 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { Box, Text, Image, Flex, Img, Spacer, Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer, Button } from '@chakra-ui/react';
 import Layout from '../components/Layout';
-import {
-  FormControl,
-  FormLabel,
-  FormErrorMessage,
-  FormHelperText,
-  Box,
-  Text,
-  Flex,
-  Input,
-  Spacer,
-  Checkbox,
-  Button,
-  useToast,
-  Select,
-  Modal,
-  ModalOverlay,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  ModalContent,
-  ModalHeader,
-} from '@chakra-ui/react';
+import { useNavigate, useParams } from 'react-router';
 import Cookies from 'js-cookie';
-import { useLocation, useNavigate } from 'react-router';
-import { useSelector } from 'react-redux';
-import { useDisclosure } from '@chakra-ui/react-use-disclosure';
 import api from '../services/api';
 
-function DetailDaftarRumahSakit() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+function DetailCariRumahSakit() {
+  const { id } = useParams();
   const token = Cookies.get('token');
-  const user = useSelector((state) => state.users);
-  const toast = useToast();
+  const [hospital, setHospital] = useState();
+  const [beds, setBeds] = useState([]);
   const navigate = useNavigate();
-  const [patients, setPatients] = useState([]);
-  const [patientId, setPatientId] = useState();
-  const [patientSelected, setPatientSelected] = useState();
-  const location = useLocation();
-  const [nameHospital, setNameHospital] = useState();
-  const hospital_id = parseInt(location.state?.hospital_id);
-  const patient_id = parseInt(patientId);
 
-  const date = new Date();
-  const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-  const myDays = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum&#39;at', 'Sabtu'];
-
-  const day = date.getDate();
-  const month = date.getMonth();
-  const thisDay = date.getDate();
-  const yy = date.getFullYear();
-
-  const getPatientsByUserId = async () => {
+  const getDetailHospital = async () => {
     await api
-      .getPatientByUserId(token, user.id)
+      .getHospitalByID(token, id)
       .then((response) => {
         const data = response.data.data;
-        setPatients(data);
-        toast({
-          position: 'top',
-          title: 'Berhasil mendapatkan data pasien',
-          status: 'success',
-          duration: '2000',
-          isClosable: true,
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-        toast({
-          position: 'top',
-          title: 'Gagal mendapatkan data pasien',
-          status: 'error',
-          duration: '2000',
-          isClosable: true,
-        });
-      });
-  };
-
-  const getDetailHospitalHandler = async () => {
-    await api
-      .getHospitalByID(token, location.state?.hospital_id)
-      .then((response) => {
-        const data = response.data.data;
-        console.log(response);
-        setNameHospital(data.nama);
+        setHospital(data);
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  const getPatientById = async (id) => {
+  const getAllBedByHospital = async () => {
     await api
-      .getPatientById(token, id)
+      .getAllBeds(token, id)
       .then((response) => {
         const data = response.data.data;
-        setPatientSelected(data);
-        toast({
-          position: 'top',
-          title: 'Berhasil mendapatkan data pasien',
-          status: 'success',
-          duration: '2000',
-          isClosable: true,
-        });
-      })
-      .catch((error) => {
-        toast({
-          position: 'top',
-          title: 'Gagal mendapatkan data pasien',
-          status: 'error',
-          duration: '2000',
-          isClosable: true,
-        });
-      });
-  };
-
-  const registrationPatient = async () => {
-    await api
-      .createBedRegistrations(token, { hospital_id, patient_id })
-      .then((response) => {
-        console.log(response);
-        toast({
-          position: 'top',
-          title: 'Berhasil mendaftarkan pasien',
-          status: 'success',
-          duration: '2000',
-          isClosable: true,
-        });
+        setBeds(data);
       })
       .catch((error) => {
         console.log(error);
-        toast({
-          position: 'top',
-          title: 'Gagal mendaftarkan pasien',
-          status: 'error',
-          duration: '2000',
-          isClosable: true,
-        });
       });
   };
 
-  const handlerSelectPatient = () => {
-    getPatientById(patientId);
-    onClose();
-  };
-
-  const handlerRegistrasi = () => {
-    console.log(hospital_id, patient_id);
-    registrationPatient();
+  const handlerRegister = () => {
+    navigate('/registrasi/pasien', {
+      state: {
+        hospital_id: id,
+      },
+    });
   };
 
   useEffect(() => {
@@ -161,184 +55,85 @@ function DetailDaftarRumahSakit() {
       });
       navigate('/login');
     }
-    getPatientsByUserId();
-    getDetailHospitalHandler();
+    getDetailHospital();
+    getAllBedByHospital();
   }, []);
 
   return (
     <Layout>
-      <Box px={{ base: '5', sm: '10', xl: '36' }} py={10} my={10}>
-        <Flex direction={{ base: 'column', xl: 'row' }}>
-          <Box mr={{ base: '0', lg: '30px' }} className="basis-3/4">
-            <Box borderWidth={'2px'} p="5" rounded={'10px'}>
-              <Text fontWeight={'semibold'}>Login sebagai</Text>
-              <Text color={'gray'}>{user.nama}</Text>
-            </Box>
-            <Box borderWidth={'2px'} p="5" rounded={'10px'} mt={5} py="10">
-              <Box>
-                <Flex justifyContent={'space-between'}>
-                  <Text fontWeight={'semibold'}>Data Pemesan</Text>
-                </Flex>
+      <Box minW="100%" minH="100vh" h="100%">
+        <Box px={{ base: '10', sm: '12', md: '16', lg: '24', xl: '36' }} pt="10" pb="36" minH="100vh" h="100%">
+          <Box w="100%">
+            <Flex direction={{ base: 'column', sm: 'column', md: 'row' }}>
+              <Box h="fit" rounded="20px" borderWidth="2px" flexBasis="1/2">
+                <Image src={hospital?.foto} w="100%" rounded="20px" p="10px" />
               </Box>
-              <Box mx={5} mt={10}>
-                <FormControl>
-                  <Box>
-                    <Flex direction={{ base: 'column', xl: 'row' }}>
-                      <Box flexBasis={'100%'}>
-                        <FormLabel>Nama Pemesan</FormLabel>
-                        <Input type="text" disabled value={user.nama} _disabled={{ color: 'black' }} />
-                      </Box>
-                    </Flex>
-                  </Box>
-                  <Box mt={5}>
-                    <Flex direction={{ base: 'column', xl: 'row' }}>
-                      <Box flexBasis={'45%'}>
-                        <FormLabel>Email</FormLabel>
-                        <Input type="email" disabled value={user.email} _disabled={{ color: 'black' }} />
-                      </Box>
-                      <Spacer />
-                      <Box flexBasis={'45%'} pt={{ base: '5', xl: '0' }}>
-                        <FormLabel>No. Handphone</FormLabel>
-                        <Input type="string" _disabled={{ color: 'black' }} disabled value={user.no_telpon ? user.no_telpon : 'tidak ada'} />
-                      </Box>
-                    </Flex>
-                  </Box>
-                </FormControl>
+              <Box ml={{ base: '60px', lg: '40px', md: '20px' }} my="auto" h="100%" w="100%" mx="0" flexBasis="1/2">
+                <Box mt={{ base: 5, md: 0 }}>
+                  <Text fontWeight="bold">{hospital?.nama}</Text>
+                  <Text color="gray">{hospital?.alamat + ', ' + hospital?.kecamatan + ', ' + hospital?.kabupaten_kota + ', ' + hospital?.provinsi + ', ' + hospital?.kode_pos}</Text>
+                  <Text fontWeight="bold">Kontak</Text>
+                  <Text color="gray">{hospital?.no_telpon}</Text>
+                  <Text fontWeight="bold">Jam Buka:</Text>
+                  <Text color="gray">Open 24 hours</Text>
+                </Box>
               </Box>
-            </Box>
-            <Box borderWidth={'2px'} p="5" rounded={'10px'} mt={5} py="10">
-              <Box>
-                <Flex justifyContent={'space-between'}>
-                  <Text fontWeight={'semibold'}>Detail Pasien</Text>
-                  <Button onClick={onOpen} bg={'#3AB8FF'} _hover={{ bg: 'alta.primary' }} color={'white'}>
-                    Pilih Data Pasien
-                  </Button>
-                </Flex>
-              </Box>
-              <Box mx={5} mt={10}>
-                <FormControl>
-                  <Box>
-                    <FormLabel>Nama Depan</FormLabel>
-                    <Input type="text" disabled _disabled={{ color: 'black' }} value={patientSelected?.nama_pasien} />
-                  </Box>
-                  <Box mt={5}>
-                    <Flex direction={{ base: 'column', lg: 'row', xl: 'row' }}>
-                      <Box flexBasis={'45%'}>
-                        <FormLabel>No. KTP</FormLabel>
-                        <Input type="number" disabled _disabled={{ color: 'black' }} value={patientSelected?.nik} />
-                      </Box>
-                      <Spacer />
-                      <Box flexBasis={'45%'} pt={{ base: '5', xl: '0' }}>
-                        <FormLabel>No. BPJS</FormLabel>
-                        <Input type="number" disabled _disabled={{ color: 'black' }} value={patientSelected?.no_bpjs} />
-                      </Box>
-                    </Flex>
-                  </Box>
-                  <Box mt={5}>
-                    <Flex direction={{ base: 'column', lg: 'row', xl: 'row' }}>
-                      <Box flexBasis={'45%'}>
-                        <FormLabel>Jenis Kelamin</FormLabel>
-                        <Input type="text" disabled _disabled={{ color: 'black' }} value={patientSelected?.jenis_kelamin} />
-                      </Box>
-                      <Spacer />
-                      <Box flexBasis={'45%'} pt={{ base: '5', xl: '0' }}>
-                        <FormLabel>Usia</FormLabel>
-                        <Input type="number" disabled _disabled={{ color: 'black' }} value={patientSelected?.usia} />
-                      </Box>
-                    </Flex>
-                  </Box>
-                  <Box mt={5}>
-                    <Flex direction={{ base: 'column', lg: 'row', xl: 'row' }}>
-                      <Box flexBasis={'45%'}>
-                        <FormLabel>Email</FormLabel>
-                        <Input type="email" disabled _disabled={{ color: 'black' }} value={patientSelected?.email_wali} />
-                      </Box>
-                      <Spacer />
-                      <Box flexBasis={'45%'} pt={{ base: '5', xl: '0' }}>
-                        <FormLabel>No. Handphone Wali</FormLabel>
-                        <Input type="number" disabled _disabled={{ color: 'black' }} value={patientSelected?.no_telpon_wali} />
-                      </Box>
-                    </Flex>
-                  </Box>
-                  <Box mt={5}>
-                    <FormLabel>Alamat Domisili</FormLabel>
-                    <Input type="text" disabled _disabled={{ color: 'black' }} value={patientSelected?.alamat_domisili} />
-                  </Box>
-                  <Box mt={5}>
-                    <Flex direction={{ base: 'column', lg: 'row', xl: 'row' }}>
-                      <Box flexBasis={'45%'}>
-                        <FormLabel>Provinsi</FormLabel>
-                        <Input type="text" disabled _disabled={{ color: 'black' }} value={patientSelected?.provinsi_domisili} />
-                      </Box>
-                      <Spacer />
-                      <Box flexBasis={'45%'} pt={{ base: '5', xl: '0' }}>
-                        <FormLabel>Kabupaten / Kota</FormLabel>
-                        <Input type="string" disabled _disabled={{ color: 'black' }} value={patientSelected?.kabupaten_kota_domisili} />
-                      </Box>
-                    </Flex>
-                  </Box>
-                  <Box mt={10}>
-                    <Checkbox defaultChecked>Semua data telah terisi dengan sebenar-benarnya</Checkbox>
-                  </Box>
-                </FormControl>
-              </Box>
-            </Box>
-            <Box mt={10} mb={20} textAlign={'end'}>
-              <Button bg={patientId ? '#3AB8FF' : '#f7f7f7'} _hover={{ bg: 'alta.primary' }} color={patientId ? 'white' : '#15192080'} p={6} onClick={() => handlerRegistrasi()} disabled={patientId ? false : true}>
-                Lanjutkan Pembayaran →
-              </Button>
-            </Box>
+            </Flex>
           </Box>
-          <Box>
-            <Box borderWidth={'2px'} p="12" rounded={'10px'}>
-              <Text fontWeight={'semibold'} textAlign="center">
-                Pendaftaran Kamar Rawat Inap
+          <Box w="100%" pt="100px">
+            {/* <Flex>
+              <Text fontWeight="bold" mr="20px" color="alta.primary">
+                Update:
               </Text>
-              <Box borderTop={'1px'} mt={'5'} pt={'5'}>
-                <Flex justifyContent={'space-between'}>
-                  <Text>Hari:</Text>
-                  <Text>{myDays[thisDay - 1]}</Text>
-                </Flex>
-              </Box>
-              <Flex justifyContent={'space-between'} mt={5}>
-                <Text>Tanggal:</Text>
-                <Text>{day + ' ' + months[month] + ' ' + yy}</Text>
-              </Flex>
-              <Flex justifyContent={'space-between'} mt={5}>
-                <Text>Rumah Sakit:</Text>
-                <Text>{nameHospital}</Text>
-              </Flex>
-            </Box>
+              <Text color="alta.primary">2022/12/21 11.22 WIB</Text>
+            </Flex> */}
           </Box>
-        </Flex>
+          <Box w="100%" mt="14">
+            <TableContainer>
+              <Table variant="simple">
+                <Thead>
+                  <Tr>
+                    <Th color="alta.primary">No</Th>
+                    <Th color="alta.primary">Kelas</Th>
+                    <Th color="alta.primary">Nama Tempat Tidur</Th>
+                    <Th color="alta.primary">Ruangan</Th>
+                    <Th color="alta.primary">Status</Th>
+                    <Th color="alta.primary">Tindakan</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {beds?.map((bed, index) => (
+                    <Tr key={index}>
+                      <Td>{index + 1}</Td>
+                      <Td>Kelas {bed.kelas}</Td>
+                      <Td>{bed.nama_tempat_tidur}</Td>
+                      <Td>Ruang {bed.ruangan}</Td>
+                      <Td color={bed.status === 'tersedia' ? '#4FC208' : '#FA0A0A'} fontWeight={'500'}>
+                        {bed.status}
+                      </Td>
+                      <Td>
+                        <Button
+                          bg={bed.status !== 'tersedia' ? 'transparent' : `#3AB8FF`}
+                          _hover={{ bg: 'alta.primary' }}
+                          color={bed.status !== 'tersedia' ? '#15192080' : 'white'}
+                          borderWidth="2px"
+                          disabled={bed.status === 'tersedia' ? false : true}
+                          fontStyle={'600'}
+                          onClick={() => handlerRegister()}
+                        >
+                          Daftar
+                        </Button>
+                      </Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+            </TableContainer>
+          </Box>
+        </Box>
       </Box>
-
-      <Modal isCentered onClose={onClose} isOpen={isOpen} motionPreset="slideInBottom">
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Pilih Pasien</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <FormControl>
-              <FormLabel>Pasien Terdaftar pada Akun</FormLabel>
-              <Select placeholder="Pilih Pasien" id="patient" onChange={(e) => setPatientId(e.target.value)}>
-                {patients?.map((data, index) => (
-                  <option value={data.id} key={index}>
-                    {data.nama_pasien}
-                  </option>
-                ))}
-              </Select>
-            </FormControl>
-          </ModalBody>
-          <ModalFooter>
-            <Button onClick={() => handlerSelectPatient()} bg={'#3AB8FF'} _hover={{ bg: 'alta.primary' }} color={'white'}>
-              Pilih
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
     </Layout>
   );
 }
 
-export default DetailDaftarRumahSakit;
+export default DetailCariRumahSakit;
