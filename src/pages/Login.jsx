@@ -31,11 +31,9 @@ function Login() {
   const navigate = useNavigate();
   const toast = useToast();
   const [passwordType, setPasswordType] = useState("");
-  const [rememberMe, setRememberMe] = React.useState({
-    email: "",
-    password: "",
-    isChecked: false,
-  });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isChecked, setIsChecked] = useState(true);
 
   const onShowPassword = (e) => {
     setPasswordType(e.target.value);
@@ -43,11 +41,8 @@ function Login() {
 
   //yup schema
   const schema = yup.object().shape({
-    email: yup
-      .string()
-      .required("Harap masukkan email")
-      .email("Format email salah"),
-    kata_sandi: yup.string().required("Harap masukkan kata sandi"),
+    email: yup.string().email("Format email salah"),
+    kata_sandi: yup.string(),
   });
 
   //rhf configuration
@@ -60,25 +55,16 @@ function Login() {
     mode: "onChange",
   });
 
-  //handle changes from input
-  const handleChanges = (e) => {
-    const newData = { ...rememberMe };
-    newData[e.target.id] = e.target.value;
-    setRememberMe(newData);
-    console.log(newData);
-  };
-
   //checkbox handler
   const handleCheckbox = (e) => {
-    setRememberMe({
-      isChecked: e.target.checked,
-    });
+    setIsChecked(e.target.checked);
+    console.log(e.target.checked);
   };
 
   //handle login
-  const handleLogin = async (data) => {
+  const handleLogin = async (email, password) => {
     await api
-      .loginUser(data)
+      .loginUser(email, password)
       .then((response) => {
         toast({
           title: `Sukses login, mengalihkan...`,
@@ -106,22 +92,23 @@ function Login() {
 
   //submit function
   const onSubmit = (data) => {
-    handleLogin(data);
-    const { email, password, isChecked } = rememberMe;
-    if (isChecked === true && email) {
-      localStorage.setItem("email", JSON.stringify(email));
-      localStorage.setItem("password", JSON.stringify(password));
-      localStorage.setItem("isChecked", JSON.stringify(isChecked));
+    handleLogin(email, password);
+    if (isChecked === true) {
+      localStorage.setItem("email", email);
+      localStorage.setItem("password", password);
+      localStorage.setItem("isChecked", isChecked);
+    } else {
+      localStorage.removeItem("email");
+      localStorage.removeItem("password");
+      localStorage.removeItem("isChecked");
     }
   };
 
   React.useEffect(() => {
-    if (localStorage.email && localStorage.isChecked) {
-      setRememberMe({
-        email: localStorage.email,
-        password: localStorage.password,
-        isChecked: localStorage.isChecked,
-      });
+    if (localStorage.email) {
+      setEmail(localStorage.email);
+      setPassword(localStorage.password);
+      setIsChecked(localStorage.isChecked);
     }
   }, []);
 
@@ -227,12 +214,12 @@ function Login() {
                   <br />
                   <FormControl isInvalid={errors.email}>
                     <Input
-                      {...register("email")}
+                      // {...register("email")}
                       placeholder="email@gmail.com"
                       name="email"
                       id="email"
-                      value={rememberMe.email ? rememberMe.email : ""}
-                      onChange={(e) => handleChanges(e)}
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                     />
                     <Text color="red">{errors.email?.message}</Text>
                   </FormControl>
@@ -245,12 +232,13 @@ function Login() {
                     <InputGroup>
                       <Input
                         type={show ? "text" : "password"}
-                        {...register("kata_sandi")}
+                        // {...register("kata_sandi")}
                         placeholder="kata sandi"
                         name="kata_sandi"
                         id="password"
                         onInput={onShowPassword}
-                        onChange={(e) => handleChanges(e)}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                       />
                       {passwordType !== "" && (
                         <InputRightElement>
@@ -274,7 +262,7 @@ function Login() {
                     <Box>
                       <input
                         type="checkbox"
-                        checked={rememberMe.isChecked}
+                        checked={isChecked}
                         className="checkbox checkbox-xs mr-2 border-gray-500"
                         id={"isChecked"}
                         onChange={(e) => handleCheckbox(e)}
