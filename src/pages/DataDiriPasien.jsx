@@ -1,20 +1,25 @@
-import React from 'react';
-import { Box } from '@chakra-ui/react';
-import { Text } from '@chakra-ui/react';
-import { Button } from '@chakra-ui/react';
-import { Image } from '@chakra-ui/react';
-import Cookies from 'js-cookie';
-import { FormControl, FormLabel, FormErrorMessage, FormHelperText } from '@chakra-ui/react';
-import { Grid, GridItem } from '@chakra-ui/react';
-import { Input } from '@chakra-ui/react';
-import { Select } from '@chakra-ui/react';
-import UploadIcon from '../assets/images/UploadIcon.png';
-import Layout from '../components/Layout';
-import * as yup from 'yup';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import axios from 'axios';
-import api from '../services/api';
+import React from "react";
+import { Box } from "@chakra-ui/react";
+import { Text } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
+import { Image } from "@chakra-ui/react";
+import Cookies from "js-cookie";
+import {
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  FormHelperText,
+} from "@chakra-ui/react";
+import { Grid, GridItem } from "@chakra-ui/react";
+import { Input } from "@chakra-ui/react";
+import { Select } from "@chakra-ui/react";
+import UploadIcon from "../assets/images/UploadIcon.png";
+import Layout from "../components/Layout";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import axios from "axios";
+import api from "../services/api";
 
 function DataDiriPasien() {
   const [provinsi, setProvinsi] = React.useState();
@@ -74,7 +79,7 @@ function DataDiriPasien() {
 
   //get kartu keluarga
   const getNomorKk = async () => {
-    const token = Cookies.get('token');
+    const token = Cookies.get("token");
     await api
       .getUser(token)
       .then((response) => {
@@ -255,11 +260,23 @@ function DataDiriPasien() {
                 <GridItem w="100%" h="100%">
                   <FormControl isInvalid={errors.kota}>
                     <FormLabel>Kabupaten / Kota Domisili</FormLabel>
-                    <Select {...register('kota')} placeholder="-- Pilih kabupaten/kota --" name={'kota'}>
-                      <option value="Kabupaten Pacitan">Kabupaten Pacitan</option>
-                      <option value="Kabupaten Ponorogo">Kabupaten Ponorogo</option>
-                      <option value="Kabupaten Trenggalek">Kabupaten Trenggalek</option>
-                      <option value="Kabupaten Tulungagung">Kabupaten Tulungagung</option>
+                    <Select
+                      {...register("kota")}
+                      placeholder="-- Pilih kabupaten/kota --"
+                      name={"kota"}
+                    >
+                      <option value="Kabupaten Pacitan">
+                        Kabupaten Pacitan
+                      </option>
+                      <option value="Kabupaten Ponorogo">
+                        Kabupaten Ponorogo
+                      </option>
+                      <option value="Kabupaten Trenggalek">
+                        Kabupaten Trenggalek
+                      </option>
+                      <option value="Kabupaten Tulungagung">
+                        Kabupaten Tulungagung
+                      </option>
                       <option value="Kabupaten Blitar">Kabupaten Blitar</option>
                       <option value="Kabupaten Kediri">Kabupaten Kediri</option>
                       <option value="Kabupaten Malang">Kabupaten Malang</option>
@@ -287,7 +304,7 @@ function DataDiriPasien() {
                 <GridItem w="100%" h="100%">
                   <FormControl isInvalid={errors.kelas_bpjs}>
                     <FormLabel>Kelas BPJS</FormLabel>
-                    <Input {...register('kelas_bpjs')} type="number" />
+                    <Input {...register("kelas_bpjs")} type="number" />
                     <Text color="red">{errors.kelas_bpjs?.message}</Text>
                   </FormControl>
                 </GridItem>
@@ -299,11 +316,23 @@ function DataDiriPasien() {
               </Text>
               <FormControl mt={5}>
                 <FormLabel>Foto KTP</FormLabel>
-                <Input {...register('fotoKTP')} type="file" id="img" name="fotoKTP" accept="image/*" display={'none'} />
+                <Input
+                  {...register("fotoKTP")}
+                  type="file"
+                  id="img"
+                  name="fotoKTP"
+                  accept="image/*"
+                  display={"none"}
+                />
                 <Box h={300} borderWidth="1px" rounded={10} w="100%">
                   <FormControl>
-                    <label for="img" style={{ cursor: 'pointer' }}>
-                      <Grid justifyContent={'center'} alignItems="center" w="100%" textAlign={'center'}>
+                    <label for="img" style={{ cursor: "pointer" }}>
+                      <Grid
+                        justifyContent={"center"}
+                        alignItems="center"
+                        w="100%"
+                        textAlign={"center"}
+                      >
                         <Box className="grid justify-center" pt={10}>
                           <Image src={UploadIcon} w="50px" mt={20} textAlign="center" />
                         </Box>
