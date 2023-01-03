@@ -2,7 +2,6 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { Box } from "@chakra-ui/layout";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux";
-
 import Login from "./pages/Login";
 import SettingPage from "./pages/Admin/SettingPage";
 import Register from "./pages/Register";
@@ -19,16 +18,6 @@ import PatientRegistrationPage from "./pages/Admin/PatientRegistrationPage";
 import DoctorPage from "./pages/Admin/DoctorPage";
 import ProfileHospitalPage from "./pages/Admin/ProfileHospitalPage";
 import LoginAdmin from "./pages/Admin/LoginAdmin";
-
-import Pembayaran from "./pages/Pembayaran";
-import Payment from "./pages/Payment";
-import PembayaranSelesai from "./pages/PembayaranSelesai";
-import CariDokter from "./pages/CariDokter";
-import DetailDokter from "./pages/DetailDokter";
-import DashboardRoot from "./pages/Admin/DashboardRoot";
-import HospitalRootPages from "./pages/Admin/HospitalRootPages";
-import AdminRoot from "./pages/Admin/AdminRoot";
-
 import Pembayaran from "./pages/Pembayaran";
 import Payment from "./pages/Payment";
 import PembayaranSelesai from "./pages/PembayaranSelesai";

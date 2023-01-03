@@ -35,7 +35,7 @@ function Login() {
   const [passwordType, setPasswordType] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isChecked, setIsChecked] = useState(true);
+  const [isChecked, setIsChecked] = useState(false);
   const token = Cookies.get("token");
   const dispatch = useDispatch();
 
@@ -79,6 +79,15 @@ function Login() {
           duration: 1500,
         });
         getUser(data.token);
+        if (isChecked) {
+          localStorage.setItem("email", email);
+          localStorage.setItem("password", password);
+          localStorage.setItem("isChecked", isChecked);
+        } else {
+          localStorage.removeItem("email");
+          localStorage.removeItem("password");
+          localStorage.removeItem("isChecked");
+        }
         Cookies.set("token", data.token);
         setTimeout(() => {
           navigate("/home");
@@ -111,15 +120,6 @@ function Login() {
   //submit function
   const onSubmit = (data) => {
     handleLogin(email, password);
-    if (isChecked === true) {
-      localStorage.setItem("email", email);
-      localStorage.setItem("password", password);
-      localStorage.setItem("isChecked", isChecked);
-    } else {
-      localStorage.removeItem("email");
-      localStorage.removeItem("password");
-      localStorage.removeItem("isChecked");
-    }
   };
 
   React.useEffect(() => {
