@@ -629,7 +629,7 @@ export default {
     }),
 
   //bed Register
-  createBedRegistrations: (token, { hospital_id, patient_id}) =>
+  createBedRegistrations: (token, { hospital_id, patient_id }) =>
     instance({
       method: `POST`,
       url: `/registrations`,

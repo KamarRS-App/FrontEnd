@@ -8,15 +8,18 @@ import {
   Select,
   Input,
   useToast,
-} from "@chakra-ui/react";
-import {
   FormControl,
   FormLabel,
   FormErrorMessage,
-} from "@chakra-ui/form-control";
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+} from "@chakra-ui/react";
 import LayoutAdmin from "../../components/LayoutAdmin";
-import addButton from "../../assets/images/addButton.svg";
-import filterButton from "../../assets/images/filterButton.svg";
 import searchIcon from "../../assets/images/searchIcon.svg";
 import HeadAdmin from "../../components/HeadAdmin";
 import PopupAdmin from "../../components/PopupAdmin";
@@ -33,12 +36,6 @@ function DashboardDailyPraktek() {
   const role = Cookies.get("role");
   const toast = useToast();
   const navigate = useNavigate();
-  const [submitData, setSubmitData] = React.useState({
-    policlinic_id: "",
-    tanggal_praktik: "",
-    kuota_harian: 0,
-    status: "",
-  });
 
   //modal controller
   const {
@@ -48,11 +45,11 @@ function DashboardDailyPraktek() {
   } = useDisclosure();
 
   //schema validation
-  const schema = yup.object().shape({
+  const schema = yup.object({
     policlinic_id: yup.number().typeError("Harap masukkan id klinik"),
     tanggal_praktik: yup.string().required("Harap masukkan tanggal praktik"),
     kuota_harian: yup.number().typeError("Harap masukkan kuota yang tersedia"),
-    status: yup.string().required("Harap masukkan status sekarang"),
+    // status: yup.string().required("Harap masukkan status sekarang"),
   });
 
   //rhf configuration
@@ -62,29 +59,28 @@ function DashboardDailyPraktek() {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    mode: "onChange",
+    mode: "onTouched",
   });
 
-  //handle change every input
-  const handleInput = (e) => {
-    const newData = { ...submitData };
-    newData[e.target.id] = e.target.value;
-    setSubmitData(newData);
-    console.log(newData);
-  };
-
   //handle send the data
-  const sendData = async () => {
+  const sendData = async (data) => {
     await api
-      .createDailyPractice(token, submitData)
-      .then((response) => console.log(response))
+      .createDailyPractice(token, data)
+      .then((response) => {
+        toast({
+          title: `Berhasil mendaftarkan data praktek harian`,
+          status: "success",
+          position: "top",
+          isClosable: true,
+          duration: 1500,
+        });
+      })
       .catch((err) => console.log(err));
   };
 
   //submit data
-  const onSubmit = (e, data) => {
-    e.preventDefault();
-    sendData();
+  const onSubmit = (data) => {
+    sendData(data);
   };
 
   useEffect(() => {
@@ -130,13 +126,24 @@ function DashboardDailyPraktek() {
           </Box>
         </Box>
       </Box>
-
-      <PopupAdmin
-        modalTitle={"Tambah Data Praktek Harian"}
+      <Modal
         isOpen={isModalCreateOpen}
         onClose={onCloseModalCreate}
-        modalBody={
-          <>
+        size={{ base: "xs", sm: "sm", md: "lg", lg: "2xl" }}
+      >
+        <ModalOverlay />
+        <ModalContent
+          px={{ base: "5", sm: "8", md: "10" }}
+          py={"5"}
+          borderRadius={"3xl"}
+        >
+          <ModalHeader color={"#1FA8F6"} fontSize="3xl">
+            <Text fontSize={"20px"} mt={"5"}>
+              Tambah Data Praktek Harian
+            </Text>
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={20}>
             <FormControl isInvalid={errors.policlinic_id}>
               <FormLabel>ID Poliklinik</FormLabel>
               <Input
@@ -145,7 +152,6 @@ function DashboardDailyPraktek() {
                 id="policlinic_id"
                 type="number"
                 name="policlinic_id"
-                onChange={(e) => handleInput(e)}
               />
               {errors.policlinic_id && (
                 <FormErrorMessage>
@@ -160,7 +166,6 @@ function DashboardDailyPraktek() {
                 id="tanggal_praktik"
                 type="date"
                 name="tanggal_praktik"
-                onChange={(e) => handleInput(e)}
               />
               {errors.tanggal_praktik && (
                 <FormErrorMessage>
@@ -176,7 +181,6 @@ function DashboardDailyPraktek() {
                 id="kuota_harian"
                 type="number"
                 name="kuota_harian"
-                onChange={(e) => handleInput(e)}
               />
               {errors.kuota_harian && (
                 <FormErrorMessage>
@@ -185,12 +189,12 @@ function DashboardDailyPraktek() {
               )}
             </FormControl>
             <FormControl isInvalid={errors.status}>
-              <FormLabel>Kuota Harian</FormLabel>
+              <FormLabel>Status</FormLabel>
               <Select
-                {...register("status")}
+                {...register("mamang")}
                 id="status"
                 name="status"
-                onChange={(e) => handleInput(e)}
+                placeholder={"-- Pilih status --"}
               >
                 <option value="Available">Available</option>
                 <option value="Not Available">Not Available</option>
@@ -199,10 +203,24 @@ function DashboardDailyPraktek() {
                 <FormErrorMessage>{errors.status?.message}</FormErrorMessage>
               )}
             </FormControl>
-          </>
-        }
-        submitButton={(e) => handleSubmit(onSubmit(e))}
-      />
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              onClick={handleSubmit(onSubmit)}
+              mr={3}
+              bg="#3AB8FF"
+              color={"white"}
+              fontSize={"14px"}
+              fontWeight={"700"}
+              width={"150px"}
+              height={"50px"}
+              _hover={{ bg: "alta.primary" }}
+            >
+              Simpan
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </LayoutAdmin>
   );
 }
