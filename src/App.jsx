@@ -32,7 +32,7 @@ import BuatJanjiDokter from "./pages/BuatJanjiDokter";
 import TentangKami from "./pages/TentangKami";
 import Privasi from "./pages/Privasi";
 import SyaratDanKetentuan from "./pages/SyaratDanKetentuan";
-import Poliklinik from "./pages/Admin/Poliklinik";
+// import Poliklinik from "./pages/Admin/Poliklinik";
 import LoginAdminRoot from "./pages/Admin/LoginAdminRoot";
 
 import "./App.css";
@@ -82,7 +82,7 @@ function App() {
               <Route path="/admin/room" element={<RoomPage />} />
               <Route path="/admin/patient" element={<PatientRegistrationPage />} />
               <Route path="/admin/doctor" element={<DoctorPage />} />
-              <Route path="/admin/poliklinik" element={<PoliclinicPages />} />
+              {/* <Route path="/admin/poliklinik" element={<PoliclinicPages />} /> */}
               <Route path="/admin/policlinic" element={<PoliclinicPages />} />
               <Route path="/admin/hospital/profile" element={<ProfileHospitalPage />} />
               <Route path="/admin/login" element={<LoginAdmin />} />

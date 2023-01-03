@@ -27,6 +27,7 @@ import { useLocation, useNavigate } from "react-router";
 import { useSelector } from "react-redux";
 import { useDisclosure } from "@chakra-ui/react-use-disclosure";
 import api from "../services/api";
+import { AuthToken } from "../services/authToken";
 
 function DetailDaftarRumahSakit() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -41,6 +42,7 @@ function DetailDaftarRumahSakit() {
   const [nameHospital, setNameHospital] = useState();
   const hospital_id = parseInt(location.state?.hospital_id);
   const patient_id = parseInt(patientId);
+  const auth = AuthToken();
 
   const date = new Date();
   const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
@@ -148,7 +150,7 @@ function DetailDaftarRumahSakit() {
   }
 
   useEffect(() => {
-    if (!token) {
+    if (!auth) {
       toast({
         position: 'top',
         title: 'Kamu Harus Login Dulu',

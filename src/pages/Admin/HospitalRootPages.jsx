@@ -21,6 +21,7 @@ import api from '../../services/api';
 import axios from 'axios';
 import PopupDelete from '../../components/PopupDelete';
 import apiProvinsi from '../../services/apiProvinsi';
+import { AuthToken } from '../../services/authToken';
 
 const HospitalRootPages = () => {
     const { isOpen: isModalCreateOpen, onOpen: onModalCreateOpen, onClose: onCloseModalCreate } = useDisclosure();
@@ -39,6 +40,8 @@ const HospitalRootPages = () => {
     const [kota, setKota] = useState([]);
     const [nameKota, setNameKota] = useState('');
     const [kecamatan, setKecamatan] = useState([]);
+
+    const auth = AuthToken();
 
 
     const initialValues = {
@@ -379,7 +382,7 @@ const HospitalRootPages = () => {
     }
 
     useEffect(() => {
-        if (role !== 'super admin' && token === undefined) {
+        if (role !== 'super admin' || !auth) {
             toast({
                 position: 'top',
                 title: 'Kamu Harus Login Dulu',

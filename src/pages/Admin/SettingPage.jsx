@@ -11,6 +11,7 @@ import api from '../../services/api';
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { AuthToken } from '../../services/authToken';
 
 const SettingPage = () => {
     const token = Cookies.get('token');
@@ -18,6 +19,7 @@ const SettingPage = () => {
     const id = Cookies.get('id');
     const toast = useToast();
     const navigate = useNavigate();
+    const auth = AuthToken();
 
     const initialValues = {
         nama: '',
@@ -69,7 +71,7 @@ const SettingPage = () => {
 
 
     useEffect(() => {
-        if (role !== 'Admin - Staff' && token === undefined) {
+        if (role !== 'Admin - Staff' || !auth) {
             toast({
                 position: 'top',
                 title: 'Kamu Harus Login Dulu',

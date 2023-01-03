@@ -26,6 +26,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useDispatch } from "react-redux";
 import { addUsers } from "../features/userSlice";
+import { AuthToken } from "../services/authToken";
 
 function Login() {
   const [show, setShow] = useState(false);
@@ -33,8 +34,8 @@ function Login() {
   const navigate = useNavigate();
   const toast = useToast();
   const [passwordType, setPasswordType] = useState('');
-  const token = Cookies.get('token');
   const dispatch = useDispatch();
+  const auth = AuthToken();
 
   const onShowPassword = (e) => {
     setPasswordType(e.target.value);
@@ -106,18 +107,18 @@ function Login() {
     handleLogin(data);
   };
 
-  useEffect(() => {
-    if(token){
-        toast({
-            position: 'top',
-            title: 'Kamu sudah Login',
-            status: 'warning',
-            duration: '2000',
-            isClosable: true
-        });
-        navigate('/home');
-    }
-},[]);
+//   useEffect(() => {
+//     if(auth){
+//         toast({
+//             position: 'top',
+//             title: 'Kamu sudah Login',
+//             status: 'warning',
+//             duration: '2000',
+//             isClosable: true
+//         });
+//         navigate('/home');
+//     }
+// },[]);
 
   return (
     <Box minH={"100%"}>

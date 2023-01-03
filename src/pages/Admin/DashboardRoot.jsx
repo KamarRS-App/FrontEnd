@@ -7,15 +7,17 @@ import { dataPatient } from '../../../utils/Data';
 import CardAdmin from '../../components/CardAdmin';
 import ChartPatient from '../../components/ChartPatient';
 import LayoutAdminRoot from '../../components/LayoutAdminRoot';
+import { AuthToken } from '../../services/authToken';
 
 const DashboardRoot = () => {
     const role = Cookies.get('role');
     const token = Cookies.get('token');
     const navigate = useNavigate();
     const toast = useToast();
+    const auth = AuthToken();
 
     useEffect(() => {
-            if(role !== 'super admin' && token === undefined) {
+            if(role !== 'super admin' || !auth) {
                 toast({
                     position: 'top',
                     title: 'Kamu Harus Login Dulu',

@@ -23,6 +23,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { BsFillEyeFill, BsFillEyeSlashFill } from "react-icons/bs";
 import PopupDelete from "../../components/PopupDelete";
+import { AuthToken } from "../../services/authToken";
 
 const AdminRoot = () => {
     const { isOpen: isModalCreateOpen, onOpen: onModalCreateOpen, onClose: onCloseModalCreate, } = useDisclosure();
@@ -38,6 +39,8 @@ const AdminRoot = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [show, setShow] = useState("");
     const [adminId, setAdminId] = useState("");
+
+    const auth = AuthToken();
 
     const initialValues = {
         nama: "",
@@ -275,7 +278,7 @@ const AdminRoot = () => {
     }
 
     useEffect(() => {
-        if (role !== 'super admin' && token === undefined) {
+        if (role !== 'super admin' || !auth) {
             toast({
                 position: 'top',
                 title: 'Kamu Harus Login Dulu',

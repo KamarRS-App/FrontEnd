@@ -22,10 +22,12 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import PopupDelete from '../../components/PopupDelete';
 import axios from 'axios';
 import { Image } from '@chakra-ui/react';
+import { AuthToken } from '../../services/authToken';
 
 const PoliclinicPages = () => {
     const token = Cookies.get('token');
     const role = Cookies.get('role');
+    const auth = AuthToken();
     const toast = useToast();
     const navigate = useNavigate();
     const [policlinics, setPoliclinics] = useState([]);
@@ -438,7 +440,7 @@ const PoliclinicPages = () => {
     });
 
     useEffect(() => {
-        if (role !== 'Admin - Staff' && token === undefined) {
+        if (role !== 'Admin - Staff' || !auth) {
             toast({
                 position: 'top',
                 title: 'Kamu Harus Login Dulu',

@@ -22,6 +22,7 @@ import { useNavigate } from 'react-router';
 import api from '../services/api';
 import apiProvinsi from '../services/apiProvinsi';
 import { Link } from 'react-router-dom';
+import { AuthToken } from '../services/authToken';
 
 const HomePage = () => {
     const token = Cookies.get('token');
@@ -33,6 +34,7 @@ const HomePage = () => {
     const [nameProvinsi, setNameProvinsi] = useState('');
     const [kota, setKota] = useState([]);
     const [selectKota, setSelectKota] = useState('');
+    const auth = AuthToken();
 
     const getAllHospitalsHandler = async () => {
         await api.getHospitals(token)
@@ -87,7 +89,7 @@ const HomePage = () => {
     })
 
     useEffect(() => {
-        if (!token) {
+        if (!auth) {
             toast({
                 position: 'top',
                 title: 'Kamu Harus Login Dulu',
