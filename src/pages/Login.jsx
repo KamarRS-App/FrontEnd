@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../assets/images/logo.png";
 import googleLogo from "../assets/images/googlelogo.png";
 import api from "../services/api";
@@ -24,13 +24,17 @@ import {
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useDispatch } from "react-redux";
+import { addUsers } from "../features/userSlice";
 
 function Login() {
-  const [show, setShow] = React.useState(false);
+  const [show, setShow] = useState(false);
   const showPassword = () => setShow(!show);
   const navigate = useNavigate();
   const toast = useToast();
   const [passwordType, setPasswordType] = useState('');
+  const token = Cookies.get('token');
+  const dispatch = useDispatch();
 
   const onShowPassword = (e) => {
     setPasswordType(e.target.value);
@@ -60,6 +64,7 @@ function Login() {
     await api
       .loginUser(data)
       .then((response) => {
+        const data = response.data.data;
         toast({
           title: `Sukses login, mengalihkan...`,
           status: "success",
@@ -67,7 +72,8 @@ function Login() {
           isClosable: true,
           duration: 1500,
         });
-        Cookies.set("token", response.data.data.token);
+        getUser(data.token);
+        Cookies.set("token", data.token);
         setTimeout(() => {
           navigate("/home");
         }, 2000);
@@ -84,10 +90,34 @@ function Login() {
       });
   };
 
+  const getUser = async (token) => {
+    await api.getUser(token)
+      .then(response => {
+        const data = response.data.data;
+        dispatch(addUsers(data))
+      })
+      .catch(error => {
+        console.log(error);
+      })
+  }
+
   //submit function
   const onSubmit = (data) => {
     handleLogin(data);
   };
+
+  useEffect(() => {
+    if(token){
+        toast({
+            position: 'top',
+            title: 'Kamu sudah Login',
+            status: 'warning',
+            duration: '2000',
+            isClosable: true
+        });
+        navigate('/home');
+    }
+},[]);
 
   return (
     <Box minH={"100%"}>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Text,
@@ -17,10 +17,63 @@ import {
   TableContainer,
   Button,
 } from "@chakra-ui/react";
-import gambarRoemahSakit from "../assets/images/GambarRoemahSakit.svg";
 import Layout from "../components/Layout";
+import { useNavigate, useParams } from "react-router";
+import Cookies from "js-cookie";
+import api from "../services/api";
 
 function DetailCariRumahSakit() {
+  const { id } = useParams();
+  const token = Cookies.get('token')
+  const [hospital, setHospital] = useState();
+  const [beds, setBeds] = useState([]);
+  const navigate = useNavigate();
+
+  const getDetailHospital = async () => {
+    await api.getHospitalByID(token, id)
+      .then(response => {
+        const data = response.data.data;
+        setHospital(data);
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }
+
+  const getAllBedByHospital = async () => {
+    await api.getAllBeds(token, id)
+      .then(response => {
+        const data = response.data.data;
+        setBeds(data);
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }
+
+  const handlerRegister = () => {
+    navigate('/registrasi/pasien', {
+      state: {
+        hospital_id: id,
+      }
+    });
+  }
+
+  useEffect(() => {
+    if (!token) {
+      toast({
+        position: 'top',
+        title: 'Kamu Harus Login Dulu',
+        status: 'warning',
+        duration: '2000',
+        isClosable: true
+      });
+      navigate('/login');
+    }
+    getDetailHospital();
+    getAllBedByHospital();
+  }, []);
+
   return (
     <Layout>
       <Box minW="100%" minH="100vh" h="100%">
@@ -35,7 +88,7 @@ function DetailCariRumahSakit() {
             <Flex direction={{ base: "column", sm: "column", md: "row" }}>
               <Box h="fit" rounded="20px" borderWidth="2px" flexBasis="1/2">
                 <Image
-                  src={gambarRoemahSakit}
+                  src={hospital?.foto}
                   w="100%"
                   rounded="20px"
                   p="10px"
@@ -50,13 +103,12 @@ function DetailCariRumahSakit() {
                 flexBasis="1/2"
               >
                 <Box mt={{ base: 5, md: 0 }}>
-                  <Text fontWeight="bold">RS Haji Surabaya</Text>
+                  <Text fontWeight="bold">{hospital?.nama}</Text>
                   <Text color="gray">
-                    Jalan Manyar Kertoadi No 13, Klampisngasem, Kec. Sukolilo,
-                    Kota Surabaya, Jawa Timur 60116
+                    {hospital?.alamat + ", " + hospital?.kecamatan + ", " + hospital?.kabupaten_kota + ", " + hospital?.provinsi + ", " + hospital?.kode_pos}
                   </Text>
-                  <Text fontWeight="bold">Kontak:</Text>
-                  <Text color="gray">0812121212</Text>
+                  <Text fontWeight="bold">Kontak</Text>
+                  <Text color="gray">{hospital?.no_telpon}</Text>
                   <Text fontWeight="bold">Jam Buka:</Text>
                   <Text color="gray">Open 24 hours</Text>
                 </Box>
@@ -64,12 +116,12 @@ function DetailCariRumahSakit() {
             </Flex>
           </Box>
           <Box w="100%" pt="100px">
-            <Flex>
+            {/* <Flex>
               <Text fontWeight="bold" mr="20px" color="alta.primary">
                 Update:
               </Text>
               <Text color="alta.primary">2022/12/21 11.22 WIB</Text>
-            </Flex>
+            </Flex> */}
           </Box>
           <Box w="100%" mt="14">
             <TableContainer>
@@ -78,96 +130,42 @@ function DetailCariRumahSakit() {
                   <Tr>
                     <Th color="alta.primary">No</Th>
                     <Th color="alta.primary">Kelas</Th>
-                    <Th color="alta.primary">Tempat Tidur</Th>
-                    <Th color="alta.primary">Jumlah Kosong</Th>
+                    <Th color="alta.primary">Nama Tempat Tidur</Th>
+                    <Th color="alta.primary">Ruangan</Th>
                     <Th color="alta.primary">Status</Th>
                     <Th color="alta.primary">Tindakan</Th>
                   </Tr>
                 </Thead>
                 <Tbody>
-                  <Tr>
-                    <Td>1</Td>
-                    <Td>VVIP</Td>
-                    <Td>12</Td>
-                    <Td>0</Td>
-                    <Td color="red">Tidak Tersedia</Td>
-                    <Td>
-                      <Button
-                        isDisabled
-                        backgroundColor="white"
-                        borderWidth="2px"
-                      >
-                        Daftar
-                      </Button>
-                    </Td>
-                  </Tr>
-                  <Tr>
-                    <Td>2</Td>
-                    <Td>VIP</Td>
-                    <Td>12</Td>
-                    <Td>0</Td>
-                    <Td color="red">Tidak Tersedia</Td>
-                    <Td>
-                      <Button
-                        isDisabled
-                        backgroundColor="white"
-                        borderWidth="2px"
-                      >
-                        Daftar
-                      </Button>
-                    </Td>
-                  </Tr>
-                  <Tr>
-                    <Td>3</Td>
-                    <Td>Kelas I</Td>
-                    <Td>16</Td>
-                    <Td>1</Td>
-                    <Td color="green">Tersedia</Td>
-                    <Td>
-                      <Button
-                        bg="#3AB8FF"
-                        _hover={{ bg: "alta.primary" }}
-                        color="white"
-                        borderWidth="2px"
-                      >
-                        Daftar
-                      </Button>
-                    </Td>
-                  </Tr>
-                  <Tr>
-                    <Td>4</Td>
-                    <Td>Kelas II</Td>
-                    <Td>18</Td>
-                    <Td>3</Td>
-                    <Td color="green">Tersedia</Td>
-                    <Td>
-                      <Button
-                        bg="#3AB8FF"
-                        _hover={{ bg: "alta.primary" }}
-                        color="white"
-                        borderWidth="2px"
-                      >
-                        Daftar
-                      </Button>
-                    </Td>
-                  </Tr>
-                  <Tr>
-                    <Td>5</Td>
-                    <Td>Kelas III</Td>
-                    <Td>22</Td>
-                    <Td>7</Td>
-                    <Td color="green">Tersedia</Td>
-                    <Td>
-                      <Button
-                        bg="#3AB8FF"
-                        _hover={{ bg: "alta.primary" }}
-                        color="white"
-                        borderWidth="2px"
-                      >
-                        Daftar
-                      </Button>
-                    </Td>
-                  </Tr>
+                  {
+                    beds?.map((bed, index) => (
+                      <Tr key={index}>
+                        <Td>{index + 1}</Td>
+                        <Td>Kelas {bed.kelas}</Td>
+                        <Td>{bed.nama_tempat_tidur}</Td>
+                        <Td>Ruang {bed.ruangan}</Td>
+                        <Td
+                          color={bed.status === 'tersedia' ? '#4FC208' : '#FA0A0A'}
+                          fontWeight={'500'}
+                        >
+                          {bed.status}
+                        </Td>
+                        <Td>
+                          <Button
+                            bg={bed.status !== 'tersedia' ? 'transparent' : `#3AB8FF`}
+                            _hover={{ bg: "alta.primary" }}
+                            color={bed.status !== 'tersedia' ? '#15192080' : "white"}
+                            borderWidth="2px"
+                            disabled={bed.status === 'tersedia' ? false : true}
+                            fontStyle={'600'}
+                            onClick={() => handlerRegister()}
+                          >
+                            Daftar
+                          </Button>
+                        </Td>
+                      </Tr>
+                    ))
+                  }
                 </Tbody>
               </Table>
             </TableContainer>
