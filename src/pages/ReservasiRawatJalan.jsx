@@ -36,6 +36,7 @@ function ReservasiRawatJalan() {
   const navigate = useNavigate();
   const [patients, setPatients] = useState([]);
   const [patientId, setPatientId] = useState();
+  const [practiceId, setPracticeId] = useState();
   const [patientSelected, setPatientSelected] = useState();
   const location = useLocation();
   const [nameHospital, setNameHospital] = useState();
@@ -46,22 +47,31 @@ function ReservasiRawatJalan() {
   const [doctorName, setDoctorName] = useState();
   const [timeSelected, setTimeSelected] = useState();
   const time = location.state?.time;
-  
+
   const date = new Date();
   const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
   const myDays = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum&#39;at', 'Sabtu'];
-  
+
   const day = date.getDate();
   const month = date.getMonth();
   const thisDay = date.getDate();
   const yy = date.getFullYear();
-  
+
   const inDate = `${day} ${months[month]} ${yy}`;
   const getPatientsByUserId = async () => {
     await api.getPatientByUserId(token, user.id).then((response) => {
       const data = response.data.data;
       setPatients(data);
     });
+  };
+  //handle send data to database
+  const handleSendData = async (patient_id, practice_id) => {
+    await api
+      .createCheckUpReservation(token, { patient_id, practice_id })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => console.log(err));
   };
 
   const getHospitalSelected = async () => {
@@ -161,13 +171,18 @@ function ReservasiRawatJalan() {
     onClose();
   };
   const handlerRegistrasi = () => {
+    handleSendData(patientId, practiceId);
     navigate('/resume/rawat/jalan', {
       state: {
-        idHospital: idHospital,
-        idPoliclinic: idPoliclinic,
-        idDokter: idDoctor,
-        date: inDate,
-        time: time,
+        nama: patientSelected?.nama_pasien,
+        jenisKelamin: patientSelected?.jenis_kelamin,
+        noHandphone: patientSelected?.no_telpon_wali,
+        email: patientSelected?.email_wali,
+        rumahSakit: nameHospital,
+        poliklinik: policlinicName,
+        dokter: doctorName,
+        tanggalPeriksa: inDate,
+        jamPeriksa: location.state?.time,
       },
     });
   };

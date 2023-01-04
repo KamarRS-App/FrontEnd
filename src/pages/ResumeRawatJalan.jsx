@@ -44,10 +44,19 @@ function ResumeRawatJalan() {
   const [patientSelected, setPatientSelected] = useState();
   const location = useLocation();
   const [nameHospital, setNameHospital] = useState();
-  const hospital_id = parseInt(location.state?.hospital_id);
   const patient_id = parseInt(patientId);
 
+  const nama = location.state?.nama;
+  const jenisKelamin = location.state?.jenisKelamin;
+  const noHandphone = location.state?.noHandphone;
+  const email = location.state?.email;
+  const rumahSakit = location.state?.rumahSakit;
+  const poliklinik = location.state?.poliklinik;
+  const dokter = location.state?.dokter;
+  const tanggalPeriksa = location.state?.tanggalPeriksa;
+  const jamPeriksa = location.state?.jamPeriksa;
 
+  console.log(location.state);
   const [reservationSelected, setReservationSelected] = useState();
 
   const date = new Date();
@@ -162,7 +171,8 @@ function ResumeRawatJalan() {
                             <Tr>Rumah Sakit</Tr>
                             <Tr>Poliklinik</Tr>
                             <Tr>Dokter Pilihan</Tr>
-                            <Tr>Tanggal/Jam Periksa</Tr>
+                            <Tr>Tanggal Periksa</Tr>
+                            <Tr>Jam Periksa</Tr>
                           </Tr>
                         </Table>
                       </TableContainer>
@@ -172,14 +182,15 @@ function ResumeRawatJalan() {
                         <Table>
                           <Flex direction={{ base: 'column', lg: 'column', xl: 'row' }} justifyContent={'center'} textAlign="end">
                             <Tr fontWeight={'400'} textAlign="start" fontSize={'18px'}>
-                              <Tr textAlign={'end'}>tes</Tr>
-                              <Tr textAlign={'end'}>tes</Tr>
-                              <Tr textAlign={'end'}>tes</Tr>
-                              <Tr textAlign={'end'}>tes</Tr>
-                              <Tr textAlign={'end'}>tes</Tr>
-                              <Tr textAlign={'end'}>tes</Tr>
-                              <Tr textAlign={'end'}>tes</Tr>
-                              <Tr textAlign={'end'}>tes</Tr>
+                              <Tr textAlign={'end'}>{nama}</Tr>
+                              <Tr textAlign={'end'}>{jenisKelamin}</Tr>
+                              <Tr textAlign={'end'}>{noHandphone === '' ? 'Data Kosong' : noHandphone}</Tr>
+                              <Tr textAlign={'end'}>{email}</Tr>
+                              <Tr textAlign={'end'}>{rumahSakit}</Tr>
+                              <Tr textAlign={'end'}>{poliklinik}</Tr>
+                              <Tr textAlign={'end'}>{dokter}</Tr>
+                              <Tr textAlign={'end'}>{tanggalPeriksa}</Tr>
+                              <Tr textAlign={'end'}>{jamPeriksa}</Tr>
                             </Tr>
                           </Flex>
                         </Table>
