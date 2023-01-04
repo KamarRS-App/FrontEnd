@@ -36,7 +36,6 @@ import LoginAdminRoot from "./pages/Admin/LoginAdminRoot";
 import ReservasiRawatJalan from "./pages/ReservasiRawatJalan";
 import LinkPaymentPage from "./pages/LinkPaymentPage";
 import AuthGoogle from "./pages/AuthGoogle";
-import ReservasiRawatJalan from './pages/ReservasiRawatJalan';
 import ResumeRawatJalan from './pages/ResumeRawatJalan';
 
 import "./App.css";

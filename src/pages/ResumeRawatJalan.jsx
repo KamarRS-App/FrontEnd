@@ -47,6 +47,7 @@ function ResumeRawatJalan() {
   const hospital_id = parseInt(location.state?.hospital_id);
   const patient_id = parseInt(patientId);
 
+
   const [reservationSelected, setReservationSelected] = useState();
 
   const date = new Date();

@@ -45,16 +45,18 @@ function ReservasiRawatJalan() {
   const [policlinicName, setPoliclinicName] = useState();
   const [doctorName, setDoctorName] = useState();
   const [timeSelected, setTimeSelected] = useState();
-
+  const time = location.state?.time;
+  
   const date = new Date();
   const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
   const myDays = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum&#39;at', 'Sabtu'];
-
+  
   const day = date.getDate();
   const month = date.getMonth();
   const thisDay = date.getDate();
   const yy = date.getFullYear();
-
+  
+  const inDate = `${day} ${months[month]} ${yy}`;
   const getPatientsByUserId = async () => {
     await api.getPatientByUserId(token, user.id).then((response) => {
       const data = response.data.data;
@@ -113,10 +115,10 @@ function ReservasiRawatJalan() {
       });
   };
 
-  console.log(location.state?.idHospital);
-  console.log(location.state?.idPoliclinic);
+  // console.log(location.state?.idHospital);
+  // console.log(location.state?.idPoliclinic);
   console.log(location.state?.idDokter);
-  console.log(location.state?.time);
+  // console.log(location.state?.time);
 
   const getPatientById = async (id) => {
     await api
@@ -163,7 +165,7 @@ function ReservasiRawatJalan() {
       state: {
         idHospital: idHospital,
         idPoliclinic: idPoliclinic,
-        idDokter: idDokter,
+        idDokter: idDoctor,
         date: inDate,
         time: time,
       },
@@ -330,7 +332,7 @@ function ReservasiRawatJalan() {
               </Flex>
               <Flex justifyContent={'space-between'} mt={5}>
                 <Text>Jam Periksa:</Text>
-                <Text>{timeSelected}</Text>
+                <Text>{location.state?.time}</Text>
               </Flex>
               <Flex justifyContent={'space-between'} mt={5}>
                 <Text>Rumah Sakit:</Text>
