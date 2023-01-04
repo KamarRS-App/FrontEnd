@@ -898,6 +898,4 @@ const HospitalRootPages = () => {
     );
 }
 
-
-
 export default HospitalRootPages;

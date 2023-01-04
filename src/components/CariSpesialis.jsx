@@ -20,8 +20,16 @@ function CariSpesialis() {
   const [policlinics, setPoliclinics] = useState([]);
   const [practices, setPractices] = useState([]);
   const [doctors, setDoctors] = useState([]);
+  const [inTime, setInTime] = useState('');
+
   const [idHospital, setIdHospital] = useState();
   const [time, setTime] = useState();
+  const [kuota, setKuota] = useState();
+  const [idPoliclinic, setIdPoliclinic] = useState();
+  const [idPractices, setIdPractices] = useState();
+  const [idDokter, setIdDokter] = useState();
+
+  const navigate = useNavigate();
 
   const token = Cookies.get('token');
 
@@ -30,25 +38,6 @@ function CariSpesialis() {
   };
 
   const [initialValue, setInitialValue] = useState(initialValues);
-
-  const schema = yup.object().shape({
-    provinsi: yup.string().required('Harap pilih provinsi asal'),
-    kota: yup.string().required('Harap pilih kabupaten/kota asal'),
-    namaRS: yup.string().required('Harap Pilih Rumah Sakit Tujuan'),
-    waktuPeriksa: yup.string().required('Harap Pilih Waktu Periksa'),
-    tanggalPeriksa: yup.string().required('Harap Pilih Tanggal Periksa'),
-    namaPoli: yup.string().required('Harap pilih Nama Poliklinik Tujuan'),
-    namaDokter: yup.string().required('Harap pilih Nama Dokter'),
-  });
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
-    defaultValues: initialValue,
-    mode: 'onChange',
-  });
 
   //handle data provinsi
   const getProvinsi = async () => {
@@ -64,10 +53,11 @@ function CariSpesialis() {
       setListKabupaten(response.data.kota_kabupaten);
     });
   };
+
   const getPractices = async (id) => {
     await api.getAllDailyPractices(token, id).then((response) => {
       const data = response.data.data;
-      setPractices(response.data.kuota_harian);
+      setKuota(data.kuota_harian);
     });
   };
 
@@ -79,61 +69,67 @@ function CariSpesialis() {
   };
 
   const getAllHospitalsHandler = async () => {
-    await api
-      .getHospitals(token)
-      .then((response) => {
-        const data = response.data.data;
-        setHospitals(data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    await api.getHospitals(token).then((response) => {
+      const data = response.data.data;
+      setHospitals(data);
+    });
   };
 
   const getPoliclinic = async (id) => {
-    await api
-      .getPoliclinicById(token, id)
-      .then((response) => {
-        const data = response.data.data;
-        setDoctors(data.doctor);
-        setTime(data.jam_praktik);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    await api.getPoliclinicById(token, id).then((response) => {
+      const data = response.data.data;
+      setDoctors(data.doctor);
+      setTime(data.jam_praktik);
+    });
+  };
+
+  const handlerRegistrasi = () => {
+    navigate('/reservasi/rawat/jalan', {
+      state: {
+        idHospital: idHospital,
+        idPoliclinic: idPoliclinic,
+        idDokter: idDokter,
+        date: inDate,
+        time: time,
+        kuota: kuota,
+      },
+    });
   };
 
   //handle submit data
-  const onSubmit = (values) => {
-    const data = new FormData();
-    data.append('nama', values.nama);
+
+  //Set Filter Kuota by Poliklinik
+  const resultKuota = practices.filter((data) => {
+    return data.policlinic_id == idPoliclinic;
+  });
+  const handlerKuota = (id) => {
+    const resultKuota = practices.filter((data) => {
+      return data.id == id;
+    });
+    console.log(resultKuota);
+    setIdPractices(id);
+    getPractices(id);
   };
 
+  //Set Filter Poliklinik by Rumah Sakit
   const resultPoliclinic = policlinics.filter((data) => {
     return data.hospital_id == idHospital;
   });
 
-  // const resultRegionHospital = resultHospital.filter((data) => {
-  //   return data.kabupaten_kota == selectKota;
-  // });
-
-  // React.useEffect(() => {
-  //   getHospitals(nama);
-  //   console.log(nama);
-  // }, [nama]);
   const handlerPoliclinics = (id) => {
+    const resultPoliclinic = policlinics.filter((data) => {
+      return data.id == id;
+    });
+    console.log(resultPoliclinic);
+    setIdPoliclinic(id);
     getPoliclinic(id);
   };
 
-  const onReservation = () => {
-    Router.push({
-      pathname: `/bookingpage`,
-    });
-  };
   React.useEffect(() => {
     getProvinsi();
     getAllHospitalsHandler();
     getPoliclinics();
+    getPractices();
   }, []);
 
   React.useEffect(() => {
@@ -159,67 +155,68 @@ function CariSpesialis() {
       </Box>
       <Box py={'10'} bg="white" width={['1000px']} mx="auto" height="auto">
         <Card shadow="lg" height="auto" py="5" width={['1000px']} borderRadius="xl" alignItems="left" p={20}>
-          <Stack spacing={3}>
-            <Box>
-              <Text py={4}> Provinsi</Text>
-              <Select {...register('provinsi')} placeholder="-- Pilih provinsi --" onChange={(e) => setKabupaten(e.target.value)}>
-                {provinsi?.map((prov) => {
-                  return <option value={prov.id}>{prov.nama}</option>;
-                })}
-              </Select>
-              <Text color={'red'}>{errors.provinsi?.message}</Text>
-            </Box>
-            <Box>
-              <Text py={4}> Kabupaten/Kota</Text>
-              <Select {...register('kota')} placeholder="-- Pilih kabupaten/kota --">
-                {listKabupaten?.map((kota) => {
-                  return <option value={kota.nama}>{kota.nama}</option>;
-                })}
-              </Select>
-            </Box>
-            <Box>
-              <Text py={4}> Rumah Sakit</Text>
-              <Select onChange={(e) => setIdHospital(e.target.value)} placeholder="-- Pilih Rumah Sakit --" id="hospital_id">
-                {hospitals?.map((data) => {
-                  return <option value={data.id}>{data.nama}</option>;
-                })}
-              </Select>
-            </Box>
-            <Box color="#000000">
-              <Text py={4}> Poliklinik</Text>
-              <Select onChange={(e) => handlerPoliclinics(e.target.value)} placeholder="-- Pilih Poliklinik --">
-                {resultPoliclinic?.map((data) => {
-                  return <option value={data.id}>{data.nama_poli}</option>;
-                })}
-              </Select>
-            </Box>
-            <Box>
-              <Text py={4}> Dokter</Text>
-              <Select {...register('nama')} placeholder="-- Pilih Dokter --">
-                {doctors?.map((data) => {
-                  return <option value={data.id}>{data.nama}</option>;
-                })}
-              </Select>
-            </Box>
-            <Box>
-              <Text py={4}> Jam Praktik</Text>
-              <Input type="text" value={time} disabled />
-            </Box>
-            <Box>
-              <Text py={4}> Tanggal Periksa</Text>
-              <input type="date" value={inDate} onChange={(e) => setInDate(e.target.value)} />
-            </Box>
+          <form>
+            <Stack spacing={3}>
+              <Box>
+                <Text py={4}> Provinsi</Text>
+                <Select placeholder="-- Pilih provinsi --" onChange={(e) => setKabupaten(e.target.value)}>
+                  {provinsi?.map((prov) => {
+                    return <option value={prov.id}>{prov.nama}</option>;
+                  })}
+                </Select>
+              </Box>
+              <Box>
+                <Text py={4}> Kabupaten/Kota</Text>
+                <Select placeholder="-- Pilih kabupaten/kota --">
+                  {listKabupaten?.map((kota) => {
+                    return <option value={kota.nama}>{kota.nama}</option>;
+                  })}
+                </Select>
+              </Box>
+              <Box>
+                <Text py={4}> Rumah Sakit</Text>
+                <Select onChange={(e) => setIdHospital(e.target.value)} placeholder="-- Pilih Rumah Sakit --" id="hospital_id">
+                  {hospitals?.map((data) => {
+                    return <option value={data.id}>{data.nama}</option>;
+                  })}
+                </Select>
+              </Box>
+              <Box color="#000000">
+                <Text py={4}> Poliklinik</Text>
+                <Select onChange={(e) => handlerPoliclinics(e.target.value)} placeholder="-- Pilih Poliklinik --">
+                  {resultPoliclinic?.map((data) => {
+                    return <option value={data.id}>{data.nama_poli}</option>;
+                  })}
+                </Select>
+              </Box>
+              <Box>
+                <Text py={4}> Dokter</Text>
+                <Select onChange={(e) => setIdDokter(e.target.value)} placeholder="-- Pilih Dokter --">
+                  {doctors?.map((data) => {
+                    return <option value={data.id}>{data.nama}</option>;
+                  })}
+                </Select>
+              </Box>
+              <Box>
+                <Text py={4}> Jam Praktik</Text>
+                <Input type="text" value={time} _peerDisabled disabled checked={(e) => setTime(e.target.value)} />
+              </Box>
+              <Box>
+                <Text py={4}> Tanggal Periksa</Text>
+                <input type="date" value={inDate} onChange={(e) => setInDate(e.target.value)} />
+              </Box>
 
-            <Box>
-              <Text>Kuota Harian</Text>
-              <Text py={4}>2</Text>{' '}
-            </Box>
-          </Stack>
+              <Box>
+                <Text py={4}> Kuota Harian</Text>
+                <Input type="text" value={kuota} _peerDisabled disabled />
+              </Box>
+            </Stack>
+
+            <Button onClick={() => handlerRegistrasi()} m={20} color="#FFFFFF" bg="#3AB8FF">
+              Selanjutnya
+            </Button>
+          </form>
         </Card>
-
-        <Button href="/reservasi/rawat/jalan" m={20} color="#FFFFFF" bg="#3AB8FF" submitButton={handleSubmit(onSubmit)}>
-          Selanjutnya
-        </Button>
       </Box>
     </Box>
   );

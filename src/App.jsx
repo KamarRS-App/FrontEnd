@@ -36,6 +36,8 @@ import LoginAdminRoot from "./pages/Admin/LoginAdminRoot";
 import ReservasiRawatJalan from "./pages/ReservasiRawatJalan";
 import LinkPaymentPage from "./pages/LinkPaymentPage";
 import AuthGoogle from "./pages/AuthGoogle";
+import ReservasiRawatJalan from './pages/ReservasiRawatJalan';
+import ResumeRawatJalan from './pages/ResumeRawatJalan';
 
 import "./App.css";
 import "@fontsource/plus-jakarta-sans/700.css";
@@ -74,6 +76,8 @@ function App() {
                 <Route path="/syarat/dan/ketentuan" element={<SyaratDanKetentuan />} />
                 <Route path="/registrasi/pembayaran/konfirmasi" element={<LinkPaymentPage />} />
                 <Route path="/login/auth/google" element={<AuthGoogle />} />
+                <Route path="/reservasi/rawat/jalan" element={<ReservasiRawatJalan />} />
+                <Route path="/resume/rawat/jalan" element={<ResumeRawatJalan />} />
 
                 {/* admin */}
                 <Route path="/admin/dashboard" element={<Dashboard />} />
