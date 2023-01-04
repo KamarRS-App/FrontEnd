@@ -127,15 +127,30 @@ function DashboardDailyPraktek() {
     const newData = { ...selectedPractice };
     newData[e.target.id] = e.target.value;
     setSelectedPractice(newData);
-    console.log(newData);
   };
 
   //send new data
   const confirmEditHandler = async (token, id, data) => {
     await api
       .updateDailyPractice(token, id, data)
-      .then((response) => console.log(response))
-      .catch((err) => console.log(err));
+      .then((response) => {
+        toast({
+          title: `Berhasil memperbaharui data.`,
+          status: "success",
+          position: "top",
+          isClosable: true,
+          duration: 1500,
+        });
+      })
+      .catch((err) => {
+        toast({
+          title: `Gagal memperbaharui data.`,
+          status: "error",
+          position: "top",
+          isClosable: true,
+          duration: 1500,
+        });
+      });
   };
 
   // =============== MENGAMBIL DATA TIAP POLI ======================
@@ -145,9 +160,16 @@ function DashboardDailyPraktek() {
       .getAllPoliclinics(token)
       .then((response) => {
         setPoliclinics(response.data.data);
-        console.log(response.data.data);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        toast({
+          title: `Gagal mengambil data poiliklinik.`,
+          status: "error",
+          position: "top",
+          isClosable: true,
+          duration: 1500,
+        });
+      });
   };
 
   // =============== MENGAMBIL DATA DAILY PRACTICE TIAP POLI ======================
@@ -156,11 +178,18 @@ function DashboardDailyPraktek() {
     await api
       .getAllDailyPractices(token, id)
       .then((response) => {
-        console.log(response.data.data);
         setTotalPage(response.data.total_page);
         setPracticeList(response.data.data);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        toast({
+          title: `Gagal mengambil data praktek.`,
+          status: "error",
+          position: "top",
+          isClosable: true,
+          duration: 1500,
+        });
+      });
   };
 
   //mengambil data next page
@@ -169,9 +198,16 @@ function DashboardDailyPraktek() {
       .getNextPageDailyPractice(token, id, page)
       .then((response) => {
         setPracticeList(response.data.data);
-        console.log(response.data.data);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        toast({
+          title: `Gagal mengambil data selanjutnya.`,
+          status: "error",
+          position: "top",
+          isClosable: true,
+          duration: 1500,
+        });
+      });
   };
 
   //============== USE EFFECT ========================
@@ -379,7 +415,6 @@ function DashboardDailyPraktek() {
                   selectedPractice.id,
                   selectedPractice
                 );
-                console.log(selectedPractice);
               }}
             >
               Ubah
