@@ -201,7 +201,12 @@ function DashboardDailyPraktek() {
 
   return (
     <LayoutAdmin activeMenu={"doctor"}>
-      <HeadAdmin title="Manajemen Praktek" isAdd={onModalCreateOpen} />
+      <HeadAdmin
+        title="Manajemen Praktek"
+        isAdd={onModalCreateOpen}
+        showSearch={"none"}
+        showFilter={"none"}
+      />
       <Box>
         <Box backgroundColor="white" mt={5} minH="600px" p={5}>
           <Box>
@@ -212,6 +217,7 @@ function DashboardDailyPraktek() {
                 onChange={(e) => {
                   setSelectedPoli(e.target.value);
                   setCurrentPage(1);
+                  setPracticeList("");
                 }}
               >
                 {policlinics?.map((policlinics) => {
