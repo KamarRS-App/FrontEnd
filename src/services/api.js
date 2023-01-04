@@ -9,7 +9,7 @@ export default {
   loginUser: (email, password) =>
     instance({
       method: `POST`,
-      url: `login/users`,
+      url: `/login/users`,
       data: {
         email: email,
         kata_sandi: password,
@@ -176,30 +176,7 @@ export default {
     }),
 
   //patient
-  updatePatient: (
-    token,
-    id,
-    {
-      no_kk,
-      nik,
-      nama_pasien,
-      jenis_kelamin,
-      usia,
-      nama_wali,
-      email_wali,
-      no_telepon_wali,
-      alamat_ktp,
-      kabupaten_kota_ktp,
-      alamat_domisili,
-      provinsi_domisili,
-      kabupaten_kota_domisili,
-      tanggal_lahir,
-      no_bpjs,
-      kelas_bpjs,
-      foto_ktp,
-      foto_bpjs,
-    }
-  ) =>
+  updatePatient: (token, id, data) =>
     instance({
       method: `PUT`,
       url: `/patients/${id}`,
@@ -629,7 +606,7 @@ export default {
     }),
 
   //bed Register
-  createBedRegistrations: (token, { hospital_id, patient_id}) =>
+  createBedRegistrations: (token, { hospital_id, patient_id }) =>
     instance({
       method: `POST`,
       url: `/registrations`,
