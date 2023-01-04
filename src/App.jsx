@@ -45,6 +45,7 @@ import "@fontsource/plus-jakarta-sans/500.css";
 import "@fontsource/plus-jakarta-sans/600.css";
 import theme from "../utils/extendedTheme";
 import store from "../store";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -96,6 +97,8 @@ function App() {
                 <Route path="/root/dashboard" element={<DashboardRoot />} />
                 <Route path="/root/hospital" element={<HospitalRootPages />} />
                 <Route path="/root/user" element={<AdminRoot />} />
+
+                <Route path="/*" element={<NotFound />} />
               </Routes>
             </Box>
           </ChakraProvider>
