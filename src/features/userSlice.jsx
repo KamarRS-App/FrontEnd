@@ -19,8 +19,9 @@ export const userSlice = createSlice({
         },
         destroyUsers: (state, action) => {
             state = {};
-            sessionStorage.removeItem('staff')
+            sessionStorage.removeItem('users')
             Cookies.remove('name');
+            Cookies.remove('userId');
             Cookies.remove('token');
         }
     }

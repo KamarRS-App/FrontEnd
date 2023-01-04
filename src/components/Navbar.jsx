@@ -20,14 +20,17 @@ import {
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
+import { destroyUsers } from "../features/userSlice";
 
 const Navbar = ({ isAuth, nameUser, isActive }) => {
   const [isOpen, SetIsOpen] = useState(false);
   const toggle = () => SetIsOpen(!isOpen);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handeLogoutBosku = () => {
-    Cookies.remove("token");
+    dispatch(destroyUsers());
     navigate("/login");
   };
 

@@ -218,7 +218,7 @@ function TambahData() {
                             >
                               <MdOutlineDeleteOutline />
                             </Button>
-                          </ButtonGroup>>
+                          </ButtonGroup>
                                 </Td>
                                 <Td>{index + 1}</Td>
                                 <Td>{patient.nama_pasien}</Td>
