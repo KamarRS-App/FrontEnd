@@ -1,18 +1,18 @@
-import axios from 'axios';
+import axios from "axios";
 
 const instance = axios.create({
-  baseURL: 'https://rawatinap.online',
+  baseURL: "https://rawatinap.online",
 });
 
 export default {
   //Auth
-  loginUser: (data) =>
+  loginUser: (email, password) =>
     instance({
       method: `POST`,
-      url: `login/users`,
+      url: `/login/users`,
       data: {
-        email: data.email,
-        kata_sandi: data.kata_sandi,
+        email: email,
+        kata_sandi: password,
       },
     }),
 
@@ -176,87 +176,13 @@ export default {
     }),
 
   //patient
-  createPatient: (
-    token,
-    {
-      no_kk,
-      nik,
-      nama_pasien,
-      jenis_kelamin,
-      usia,
-      nama_wali,
-      email_wali,
-      no_telepon_wali,
-      alamat_ktp,
-      kabupaten_kota_ktp,
-      alamat_domisili,
-      provinsi_domisili,
-      kabupaten_kota_domisili,
-      tanggal_lahir,
-      no_bpjs,
-      kelas_bpjs,
-      foto_ktp,
-      foto_bpjs,
-    }
-  ) =>
-    instance({
-      method: `POST`,
-      url: `/patients`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'content-type': 'multipart/form-data',
-      },
-      data: {
-        no_kk: no_kk,
-        nik: nik,
-        nama_pasien: nama_pasien,
-        jenis_kelamin: jenis_kelamin,
-        usia: usia,
-        nama_wali: nama_wali,
-        email_wali: email_wali,
-        no_telepon_wali: no_telepon_wali,
-        alamat_ktp: alamat_ktp,
-        kabupaten_kota_ktp: kabupaten_kota_ktp,
-        alamat_domisili: alamat_domisili,
-        provinsi_domisili: provinsi_domisili,
-        kabupaten_kota_domisili: kabupaten_kota_domisili,
-        tanggal_lahir: tanggal_lahir,
-        no_bpjs: no_bpjs,
-        kelas_bpjs: kelas_bpjs,
-        foto_ktp: foto_ktp,
-        foto_bpjs: foto_bpjs,
-      },
-    }),
-  updatePatient: (
-    token,
-    id,
-    {
-      no_kk,
-      nik,
-      nama_pasien,
-      jenis_kelamin,
-      usia,
-      nama_wali,
-      email_wali,
-      no_telepon_wali,
-      alamat_ktp,
-      kabupaten_kota_ktp,
-      alamat_domisili,
-      provinsi_domisili,
-      kabupaten_kota_domisili,
-      tanggal_lahir,
-      no_bpjs,
-      kelas_bpjs,
-      foto_ktp,
-      foto_bpjs,
-    }
-  ) =>
+  updatePatient: (token, id, data) =>
     instance({
       method: `PUT`,
       url: `/patients/${id}`,
       headers: {
         Authorization: `Bearer ${token}`,
-        'content-type': 'multipart/form-data',
+        "content-type": "multipart/form-data",
       },
       data: {
         no_kk: no_kk,
@@ -311,7 +237,7 @@ export default {
       url: `/patients`,
       headers: {
         Authorization: `Bearer ${token}`,
-        'content-type': 'multipart/form-data',
+        "content-type": "multipart/form-data",
       },
       data: {
         no_kk: data.no_kk,
@@ -322,11 +248,12 @@ export default {
         usia: data.usia,
         nama_wali: data.namaWali,
         email_wali: data.emailWali,
-        no_telepon_wali: data.noTelpWali,
-        alamat_ktp: data.alamat_ktp,
+        no_telpon_wali: data.noTelpWali,
+        alamat_ktp: data.alamatKTP,
         kabupaten_kota_ktp: data.kota_ktp,
         alamat_domisili: data.domisili,
         provinsi_domisili: data.provinsi,
+        provinsi_ktp: data.provinsi_ktp,
         kabupaten_kota_domisili: data.kota,
         no_bpjs: data.noBPJS,
         kelas_bpjs: data.kelas_bpjs,
@@ -363,7 +290,7 @@ export default {
       url: `/patients/${id}`,
       headers: {
         Authorization: `Bearer ${token}`,
-        'content-type': 'multipart/form-data',
+        "content-type": "multipart/form-data",
       },
       data: {
         no_kk: no_kk,
@@ -412,7 +339,10 @@ export default {
     }),
 
   //hospital bed
-  createHospitalBed: (token, { hospital_id, nama_tempat_tidur, ruangan, kelas, status }) =>
+  createHospitalBed: (
+    token,
+    { hospital_id, nama_tempat_tidur, ruangan, kelas, status }
+  ) =>
     instance({
       method: `POST`,
       url: `/beds`,
@@ -427,7 +357,11 @@ export default {
         status: status,
       },
     }),
-  updateHospitalBed: (token, id, { hospital_id, nama_tempat_tidur, ruangan, kelas, status }) =>
+  updateHospitalBed: (
+    token,
+    id,
+    { hospital_id, nama_tempat_tidur, ruangan, kelas, status }
+  ) =>
     instance({
       method: `PUT`,
       url: `/beds/${id}`,
@@ -474,7 +408,7 @@ export default {
       url: `/doctors`,
       headers: {
         Authorization: `Bearer ${token}`,
-        'content-type': 'multipart/form-data',
+        "content-type": "multipart/form-data",
       },
       data: {
         nama: data.nama,
@@ -613,7 +547,7 @@ export default {
         status: data.status,
       },
     }),
-  updateDailyPractice: (token, id, { policlinic_id, tanggal_praktik, kuota_harian, status }) =>
+  updateDailyPractice: (token, id, data) =>
     instance({
       method: `PUT`,
       url: `/practices/${id}`,
@@ -621,20 +555,30 @@ export default {
         Authorization: `Bearer ${token}`,
       },
       data: {
-        policlinic_id: policlinic_id,
-        tanggal_praktik: tanggal_praktik,
-        kuota_harian: kuota_harian,
-        status: status,
+        id: data.id,
+        tanggal_praktik: data.tanggal_praktik,
+        kuota_harian: parseInt(data.kuota_harian),
+        status: data.status,
       },
     }),
-  getAllDailyPractices: (token) =>
+  getAllDailyPractices: (token, id) =>
     instance({
       method: `GET`,
-      url: `/practices`,
+      url: `/policlinics/${id}/practices`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
     }),
+
+  getNextPageDailyPractice: (token, id, page) =>
+    instance({
+      method: `GET`,
+      url: `/policlinics/${id}/practices?page=${page}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
+
   getDailyPracticesById: (token, id) =>
     instance({
       method: `GET`,
@@ -681,7 +625,20 @@ export default {
       },
     }),
 
-  updateBedRegistrations: (token, id, { hospital_id, patient_id, bed_id, status_pasien, biaya_registrasi, kode_daftar, link_pembayaran, status_pembayaran }) =>
+  updateBedRegistrations: (
+    token,
+    id,
+    {
+      hospital_id,
+      patient_id,
+      bed_id,
+      status_pasien,
+      biaya_registrasi,
+      kode_daftar,
+      link_pembayaran,
+      status_pembayaran,
+    }
+  ) =>
     instance({
       method: `PUT`,
       url: `/registrations/${id}`,
