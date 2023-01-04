@@ -408,7 +408,7 @@ function DataDiriPasien() {
                 />
                 <Box h={300} borderWidth="1px" rounded={10} w="100%">
                   <FormControl>
-                    <label for="img" style={{ cursor: "pointer" }}>
+                    <label for="fotoKTP" style={{ cursor: "pointer" }}>
                       <Grid
                         justifyContent={"center"}
                         alignItems="center"

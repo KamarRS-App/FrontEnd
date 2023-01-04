@@ -31,11 +31,11 @@ function Register() {
   const showPassword = () => setShow(!show);
   const toast = useToast();
   const navigate = useNavigate();
-  const [passwordType, setPasswordType] = React.useState('');
+  const [passwordType, setPasswordType] = React.useState("");
 
   const onShowPassword = (e) => {
     setPasswordType(e.target.value);
-  }
+  };
 
   //yup schema
   const schema = yup.object().shape({
@@ -91,6 +91,7 @@ function Register() {
             isClosable: true,
             duration: 1500,
           });
+          console.log(err);
         } else {
           toast({
             title: `Gagal membuat akun`,
@@ -103,6 +104,7 @@ function Register() {
       });
   };
 
+  //submit data
   const onSubmit = (data) => {
     console.log(data);
     handleRegister(data);
@@ -255,8 +257,7 @@ function Register() {
                         placeholder="Masukkan password"
                         onInput={onShowPassword}
                       />
-                      {
-                        passwordType &&
+                      {passwordType && (
                         <InputRightElement>
                           {show ? (
                             <ViewOffIcon
@@ -264,10 +265,13 @@ function Register() {
                               cursor={"pointer"}
                             />
                           ) : (
-                            <ViewIcon onClick={showPassword} cursor={"pointer"} />
+                            <ViewIcon
+                              onClick={showPassword}
+                              cursor={"pointer"}
+                            />
                           )}
                         </InputRightElement>
-                      }
+                      )}
                     </InputGroup>
                   </FormControl>
                   <Text color={"red"}>{errors.kata_sandi?.message}</Text>

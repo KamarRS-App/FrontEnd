@@ -45,6 +45,8 @@ const HospitalRootPages = () => {
 
     const auth = AuthToken();
 
+    const auth = AuthToken();
+
 
     const initialValues = {
         kode_rs: '',

@@ -6,13 +6,13 @@ const instance = axios.create({
 
 export default {
   //Auth
-  loginUser: (data) =>
+  loginUser: (email, password) =>
     instance({
       method: `POST`,
-      url: `login/users`,
+      url: `/login/users`,
       data: {
-        email: data.email,
-        kata_sandi: data.kata_sandi,
+        email: email,
+        kata_sandi: password,
       },
     }),
 
@@ -55,39 +55,20 @@ export default {
         nik: JSON.stringify(data.nik),
         no_kk: JSON.stringify(data.no_kk),
         kata_sandi: data.kata_sandi,
-        no_telepon: JSON.stringify(data.nomorhape),
+        no_telpon: JSON.stringify(data.nomorhape),
       },
     }),
-
-  //Users
-  register: (token, { nama, email, no_nik, no_kk, kata_sandi, no_telepon }) =>
-    instance({
-      method: `POST`,
-      url: `/users`,
-      data: {
-        nama: nama,
-        email: email,
-        no_nik: no_nik,
-        no_kk: no_kk,
-        kata_sandi: kata_sandi,
-        no_telepon: no_telepon,
-      },
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }),
-
-  updateUser: (token, { nama, email, no_nik, no_kk, kata_sandi, no_telepon }) =>
+  updateUser: (token, data) =>
     instance({
       method: `PUT`,
       url: `/users`,
       data: {
-        nama: nama,
-        email: email,
-        no_nik: no_nik,
-        no_kk: no_kk,
-        kata_sandi: kata_sandi,
-        no_telepon: no_telepon,
+        nama: data.nama,
+        email: data.email,
+        no_nik: data.no_nik,
+        no_kk: data.no_kk,
+        kata_sandi: data.kata_sandi,
+        no_telpon: data.no_telpon,
       },
       headers: {
         Authorization: `Bearer ${token}`,
@@ -195,81 +176,7 @@ export default {
     }),
 
   //patient
-  createPatient: (
-    token,
-    {
-      no_kk,
-      nik,
-      nama_pasien,
-      jenis_kelamin,
-      usia,
-      nama_wali,
-      email_wali,
-      no_telepon_wali,
-      alamat_ktp,
-      kabupaten_kota_ktp,
-      alamat_domisili,
-      provinsi_domisili,
-      kabupaten_kota_domisili,
-      tanggal_lahir,
-      no_bpjs,
-      kelas_bpjs,
-      foto_ktp,
-      foto_bpjs,
-    }
-  ) =>
-    instance({
-      method: `POST`,
-      url: `/patients`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "content-type": "multipart/form-data",
-      },
-      data: {
-        no_kk: no_kk,
-        nik: nik,
-        nama_pasien: nama_pasien,
-        jenis_kelamin: jenis_kelamin,
-        usia: usia,
-        nama_wali: nama_wali,
-        email_wali: email_wali,
-        no_telepon_wali: no_telepon_wali,
-        alamat_ktp: alamat_ktp,
-        kabupaten_kota_ktp: kabupaten_kota_ktp,
-        alamat_domisili: alamat_domisili,
-        provinsi_domisili: provinsi_domisili,
-        kabupaten_kota_domisili: kabupaten_kota_domisili,
-        tanggal_lahir: tanggal_lahir,
-        no_bpjs: no_bpjs,
-        kelas_bpjs: kelas_bpjs,
-        foto_ktp: foto_ktp,
-        foto_bpjs: foto_bpjs,
-      },
-    }),
-  updatePatient: (
-    token,
-    id,
-    {
-      no_kk,
-      nik,
-      nama_pasien,
-      jenis_kelamin,
-      usia,
-      nama_wali,
-      email_wali,
-      no_telepon_wali,
-      alamat_ktp,
-      kabupaten_kota_ktp,
-      alamat_domisili,
-      provinsi_domisili,
-      kabupaten_kota_domisili,
-      tanggal_lahir,
-      no_bpjs,
-      kelas_bpjs,
-      foto_ktp,
-      foto_bpjs,
-    }
-  ) =>
+  updatePatient: (token, id, data) =>
     instance({
       method: `PUT`,
       url: `/patients/${id}`,
@@ -341,11 +248,12 @@ export default {
         usia: data.usia,
         nama_wali: data.namaWali,
         email_wali: data.emailWali,
-        no_telepon_wali: data.noTelpWali,
-        alamat_ktp: data.alamat_ktp,
+        no_telpon_wali: data.noTelpWali,
+        alamat_ktp: data.alamatKTP,
         kabupaten_kota_ktp: data.kota_ktp,
         alamat_domisili: data.domisili,
         provinsi_domisili: data.provinsi,
+        provinsi_ktp: data.provinsi_ktp,
         kabupaten_kota_domisili: data.kota,
         no_bpjs: data.noBPJS,
         kelas_bpjs: data.kelas_bpjs,
@@ -657,14 +565,24 @@ export default {
         status: status,
       },
     }),
-  getAllDailyPractices: (token) =>
+  getAllDailyPractices: (token, id) =>
     instance({
       method: `GET`,
-      url: `/practices`,
+      url: `/policlinics/${id}/practices`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
     }),
+
+  getNextPageDailyPractice: (token, id, page) =>
+    instance({
+      method: `GET`,
+      url: `/policlinics/${id}/practices?page=${page}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
+
   getDailyPracticesById: (token, id) =>
     instance({
       method: `GET`,
@@ -698,7 +616,7 @@ export default {
     }),
 
   //bed Register
-  createBedRegistrations: (token, { hospital_id, patient_id}) =>
+  createBedRegistrations: (token, { hospital_id, patient_id }) =>
     instance({
       method: `POST`,
       url: `/registrations`,

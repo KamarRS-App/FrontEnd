@@ -1,24 +1,58 @@
-import React, { useState } from 'react';
-import { Box, Stack } from '@chakra-ui/layout';
-import { Avatar } from '@chakra-ui/avatar';
-import { Image, Button, Flex, Menu, MenuButton, MenuList, MenuItem, Text } from '@chakra-ui/react';
-import { ChevronDownIcon, HamburgerIcon, CloseIcon, ChevronRightIcon } from '@chakra-ui/icons';
-import { useNavigate } from 'react-router';
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { Box, Stack } from "@chakra-ui/layout";
+import { Avatar } from "@chakra-ui/avatar";
+import {
+  Image,
+  Button,
+  Flex,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Text,
+} from "@chakra-ui/react";
+import {
+  ChevronDownIcon,
+  HamburgerIcon,
+  CloseIcon,
+  ChevronRightIcon,
+} from "@chakra-ui/icons";
+import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const Navbar = ({ isAuth, nameUser, isActive }) => {
   const [isOpen, SetIsOpen] = useState(false);
   const toggle = () => SetIsOpen(!isOpen);
   const navigate = useNavigate();
 
+  const handeLogoutBosku = () => {
+    Cookies.remove("token");
+    navigate("/login");
+  };
+
   return (
     <div className="sticky top-0 z-10">
       <NavBarContainer>
-        <Link to='/home'>
-          <Image height="75px" width="100px" objectFit="contain" src="/src/assets/images/logo_rawat_inap.svg" alt="Logo Rawat Inap" />
+        <Link to="/home">
+          <Image
+            height="75px"
+            width="100px"
+            objectFit="contain"
+            src="/src/assets/images/logo_rawat_inap.svg"
+            alt="Logo Rawat Inap"
+          />
         </Link>
         <MenuToggle toggle={toggle} isOpen={isOpen} />
-        <MenuLinks isOpen={isOpen} Auth={isAuth} nameUser={nameUser} isActive={isActive} onLoginHandler={() => navigate('/login')} />
+        <MenuLinks
+          isOpen={isOpen}
+          Auth={isAuth}
+          nameUser={nameUser}
+          isActive={isActive}
+          onLoginHandler={() => navigate("/login")}
+          gotoProfile={() => navigate("/edit")}
+          logOut={handeLogoutBosku}
+        />
       </NavBarContainer>
     </div>
   );
@@ -32,7 +66,15 @@ const MenuToggle = ({ toggle, isOpen }) => {
   );
 };
 
-const MenuLinks = ({ isOpen, Auth, onLoginHandler, nameUser, isActive }) => {
+const MenuLinks = ({
+  isOpen,
+  Auth,
+  onLoginHandler,
+  nameUser,
+  isActive,
+  gotoProfile,
+  logOut,
+}) => {
   return (
     <Box
       display={{ base: isOpen ? "block" : "none", md: "block" }}
@@ -51,38 +93,23 @@ const MenuLinks = ({ isOpen, Auth, onLoginHandler, nameUser, isActive }) => {
       >
         {Auth ? (
           <>
-            <Link
-              to="/home"
-            >
-              <Text
-                color={isActive === 'home' && 'alta.primary'}
-              >
-                Beranda
-              </Text>
+            <Link to="/home">
+              <Text color={isActive === "home" && "alta.primary"}>Beranda</Text>
             </Link>
-            <Link
-              to="/rumahsakit"
-            >
-              <Text
-                color={isActive === 'hospital' && 'alta.primary'}
-              >
+            <Link to="/rumahsakit">
+              <Text color={isActive === "hospital" && "alta.primary"}>
                 Cari Rumah Sakit
               </Text>
             </Link>
-            <Link
-              to="/dokter"
-            >
-              <Text
-                color={isActive === 'doctor' && 'alta.primary'}
-              >
+            <Link to="/dokter">
+              <Text color={isActive === "doctor" && "alta.primary"}>
                 Cari Dokter
               </Text>
             </Link>
             <Menu>
               <MenuButton righticon={<ChevronDownIcon />}>
                 <Flex align="center" gap="3">
-                  <Avatar width="30px" height="30px">
-                  </Avatar>
+                  <Avatar width="30px" height="30px"></Avatar>
                   <Text
                     fontSize={{ base: "16px", md: "18px", lg: "18px" }}
                     color="#1FA8F6"
@@ -92,8 +119,8 @@ const MenuLinks = ({ isOpen, Auth, onLoginHandler, nameUser, isActive }) => {
                 </Flex>
               </MenuButton>
               <MenuList>
-                <MenuItem>Profile</MenuItem>
-                <MenuItem>Logout</MenuItem>
+                <MenuItem onClick={gotoProfile}>Profile</MenuItem>
+                <MenuItem onClick={logOut}>Logout</MenuItem>
               </MenuList>
             </Menu>
           </>
@@ -116,7 +143,12 @@ const MenuLinks = ({ isOpen, Auth, onLoginHandler, nameUser, isActive }) => {
             >
               Cari Dokter
             </Link> */}
-            <Button bg="#3AB8FF" _hover={{ bg: '#1FA8F6' }} color="white" onClick={onLoginHandler}>
+            <Button
+              bg="#3AB8FF"
+              _hover={{ bg: "#1FA8F6" }}
+              color="white"
+              onClick={onLoginHandler}
+            >
               Login <ChevronRightIcon />
             </Button>
           </Menu>

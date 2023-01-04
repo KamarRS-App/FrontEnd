@@ -36,20 +36,21 @@ function Login() {
   const navigate = useNavigate();
   const toast = useToast();
   const [passwordType, setPasswordType] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isChecked, setIsChecked] = useState(false);
+  const token = Cookies.get("token");
   const dispatch = useDispatch();
   const auth = AuthToken();
 
   const onShowPassword = (e) => {
     setPasswordType(e.target.value);
-  }
+  };
 
   //yup schema
   const schema = yup.object().shape({
-    email: yup
-      .string()
-      .required("Harap masukkan email")
-      .email("Format email salah"),
-    kata_sandi: yup.string().required("Harap masukkan kata sandi"),
+    email: yup.string().email("Format email salah"),
+    kata_sandi: yup.string(),
   });
 
   //rhf configuration
@@ -62,10 +63,16 @@ function Login() {
     mode: "onChange",
   });
 
+  //checkbox handler
+  const handleCheckbox = (e) => {
+    setIsChecked(e.target.checked);
+    console.log(e.target.checked);
+  };
+
   //handle login
-  const handleLogin = async (data) => {
+  const handleLogin = async (email, password) => {
     await api
-      .loginUser(data)
+      .loginUser(email, password)
       .then((response) => {
         const data = response.data.data;
         toast({
@@ -76,6 +83,15 @@ function Login() {
           duration: 1500,
         });
         getUser(data.token);
+        if (isChecked) {
+          localStorage.setItem("email", email);
+          localStorage.setItem("password", password);
+          localStorage.setItem("isChecked", isChecked);
+        } else {
+          localStorage.removeItem("email");
+          localStorage.removeItem("password");
+          localStorage.removeItem("isChecked");
+        }
         Cookies.set("token", data.token);
         setTimeout(() => {
           navigate("/home");
@@ -93,10 +109,11 @@ function Login() {
   };
 
   const getUser = async (token) => {
-    await api.getUser(token)
-      .then(response => {
+    await api
+      .getUser(token)
+      .then((response) => {
         const data = response.data.data;
-        dispatch(addUsers(data))
+        dispatch(addUsers(data));
       })
       .catch(error => {
         toast({
@@ -107,23 +124,29 @@ function Login() {
           duration: 1500,
         });
       })
-  }
-
+  };
+  
   //submit function
   const onSubmit = (data) => {
-    handleLogin(data);
+    handleLogin(email, password);
   };
-
+  
   useEffect(() => {
+    if (localStorage.email) {
+      setEmail(localStorage.email);
+      setPassword(localStorage.password);
+      setIsChecked(localStorage.isChecked);
+    }
+
     if (auth) {
       toast({
-        position: 'top',
-        title: 'Kamu sudah Login',
-        status: 'warning',
-        duration: '2000',
-        isClosable: true
+        position: "top",
+        title: "Kamu sudah Login",
+        status: "warning",
+        duration: "2000",
+        isClosable: true,
       });
-      navigate('/home');
+      navigate("/home");
     }
   }, []);
 
@@ -229,9 +252,12 @@ function Login() {
                   <br />
                   <FormControl isInvalid={errors.email}>
                     <Input
-                      {...register("email")}
+                      // {...register("email")}
                       placeholder="email@gmail.com"
                       name="email"
+                      id="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                     />
                     <Text color="red">{errors.email?.message}</Text>
                   </FormControl>
@@ -244,12 +270,15 @@ function Login() {
                     <InputGroup>
                       <Input
                         type={show ? "text" : "password"}
-                        {...register("kata_sandi")}
+                        // {...register("kata_sandi")}
                         placeholder="kata sandi"
                         name="kata_sandi"
+                        id="password"
                         onInput={onShowPassword}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                       />
-                      {passwordType !== '' &&
+                      {passwordType !== "" && (
                         <InputRightElement>
                           {show ? (
                             <ViewOffIcon
@@ -257,10 +286,13 @@ function Login() {
                               cursor={"pointer"}
                             />
                           ) : (
-                            <ViewIcon onClick={showPassword} cursor={"pointer"} />
+                            <ViewIcon
+                              onClick={showPassword}
+                              cursor={"pointer"}
+                            />
                           )}
                         </InputRightElement>
-                      }
+                      )}
                     </InputGroup>
                     <Text color="red">{errors.kata_sandi?.message}</Text>
                   </FormControl>
@@ -268,7 +300,10 @@ function Login() {
                     <Box>
                       <input
                         type="checkbox"
+                        checked={isChecked}
                         className="checkbox checkbox-xs mr-2 border-gray-500"
+                        id={"isChecked"}
+                        onChange={(e) => handleCheckbox(e)}
                       />
                       <label for="rememberme">Remember me</label>
                     </Box>

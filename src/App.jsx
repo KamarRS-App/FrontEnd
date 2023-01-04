@@ -2,7 +2,6 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { Box } from "@chakra-ui/layout";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux";
-
 import Login from "./pages/Login";
 import SettingPage from "./pages/Admin/SettingPage";
 import Register from "./pages/Register";
@@ -18,7 +17,6 @@ import RoomPage from "./pages/Admin/RoomPage";
 import PatientRegistrationPage from "./pages/Admin/PatientRegistrationPage";
 import ProfileHospitalPage from "./pages/Admin/ProfileHospitalPage";
 import LoginAdmin from "./pages/Admin/LoginAdmin";
-
 import Pembayaran from "./pages/Pembayaran";
 import Payment from "./pages/Payment";
 import PembayaranSelesai from "./pages/PembayaranSelesai";
@@ -31,8 +29,13 @@ import BuatJanjiDokter from "./pages/BuatJanjiDokter";
 import TentangKami from "./pages/TentangKami";
 import Privasi from "./pages/Privasi";
 import SyaratDanKetentuan from "./pages/SyaratDanKetentuan";
-// import Poliklinik from "./pages/Admin/Poliklinik";
+import PoliclinicPages from "./pages/Admin/PoliclinicPages";
+import EditProfileUser from "./pages/EditProfileUser";
+import CariRumahSakit from "./pages/CariRumahSakit";
 import LoginAdminRoot from "./pages/Admin/LoginAdminRoot";
+import ReservasiRawatJalan from "./pages/ReservasiRawatJalan";
+import LinkPaymentPage from "./pages/LinkPaymentPage";
+import AuthGoogle from "./pages/AuthGoogle";
 
 import "./App.css";
 import "@fontsource/plus-jakarta-sans/700.css";
@@ -41,11 +44,6 @@ import "@fontsource/plus-jakarta-sans/500.css";
 import "@fontsource/plus-jakarta-sans/600.css";
 import theme from "../utils/extendedTheme";
 import store from "../store";
-import PoliclinicPages from "./pages/Admin/PoliclinicPages";
-import EditProfileUser from "./pages/EditProfileUser";
-import CariRumahSakit from "./pages/CariRumahSakit";
-import LinkPaymentPage from "./pages/LinkPaymentPage";
-import AuthGoogle from "./pages/AuthGoogle";
 
 function App() {
   return (

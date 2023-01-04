@@ -123,57 +123,58 @@ const AdminRoot = () => {
         setLoading(false);
     }
 
-    const getAdminStaffById = async (id) => {
-        await api.getAdminById(token, id)
-            .then(response => {
-                const data = response.data.data;
-                setValueUpdate('nama', data.nama);
-                setValueUpdate('email', data.email);
-                setValueUpdate('hospital_id', data.hospital_id);
-            })
-    }
+  const getAdminStaffById = async (id) => {
+    await api.getAdminById(token, id).then((response) => {
+      const data = response.data.data;
+      setValueUpdate("nama", data.nama);
+      setValueUpdate("email", data.email);
+      setValueUpdate("hospital_id", data.hospital_id);
+    });
+  };
 
-    const createAdminStaff = async (data) => {
-        await api.createAdmin(token, data)
-            .then(response => {
-                toast({
-                    position: 'top',
-                    title: 'Berhasil membuat Admin Baru',
-                    status: 'success',
-                    duration: '2000',
-                    isClosable: true
-                })
-                getAllHospitalsHandler();
-                getAllAdminStaff();
-            })
-            .catch(error => {
-                console.log(error)
-                toast({
-                    position: 'top',
-                    title: 'Gagal membuat Admin Baru',
-                    status: 'error',
-                    duration: '2000',
-                    isClosable: true
-                })
-            })
-    }
+  const createAdminStaff = async (data) => {
+    await api
+      .createAdmin(token, data)
+      .then((response) => {
+        toast({
+          position: "top",
+          title: "Berhasil membuat Admin Baru",
+          status: "success",
+          duration: "2000",
+          isClosable: true,
+        });
+        getAllHospitalsHandler();
+        getAllAdminStaff();
+      })
+      .catch((error) => {
+        console.log(error);
+        toast({
+          position: "top",
+          title: "Gagal membuat Admin Baru",
+          status: "error",
+          duration: "2000",
+          isClosable: true,
+        });
+      });
+  };
 
-    const getAllHospitalsHandler = async () => {
-        await api.getHospitals(token)
-            .then(response => {
-                const data = response.data.data;
-                setHospitals(data)
-            })
-            .catch(error => {
-                toast({
-                    position: 'top',
-                    title: 'Gagal Mengambil Data Rumah Sakit',
-                    status: 'error',
-                    duration: '2000',
-                    isClosable: true
-                })
-            })
-    }
+  const getAllHospitalsHandler = async () => {
+    await api
+      .getHospitals(token)
+      .then((response) => {
+        const data = response.data.data;
+        setHospitals(data);
+      })
+      .catch((error) => {
+        toast({
+          position: "top",
+          title: "Gagal Mengambil Data Rumah Sakit",
+          status: "error",
+          duration: "2000",
+          isClosable: true,
+        });
+      });
+  };
 
     const getHospitalName = async (id) => {
         await api.getHospitalByID(token, id)
@@ -207,74 +208,87 @@ const AdminRoot = () => {
                 })
             })
     }
-
-    const adminDeleteHandler = async (id) => {
-        await api.deleteAdmin(token, id)
-            .then(response => {
-                toast({
-                    position: 'top',
-                    title: 'Berhasil Menghapus Data Admin',
-                    status: 'success',
-                    duration: '2000',
-                    isClosable: true
-                })
-                getAllAdminStaff();
-            })
-            .catch(error => {
-                console.log(error)
-                toast({
-                    position: 'top',
-                    title: 'Gagal Menghapus Data Admin',
-                    status: 'error',
-                    duration: '2000',
-                    isClosable: true
-                })
-            })
-    }
+  const adminDeleteHandler = async (id) => {
+    await api
+      .deleteAdmin(token, id)
+      .then((response) => {
+        toast({
+          position: "top",
+          title: "Berhasil Menghapus Data Admin",
+          status: "success",
+          duration: "2000",
+          isClosable: true,
+        });
+        getAllAdminStaff();
+      })
+      .catch((error) => {
+        console.log(error);
+        toast({
+          position: "top",
+          title: "Gagal Menghapus Data Admin",
+          status: "error",
+          duration: "2000",
+          isClosable: true,
+        });
+      });
+  };
 
     const onChangeHospital = (id) => {
         getHospitalName(id);
         console.log(id);
     }
+  const onSubmitCreate = (values) => {
+    createAdminStaff(values);
+    onCloseModalCreate();
+  };
 
-    const onSubmitCreate = (values) => {
-        console.log(values);
-        // createAdminStaff(values)
-        onCloseModalCreate();
-    }
+  const onUpdateSubmit = (data) => {
+    updateAdminStaff(adminId, data);
+    onCloseModalEdit();
+  };
 
-    const onUpdateSubmit = (data) => {
-        updateAdminStaff(adminId, data);
-        onCloseModalEdit();
-    }
+  const onEditHandler = (id) => {
+    setAdminId(id);
+    getAdminStaffById(id);
+    onModalEditOpen();
+  };
 
-    const onEditHandler = (id) => {
-        setAdminId(id);
-        getAdminStaffById(id);
-        onModalEditOpen();
-    }
+  const onDeleteClicked = (id) => {
+    onModalDeleteOpen();
+    setAdminId(id);
+  };
 
-    const onDeleteClicked = (id) => {
-        onModalDeleteOpen()
-        setAdminId(id);
-    }
+  const onDeleteHandler = () => {
+    adminDeleteHandler(adminId);
+    onCloseModalDelete();
+  };
 
-    const onDeleteHandler = () => {
-        adminDeleteHandler(adminId);
-        onCloseModalDelete();
-    }
+  const onCloseHandler = () => {
+    onCloseModalCreate();
+    setValueCreate("nama", "");
+    setValueCreate("email", "");
+    setValueCreate("kata_sandi", "");
+    setValueCreate("hospital_id", null);
+  };
 
-    const onCloseHandler = () => {
-        onCloseModalCreate()
-        setValueCreate('nama', '');
-        setValueCreate('email', '');
-        setValueCreate('kata_sandi', '');
-        setValueCreate('hospital_id', null);
-    }
+  const onShowPassword = (e) => {
+    setShow(e.target.value);
+  };
 
-    const onShowPassword = (e) => {
-        setShow(e.target.value)
+  useEffect(() => {
+    if (role !== "super admin" && token === undefined) {
+      toast({
+        position: "top",
+        title: "Kamu Harus Login Dulu",
+        status: "warning",
+        duration: "2000",
+        isClosable: true,
+      });
+      navigate("/root/login");
     }
+    getAllAdminStaff();
+    getAllHospitalsHandler();
+  }, []);
 
     const onError = (error) => {
         console.log(error)
