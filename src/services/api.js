@@ -570,11 +570,7 @@ export default {
         status: data.status,
       },
     }),
-  updateDailyPractice: (
-    token,
-    id,
-    { policlinic_id, tanggal_praktik, kuota_harian, status }
-  ) =>
+  updateDailyPractice: (token, id, data) =>
     instance({
       method: `PUT`,
       url: `/practices/${id}`,
@@ -582,10 +578,10 @@ export default {
         Authorization: `Bearer ${token}`,
       },
       data: {
-        policlinic_id: policlinic_id,
-        tanggal_praktik: tanggal_praktik,
-        kuota_harian: kuota_harian,
-        status: status,
+        id: data.id,
+        tanggal_praktik: data.tanggal_praktik,
+        kuota_harian: parseInt(data.kuota_harian),
+        status: data.status,
       },
     }),
   getAllDailyPractices: (token, id) =>

@@ -52,12 +52,7 @@ function DashboardDailyPraktek() {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [totalPage, setTotalPage] = React.useState(0);
   const [selectedPractice, setSelectedPractice] = React.useState();
-  const [newDataPractice, setNewDataPractice] = React.useState({
-    policlinic_id: "",
-    tanggal_praktik: "",
-    kuota_harian: "",
-    status: "",
-  });
+
   // ================ PAGINATION ====================
   //change page
   const onChangePage = (page) => {
@@ -127,11 +122,20 @@ function DashboardDailyPraktek() {
     onClose: onCloseModalEdit,
   } = useDisclosure();
 
+  //edit inputan handler
   const editDataPraktik = (e) => {
     const newData = { ...selectedPractice };
     newData[e.target.id] = e.target.value;
-    setNewDataPractice(newData);
+    setSelectedPractice(newData);
     console.log(newData);
+  };
+
+  //send new data
+  const confirmEditHandler = async (token, id, data) => {
+    await api
+      .updateDailyPractice(token, id, data)
+      .then((response) => console.log(response))
+      .catch((err) => console.log(err));
   };
 
   // =============== MENGAMBIL DATA TIAP POLI ======================
@@ -318,31 +322,13 @@ function DashboardDailyPraktek() {
           <ModalCloseButton />
           <ModalBody>
             <FormControl>
-              <FormLabel>ID Poliklinik</FormLabel>
+              <FormLabel>Tanggal Praktek</FormLabel>
               <Input
-                placeholder="ID Poliklinik"
-                id="policlinic_id"
-                type="number"
-                name="policlinic_id"
-                value={selectedPractice?.id}
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel>ID Poliklinik</FormLabel>
-              <Input
-                placeholder="ID Poliklinik"
-                id="policlinic_id"
-                type="number"
-                name="policlinic_id"
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel>ID Poliklinik</FormLabel>
-              <Input
-                placeholder="ID Poliklinik"
-                id="policlinic_id"
-                type="number"
-                name="policlinic_id"
+                id="tanggal_praktik"
+                type="date"
+                name="tanggal_praktik"
+                value={selectedPractice?.tanggal_praktik}
+                onChange={(e) => editDataPraktik(e)}
               />
             </FormControl>
             <FormControl>
@@ -353,7 +339,22 @@ function DashboardDailyPraktek() {
                 type="number"
                 name="kuota_harian"
                 value={selectedPractice?.kuota_harian}
+                onChange={(e) => editDataPraktik(e)}
               />
+            </FormControl>
+            <FormControl>
+              <FormLabel>Status:</FormLabel>
+              <Select
+                id="status"
+                placeholder="-- Pilih Status --"
+                name="status"
+                onChange={(e) => {
+                  editDataPraktik(e);
+                }}
+              >
+                <option value="Available">Available</option>
+                <option value="Not Available">Not Available</option>
+              </Select>
             </FormControl>
           </ModalBody>
           <ModalFooter>
@@ -366,9 +367,16 @@ function DashboardDailyPraktek() {
               width={"150px"}
               height={"50px"}
               _hover={{ bg: "alta.primary" }}
-              onClick={onCloseModalEdit}
+              onClick={() => {
+                confirmEditHandler(
+                  token,
+                  selectedPractice.id,
+                  selectedPractice
+                );
+                console.log(selectedPractice);
+              }}
             >
-              Close
+              Ubah
             </Button>{" "}
             <Button
               mr={3}
