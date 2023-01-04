@@ -4,7 +4,7 @@ import googleLogo from "../assets/images/googlelogo.png";
 import api from "../services/api";
 import { ViewOffIcon, ViewIcon } from "@chakra-ui/icons";
 import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import {
   Button,
   Center,
@@ -26,18 +26,22 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useDispatch } from "react-redux";
 import { addUsers } from "../features/userSlice";
+import { AuthToken } from "../services/authToken";
+import axios from "axios";
+import { useGoogleLogin } from "@react-oauth/google";
 
 function Login() {
   const [show, setShow] = useState(false);
   const showPassword = () => setShow(!show);
   const navigate = useNavigate();
   const toast = useToast();
-  const [passwordType, setPasswordType] = useState("");
+  const [passwordType, setPasswordType] = useState('');
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isChecked, setIsChecked] = useState(false);
   const token = Cookies.get("token");
   const dispatch = useDispatch();
+  const auth = AuthToken();
 
   const onShowPassword = (e) => {
     setPasswordType(e.target.value);
@@ -101,7 +105,6 @@ function Login() {
           isClosable: true,
           duration: 1500,
         });
-        console.log(error);
       });
   };
 
@@ -112,24 +115,30 @@ function Login() {
         const data = response.data.data;
         dispatch(addUsers(data));
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch(error => {
+        toast({
+          title: `Gagal mendapatkan data user.`,
+          status: "error",
+          position: "top",
+          isClosable: true,
+          duration: 1500,
+        });
+      })
   };
-
+  
   //submit function
   const onSubmit = (data) => {
     handleLogin(email, password);
   };
-
-  React.useEffect(() => {
+  
+  useEffect(() => {
     if (localStorage.email) {
       setEmail(localStorage.email);
       setPassword(localStorage.password);
       setIsChecked(localStorage.isChecked);
     }
 
-    if (token) {
+    if (auth) {
       toast({
         position: "top",
         title: "Kamu sudah Login",
@@ -306,6 +315,7 @@ function Login() {
                     mt="10"
                     backgroundColor="alta.primary"
                     _hover={{ bg: "#3AB8FF" }}
+                    type='submit'
                     onClick={handleSubmit(onSubmit)}
                   >
                     Login
@@ -321,24 +331,30 @@ function Login() {
               <Divider />
             </Flex>
             <Box mt={10}>
-              <Button
-                colorScheme="white"
-                color="#000000"
-                variant="solid"
-                border="1px"
-                borderColor="#00000066"
-                width="100%"
+              <Link
+                href="https://rawatinap.online/auth/google/login"
+                target={'_self'}
               >
-                <Flex minWidth="max-content" gap="2" w="100%">
-                  <Box>
-                    <Image src={googleLogo} boxSize="20px" />
-                  </Box>
-                  <Spacer />
-                  <Box flex="100%">
-                    <Text fontSize="md">Login with Google</Text>
-                  </Box>
-                </Flex>
-              </Button>
+                <Button
+                  colorScheme="white"
+                  color="#000000"
+                  variant="solid"
+                  border="1px"
+                  borderColor="#00000066"
+                  width="100%"
+                >
+                  <Flex minWidth="max-content" gap="2" w="100%">
+                    <Box>
+                      <Image src={googleLogo} boxSize="20px" />
+                    </Box>
+                    <Spacer />
+                    <Box flex="100%">
+                      <Text fontSize="md">Login with Google</Text>
+                    </Box>
+                  </Flex>
+
+                </Button>
+              </Link>
             </Box>
             <Box>
               <Center>

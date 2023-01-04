@@ -1,38 +1,31 @@
 import React from 'react';
-import { Box, Center } from '@chakra-ui/react';
+import { Box, Button, Center, Flex, Img, Input, InputGroup, InputRightElement } from '@chakra-ui/react';
 import { Text } from '@chakra-ui/react';
-import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/react';
+import { Card, CardHeader, CardBody } from '@chakra-ui/react';
 import { Stack, StackDivider } from '@chakra-ui/react';
 import BankPayment from './BankPayment';
-import EWalletPayment from './EWalletPayment';
-import Indomeret from './Indomaret';
-import Alfa from './Alfa';
-function CardPayment() {
+import CopyToClipboard from 'react-copy-to-clipboard';
+
+function CardPayment({ onClickBCA, onClickBNI, onClickBRI, onClickPermata }) {
   return (
-    <Card w={700} mt={50} ml={50} mb={50}>
-      <Center>
-        <Text fontSize={16} fontWeight={600} color="#1FA8F6" m="5">
-          Selesaikan Pembayaran Dalam 19:59 menit
-        </Text>
-      </Center>
+    <Card
+      maxWidth={{ md: '500px', lg: '570px', xl: '700px' }}
+      py={'10'}
+    >
       <CardHeader>
-        <Text fontSize={20} fontWeight={600} color="#CDD1E0" m="5">
+        <Text fontSize={20} fontWeight={600}>
           Pilih Metode Pembayaran
         </Text>
       </CardHeader>
       <CardBody justifyContent="center" alignItems="center">
         <Stack divider={<StackDivider />} spacing="4">
           <Box>
-            <BankPayment />
-          </Box>
-          <Box>
-            <EWalletPayment />
-          </Box>
-          <Box>
-            <Indomeret />
-          </Box>
-          <Box>
-            <Alfa />
+            <BankPayment
+              onClickBCA={onClickBCA}
+              onClickBNI={onClickBNI}
+              onClickBRI={onClickBRI}
+              onClickPermata={onClickPermata}
+            />
           </Box>
         </Stack>
       </CardBody>

@@ -33,6 +33,7 @@ import api from "../services/api";
 import Cookies from "js-cookie";
 import { MdModeEdit, MdOutlineDeleteOutline } from "react-icons/md";
 import { useSelector } from "react-redux";
+import Loading from "../components/Loading";
 import PopupAdmin from "../components/PopupAdmin";
 
 function TambahData() {
@@ -41,6 +42,7 @@ function TambahData() {
   const token = Cookies.get("token");
   const toast = useToast();
   const [patients, setPatients] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [modalData, setModalData] = useState();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -51,15 +53,16 @@ function TambahData() {
         const data = response.data.data;
         setPatients(data);
       })
-      .catch((error) => {
+      .catch(error => {
         toast({
-          title: `Ini terjadi karna kesalahan kami, mohon tunggu..`,
-          status: "error",
-          position: "top",
-          isClosable: true,
-          duration: 1500,
+          position: 'top',
+          title: 'Ini terjadi karna kesalahan kami, mohon tunggu..',
+          status: 'error',
+          duration: '2000',
+          isClosable: true
         });
-      });
+      })
+    setLoading(false);
   };
 
   //delete user by id handler
@@ -137,55 +140,63 @@ function TambahData() {
   }, []);
 
   return (
-    <Layout>
-      <Box minH="100vh" backgroundColor="white">
-        <Box px={36} py={20} w="100%">
-          <Box className="text-end">
-            <Button
-              bg="#3AB8FF"
-              _hover={{ bg: "alta.primary" }}
-              color="white"
-              onClick={() => navigate("/pasien/tambah")}
-            >
-              Tambah data +
-            </Button>
-          </Box>
-          <Box pt={20} className="text-center">
-            {patients.length === 0 ? (
-              <>
-                <Text color="gray" fontSize="3xl">
-                  belum ada data terdaftar
-                </Text>
-                <Box pt={10}>
-                  <Grid className="justify-center">
-                    <Image src={Group3601} alt="Belum ada data" />
-                  </Grid>
-                </Box>
-              </>
-            ) : (
-              <TableContainer>
-                <Table variant="simple">
-                  <Thead>
-                    <Tr>
-                      <Th color="alta.primary">Aksi</Th>
-                      <Th color="alta.primary">No</Th>
-                      <Th color="alta.primary">Nama</Th>
-                      <Th color="alta.primary">NIK</Th>
-                      <Th color="alta.primary">No KK</Th>
-                      <Th color="alta.primary">Usia</Th>
-                      <Th color="alta.primary">Alamat</Th>
-                      <Th color="alta.primary">Jenis Kelamin</Th>
-                      <Th color="alta.primary">Nama Wali</Th>
-                      <Th color="alta.primary">Email Wali</Th>
-                      <Th color="alta.primary">No Telpon Wali</Th>
-                      <Th color="alta.primary">No BPJS</Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    {patients?.map((patient, index) => (
-                      <Tr key={index}>
-                        <Td textAlign={"center"}>
-                          <ButtonGroup gap="4">
+    <>
+      {loading && <Loading body={'Sedang Memuat Halaman....'} />}
+      {
+        !loading &&
+        <Layout>
+          <Box minH="100vh" backgroundColor="white">
+            <Box px={36} py={20} w="100%">
+              <Box className="text-end">
+                <Button
+                  bg="#3AB8FF"
+                  _hover={{ bg: "alta.primary" }}
+                  color="white"
+                  onClick={() => navigate("/pasien/tambah")}
+                >
+                  Tambah data +
+                </Button>
+              </Box>
+              <Box pt={20} className="text-center">
+                {
+                  patients.length === 0 ?
+                    <>
+                      <Text color="gray" fontSize="3xl">
+                        belum ada data terdaftar
+                      </Text>
+                      <Box pt={10}>
+                        <Grid className="justify-center">
+                          <Image src={Group3601} alt="Belum ada data" />
+                        </Grid>
+                      </Box>
+                    </>
+                    :
+                    <TableContainer>
+                      <Table variant="simple">
+                        <Thead>
+                          <Tr>
+                            <Th color="alta.primary">Aksi</Th>
+                            <Th color="alta.primary">No</Th>
+                            <Th color="alta.primary">Nama</Th>
+                            <Th color="alta.primary">NIK</Th>
+                            <Th color="alta.primary">No KK</Th>
+                            <Th color="alta.primary">Usia</Th>
+                            <Th color="alta.primary">Alamat</Th>
+                            <Th color="alta.primary">Jenis Kelamin</Th>
+                            <Th color="alta.primary">Nama Wali</Th>
+                            <Th color="alta.primary">Email Wali</Th>
+                            <Th color="alta.primary">No Telpon Wali</Th>
+                            <Th color="alta.primary">No BPJS</Th>
+                          </Tr>
+                        </Thead>
+                        <Tbody>
+                          {
+                            patients?.map((patient, index) => (
+                              <Tr key={index}>
+                                <Td
+                                  textAlign={'center'}
+                                >
+                                  <ButtonGroup gap="4">
                             <Button
                               onClick={() => {
                                 onOpen();
@@ -207,39 +218,28 @@ function TambahData() {
                             >
                               <MdOutlineDeleteOutline />
                             </Button>
-                          </ButtonGroup>
-                        </Td>
-                        <Td>{index + 1}</Td>
-                        <Td>{patient.nama_pasien}</Td>
-                        <Td>{patient.nik}</Td>
-                        <Td>{patient.no_kk}</Td>
-                        <Td>{patient.usia} Tahun</Td>
-                        <Td>
-                          {patient.alamat_domisili +
-                            ", " +
-                            patient.kabupaten_kota_domisili +
-                            ", " +
-                            patient.provinsi_domisili}
-                        </Td>
-                        <Td>{patient.jenis_kelamin}</Td>
-                        <Td>{patient.nama_wali}</Td>
-                        <Td>{patient.email_wali}</Td>
-                        <Td>
-                          {patient.no_telpon_wali === ""
-                            ? "tidak ada"
-                            : patient.no_telpon_wali}
-                        </Td>
-                        <Td>
-                          {patient.no_bpjs === ""
-                            ? "tidak ada"
-                            : patient.no_bpjs}
-                        </Td>
-                      </Tr>
-                    ))}
-                  </Tbody>
-                </Table>
-              </TableContainer>
-            )}
+                          </ButtonGroup>>
+                                </Td>
+                                <Td>{index + 1}</Td>
+                                <Td>{patient.nama_pasien}</Td>
+                                <Td>{patient.nik}</Td>
+                                <Td>{patient.no_kk}</Td>
+                                <Td>{patient.usia} Tahun</Td>
+                                <Td>{patient.alamat_domisili + ", " + patient.kabupaten_kota_domisili + ", " + patient.provinsi_domisili}</Td>
+                                <Td>{patient.jenis_kelamin}</Td>
+                                <Td>{patient.nama_wali}</Td>
+                                <Td>{patient.email_wali}</Td>
+                                <Td>{patient.no_telpon_wali === '' ? 'tidak ada' : patient.no_telpon_wali}</Td>
+                                <Td>{patient.no_bpjs === '' ? 'tidak ada' : patient.no_bpjs}</Td>
+                              </Tr>
+                            ))
+                          }
+                        </Tbody>
+                      </Table>
+                    </TableContainer>
+                }
+              </Box>
+            </Box>
           </Box>
           <PopupAdmin
             isOpen={isOpen}
@@ -353,10 +353,10 @@ function TambahData() {
                 </FormControl>
               </>
             }
-          ></PopupAdmin>
-        </Box>
-      </Box>
-    </Layout>
+           />
+        </Layout>
+      }
+    </>
   );
 }
 

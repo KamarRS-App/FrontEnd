@@ -9,6 +9,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import LayoutAdmin from '../../components/LayoutAdmin';
 import api from '../../services/api';
+import { AuthToken } from '../../services/authToken';
 
 function ProfileHospitalPage() {
   const [hospital, setHospital] = useState([]);
@@ -16,6 +17,7 @@ function ProfileHospitalPage() {
   const role = Cookies.get('role');
   const toast = useToast();
   const navigate = useNavigate();
+  const auth = AuthToken();
 
   const getHospitalById = async () => {
     await api.getHospitalByID(token, id)
@@ -29,7 +31,7 @@ function ProfileHospitalPage() {
   }
 
   useEffect(() => {
-    if (role !== 'Admin - Staff' && token === undefined) {
+    if (role !== 'Admin - Staff' || !auth) {
       toast({
         position: 'top',
         title: 'Kamu Harus Login Dulu',

@@ -21,7 +21,8 @@ import api from '../../services/api';
 import axios from 'axios';
 import PopupDelete from '../../components/PopupDelete';
 import apiProvinsi from '../../services/apiProvinsi';
-// import { AuthToken } from '../../services/authToken';
+import { AuthToken } from '../../services/authToken';
+import Loading from '../../components/Loading';
 
 const HospitalRootPages = () => {
     const { isOpen: isModalCreateOpen, onOpen: onModalCreateOpen, onClose: onCloseModalCreate } = useDisclosure();
@@ -40,6 +41,9 @@ const HospitalRootPages = () => {
     const [kota, setKota] = useState([]);
     const [nameKota, setNameKota] = useState('');
     const [kecamatan, setKecamatan] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    const auth = AuthToken();
 
     const auth = AuthToken();
 
@@ -138,6 +142,7 @@ const HospitalRootPages = () => {
                 const data = response.data.data;
                 setHospitals(data)
             })
+        setLoading(false);
     }
 
     const createHospitalHandler = async (data) => {
@@ -170,7 +175,7 @@ const HospitalRootPages = () => {
     }
 
     const updateHospitalHandler = async (data) => {
-        await axios.put(`http://34.143.247.242/hospitals/${currentHospital.id}`, data, {
+        await axios.put(`https://rawatinap.online/hospitals/${currentHospital.id}`, data, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 'content-type': 'multipart/form-data'
@@ -382,7 +387,7 @@ const HospitalRootPages = () => {
     }
 
     useEffect(() => {
-        if (role !== 'super admin' || token !== '') {
+        if (role !== 'super admin' || !auth) {
             toast({
                 position: 'top',
                 title: 'Kamu Harus Login Dulu',
@@ -396,498 +401,509 @@ const HospitalRootPages = () => {
         getProvinsi();
     }, []);
     return (
-        <LayoutAdminRoot activeMenu={'hospital'}>
-            <HeadAdmin title={'Manajemen Rumah Sakit'} isAdd={onModalCreateOpen} />
-            <TableAdmin
-                headTable={
-                    <Tr>
-                        {/* <Td
-                            fontWeight={'400'}
-                            textAlign='center'
-                            fontSize={'18px'}
-                        >
-                            No
-                        </Td> */}
-                        <Td
-                            fontWeight={'400'}
-                            textAlign='center'
-                            fontSize={'18px'}
-                        >
-                            Actions
-                        </Td>
-                        <Td
-                            fontWeight={'400'}
-                            textAlign='center'
-                            fontSize={'18px'}
-                        >
-                            Foto
-                        </Td>
-                        <Td
-                            fontWeight={'400'}
-                            textAlign='center'
-                            fontSize={'18px'}
-                        >
-                            Nama Rumah Sakit
-                        </Td>
-                        <Td
-                            fontWeight={'400'}
-                            textAlign='center'
-                            fontSize={'18px'}
-                        >
-                            Kode Rumah Sakit
-                        </Td>
-                        <Td
-                            fontWeight={'400'}
-                            textAlign='center'
-                            fontSize={'18px'}
-                        >
-                            Alamat
-                        </Td>
-                        <Td
-                            fontWeight={'400'}
-                            textAlign='center'
-                            fontSize={'18px'}
-                        >
-                            No Telpon
-                        </Td>
-                        <Td
-                            fontWeight={'400'}
-                            textAlign='center'
-                            fontSize={'18px'}
-                        >
-                            Email
-                        </Td>
-                        <Td
-                            fontWeight={'400'}
-                            textAlign='center'
-                            fontSize={'18px'}
-                        >
-                            Kelas RS
-                        </Td>
-                        <Td
-                            fontWeight={'400'}
-                            textAlign='center'
-                            fontSize={'18px'}
-                        >
-                            Pemilik/Pengelola
-                        </Td>
-                        <Td
-                            fontWeight={'400'}
-                            textAlign='center'
-                            fontSize={'18px'}
-                        >
-                            Jumlah Tempat Tidur
-                        </Td>
-                        <Td
-                            fontWeight={'400'}
-                            textAlign='center'
-                            fontSize={'18px'}
-                        >
-                            Status Rumah Sakit
-                        </Td>
-                        <Td
-                            fontWeight={'400'}
-                            textAlign='center'
-                            fontSize={'18px'}
-                        >
-                            Biaya Pendaftaran
-                        </Td>
-                    </Tr>
-                }
-                bodyTable={
-                    hospitals.length !== 0 ?
-                        hospitals?.map(data => (
-                            <Tr key={data.id}>
+        <>
+            {loading && <Loading body={'Sedang Memuat Data...'} />}
+            {
+                !loading &&
+                <LayoutAdminRoot activeMenu={'hospital'}>
+                    <HeadAdmin title={'Manajemen Rumah Sakit'} isAdd={onModalCreateOpen} />
+                    <TableAdmin
+                        headTable={
+                            <Tr>
                                 <Td
-                                    textAlign={'center'}
+                                    fontWeight={'400'}
+                                    textAlign='center'
+                                    fontSize={'18px'}
                                 >
-                                    <ButtonGroup gap='4'>
-                                        <Button
-                                            onClick={() => onHandlerEdit(data.id)}
-                                            bg='transparent'
-                                            border='1px'
-                                            borderColor={'#E0E0E0'}
-                                        >
-                                            <MdModeEdit />
-                                        </Button>
-                                        <Button
-                                            onClick={() => onDeleteClicked(data.id)}
-                                            bg='transparent'
-                                            border='1px'
-                                            borderColor={'#E0E0E0'}
-                                        >
-                                            <MdOutlineDeleteOutline />
-                                        </Button>
-                                    </ButtonGroup>
+                                    No
                                 </Td>
                                 <Td
-                                    textAlign={'center'}
+                                    fontWeight={'400'}
+                                    textAlign='center'
+                                    fontSize={'18px'}
                                 >
-                                    <Image
-                                        src={data.foto}
-                                        minWidth={'150px'}
-                                        maxWidth={'300px'}
-                                    />
+                                    Actions
                                 </Td>
                                 <Td
-                                    textAlign={'center'}
+                                    fontWeight={'400'}
+                                    textAlign='center'
+                                    fontSize={'18px'}
                                 >
-                                    {data.nama}
+                                    Foto
                                 </Td>
                                 <Td
-                                    textAlign={'center'}
+                                    fontWeight={'400'}
+                                    textAlign='center'
+                                    fontSize={'18px'}
                                 >
-                                    {data.kode_rs}
+                                    Nama Rumah Sakit
                                 </Td>
                                 <Td
-                                    textAlign={'center'}
+                                    fontWeight={'400'}
+                                    textAlign='center'
+                                    fontSize={'18px'}
                                 >
-                                    {data.alamat + ", kec." + data.kecamatan + ", " + data.kabupaten_kota + ", " + data.provinsi + ", " + data.kode_pos}
+                                    Kode Rumah Sakit
                                 </Td>
                                 <Td
-                                    textAlign={'center'}
+                                    fontWeight={'400'}
+                                    textAlign='center'
+                                    fontSize={'18px'}
                                 >
-                                    {data.no_telpon}
+                                    Alamat
                                 </Td>
                                 <Td
-                                    textAlign={'center'}
+                                    fontWeight={'400'}
+                                    textAlign='center'
+                                    fontSize={'18px'}
                                 >
-                                    {data.email}
+                                    No Telpon
                                 </Td>
                                 <Td
-                                    textAlign={'center'}
+                                    fontWeight={'400'}
+                                    textAlign='center'
+                                    fontSize={'18px'}
                                 >
-                                    {data.kelas_rs}
+                                    Email
                                 </Td>
                                 <Td
-                                    textAlign={'center'}
+                                    fontWeight={'400'}
+                                    textAlign='center'
+                                    fontSize={'18px'}
                                 >
-                                    {data.pemilik_pengelola}
+                                    Kelas RS
                                 </Td>
                                 <Td
-                                    textAlign={'center'}
+                                    fontWeight={'400'}
+                                    textAlign='center'
+                                    fontSize={'18px'}
                                 >
-                                    {data.jumlah_tempat_tidur}
+                                    Pemilik/Pengelola
                                 </Td>
                                 <Td
-                                    textAlign={'center'}
+                                    fontWeight={'400'}
+                                    textAlign='center'
+                                    fontSize={'18px'}
                                 >
-                                    {data.status_penggunaan}
+                                    Jumlah Tempat Tidur
                                 </Td>
                                 <Td
-                                    textAlign={'center'}
+                                    fontWeight={'400'}
+                                    textAlign='center'
+                                    fontSize={'18px'}
                                 >
-                                    Rp. {data.biaya_registrasi}
+                                    Status Rumah Sakit
+                                </Td>
+                                <Td
+                                    fontWeight={'400'}
+                                    textAlign='center'
+                                    fontSize={'18px'}
+                                >
+                                    Biaya Pendaftaran
                                 </Td>
                             </Tr>
-                        ))
-                        :
-                        <Tr>
-                            <Td colSpan={'12'}
-                                textAlign={'center'}
-                            >
-                                Data Kosong
-                            </Td>
-                        </Tr>
-                }
-            />
-            <PopupAdmin
-                modalTitle={'Tambah Rumah Sakit'}
-                isOpen={isModalCreateOpen}
-                onClose={onCloseCreateHandler}
-                submitButton={handleSubmit(onSubmit)}
-                modalBody={
-                    <>
-                        <FormControl isInvalid={errors.kode_rs}>
-                            <FormLabel>Kode Rumah Sakit</FormLabel>
-                            <Input placeholder='Kode Rumah Sakit' id="kode_rs" type='text' {...createHospital('kode_rs')} />
-                            {errors.kode_rs && <FormErrorMessage>{errors.kode_rs.message}</FormErrorMessage>}
-                        </FormControl>
+                        }
+                        bodyTable={
+                            hospitals.length !== 0 ?
+                                hospitals?.map((data, index) => (
+                                    <Tr key={data.id}>
+                                        <Td
+                                            textAlign={'center'}
+                                        >
+                                            {index + 1}
+                                        </Td>
+                                        <Td
+                                            textAlign={'center'}
+                                        >
+                                            <ButtonGroup gap='4'>
+                                                <Button
+                                                    onClick={() => onHandlerEdit(data.id)}
+                                                    bg='transparent'
+                                                    border='1px'
+                                                    borderColor={'#E0E0E0'}
+                                                >
+                                                    <MdModeEdit />
+                                                </Button>
+                                                <Button
+                                                    onClick={() => onDeleteClicked(data.id)}
+                                                    bg='transparent'
+                                                    border='1px'
+                                                    borderColor={'#E0E0E0'}
+                                                >
+                                                    <MdOutlineDeleteOutline />
+                                                </Button>
+                                            </ButtonGroup>
+                                        </Td>
+                                        <Td
+                                            textAlign={'center'}
+                                        >
+                                            <Image
+                                                src={data.foto}
+                                                minWidth={'150px'}
+                                                maxWidth={'300px'}
+                                            />
+                                        </Td>
+                                        <Td
+                                            textAlign={'center'}
+                                        >
+                                            {data.nama}
+                                        </Td>
+                                        <Td
+                                            textAlign={'center'}
+                                        >
+                                            {data.kode_rs}
+                                        </Td>
+                                        <Td
+                                            textAlign={'center'}
+                                        >
+                                            {data.alamat + ", kec." + data.kecamatan + ", " + data.kabupaten_kota + ", " + data.provinsi + ", " + data.kode_pos}
+                                        </Td>
+                                        <Td
+                                            textAlign={'center'}
+                                        >
+                                            {data.no_telpon}
+                                        </Td>
+                                        <Td
+                                            textAlign={'center'}
+                                        >
+                                            {data.email}
+                                        </Td>
+                                        <Td
+                                            textAlign={'center'}
+                                        >
+                                            {data.kelas_rs}
+                                        </Td>
+                                        <Td
+                                            textAlign={'center'}
+                                        >
+                                            {data.pemilik_pengelola}
+                                        </Td>
+                                        <Td
+                                            textAlign={'center'}
+                                        >
+                                            {data.jumlah_tempat_tidur}
+                                        </Td>
+                                        <Td
+                                            textAlign={'center'}
+                                        >
+                                            {data.status_penggunaan}
+                                        </Td>
+                                        <Td
+                                            textAlign={'center'}
+                                        >
+                                            Rp. {data.biaya_registrasi}
+                                        </Td>
+                                    </Tr>
+                                ))
+                                :
+                                <Tr>
+                                    <Td colSpan={'12'}
+                                        textAlign={'center'}
+                                    >
+                                        Data Kosong
+                                    </Td>
+                                </Tr>
+                        }
+                    />
+                    <PopupAdmin
+                        modalTitle={'Tambah Rumah Sakit'}
+                        isOpen={isModalCreateOpen}
+                        onClose={onCloseCreateHandler}
+                        submitButton={handleSubmit(onSubmit)}
+                        modalBody={
+                            <>
+                                <FormControl isInvalid={errors.kode_rs}>
+                                    <FormLabel>Kode Rumah Sakit</FormLabel>
+                                    <Input placeholder='Kode Rumah Sakit' id="kode_rs" type='text' {...createHospital('kode_rs')} />
+                                    {errors.kode_rs && <FormErrorMessage>{errors.kode_rs.message}</FormErrorMessage>}
+                                </FormControl>
 
-                        <FormControl mt={'4'} isInvalid={errors.nama}>
-                            <FormLabel>Nama Rumah Sakit</FormLabel>
-                            <Input placeholder='Nama Rumah Sakit' id="nama" type='text' {...createHospital('nama')} />
-                            {errors.nama && <FormErrorMessage>{errors.nama.message}</FormErrorMessage>}
-                        </FormControl>
+                                <FormControl mt={'4'} isInvalid={errors.nama}>
+                                    <FormLabel>Nama Rumah Sakit</FormLabel>
+                                    <Input placeholder='Nama Rumah Sakit' id="nama" type='text' {...createHospital('nama')} />
+                                    {errors.nama && <FormErrorMessage>{errors.nama.message}</FormErrorMessage>}
+                                </FormControl>
 
-                        <FormControl mt={'4'} isInvalid={errors.alamat}>
-                            <FormLabel>Alamat Rumah Sakit</FormLabel>
-                            <Input placeholder='Alamat Rumah Sakit' id="alamat" type='text' {...createHospital('alamat')} />
-                            {errors.alamat && <FormErrorMessage>{errors.alamat.message}</FormErrorMessage>}
-                        </FormControl>
+                                <FormControl mt={'4'} isInvalid={errors.alamat}>
+                                    <FormLabel>Alamat Rumah Sakit</FormLabel>
+                                    <Input placeholder='Alamat Rumah Sakit' id="alamat" type='text' {...createHospital('alamat')} />
+                                    {errors.alamat && <FormErrorMessage>{errors.alamat.message}</FormErrorMessage>}
+                                </FormControl>
 
-                        <Grid
-                            templateColumns={'repeat(2, 1fr)'}
-                            gap={'6'}
-                            mt={'4'}
-                        >
-                            <FormControl isInvalid={errors.provinsi}>
-                                <FormLabel>Provinsi</FormLabel>
-                                <Select
-                                    placeholder='Provinsi'
-                                    id='provinsi'
-                                    {...createHospital('provinsi')}
-                                    onChange={(e) => handlerProvinsi(e.target.value)}
+                                <Grid
+                                    templateColumns={'repeat(2, 1fr)'}
+                                    gap={'6'}
+                                    mt={'4'}
                                 >
-                                    {
-                                        provinsi.map(data => (
-                                            <option value={data.id} key={data.id}>{data.nama}</option>
-                                        ))
-                                    }
-                                </Select>
-                                {errors.provinsi && <FormErrorMessage>{errors.provinsi.message}</FormErrorMessage>}
-                            </FormControl>
+                                    <FormControl isInvalid={errors.provinsi}>
+                                        <FormLabel>Provinsi</FormLabel>
+                                        <Select
+                                            placeholder='Provinsi'
+                                            id='provinsi'
+                                            {...createHospital('provinsi')}
+                                            onChange={(e) => handlerProvinsi(e.target.value)}
+                                        >
+                                            {
+                                                provinsi.map(data => (
+                                                    <option value={data.id} key={data.id}>{data.nama}</option>
+                                                ))
+                                            }
+                                        </Select>
+                                        {errors.provinsi && <FormErrorMessage>{errors.provinsi.message}</FormErrorMessage>}
+                                    </FormControl>
 
-                            <FormControl isInvalid={errors.kabupaten_kota}>
-                                <FormLabel>Kabupaten / Kota</FormLabel>
-                                <Select
-                                    placeholder='Kabupaten/Kota'
-                                    id='kabupaten_kota'
-                                    {...createHospital('kabupaten_kota')}
-                                    onChange={(e) => handlerKota(e.target.value)}
+                                    <FormControl isInvalid={errors.kabupaten_kota}>
+                                        <FormLabel>Kabupaten / Kota</FormLabel>
+                                        <Select
+                                            placeholder='Kabupaten/Kota'
+                                            id='kabupaten_kota'
+                                            {...createHospital('kabupaten_kota')}
+                                            onChange={(e) => handlerKota(e.target.value)}
+                                        >
+                                            {
+                                                kota.map(data => (
+                                                    <option value={data.id} key={data.id}>{data.nama}</option>
+                                                ))
+                                            }
+                                        </Select>
+                                        {errors.kabupaten_kota && <FormErrorMessage>{errors.kabupaten_kota.message}</FormErrorMessage>}
+                                    </FormControl>
+
+                                    <FormControl isInvalid={errors.kecamatan}>
+                                        <FormLabel>Kecamatan</FormLabel>
+                                        <Select
+                                            placeholder='Kecamatan'
+                                            id='kecamatan'
+                                            {...createHospital('kecamatan')}
+                                        >
+                                            {
+                                                kecamatan.map(data => (
+                                                    <option value={data.nama} key={data.id}>{data.nama}</option>
+                                                ))
+                                            }
+                                        </Select>
+                                        {errors.kecamatan && <FormErrorMessage>{errors.kecamatan.message}</FormErrorMessage>}
+                                    </FormControl>
+
+                                    <FormControl isInvalid={errors.kode_pos}>
+                                        <FormLabel>Kode Pos</FormLabel>
+                                        <Input placeholder='Kode Pos' id="kodepos" type='number' {...createHospital('kode_pos')} />
+                                        {errors.kode_pos && <FormErrorMessage>{errors.kode_pos.message}</FormErrorMessage>}
+                                    </FormControl>
+                                </Grid>
+
+                                <FormControl mt={'4'} isInvalid={errors.no_telepon}>
+                                    <FormLabel>No Telpon</FormLabel>
+                                    <Input placeholder='Masukan Nomor Telpon Rumah Sakit' id="no_telpon" type='text' {...createHospital('no_telepon')} />
+                                    {errors.no_telepon && <FormErrorMessage>{errors.no_telepon.message}</FormErrorMessage>}
+                                </FormControl>
+
+                                <FormControl mt={'4'} isInvalid={errors.email}>
+                                    <FormLabel>email</FormLabel>
+                                    <Input placeholder='Masukan Email Rumah Sakit' id="email" type='email' {...createHospital('email')} />
+                                    {errors.email && <FormErrorMessage>{errors.email.message}</FormErrorMessage>}
+                                </FormControl>
+
+                                <FormControl mt={'4'} isInvalid={errors.kelas_rs}>
+                                    <FormLabel>Kelas Rumah Sakit</FormLabel>
+                                    <Select placeholder='Pilih Kelas Rumah Sakit' id='kelas_rs' {...createHospital('kelas_rs')}>
+                                        <option>rawat inap</option>
+                                        <option>rawat jalan</option>
+                                        <option>verifikasi</option>
+                                        <option>pendaftaran</option>
+                                        <option>selesai</option>
+                                    </Select>
+                                    {errors.kelas_rs && <FormErrorMessage>{errors.kelas_rs.message}</FormErrorMessage>}
+                                </FormControl>
+
+                                <FormControl mt={'4'} isInvalid={errors.pemilik_pengelola}>
+                                    <FormLabel>Pemilik/Pengelola Rumah Sakit</FormLabel>
+                                    <Select placeholder='Pilih Pengelola Rumah Sakit' id='pemilik_pengelola' {...createHospital('pemilik_pengelola')}>
+                                        <option>rawat inap</option>
+                                        <option>rawat jalan</option>
+                                        <option>verifikasi</option>
+                                        <option>pendaftaran</option>
+                                        <option>selesai</option>
+                                    </Select>
+                                    {errors.pemilik_pengelola && <FormErrorMessage>{errors.pemilik_pengelola.message}</FormErrorMessage>}
+                                </FormControl>
+
+                                <FormControl mt={'4'} isInvalid={errors.jumlah_tempat_tidur}>
+                                    <FormLabel>Jumlah Tempat Tidur Tersedia</FormLabel>
+                                    <Input placeholder='Masukan Jumlah Tempat Tidur Rumah Sakit' id="jumlah_tempat_tidur" type='number' {...createHospital('jumlah_tempat_tidur')} />
+                                    {errors.jumlah_tempat_tidur && <FormErrorMessage>{errors.jumlah_tempat_tidur.message}</FormErrorMessage>}
+                                </FormControl>
+
+                                <FormControl mt={'4'} isInvalid={errors.status_penggunaan}>
+                                    <FormLabel>Status Penggunaan</FormLabel>
+                                    <Input placeholder='Status Penggunaan Rumah Sakit' id="status_penggunaan" type='text' {...createHospital('status_penggunaan')} />
+                                    {errors.status_penggunaan && <FormErrorMessage>{errors.status_penggunaan.message}</FormErrorMessage>}
+                                </FormControl>
+
+                                <FormControl mt={'4'} isInvalid={errors.biaya_registrasi}>
+                                    <FormLabel>Biaya Pendaftaran</FormLabel>
+                                    <Input placeholder='Masukan Biaya Pendaftaran Rumah Sakit' id="biaya_registrasi" type='number' {...createHospital('biaya_registrasi')} />
+                                    {errors.biaya_registrasi && <FormErrorMessage>{errors.biaya_registrasi.message}</FormErrorMessage>}
+                                </FormControl>
+
+                                <FormControl mt={'4'} isInvalid={errors.foto}>
+                                    <FormLabel>Upload Foto Rumah Sakit</FormLabel>
+                                    <Input id="foto" type='file'{...createHospital('foto')} onChange={(e) => handleHospitalImage(e)} />
+                                    {errors.foto && <FormErrorMessage>{errors.foto.message}</FormErrorMessage>}
+                                </FormControl>
+                            </>
+                        }
+                    />
+
+                    <PopupAdmin
+                        modalTitle={'Edit Info Rumah Sakit'}
+                        isOpen={isModalEditOpen}
+                        onClose={onCloseHandler}
+                        submitButton={handleUpdate(onUpdateHandler)}
+                        modalBody={
+                            <>
+                                <FormControl isInvalid={errorsUpdate.kode_rs}>
+                                    <FormLabel>Kode Rumah Sakit</FormLabel>
+                                    <Input placeholder={currentHospital.kode_rs} id="kode_rs" type='text' {...updateHospital('kode_rs')} />
+                                    {errorsUpdate.kode_rs && <FormErrorMessage>{errorsUpdate.kode_rs.message}</FormErrorMessage>}
+                                </FormControl>
+
+                                <FormControl mt={'4'} isInvalid={errorsUpdate.nama}>
+                                    <FormLabel>Nama Rumah Sakit</FormLabel>
+                                    <Input placeholder={currentHospital.nama} id="nama" type='text' {...updateHospital('nama')} />
+                                    {errorsUpdate.nama && <FormErrorMessage>{errorsUpdate.nama.message}</FormErrorMessage>}
+                                </FormControl>
+
+                                <FormControl mt={'4'} isInvalid={errorsUpdate.alamat}>
+                                    <FormLabel>Alamat Rumah Sakit</FormLabel>
+                                    <Input placeholder={currentHospital.alamat} id="alamat" type='text' {...updateHospital('alamat')} />
+                                    {errorsUpdate.alamat && <FormErrorMessage>{errorsUpdate.alamat.message}</FormErrorMessage>}
+                                </FormControl>
+
+                                <Grid
+                                    templateColumns={'repeat(2, 1fr)'}
+                                    gap={'6'}
+                                    mt={'4'}
                                 >
-                                    {
-                                        kota.map(data => (
-                                            <option value={data.id} key={data.id}>{data.nama}</option>
-                                        ))
-                                    }
-                                </Select>
-                                {errors.kabupaten_kota && <FormErrorMessage>{errors.kabupaten_kota.message}</FormErrorMessage>}
-                            </FormControl>
+                                    <FormControl isInvalid={errorsUpdate.provinsi}>
+                                        <FormLabel>Provinsi</FormLabel>
+                                        <Select placeholder={currentHospital.provinsi} id='provinsi' {...updateHospital('provinsi')}>
+                                            <option>Jawa Timur</option>
+                                            <option>rawat jalan</option>
+                                            <option>verifikasi</option>
+                                            <option>pendaftaran</option>
+                                            <option>selesai</option>
+                                        </Select>
+                                        {errorsUpdate.provinsi && <FormErrorMessage>{errorsUpdate.provinsi.message}</FormErrorMessage>}
+                                    </FormControl>
 
-                            <FormControl isInvalid={errors.kecamatan}>
-                                <FormLabel>Kecamatan</FormLabel>
-                                <Select
-                                    placeholder='Kecamatan'
-                                    id='kecamatan'
-                                    {...createHospital('kecamatan')}
-                                >
-                                    {
-                                        kecamatan.map(data => (
-                                            <option value={data.nama} key={data.id}>{data.nama}</option>
-                                        ))
-                                    }
-                                </Select>
-                                {errors.kecamatan && <FormErrorMessage>{errors.kecamatan.message}</FormErrorMessage>}
-                            </FormControl>
+                                    <FormControl isInvalid={errorsUpdate.kabupaten_kota}>
+                                        <FormLabel>Kabupaten / Kota</FormLabel>
+                                        <Select placeholder={currentHospital.kabupaten_kota} id='kabupaten_kota' {...updateHospital('kabupaten_kota')}>
+                                            <option>Surabaya</option>
+                                            <option>rawat jalan</option>
+                                            <option>verifikasi</option>
+                                            <option>pendaftaran</option>
+                                            <option>selesai</option>
+                                        </Select>
+                                        {errorsUpdate.kabupaten_kota && <FormErrorMessage>{errorsUpdate.kabupaten_kota.message}</FormErrorMessage>}
+                                    </FormControl>
 
-                            <FormControl isInvalid={errors.kode_pos}>
-                                <FormLabel>Kode Pos</FormLabel>
-                                <Input placeholder='Kode Pos' id="kodepos" type='number' {...createHospital('kode_pos')} />
-                                {errors.kode_pos && <FormErrorMessage>{errors.kode_pos.message}</FormErrorMessage>}
-                            </FormControl>
-                        </Grid>
+                                    <FormControl isInvalid={errorsUpdate.kecamatan}>
+                                        <FormLabel>Kecamatan</FormLabel>
+                                        <Select placeholder={currentHospital.kecamatan} id='kecamatan' {...updateHospital('kecamatan')} >
+                                            <option>Rungkut</option>
+                                            <option>rawat jalan</option>
+                                            <option>verifikasi</option>
+                                            <option>pendaftaran</option>
+                                            <option>selesai</option>
+                                        </Select>
+                                        {errorsUpdate.kecamatan && <FormErrorMessage>{errorsUpdate.kecamatan.message}</FormErrorMessage>}
+                                    </FormControl>
 
-                        <FormControl mt={'4'} isInvalid={errors.no_telepon}>
-                            <FormLabel>No Telpon</FormLabel>
-                            <Input placeholder='Masukan Nomor Telpon Rumah Sakit' id="no_telpon" type='text' {...createHospital('no_telepon')} />
-                            {errors.no_telepon && <FormErrorMessage>{errors.no_telepon.message}</FormErrorMessage>}
-                        </FormControl>
+                                    <FormControl isInvalid={errorsUpdate.kode_pos}>
+                                        <FormLabel>Kode Pos</FormLabel>
+                                        <Input placeholder={currentHospital.kode_pos} id="kodepos" type='number' {...updateHospital('kode_pos')} />
+                                        {errorsUpdate.kode_pos && <FormErrorMessage>{errorsUpdate.kode_pos.message}</FormErrorMessage>}
+                                    </FormControl>
+                                </Grid>
 
-                        <FormControl mt={'4'} isInvalid={errors.email}>
-                            <FormLabel>email</FormLabel>
-                            <Input placeholder='Masukan Email Rumah Sakit' id="email" type='email' {...createHospital('email')} />
-                            {errors.email && <FormErrorMessage>{errors.email.message}</FormErrorMessage>}
-                        </FormControl>
+                                <FormControl mt={'4'} isInvalid={errorsUpdate.no_telepon}>
+                                    <FormLabel>No Telpon</FormLabel>
+                                    <Input placeholder={currentHospital.no_telpon} id="no_telpon" type='text' {...updateHospital('no_telepon')} />
+                                    {errorsUpdate.no_telepon && <FormErrorMessage>{errorsUpdate.no_telepon.message}</FormErrorMessage>}
+                                </FormControl>
 
-                        <FormControl mt={'4'} isInvalid={errors.kelas_rs}>
-                            <FormLabel>Kelas Rumah Sakit</FormLabel>
-                            <Select placeholder='Pilih Kelas Rumah Sakit' id='kelas_rs' {...createHospital('kelas_rs')}>
-                                <option>rawat inap</option>
-                                <option>rawat jalan</option>
-                                <option>verifikasi</option>
-                                <option>pendaftaran</option>
-                                <option>selesai</option>
-                            </Select>
-                            {errors.kelas_rs && <FormErrorMessage>{errors.kelas_rs.message}</FormErrorMessage>}
-                        </FormControl>
+                                <FormControl mt={'4'} isInvalid={errorsUpdate.email}>
+                                    <FormLabel>email</FormLabel>
+                                    <Input placeholder={currentHospital.email} id="email" type='email' {...updateHospital('email')} />
+                                    {errorsUpdate.email && <FormErrorMessage>{errorsUpdate.email.message}</FormErrorMessage>}
+                                </FormControl>
 
-                        <FormControl mt={'4'} isInvalid={errors.pemilik_pengelola}>
-                            <FormLabel>Pemilik/Pengelola Rumah Sakit</FormLabel>
-                            <Select placeholder='Pilih Pengelola Rumah Sakit' id='pemilik_pengelola' {...createHospital('pemilik_pengelola')}>
-                                <option>rawat inap</option>
-                                <option>rawat jalan</option>
-                                <option>verifikasi</option>
-                                <option>pendaftaran</option>
-                                <option>selesai</option>
-                            </Select>
-                            {errors.pemilik_pengelola && <FormErrorMessage>{errors.pemilik_pengelola.message}</FormErrorMessage>}
-                        </FormControl>
+                                <FormControl mt={'4'} isInvalid={errorsUpdate.kelas_rs}>
+                                    <FormLabel>Kelas Rumah Sakit</FormLabel>
+                                    <Select placeholder={currentHospital.kelas_rs} id='kelas_rs' {...updateHospital('kelas_rs')}>
+                                        <option>rawat inap</option>
+                                        <option>rawat jalan</option>
+                                        <option>verifikasi</option>
+                                        <option>pendaftaran</option>
+                                        <option>selesai</option>
+                                    </Select>
+                                    {errorsUpdate.kelas_rs && <FormErrorMessage>{errorsUpdate.kelas_rs.message}</FormErrorMessage>}
+                                </FormControl>
 
-                        <FormControl mt={'4'} isInvalid={errors.jumlah_tempat_tidur}>
-                            <FormLabel>Jumlah Tempat Tidur Tersedia</FormLabel>
-                            <Input placeholder='Masukan Jumlah Tempat Tidur Rumah Sakit' id="jumlah_tempat_tidur" type='number' {...createHospital('jumlah_tempat_tidur')} />
-                            {errors.jumlah_tempat_tidur && <FormErrorMessage>{errors.jumlah_tempat_tidur.message}</FormErrorMessage>}
-                        </FormControl>
+                                <FormControl mt={'4'} isInvalid={errorsUpdate.pemilik_pengelola}>
+                                    <FormLabel>Pemilik/Pengelola Rumah Sakit</FormLabel>
+                                    <Select placeholder={currentHospital.pemilik_pengelola} id='pemilik_pengelola' {...updateHospital('pemilik_pengelola')}>
+                                        <option>rawat inap</option>
+                                        <option>rawat jalan</option>
+                                        <option>verifikasi</option>
+                                        <option>pendaftaran</option>
+                                        <option>selesai</option>
+                                    </Select>
+                                    {errorsUpdate.pemilik_pengelola && <FormErrorMessage>{errorsUpdate.pemilik_pengelola.message}</FormErrorMessage>}
+                                </FormControl>
 
-                        <FormControl mt={'4'} isInvalid={errors.status_penggunaan}>
-                            <FormLabel>Status Penggunaan</FormLabel>
-                            <Input placeholder='Status Penggunaan Rumah Sakit' id="status_penggunaan" type='text' {...createHospital('status_penggunaan')} />
-                            {errors.status_penggunaan && <FormErrorMessage>{errors.status_penggunaan.message}</FormErrorMessage>}
-                        </FormControl>
+                                <FormControl mt={'4'} isInvalid={errorsUpdate.jumlah_tempat_tidur}>
+                                    <FormLabel>Jumlah Tempat Tidur Tersedia</FormLabel>
+                                    <Input placeholder={currentHospital.jumlah_tempat_tidur} id="jumlah_tempat_tidur" type='number'
+                                        {...updateHospital('jumlah_tempat_tidur')}
+                                    />
+                                    {errorsUpdate.jumlah_tempat_tidur && <FormErrorMessage>{errorsUpdate.jumlah_tempat_tidur.message}</FormErrorMessage>}
+                                </FormControl>
 
-                        <FormControl mt={'4'} isInvalid={errors.biaya_registrasi}>
-                            <FormLabel>Biaya Pendaftaran</FormLabel>
-                            <Input placeholder='Masukan Biaya Pendaftaran Rumah Sakit' id="biaya_registrasi" type='number' {...createHospital('biaya_registrasi')} />
-                            {errors.biaya_registrasi && <FormErrorMessage>{errors.biaya_registrasi.message}</FormErrorMessage>}
-                        </FormControl>
+                                <FormControl mt={'4'} isInvalid={errorsUpdate.status_penggunaan}>
+                                    <FormLabel>Status Penggunaan</FormLabel>
+                                    <Input placeholder={currentHospital.status_penggunaan} id="status_penggunaan" type='text' {...updateHospital('status_penggunaan')} />
+                                    {errorsUpdate.status_penggunaan && <FormErrorMessage>{errorsUpdate.status_penggunaan.message}</FormErrorMessage>}
+                                </FormControl>
 
-                        <FormControl mt={'4'} isInvalid={errors.foto}>
-                            <FormLabel>Upload Foto Rumah Sakit</FormLabel>
-                            <Input id="foto" type='file'{...createHospital('foto')} onChange={(e) => handleHospitalImage(e)} />
-                            {errors.foto && <FormErrorMessage>{errors.foto.message}</FormErrorMessage>}
-                        </FormControl>
-                    </>
-                }
-            />
+                                <FormControl mt={'4'} isInvalid={errorsUpdate.biaya_registrasi}>
+                                    <FormLabel>Biaya Pendaftaran</FormLabel>
+                                    <Input placeholder={currentHospital.biaya_registrasi} id="biaya_pendaftaran" type='number' {...updateHospital('biaya_registrasi')} />
+                                    {errorsUpdate.biaya_registrasi && <FormErrorMessage>{errorsUpdate.biaya_registrasi.message}</FormErrorMessage>}
+                                </FormControl>
 
-            <PopupAdmin
-                modalTitle={'Edit Info Rumah Sakit'}
-                isOpen={isModalEditOpen}
-                onClose={onCloseHandler}
-                submitButton={handleUpdate(onUpdateHandler)}
-                modalBody={
-                    <>
-                        <FormControl isInvalid={errorsUpdate.kode_rs}>
-                            <FormLabel>Kode Rumah Sakit</FormLabel>
-                            <Input placeholder={currentHospital.kode_rs} id="kode_rs" type='text' {...updateHospital('kode_rs')} />
-                            {errorsUpdate.kode_rs && <FormErrorMessage>{errorsUpdate.kode_rs.message}</FormErrorMessage>}
-                        </FormControl>
-
-                        <FormControl mt={'4'} isInvalid={errorsUpdate.nama}>
-                            <FormLabel>Nama Rumah Sakit</FormLabel>
-                            <Input placeholder={currentHospital.nama} id="nama" type='text' {...updateHospital('nama')} />
-                            {errorsUpdate.nama && <FormErrorMessage>{errorsUpdate.nama.message}</FormErrorMessage>}
-                        </FormControl>
-
-                        <FormControl mt={'4'} isInvalid={errorsUpdate.alamat}>
-                            <FormLabel>Alamat Rumah Sakit</FormLabel>
-                            <Input placeholder={currentHospital.alamat} id="alamat" type='text' {...updateHospital('alamat')} />
-                            {errorsUpdate.alamat && <FormErrorMessage>{errorsUpdate.alamat.message}</FormErrorMessage>}
-                        </FormControl>
-
-                        <Grid
-                            templateColumns={'repeat(2, 1fr)'}
-                            gap={'6'}
-                            mt={'4'}
-                        >
-                            <FormControl isInvalid={errorsUpdate.provinsi}>
-                                <FormLabel>Provinsi</FormLabel>
-                                <Select placeholder={currentHospital.provinsi} id='provinsi' {...updateHospital('provinsi')}>
-                                    <option>Jawa Timur</option>
-                                    <option>rawat jalan</option>
-                                    <option>verifikasi</option>
-                                    <option>pendaftaran</option>
-                                    <option>selesai</option>
-                                </Select>
-                                {errorsUpdate.provinsi && <FormErrorMessage>{errorsUpdate.provinsi.message}</FormErrorMessage>}
-                            </FormControl>
-
-                            <FormControl isInvalid={errorsUpdate.kabupaten_kota}>
-                                <FormLabel>Kabupaten / Kota</FormLabel>
-                                <Select placeholder={currentHospital.kabupaten_kota} id='kabupaten_kota' {...updateHospital('kabupaten_kota')}>
-                                    <option>Surabaya</option>
-                                    <option>rawat jalan</option>
-                                    <option>verifikasi</option>
-                                    <option>pendaftaran</option>
-                                    <option>selesai</option>
-                                </Select>
-                                {errorsUpdate.kabupaten_kota && <FormErrorMessage>{errorsUpdate.kabupaten_kota.message}</FormErrorMessage>}
-                            </FormControl>
-
-                            <FormControl isInvalid={errorsUpdate.kecamatan}>
-                                <FormLabel>Kecamatan</FormLabel>
-                                <Select placeholder={currentHospital.kecamatan} id='kecamatan' {...updateHospital('kecamatan')} >
-                                    <option>Rungkut</option>
-                                    <option>rawat jalan</option>
-                                    <option>verifikasi</option>
-                                    <option>pendaftaran</option>
-                                    <option>selesai</option>
-                                </Select>
-                                {errorsUpdate.kecamatan && <FormErrorMessage>{errorsUpdate.kecamatan.message}</FormErrorMessage>}
-                            </FormControl>
-
-                            <FormControl isInvalid={errorsUpdate.kode_pos}>
-                                <FormLabel>Kode Pos</FormLabel>
-                                <Input placeholder={currentHospital.kode_pos} id="kodepos" type='number' {...updateHospital('kode_pos')} />
-                                {errorsUpdate.kode_pos && <FormErrorMessage>{errorsUpdate.kode_pos.message}</FormErrorMessage>}
-                            </FormControl>
-                        </Grid>
-
-                        <FormControl mt={'4'} isInvalid={errorsUpdate.no_telepon}>
-                            <FormLabel>No Telpon</FormLabel>
-                            <Input placeholder={currentHospital.no_telpon} id="no_telpon" type='text' {...updateHospital('no_telepon')} />
-                            {errorsUpdate.no_telepon && <FormErrorMessage>{errorsUpdate.no_telepon.message}</FormErrorMessage>}
-                        </FormControl>
-
-                        <FormControl mt={'4'} isInvalid={errorsUpdate.email}>
-                            <FormLabel>email</FormLabel>
-                            <Input placeholder={currentHospital.email} id="email" type='email' {...updateHospital('email')} />
-                            {errorsUpdate.email && <FormErrorMessage>{errorsUpdate.email.message}</FormErrorMessage>}
-                        </FormControl>
-
-                        <FormControl mt={'4'} isInvalid={errorsUpdate.kelas_rs}>
-                            <FormLabel>Kelas Rumah Sakit</FormLabel>
-                            <Select placeholder={currentHospital.kelas_rs} id='kelas_rs' {...updateHospital('kelas_rs')}>
-                                <option>rawat inap</option>
-                                <option>rawat jalan</option>
-                                <option>verifikasi</option>
-                                <option>pendaftaran</option>
-                                <option>selesai</option>
-                            </Select>
-                            {errorsUpdate.kelas_rs && <FormErrorMessage>{errorsUpdate.kelas_rs.message}</FormErrorMessage>}
-                        </FormControl>
-
-                        <FormControl mt={'4'} isInvalid={errorsUpdate.pemilik_pengelola}>
-                            <FormLabel>Pemilik/Pengelola Rumah Sakit</FormLabel>
-                            <Select placeholder={currentHospital.pemilik_pengelola} id='pemilik_pengelola' {...updateHospital('pemilik_pengelola')}>
-                                <option>rawat inap</option>
-                                <option>rawat jalan</option>
-                                <option>verifikasi</option>
-                                <option>pendaftaran</option>
-                                <option>selesai</option>
-                            </Select>
-                            {errorsUpdate.pemilik_pengelola && <FormErrorMessage>{errorsUpdate.pemilik_pengelola.message}</FormErrorMessage>}
-                        </FormControl>
-
-                        <FormControl mt={'4'} isInvalid={errorsUpdate.jumlah_tempat_tidur}>
-                            <FormLabel>Jumlah Tempat Tidur Tersedia</FormLabel>
-                            <Input placeholder={currentHospital.jumlah_tempat_tidur} id="jumlah_tempat_tidur" type='number'
-                                {...updateHospital('jumlah_tempat_tidur')}
-                            />
-                            {errorsUpdate.jumlah_tempat_tidur && <FormErrorMessage>{errorsUpdate.jumlah_tempat_tidur.message}</FormErrorMessage>}
-                        </FormControl>
-
-                        <FormControl mt={'4'} isInvalid={errorsUpdate.status_penggunaan}>
-                            <FormLabel>Status Penggunaan</FormLabel>
-                            <Input placeholder={currentHospital.status_penggunaan} id="status_penggunaan" type='text' {...updateHospital('status_penggunaan')} />
-                            {errorsUpdate.status_penggunaan && <FormErrorMessage>{errorsUpdate.status_penggunaan.message}</FormErrorMessage>}
-                        </FormControl>
-
-                        <FormControl mt={'4'} isInvalid={errorsUpdate.biaya_registrasi}>
-                            <FormLabel>Biaya Pendaftaran</FormLabel>
-                            <Input placeholder={currentHospital.biaya_registrasi} id="biaya_pendaftaran" type='number' {...updateHospital('biaya_registrasi')} />
-                            {errorsUpdate.biaya_registrasi && <FormErrorMessage>{errorsUpdate.biaya_registrasi.message}</FormErrorMessage>}
-                        </FormControl>
-
-                        <FormControl mt={'4'} isInvalid={errorsUpdate.foto}>
-                            {currentHospital.foto && <Image src={currentHospital.foto} />}
-                            <FormLabel>Upload Foto Rumah Sakit</FormLabel>
-                            <Input id="foto" type='file' {...updateHospital('foto')} onChange={(e) => handleHospitalImage(e)} />
-                            {errorsUpdate.kode_rs && <FormErrorMessage>{errorsUpdate.kode_rs.message}</FormErrorMessage>}
-                        </FormControl>
-                    </>
-                }
-            />
-            <PopupDelete
-                deletet_name={'Hapus Hospital'}
-                modalBody={'Apakah Anda Yakin Menghapus Data Hospital?'}
-                modalTitle={'Hapus Data Hospital'}
-                isOpen={isModalDeleteOpen}
-                onClose={onCloseModalDelete}
-                onDelete={() => onDeleteHandler(hospitalId)}
-            />
-        </LayoutAdminRoot>
+                                <FormControl mt={'4'} isInvalid={errorsUpdate.foto}>
+                                    {currentHospital.foto && <Image src={currentHospital.foto} />}
+                                    <FormLabel>Upload Foto Rumah Sakit</FormLabel>
+                                    <Input id="foto" type='file' {...updateHospital('foto')} onChange={(e) => handleHospitalImage(e)} />
+                                    {errorsUpdate.kode_rs && <FormErrorMessage>{errorsUpdate.kode_rs.message}</FormErrorMessage>}
+                                </FormControl>
+                            </>
+                        }
+                    />
+                    <PopupDelete
+                        deletet_name={'Hapus Hospital'}
+                        modalBody={'Apakah Anda Yakin Menghapus Data Hospital?'}
+                        modalTitle={'Hapus Data Hospital'}
+                        isOpen={isModalDeleteOpen}
+                        onClose={onCloseModalDelete}
+                        onDelete={() => onDeleteHandler(hospitalId)}
+                    />
+                </LayoutAdminRoot>
+            }
+        </>
     );
 }
 

@@ -22,6 +22,8 @@ import { useNavigate } from 'react-router';
 import api from '../services/api';
 import apiProvinsi from '../services/apiProvinsi';
 import { Link } from 'react-router-dom';
+import { AuthToken } from '../services/authToken';
+import Loading from '../components/Loading';
 
 const HomePage = () => {
     const token = Cookies.get('token');
@@ -33,6 +35,8 @@ const HomePage = () => {
     const [nameProvinsi, setNameProvinsi] = useState('');
     const [kota, setKota] = useState([]);
     const [selectKota, setSelectKota] = useState('');
+    const auth = AuthToken();
+    const [loading, setLoading] = useState(true);
 
     const getAllHospitalsHandler = async () => {
         await api.getHospitals(token)
@@ -43,6 +47,7 @@ const HomePage = () => {
             .catch(error => {
                 console.log(error);
             })
+        setLoading(false)
     }
 
     const getProvinsi = async () => {
@@ -87,7 +92,7 @@ const HomePage = () => {
     })
 
     useEffect(() => {
-        if (!token) {
+        if (!auth) {
             toast({
                 position: 'top',
                 title: 'Kamu Harus Login Dulu',
@@ -102,102 +107,108 @@ const HomePage = () => {
     }, []);
 
     return (
-        <Layout isActive={'home'}>
-            <HeroComponent />
-            <Box
-                px={['20']}
-                my={['20']}
-            >
-                <Text
-                    fontWeight='600'
-                    fontSize={['30px', '48px']}
-                    mb={['10']}
-                    color='#1FA8F6'
-                    textAlign={{ base: 'center', md: 'left' }}
-                >
-                    Alur Pendaftaran
-                </Text>
-                <Flex
-                    gridTemplateColumns={'repeat(3, 1fr)'}
-                    rowGap='20'
-                    columnGap='10'
-                    flexWrap='wrap'
-                    justifyContent='center'
-                >
-                    {
-                        flowRegister.map(data => (
-                            <CardFlow
-                                key={data.no}
-                                desc={data.desc}
-                                number={data.no}
-                            />
-                        ))
-                    }
-                </Flex>
-            </Box>
-            <TableListHospital
-                provinsi={provinsi}
-                valueProvinsi={selectProvinsi}
-                onChangeProvinsi={(e) => handlerChangeProvinsi(e.target.value)}
-                kota={kota}
-                valueKota={selectKota}
-                onChangeKota={(e) => setSelectKota(e.target.value)}
-                headTable={
-                    <Tr>
-                        <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
-                            No
-                        </Th>
-                        <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
-                            Nama Rumah Sakit
-                        </Th>
-                        <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
-                            Pemilik / Pengelola
-                        </Th>
-                        <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
-                            No Telepon
-                        </Th>
-                        <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
-                            Alamat
-                        </Th>
-                    </Tr>
-                }
-                bodyTable={
-                    (nameProvinsi === 'all' || nameProvinsi === '' ? hospitals : selectKota === 'all' || selectKota === '' ? resultHospital : resultRegionHospital)
-                        .map((data, index) => (
-                            <Tr key={index}>
-                                <Td>{index + 1}</Td>
-                                <Link>
-                                    <Td
-                                        textDecoration={'underline'}
-                                        _hover={{ color: '#1FA8F6' }}
-                                    >
-                                        {data.nama}
-                                    </Td>
-                                </Link>
-                                <Td>{data.pemilik_pengelola}</Td>
-                                <Td>{data.no_telpon}</Td>
-                                <Td>{data.alamat + " " + data.kecamatan + " " + data.kabupaten_kota + ", " + data.provinsi + "," + data.kode_pos}</Td>
+        <>
+            {loading && <Loading body={'Tunggu Sebentar...'} />}
+            {
+                !loading &&
+                <Layout isActive={'home'}>
+                    <HeroComponent />
+                    <Box
+                        px={['20']}
+                        my={['20']}
+                    >
+                        <Text
+                            fontWeight='600'
+                            fontSize={['30px', '48px']}
+                            mb={['10']}
+                            color='#1FA8F6'
+                            textAlign={{ base: 'center', md: 'left' }}
+                        >
+                            Alur Pendaftaran
+                        </Text>
+                        <Flex
+                            gridTemplateColumns={'repeat(3, 1fr)'}
+                            rowGap='20'
+                            columnGap='10'
+                            flexWrap='wrap'
+                            justifyContent='center'
+                        >
+                            {
+                                flowRegister.map(data => (
+                                    <CardFlow
+                                        key={data.no}
+                                        desc={data.desc}
+                                        number={data.no}
+                                    />
+                                ))
+                            }
+                        </Flex>
+                    </Box>
+                    <TableListHospital
+                        provinsi={provinsi}
+                        valueProvinsi={selectProvinsi}
+                        onChangeProvinsi={(e) => handlerChangeProvinsi(e.target.value)}
+                        kota={kota}
+                        valueKota={selectKota}
+                        onChangeKota={(e) => setSelectKota(e.target.value)}
+                        headTable={
+                            <Tr>
+                                <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
+                                    No
+                                </Th>
+                                <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
+                                    Nama Rumah Sakit
+                                </Th>
+                                <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
+                                    Pemilik / Pengelola
+                                </Th>
+                                <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
+                                    No Telepon
+                                </Th>
+                                <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
+                                    Alamat
+                                </Th>
                             </Tr>
-                        ))
-                }
-            />
-            <Box
-                textAlign={'center'}
-                mt={'10'}
-                mb={'20'}
-            >
-                <Button
-                    onClick={() => navigate('/rumahsakit')}
-                    bg={'#3AB8FF'}
-                    color={'white'}
-                    px={'10'}
-                    py={'6'}
-                    _hover={{ bg: 'alta.primary' }}
-                >
-                    Telusuri Lebih Banyak
-                </Button>
-            </Box>
-        </Layout>
+                        }
+                        bodyTable={
+                            (nameProvinsi === 'all' || nameProvinsi === '' ? hospitals : selectKota === 'all' || selectKota === '' ? resultHospital : resultRegionHospital)
+                                .map((data, index) => (
+                                    <Tr key={index}>
+                                        <Td>{index + 1}</Td>
+                                        <Link>
+                                            <Td
+                                                textDecoration={'underline'}
+                                                _hover={{ color: '#1FA8F6' }}
+                                            >
+                                                {data.nama}
+                                            </Td>
+                                        </Link>
+                                        <Td>{data.pemilik_pengelola}</Td>
+                                        <Td>{data.no_telpon}</Td>
+                                        <Td>{data.alamat + " " + data.kecamatan + " " + data.kabupaten_kota + ", " + data.provinsi + "," + data.kode_pos}</Td>
+                                    </Tr>
+                                ))
+                        }
+                    />
+                    <Box
+                        textAlign={'center'}
+                        mt={'10'}
+                        mb={'20'}
+                    >
+                        <Button
+                            onClick={() => navigate('/rumahsakit')}
+                            bg={'#3AB8FF'}
+                            color={'white'}
+                            px={'10'}
+                            py={'6'}
+                            _hover={{ bg: 'alta.primary' }}
+                        >
+                            Telusuri Lebih Banyak
+                        </Button>
+                    </Box>
+                </Layout>
+            }
+        </>
     );
 }
 

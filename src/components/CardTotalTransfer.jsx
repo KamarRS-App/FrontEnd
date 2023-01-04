@@ -4,11 +4,15 @@ import { Text } from '@chakra-ui/react';
 import { Divider } from '@chakra-ui/react';
 import { SimpleGrid, Center } from '@chakra-ui/react';
 
-function CardTotalTransfer() {
+function CardTotalTransfer({ kode_daftar, biaya_registrasi }) {
   return (
-    <Card w={400} m={[30, 40, 50]} width="full" justifyContent="end">
+    <Card
+      width="full"
+      justifyContent="end"
+      maxWidth={{ md:'300px',lg:'400px' }}
+    >
       <CardHeader>
-        <Text fontSize={20} fontWeight={700} color="#072051" m="5" lignItems="center">
+        <Text fontSize={20} fontWeight={700} color="#072051" m="5" alignItems="center">
           Pendaftaran Kamar Rawat Inap
         </Text>
       </CardHeader>
@@ -17,16 +21,14 @@ function CardTotalTransfer() {
         <Center>
           <SimpleGrid columns={2} spacing={8} color="#072051">
             <Text>Kode Daftar :</Text>
-            <Text>#B01013FEBE</Text>
+            <Text>{kode_daftar}</Text>
             <Text>Biaya pendaftaran : </Text>
-            <Text>25.000</Text>
-            <Text>Kode Unik : </Text>
-            <Text>124 </Text>
+            <Text> Rp. {biaya_registrasi}</Text>
             <Text fontSize={20} fontWeight={800}>
               Total Transfer :{' '}
             </Text>
             <Text fontSize={20} fontWeight={800}>
-              25.124{' '}
+              Rp. {biaya_registrasi}
             </Text>
           </SimpleGrid>
         </Center>
