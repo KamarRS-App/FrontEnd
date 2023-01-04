@@ -45,9 +45,6 @@ const HospitalRootPages = () => {
 
     const auth = AuthToken();
 
-    const auth = AuthToken();
-
-
     const initialValues = {
         kode_rs: '',
         nama: '',
@@ -707,11 +704,11 @@ const HospitalRootPages = () => {
                                 <FormControl mt={'4'} isInvalid={errors.kelas_rs}>
                                     <FormLabel>Kelas Rumah Sakit</FormLabel>
                                     <Select placeholder='Pilih Kelas Rumah Sakit' id='kelas_rs' {...createHospital('kelas_rs')}>
-                                        <option>rawat inap</option>
-                                        <option>rawat jalan</option>
-                                        <option>verifikasi</option>
-                                        <option>pendaftaran</option>
-                                        <option>selesai</option>
+                                        <option>Rumah Sakit Umum Kelas A</option>
+                                        <option>Rumah Sakit Umum Kelas B</option>
+                                        <option>Rumah Sakit Umum Kelas C</option>
+                                        <option>Rumah Sakit Umum Kelas D</option>
+                                        <option>Rumah Sakit Khusus</option>
                                     </Select>
                                     {errors.kelas_rs && <FormErrorMessage>{errors.kelas_rs.message}</FormErrorMessage>}
                                 </FormControl>
@@ -719,11 +716,8 @@ const HospitalRootPages = () => {
                                 <FormControl mt={'4'} isInvalid={errors.pemilik_pengelola}>
                                     <FormLabel>Pemilik/Pengelola Rumah Sakit</FormLabel>
                                     <Select placeholder='Pilih Pengelola Rumah Sakit' id='pemilik_pengelola' {...createHospital('pemilik_pengelola')}>
-                                        <option>rawat inap</option>
-                                        <option>rawat jalan</option>
-                                        <option>verifikasi</option>
-                                        <option>pendaftaran</option>
-                                        <option>selesai</option>
+                                        <option>Pemerintah</option>
+                                        <option>Swasta</option>
                                     </Select>
                                     {errors.pemilik_pengelola && <FormErrorMessage>{errors.pemilik_pengelola.message}</FormErrorMessage>}
                                 </FormControl>
@@ -843,11 +837,11 @@ const HospitalRootPages = () => {
                                 <FormControl mt={'4'} isInvalid={errorsUpdate.kelas_rs}>
                                     <FormLabel>Kelas Rumah Sakit</FormLabel>
                                     <Select placeholder={currentHospital.kelas_rs} id='kelas_rs' {...updateHospital('kelas_rs')}>
-                                        <option>rawat inap</option>
-                                        <option>rawat jalan</option>
-                                        <option>verifikasi</option>
-                                        <option>pendaftaran</option>
-                                        <option>selesai</option>
+                                        <option>Rumah Sakit Umum Kelas A</option>
+                                        <option>Rumah Sakit Umum Kelas B</option>
+                                        <option>Rumah Sakit Umum Kelas C</option>
+                                        <option>Rumah Sakit Umum Kelas D</option>
+                                        <option>Rumah Sakit Khusus</option>
                                     </Select>
                                     {errorsUpdate.kelas_rs && <FormErrorMessage>{errorsUpdate.kelas_rs.message}</FormErrorMessage>}
                                 </FormControl>
@@ -855,11 +849,8 @@ const HospitalRootPages = () => {
                                 <FormControl mt={'4'} isInvalid={errorsUpdate.pemilik_pengelola}>
                                     <FormLabel>Pemilik/Pengelola Rumah Sakit</FormLabel>
                                     <Select placeholder={currentHospital.pemilik_pengelola} id='pemilik_pengelola' {...updateHospital('pemilik_pengelola')}>
-                                        <option>rawat inap</option>
-                                        <option>rawat jalan</option>
-                                        <option>verifikasi</option>
-                                        <option>pendaftaran</option>
-                                        <option>selesai</option>
+                                        <option>Pemerintah</option>
+                                        <option>Swasta</option>
                                     </Select>
                                     {errorsUpdate.pemilik_pengelola && <FormErrorMessage>{errorsUpdate.pemilik_pengelola.message}</FormErrorMessage>}
                                 </FormControl>
@@ -906,7 +897,5 @@ const HospitalRootPages = () => {
         </>
     );
 }
-
-
 
 export default HospitalRootPages;
