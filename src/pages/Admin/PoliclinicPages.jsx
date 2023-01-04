@@ -23,6 +23,7 @@ import PopupDelete from '../../components/PopupDelete';
 import axios from 'axios';
 import { Image } from '@chakra-ui/react';
 import { AuthToken } from '../../services/authToken';
+import Loading from '../../components/Loading';
 
 const PoliclinicPages = () => {
     const token = Cookies.get('token');
@@ -48,6 +49,7 @@ const PoliclinicPages = () => {
     const { isOpen: isOpenDeleteModalDoctor, onOpen: onOpenDeleteModalDoctor, onClose: onCloseDeleteModalDoctor } = useDisclosure();
 
     const staff = useSelector((state) => state.staffs);
+    const [loading, setLoading] = useState(true);
 
     //consume api
     //policlinic
@@ -67,6 +69,7 @@ const PoliclinicPages = () => {
                     isClosable: true
                 })
             })
+        setLoading(false);
     }
 
     const getDoctorsByPoliclinic = async () => {
@@ -455,325 +458,331 @@ const PoliclinicPages = () => {
     }, []);
 
     return (
-        <LayoutAdmin activeMenu={'poli'}>
-            <HeadAdminPoli
-                title={`Manajemen ${policlinicName}`}
-                onAdd={onModalCreateOpen}
-                nama_poli={'Pilih Poliklinik'}
-                onDelete={onOpenModalDelete}
-                onEdit={onEditHandler}
-                select_poli={
-                    <Select
-                        width={'200px'}
-                        id={'policlinic_id'}
-                        value={policlinicId}
-                        onChange={(e) => onChangePoliclinic(e.target.value)}
+        <>
+            {loading && <Loading body={'Sedang Memuat Data...'} />}
+            {
+                !loading &&
+                <LayoutAdmin activeMenu={'poli'}>
+                    <HeadAdminPoli
+                        title={`Manajemen ${policlinicName}`}
+                        onAdd={onModalCreateOpen}
+                        nama_poli={'Pilih Poliklinik'}
+                        onDelete={onOpenModalDelete}
+                        onEdit={onEditHandler}
+                        select_poli={
+                            <Select
+                                width={'200px'}
+                                id={'policlinic_id'}
+                                value={policlinicId}
+                                onChange={(e) => onChangePoliclinic(e.target.value)}
+                            >
+                                {
+                                    policlinics.map((data, index) => {
+                                        return (
+                                            <option value={data.id} key={index}>{data.nama_poli}</option>
+                                        )
+                                    })
+                                }
+                            </Select>
+                        }
+                    />
+
+                    <Box
+                        mt={'5'}
+                        p={{ base: '2', sm: '5', md: '10' }}
+                        bg="white"
                     >
                         {
-                            policlinics.map((data, index) => {
-                                return (
-                                    <option value={data.id} key={index}>{data.nama_poli}</option>
-                                )
-                            })
-                        }
-                    </Select>
-                }
-            />
-
-            <Box
-                mt={'5'}
-                p={{ base: '2', sm: '5', md: '10' }}
-                bg="white"
-            >
-                {
-                    newDoctors.length !== 0 &&
-                    <Box
-                        width={'full'}
-                        textAlign={'end'}
-                    >
-                        <Button
-                            onClick={onOpenAddDoctor}
-                            bg="#3AB8FF"
-                            color={'white'}
-                            fontSize={'14px'}
-                            fontWeight={'700'}
-                            height={'50px'}
-                            _hover={{ bg: 'alta.primary' }}
-                        >
-                            Tambah Data Dokter
-                        </Button>
-                    </Box>
-                }
-                <TableAdmin
-                    headTable={
-                        <Tr>
-                            <Td fontWeight={'400'} textAlign="center" fontSize={'18px'}>
-                                No
-                            </Td>
-                            <Td fontWeight={'400'} textAlign="center" fontSize={'18px'}>
-                                Dokter
-                            </Td>
-                            <Td fontWeight={'400'} textAlign="center" fontSize={'18px'}>
-                                Spesialis
-                            </Td>
-                            <Td fontWeight={'400'} textAlign="center" fontSize={'18px'}>
-                                Email
-                            </Td>
-                            <Td fontWeight={'400'} textAlign="center" fontSize={'18px'}>
-                                Telephone
-                            </Td>
-                            <Td fontWeight={'400'} textAlign="center" fontSize={'18px'}>
-                                Jam Praktek
-                            </Td>
-                            <Td fontWeight={'400'} textAlign="center" fontSize={'18px'}>
-                                Actions
-                            </Td>
-                        </Tr>
-                    }
-                    bodyTable={
-                        newDoctors.length === 0 ?
-                            <Tr>
-                                <Td
-                                    colSpan={'6'}
-                                    textAlign={'center'}
+                            newDoctors.length !== 0 &&
+                            <Box
+                                width={'full'}
+                                textAlign={'end'}
+                            >
+                                <Button
+                                    onClick={onOpenAddDoctor}
+                                    bg="#3AB8FF"
+                                    color={'white'}
+                                    fontSize={'14px'}
+                                    fontWeight={'700'}
+                                    height={'50px'}
+                                    _hover={{ bg: 'alta.primary' }}
                                 >
-                                    <Text
-                                        fontWeight={'500'}
-                                        color={'#ADB8CC'}
-                                        mb={'5'}
-                                    >
-                                        Data Belum Ada
-                                    </Text>
-                                    <Button
-                                        onClick={onOpenAddDoctor}
-                                        bg="#3AB8FF"
-                                        color={'white'}
-                                        fontSize={'14px'}
-                                        fontWeight={'700'}
-                                        height={'50px'}
-                                        _hover={{ bg: 'alta.primary' }}
-                                    >
-                                        Tambah Data Dokter
-                                    </Button>
-                                </Td>
-                            </Tr>
-                            :
-                            newDoctors.map((doctor, index) => (
-                                <Tr key={index}>
-                                    <Td textAlign={'center'}>{index + 1}</Td>
-                                    <Td textAlign={'center'}>{doctor.nama}</Td>
-                                    <Td textAlign={'center'}>{doctor.spesialis}</Td>
-                                    <Td textAlign={'center'}>{doctor.email}</Td>
-                                    <Td textAlign={'center'}>{doctor.no_telpon}</Td>
-                                    <Td textAlign={'center'}>{jamPraktik}</Td>
-                                    <Td textAlign="center">
-                                        <ButtonGroup gap="4">
-                                            <Button
-                                                onClick={() => handleEditeDoctor(doctor.id)}
-                                                bg="transparent"
-                                                border="1px"
-                                                borderColor={'#E0E0E0'}
-                                            >
-                                                <MdModeEdit />
-                                            </Button>
-                                            <Button
-                                                onClick={() => handleDeleteDoctor(doctor.id)}
-                                                bg="transparent"
-                                                border="1px"
-                                                borderColor={'#E0E0E0'}
-                                            >
-                                                <MdOutlineDeleteOutline />
-                                            </Button>
-                                        </ButtonGroup>
+                                    Tambah Data Dokter
+                                </Button>
+                            </Box>
+                        }
+                        <TableAdmin
+                            headTable={
+                                <Tr>
+                                    <Td fontWeight={'400'} textAlign="center" fontSize={'18px'}>
+                                        No
+                                    </Td>
+                                    <Td fontWeight={'400'} textAlign="center" fontSize={'18px'}>
+                                        Dokter
+                                    </Td>
+                                    <Td fontWeight={'400'} textAlign="center" fontSize={'18px'}>
+                                        Spesialis
+                                    </Td>
+                                    <Td fontWeight={'400'} textAlign="center" fontSize={'18px'}>
+                                        Email
+                                    </Td>
+                                    <Td fontWeight={'400'} textAlign="center" fontSize={'18px'}>
+                                        Telephone
+                                    </Td>
+                                    <Td fontWeight={'400'} textAlign="center" fontSize={'18px'}>
+                                        Jam Praktek
+                                    </Td>
+                                    <Td fontWeight={'400'} textAlign="center" fontSize={'18px'}>
+                                        Actions
                                     </Td>
                                 </Tr>
-                            ))}
-                />
-            </Box>
+                            }
+                            bodyTable={
+                                newDoctors.length === 0 ?
+                                    <Tr>
+                                        <Td
+                                            colSpan={'6'}
+                                            textAlign={'center'}
+                                        >
+                                            <Text
+                                                fontWeight={'500'}
+                                                color={'#ADB8CC'}
+                                                mb={'5'}
+                                            >
+                                                Data Belum Ada
+                                            </Text>
+                                            <Button
+                                                onClick={onOpenAddDoctor}
+                                                bg="#3AB8FF"
+                                                color={'white'}
+                                                fontSize={'14px'}
+                                                fontWeight={'700'}
+                                                height={'50px'}
+                                                _hover={{ bg: 'alta.primary' }}
+                                            >
+                                                Tambah Data Dokter
+                                            </Button>
+                                        </Td>
+                                    </Tr>
+                                    :
+                                    newDoctors.map((doctor, index) => (
+                                        <Tr key={index}>
+                                            <Td textAlign={'center'}>{index + 1}</Td>
+                                            <Td textAlign={'center'}>{doctor.nama}</Td>
+                                            <Td textAlign={'center'}>{doctor.spesialis}</Td>
+                                            <Td textAlign={'center'}>{doctor.email}</Td>
+                                            <Td textAlign={'center'}>{doctor.no_telpon}</Td>
+                                            <Td textAlign={'center'}>{jamPraktik}</Td>
+                                            <Td textAlign="center">
+                                                <ButtonGroup gap="4">
+                                                    <Button
+                                                        onClick={() => handleEditeDoctor(doctor.id)}
+                                                        bg="transparent"
+                                                        border="1px"
+                                                        borderColor={'#E0E0E0'}
+                                                    >
+                                                        <MdModeEdit />
+                                                    </Button>
+                                                    <Button
+                                                        onClick={() => handleDeleteDoctor(doctor.id)}
+                                                        bg="transparent"
+                                                        border="1px"
+                                                        borderColor={'#E0E0E0'}
+                                                    >
+                                                        <MdOutlineDeleteOutline />
+                                                    </Button>
+                                                </ButtonGroup>
+                                            </Td>
+                                        </Tr>
+                                    ))}
+                        />
+                    </Box>
 
-            {/* pop up policlinic */}
-            <PopupAdmin
-                isOpen={isModalCreateOpen}
-                onClose={onCloseModalCreate}
-                modalTitle={'Tambahkan Poliklinik Baru'}
-                submitButton={handleSubmit(submitButtonPoliclinic)}
-                modalBody={
-                    <>
-                        <FormControl isInvalid={errors.nama_poli}>
-                            <FormLabel>Nama Poliklinik</FormLabel>
-                            <Input placeholder='Masukan Nama Poliklinik' id="nama_poli" type='text' {...register('nama_poli')} />
-                            {errors.nama_poli && <FormErrorMessage>{errors.nama_poli.message}</FormErrorMessage>}
-                        </FormControl>
+                    {/* pop up policlinic */}
+                    <PopupAdmin
+                        isOpen={isModalCreateOpen}
+                        onClose={onCloseModalCreate}
+                        modalTitle={'Tambahkan Poliklinik Baru'}
+                        submitButton={handleSubmit(submitButtonPoliclinic)}
+                        modalBody={
+                            <>
+                                <FormControl isInvalid={errors.nama_poli}>
+                                    <FormLabel>Nama Poliklinik</FormLabel>
+                                    <Input placeholder='Masukan Nama Poliklinik' id="nama_poli" type='text' {...register('nama_poli')} />
+                                    {errors.nama_poli && <FormErrorMessage>{errors.nama_poli.message}</FormErrorMessage>}
+                                </FormControl>
 
-                        <FormControl mt={'4'} isInvalid={errors.jam_praktik}>
-                            <FormLabel>Jam Praktik</FormLabel>
-                            <Input placeholder='Masukan Jam Praktik Poliklinik' id="jam_praktik" type='text' {...register('jam_praktik')} />
-                            {errors.jam_praktik && <FormErrorMessage>{errors.jam_praktik.message}</FormErrorMessage>}
-                        </FormControl>
-                    </>
-                }
-            />
+                                <FormControl mt={'4'} isInvalid={errors.jam_praktik}>
+                                    <FormLabel>Jam Praktik</FormLabel>
+                                    <Input placeholder='Masukan Jam Praktik Poliklinik' id="jam_praktik" type='text' {...register('jam_praktik')} />
+                                    {errors.jam_praktik && <FormErrorMessage>{errors.jam_praktik.message}</FormErrorMessage>}
+                                </FormControl>
+                            </>
+                        }
+                    />
 
-            <PopupAdmin
-                isOpen={isOpenModalEdit}
-                onClose={onCloseModalEdit}
-                modalTitle={`Edit ${policlinicName}`}
-                submitButton={submitUpdatePoliclinic(onUpdateClicked)}
-                modalBody={
-                    <>
-                        <FormControl isInvalid={errorsEdit.nama_poli}>
-                            <FormLabel>Nama Poliklinik</FormLabel>
-                            <Input placeholder='Masukan Nama Poliklinik' id="nama_poli" type='text' {...updatePoliclinic('nama_poli')} />
-                            {errorsEdit.nama_poli && <FormErrorMessage>{errorsEdit.nama_poli.message}</FormErrorMessage>}
-                        </FormControl>
+                    <PopupAdmin
+                        isOpen={isOpenModalEdit}
+                        onClose={onCloseModalEdit}
+                        modalTitle={`Edit ${policlinicName}`}
+                        submitButton={submitUpdatePoliclinic(onUpdateClicked)}
+                        modalBody={
+                            <>
+                                <FormControl isInvalid={errorsEdit.nama_poli}>
+                                    <FormLabel>Nama Poliklinik</FormLabel>
+                                    <Input placeholder='Masukan Nama Poliklinik' id="nama_poli" type='text' {...updatePoliclinic('nama_poli')} />
+                                    {errorsEdit.nama_poli && <FormErrorMessage>{errorsEdit.nama_poli.message}</FormErrorMessage>}
+                                </FormControl>
 
-                        <FormControl mt={'4'} isInvalid={errorsEdit.jam_praktik}>
-                            <FormLabel>Jam Praktik</FormLabel>
-                            <Input placeholder='Masukan Jam Praktik Poliklinik' id="jam_praktik" type='text' {...updatePoliclinic('jam_praktik')} />
-                            {errorsEdit.jam_praktik && <FormErrorMessage>{errorsEdit.jam_praktik.message}</FormErrorMessage>}
-                        </FormControl>
-                    </>
-                }
-            />
+                                <FormControl mt={'4'} isInvalid={errorsEdit.jam_praktik}>
+                                    <FormLabel>Jam Praktik</FormLabel>
+                                    <Input placeholder='Masukan Jam Praktik Poliklinik' id="jam_praktik" type='text' {...updatePoliclinic('jam_praktik')} />
+                                    {errorsEdit.jam_praktik && <FormErrorMessage>{errorsEdit.jam_praktik.message}</FormErrorMessage>}
+                                </FormControl>
+                            </>
+                        }
+                    />
 
-            <PopupDelete
-                deletet_name={'Hapus Poliklinik'}
-                modalBody={'Apakah kamu yakin menghapus Poliklinik?'}
-                modalTitle={'Hapus Poliklinik'}
-                isOpen={isOpenModalDelete}
-                onClose={onCloseModalDelete}
-                onDelete={() => onDeleteClicked()}
-            />
+                    <PopupDelete
+                        deletet_name={'Hapus Poliklinik'}
+                        modalBody={'Apakah kamu yakin menghapus Poliklinik?'}
+                        modalTitle={'Hapus Poliklinik'}
+                        isOpen={isOpenModalDelete}
+                        onClose={onCloseModalDelete}
+                        onDelete={() => onDeleteClicked()}
+                    />
 
-            {/* pop up doctor */}
+                    {/* pop up doctor */}
 
-            <PopupAdmin
-                modalTitle={"Tambah Data Dokter"}
-                isOpen={isOpenAddModalDoctor}
-                onClose={onCloseAddModalDoctor}
-                submitButton={handleSubmitDoctor(onSubmitDoctor)}
-                modalBody={
-                    <>
-                        <FormControl isInvalid={errorsDoctor.nama}>
-                            <FormLabel>Nama</FormLabel>
-                            <Input
-                                {...registerDoctor("nama")}
-                                placeholder="Nama Dokter"
-                                id="name"
-                                type="text"
-                                name="nama"
-                            />
-                            {errorsDoctor.nama && (
-                                <FormErrorMessage>{errorsDoctor.nama.message}</FormErrorMessage>
-                            )}
-                        </FormControl>
+                    <PopupAdmin
+                        modalTitle={"Tambah Data Dokter"}
+                        isOpen={isOpenAddModalDoctor}
+                        onClose={onCloseAddModalDoctor}
+                        submitButton={handleSubmitDoctor(onSubmitDoctor)}
+                        modalBody={
+                            <>
+                                <FormControl isInvalid={errorsDoctor.nama}>
+                                    <FormLabel>Nama</FormLabel>
+                                    <Input
+                                        {...registerDoctor("nama")}
+                                        placeholder="Nama Dokter"
+                                        id="name"
+                                        type="text"
+                                        name="nama"
+                                    />
+                                    {errorsDoctor.nama && (
+                                        <FormErrorMessage>{errorsDoctor.nama.message}</FormErrorMessage>
+                                    )}
+                                </FormControl>
 
-                        <FormControl mt={4} isInvalid={errorsDoctor.email}>
-                            <FormLabel>Email</FormLabel>
-                            <Input
-                                {...registerDoctor("email")}
-                                name="email"
-                                placeholder="Email Dokter"
-                                type={"email"}
-                                id="email"
-                            />
-                            {errorsDoctor.email && (
-                                <FormErrorMessage>{errorsDoctor.email.message}</FormErrorMessage>
-                            )}
-                        </FormControl>
+                                <FormControl mt={4} isInvalid={errorsDoctor.email}>
+                                    <FormLabel>Email</FormLabel>
+                                    <Input
+                                        {...registerDoctor("email")}
+                                        name="email"
+                                        placeholder="Email Dokter"
+                                        type={"email"}
+                                        id="email"
+                                    />
+                                    {errorsDoctor.email && (
+                                        <FormErrorMessage>{errorsDoctor.email.message}</FormErrorMessage>
+                                    )}
+                                </FormControl>
 
-                        <FormControl mt={4} isInvalid={errorsDoctor.no_telpon}>
-                            <FormLabel>No Telpon</FormLabel>
-                            <Input
-                                {...registerDoctor("no_telpon")}
-                                name="no_telpon"
-                                placeholder="Nomor Telephone Dokter"
-                                type={"number"}
-                                id="no_telpon"
-                            />
-                            {errorsDoctor.no_telpon && (
-                                <FormErrorMessage>{errorsDoctor.no_telpon.message}</FormErrorMessage>
-                            )}
-                        </FormControl>
+                                <FormControl mt={4} isInvalid={errorsDoctor.no_telpon}>
+                                    <FormLabel>No Telpon</FormLabel>
+                                    <Input
+                                        {...registerDoctor("no_telpon")}
+                                        name="no_telpon"
+                                        placeholder="Nomor Telephone Dokter"
+                                        type={"number"}
+                                        id="no_telpon"
+                                    />
+                                    {errorsDoctor.no_telpon && (
+                                        <FormErrorMessage>{errorsDoctor.no_telpon.message}</FormErrorMessage>
+                                    )}
+                                </FormControl>
 
-                        <FormControl mt={'4'} isInvalid={errorsDoctor.foto}>
-                            <FormLabel>Upload Foto Dokter</FormLabel>
-                            <Input id="foto" type='file'{...registerDoctor('foto')} onChange={(e) => handleDoctorImage(e)} />
-                            {errorsDoctor.foto && <FormErrorMessage>{errorsDoctor.foto.message}</FormErrorMessage>}
-                        </FormControl>
-                    </>
-                }
-            />
+                                <FormControl mt={'4'} isInvalid={errorsDoctor.foto}>
+                                    <FormLabel>Upload Foto Dokter</FormLabel>
+                                    <Input id="foto" type='file'{...registerDoctor('foto')} onChange={(e) => handleDoctorImage(e)} />
+                                    {errorsDoctor.foto && <FormErrorMessage>{errorsDoctor.foto.message}</FormErrorMessage>}
+                                </FormControl>
+                            </>
+                        }
+                    />
 
-            <PopupAdmin
-                modalTitle={"Ubah Data Dokter"}
-                isOpen={isOpenEditModalDoctor}
-                onClose={onCloseEditModalDoctor}
-                submitButton={handleUpdateDoctor(onClickedUpdateDoctor)}
-                modalBody={
-                    <>
-                        <FormControl isInvalid={errorsUpdateDoctor.nama}>
-                            <FormLabel>Nama</FormLabel>
-                            <Input
-                                {...updateDoctor("nama")}
-                                placeholder="Nama Dokter"
-                                id="name"
-                                type="text"
-                                name="nama"
-                            />
-                            {errorsUpdateDoctor.nama && (
-                                <FormErrorMessage>{errorsUpdateDoctor.nama.message}</FormErrorMessage>
-                            )}
-                        </FormControl>
+                    <PopupAdmin
+                        modalTitle={"Ubah Data Dokter"}
+                        isOpen={isOpenEditModalDoctor}
+                        onClose={onCloseEditModalDoctor}
+                        submitButton={handleUpdateDoctor(onClickedUpdateDoctor)}
+                        modalBody={
+                            <>
+                                <FormControl isInvalid={errorsUpdateDoctor.nama}>
+                                    <FormLabel>Nama</FormLabel>
+                                    <Input
+                                        {...updateDoctor("nama")}
+                                        placeholder="Nama Dokter"
+                                        id="name"
+                                        type="text"
+                                        name="nama"
+                                    />
+                                    {errorsUpdateDoctor.nama && (
+                                        <FormErrorMessage>{errorsUpdateDoctor.nama.message}</FormErrorMessage>
+                                    )}
+                                </FormControl>
 
-                        <FormControl mt={4} isInvalid={errorsUpdateDoctor.email}>
-                            <FormLabel>Email</FormLabel>
-                            <Input
-                                {...updateDoctor("email")}
-                                name="email"
-                                placeholder="Email Dokter"
-                                type={"email"}
-                                id="email"
-                            />
-                            {errorsUpdateDoctor.email && (
-                                <FormErrorMessage>{errorsUpdateDoctor.email.message}</FormErrorMessage>
-                            )}
-                        </FormControl>
+                                <FormControl mt={4} isInvalid={errorsUpdateDoctor.email}>
+                                    <FormLabel>Email</FormLabel>
+                                    <Input
+                                        {...updateDoctor("email")}
+                                        name="email"
+                                        placeholder="Email Dokter"
+                                        type={"email"}
+                                        id="email"
+                                    />
+                                    {errorsUpdateDoctor.email && (
+                                        <FormErrorMessage>{errorsUpdateDoctor.email.message}</FormErrorMessage>
+                                    )}
+                                </FormControl>
 
-                        <FormControl mt={4} isInvalid={errorsUpdateDoctor.no_telpon}>
-                            <FormLabel>No Telpon</FormLabel>
-                            <Input
-                                {...updateDoctor("no_telpon")}
-                                name="no_telpon"
-                                placeholder="Nomor Telephone Dokter"
-                                type={"number"}
-                                id="no_telpon"
-                            />
-                            {errorsUpdateDoctor.no_telpon && (
-                                <FormErrorMessage>{errorsUpdateDoctor.no_telpon.message}</FormErrorMessage>
-                            )}
-                        </FormControl>
+                                <FormControl mt={4} isInvalid={errorsUpdateDoctor.no_telpon}>
+                                    <FormLabel>No Telpon</FormLabel>
+                                    <Input
+                                        {...updateDoctor("no_telpon")}
+                                        name="no_telpon"
+                                        placeholder="Nomor Telephone Dokter"
+                                        type={"number"}
+                                        id="no_telpon"
+                                    />
+                                    {errorsUpdateDoctor.no_telpon && (
+                                        <FormErrorMessage>{errorsUpdateDoctor.no_telpon.message}</FormErrorMessage>
+                                    )}
+                                </FormControl>
 
-                        <FormControl mt={'4'} isInvalid={errorsUpdateDoctor.foto}>
-                            {doctorImage && <Image src={doctorImage} width='auto' height={'300px'} />}
-                            <FormLabel>Upload Foto Dokter</FormLabel>
-                            <Input id="foto" type='file'{...updateDoctor('foto')} onChange={(e) => handleDoctorImage(e)} />
-                            {errorsUpdateDoctor.foto && <FormErrorMessage>{errorsUpdateDoctor.foto.message}</FormErrorMessage>}
-                        </FormControl>
-                    </>
-                }
-            />
+                                <FormControl mt={'4'} isInvalid={errorsUpdateDoctor.foto}>
+                                    {doctorImage && <Image src={doctorImage} width='auto' height={'300px'} />}
+                                    <FormLabel>Upload Foto Dokter</FormLabel>
+                                    <Input id="foto" type='file'{...updateDoctor('foto')} onChange={(e) => handleDoctorImage(e)} />
+                                    {errorsUpdateDoctor.foto && <FormErrorMessage>{errorsUpdateDoctor.foto.message}</FormErrorMessage>}
+                                </FormControl>
+                            </>
+                        }
+                    />
 
-            <PopupDelete
-                deletet_name={'Hapus Dokter'}
-                modalBody={'Apakah kamu yakin menghapus Dokter ini?'}
-                modalTitle={'Hapus Dokter'}
-                isOpen={isOpenDeleteModalDoctor}
-                onClose={onCloseDeleteModalDoctor}
-                onDelete={() => onDeleteDoctorClicked()}
-            />
+                    <PopupDelete
+                        deletet_name={'Hapus Dokter'}
+                        modalBody={'Apakah kamu yakin menghapus Dokter ini?'}
+                        modalTitle={'Hapus Dokter'}
+                        isOpen={isOpenDeleteModalDoctor}
+                        onClose={onCloseDeleteModalDoctor}
+                        onDelete={() => onDeleteDoctorClicked()}
+                    />
 
-        </LayoutAdmin>
+                </LayoutAdmin>
+            }
+        </>
     );
 }
 

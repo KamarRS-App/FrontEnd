@@ -16,7 +16,6 @@ import DashboardDailyPraktek from "./pages/Admin/DashboardDailyPraktek";
 import UserPage from "./pages/Admin/UserPage";
 import RoomPage from "./pages/Admin/RoomPage";
 import PatientRegistrationPage from "./pages/Admin/PatientRegistrationPage";
-import DoctorPage from "./pages/Admin/DoctorPage";
 import ProfileHospitalPage from "./pages/Admin/ProfileHospitalPage";
 import LoginAdmin from "./pages/Admin/LoginAdmin";
 
@@ -46,6 +45,7 @@ import PoliclinicPages from "./pages/Admin/PoliclinicPages";
 import EditProfileUser from "./pages/EditProfileUser";
 import CariRumahSakit from "./pages/CariRumahSakit";
 import LinkPaymentPage from "./pages/LinkPaymentPage";
+import AuthGoogle from "./pages/AuthGoogle";
 
 function App() {
   return (
@@ -75,6 +75,7 @@ function App() {
                 <Route path="/halaman/privasi" element={<Privasi />} />
                 <Route path="/syarat/dan/ketentuan" element={<SyaratDanKetentuan />} />
                 <Route path="/registrasi/pembayaran/konfirmasi" element={<LinkPaymentPage />} />
+                <Route path="/login/auth/google" element={<AuthGoogle />} />
 
                 {/* admin */}
                 <Route path="/admin/dashboard" element={<Dashboard />} />
@@ -84,7 +85,6 @@ function App() {
                 <Route path="/admin/profile" element={<SettingPage />} />
                 <Route path="/admin/room" element={<RoomPage />} />
                 <Route path="/admin/patient" element={<PatientRegistrationPage />} />
-                <Route path="/admin/doctor" element={<DoctorPage />} />
                 {/* <Route path="/admin/poliklinik" element={<PoliclinicPages />} /> */}
                 <Route path="/admin/policlinic" element={<PoliclinicPages />} />
                 <Route path="/admin/hospital/profile" element={<ProfileHospitalPage />} />

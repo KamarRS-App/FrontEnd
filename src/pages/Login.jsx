@@ -89,7 +89,6 @@ function Login() {
           isClosable: true,
           duration: 1500,
         });
-        console.log(error);
       });
   };
 
@@ -100,7 +99,13 @@ function Login() {
         dispatch(addUsers(data))
       })
       .catch(error => {
-        console.log(error);
+        toast({
+          title: `Gagal mendapatkan data user.`,
+          status: "error",
+          position: "top",
+          isClosable: true,
+          duration: 1500,
+        });
       })
   }
 
@@ -109,35 +114,17 @@ function Login() {
     handleLogin(data);
   };
 
-  // const googleLogin = useGoogleLogin({
-  //   onSuccess: async (tokenResponse) => {
-  //     console.log(tokenResponse);
-  //     const userInfo = await axios.get(
-  //       'https://rawatinap.online/auth/google/login ',
-  //       { headers: { Authorization: `Bearer ${tokenResponse.access_token}` } },
-  //     );
-
-  //     console.log(userInfo);
-  //   },
-  //   onError: errorResponse => console.log(errorResponse),
-  // });
-
-  const search = useLocation().search;
-  const token = new URLSearchParams(search).get('token')
-  console.log(token)
-
   useEffect(() => {
-    // if(auth){
-    //     toast({
-    //         position: 'top',
-    //         title: 'Kamu sudah Login',
-    //         status: 'warning',
-    //         duration: '2000',
-    //         isClosable: true
-    //     });
-    //     navigate('/home');
-    // }
-
+    if (auth) {
+      toast({
+        position: 'top',
+        title: 'Kamu sudah Login',
+        status: 'warning',
+        duration: '2000',
+        isClosable: true
+      });
+      navigate('/home');
+    }
   }, []);
 
   return (
@@ -310,24 +297,28 @@ function Login() {
             </Flex>
             <Box mt={10}>
               <Link
-                colorScheme="white"
-                color="#000000"
-                variant="solid"
-                border="1px"
-                borderColor="#00000066"
-                width="100%"
                 href="https://rawatinap.online/auth/google/login"
-                target={'_blank'}
+                target={'_self'}
               >
-                <Flex minWidth="max-content" gap="2" w="100%">
-                  <Box>
-                    <Image src={googleLogo} boxSize="20px" />
-                  </Box>
-                  <Spacer />
-                  <Box flex="100%">
-                    <Text fontSize="md">Login with Google</Text>
-                  </Box>
-                </Flex>
+                <Button
+                  colorScheme="white"
+                  color="#000000"
+                  variant="solid"
+                  border="1px"
+                  borderColor="#00000066"
+                  width="100%"
+                >
+                  <Flex minWidth="max-content" gap="2" w="100%">
+                    <Box>
+                      <Image src={googleLogo} boxSize="20px" />
+                    </Box>
+                    <Spacer />
+                    <Box flex="100%">
+                      <Text fontSize="md">Login with Google</Text>
+                    </Box>
+                  </Flex>
+
+                </Button>
               </Link>
             </Box>
             <Box>

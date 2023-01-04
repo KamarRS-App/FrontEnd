@@ -24,6 +24,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { BsFillEyeFill, BsFillEyeSlashFill } from "react-icons/bs";
 import PopupDelete from "../../components/PopupDelete";
 import { AuthToken } from "../../services/authToken";
+import Loading from "../../components/Loading";
 
 const AdminRoot = () => {
     const { isOpen: isModalCreateOpen, onOpen: onModalCreateOpen, onClose: onCloseModalCreate, } = useDisclosure();
@@ -39,6 +40,7 @@ const AdminRoot = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [show, setShow] = useState("");
     const [adminId, setAdminId] = useState("");
+    const [loading, setLoading] = useState(true);
 
     const auth = AuthToken();
 
@@ -89,7 +91,7 @@ const AdminRoot = () => {
     });
 
     const {
-        register: createAdmin, handleSubmit, formState: { errors }, setValue} = useForm({
+        register: createAdmin, handleSubmit, formState: { errors }, setValue } = useForm({
             mode: "onTouched",
             reValidateMode: "onSubmit",
             resolver: yupResolver(schema),
@@ -118,6 +120,7 @@ const AdminRoot = () => {
                     isClosable: true
                 })
             })
+        setLoading(false);
     }
 
     const getAdminStaffById = async (id) => {
@@ -293,219 +296,225 @@ const AdminRoot = () => {
     }, []);
 
     return (
-        <LayoutAdminRoot activeMenu={'user'}>
-            <HeadAdmin title={'Manajemen Akun Super Admin Rumah Sakit'} isAdd={onModalCreateOpen} />
-            <TableAdmin
-                headTable={
-                    <Tr>
-                        <Td
-                            fontWeight={'400'}
-                            textAlign='center'
-                            fontSize={'18px'}
-                        >
-                            No
-                        </Td>
-                        <Td
-                            fontWeight={'400'}
-                            textAlign='center'
-                            fontSize={'18px'}
-                        >
-                            Nama
-                        </Td>
-                        <Td
-                            fontWeight={'400'}
-                            textAlign='center'
-                            fontSize={'18px'}
-                        >
-                            Email
-                        </Td>
-                        <Td
-                            fontWeight={'400'}
-                            textAlign='center'
-                            fontSize={'18px'}
-                        >
-                            Peran
-                        </Td>
-                        <Td
-                            fontWeight={'400'}
-                            textAlign='center'
-                            fontSize={'18px'}
-                        >
-                            Rumah Sakit
-                        </Td>
-                        <Td
-                            fontWeight={'400'}
-                            textAlign='center'
-                            fontSize={'18px'}
-                        >
-                            Actions
-                        </Td>
-                    </Tr>
-                }
-                bodyTable={
-                    adminStaff.length !== 0 ?
-                        adminStaff.map((data, index) => (
-                            <Tr key={index + 1}>
+        <>
+            {loading && <Loading body={'Sedang Memuat Halaman...'} />}
+            {
+                !loading &&
+                <LayoutAdminRoot activeMenu={'user'}>
+                    <HeadAdmin title={'Manajemen Akun Super Admin Rumah Sakit'} isAdd={onModalCreateOpen} />
+                    <TableAdmin
+                        headTable={
+                            <Tr>
                                 <Td
-                                    textAlign={'center'}
+                                    fontWeight={'400'}
+                                    textAlign='center'
+                                    fontSize={'18px'}
                                 >
-                                    {index + 1}
+                                    No
                                 </Td>
                                 <Td
-                                    textAlign={'center'}
+                                    fontWeight={'400'}
+                                    textAlign='center'
+                                    fontSize={'18px'}
                                 >
-                                    {data.nama}
+                                    Nama
                                 </Td>
                                 <Td
-                                    textAlign={'center'}
+                                    fontWeight={'400'}
+                                    textAlign='center'
+                                    fontSize={'18px'}
                                 >
-                                    {data.email}
+                                    Email
                                 </Td>
                                 <Td
-                                    textAlign={'center'}
+                                    fontWeight={'400'}
+                                    textAlign='center'
+                                    fontSize={'18px'}
                                 >
-                                    {data.peran}
+                                    Peran
                                 </Td>
                                 <Td
-                                    textAlign={'center'}
+                                    fontWeight={'400'}
+                                    textAlign='center'
+                                    fontSize={'18px'}
                                 >
-                                    {
-                                        hospitals.map((hospital) => {
-                                            if (hospital.id === data.hospital_id) {
-                                                return hospital.nama
-                                            }
-                                        })
-                                    }
+                                    Rumah Sakit
                                 </Td>
                                 <Td
-                                    textAlign={'center'}
+                                    fontWeight={'400'}
+                                    textAlign='center'
+                                    fontSize={'18px'}
                                 >
-                                    <ButtonGroup gap='4'>
-                                        <Button
-                                            onClick={() => onEditHandler(data.id)}
-                                            bg='transparent'
-                                            border='1px'
-                                            borderColor={'#E0E0E0'}
-                                        >
-                                            <MdModeEdit />
-                                        </Button>
-                                        <Button
-                                            onClick={() => onDeleteClicked(data.id)}
-                                            bg='transparent'
-                                            border='1px'
-                                            borderColor={'#E0E0E0'}
-                                        >
-                                            <MdOutlineDeleteOutline />
-                                        </Button>
-                                    </ButtonGroup>
+                                    Actions
                                 </Td>
                             </Tr>
-                        ))
-                        :
-                        <Tr>
-                            <Td colSpan={'6'} textAlign={'center'}>Data Kosong</Td>
-                        </Tr>
-                }
-            />
-            <PopupAdmin
-                modalTitle={'Tambahkan Akun Admin Rumah Sakit'}
-                isOpen={isModalCreateOpen}
-                onClose={onCloseHandler}
-                submitButton={handleSubmit(onSubmitCreate, onError)}
-                modalBody={
-                    <>
-                        <FormControl isInvalid={errors.nama}>
-                            <FormLabel>Nama</FormLabel>
-                            <Input placeholder='Masukan Nama Karyawan' id="nama" type='text' {...createAdmin('nama')} />
-                            {errors.nama && <FormErrorMessage>{errors.nama.message}</FormErrorMessage>}
-                        </FormControl>
+                        }
+                        bodyTable={
+                            adminStaff.length !== 0 ?
+                                adminStaff.map((data, index) => (
+                                    <Tr key={index + 1}>
+                                        <Td
+                                            textAlign={'center'}
+                                        >
+                                            {index + 1}
+                                        </Td>
+                                        <Td
+                                            textAlign={'center'}
+                                        >
+                                            {data.nama}
+                                        </Td>
+                                        <Td
+                                            textAlign={'center'}
+                                        >
+                                            {data.email}
+                                        </Td>
+                                        <Td
+                                            textAlign={'center'}
+                                        >
+                                            {data.peran}
+                                        </Td>
+                                        <Td
+                                            textAlign={'center'}
+                                        >
+                                            {
+                                                hospitals.map((hospital) => {
+                                                    if (hospital.id === data.hospital_id) {
+                                                        return hospital.nama
+                                                    }
+                                                })
+                                            }
+                                        </Td>
+                                        <Td
+                                            textAlign={'center'}
+                                        >
+                                            <ButtonGroup gap='4'>
+                                                <Button
+                                                    onClick={() => onEditHandler(data.id)}
+                                                    bg='transparent'
+                                                    border='1px'
+                                                    borderColor={'#E0E0E0'}
+                                                >
+                                                    <MdModeEdit />
+                                                </Button>
+                                                <Button
+                                                    onClick={() => onDeleteClicked(data.id)}
+                                                    bg='transparent'
+                                                    border='1px'
+                                                    borderColor={'#E0E0E0'}
+                                                >
+                                                    <MdOutlineDeleteOutline />
+                                                </Button>
+                                            </ButtonGroup>
+                                        </Td>
+                                    </Tr>
+                                ))
+                                :
+                                <Tr>
+                                    <Td colSpan={'6'} textAlign={'center'}>Data Kosong</Td>
+                                </Tr>
+                        }
+                    />
+                    <PopupAdmin
+                        modalTitle={'Tambahkan Akun Admin Rumah Sakit'}
+                        isOpen={isModalCreateOpen}
+                        onClose={onCloseHandler}
+                        submitButton={handleSubmit(onSubmitCreate, onError)}
+                        modalBody={
+                            <>
+                                <FormControl isInvalid={errors.nama}>
+                                    <FormLabel>Nama</FormLabel>
+                                    <Input placeholder='Masukan Nama Karyawan' id="nama" type='text' {...createAdmin('nama')} />
+                                    {errors.nama && <FormErrorMessage>{errors.nama.message}</FormErrorMessage>}
+                                </FormControl>
 
-                        <FormControl mt={'4'} isInvalid={errors.email}>
-                            <FormLabel>Email Address</FormLabel>
-                            <Input placeholder='Email Address' id="email" type='email' {...createAdmin('email')} />
-                            {errors.email && <FormErrorMessage>{errors.email.message}</FormErrorMessage>}
-                        </FormControl>
+                                <FormControl mt={'4'} isInvalid={errors.email}>
+                                    <FormLabel>Email Address</FormLabel>
+                                    <Input placeholder='Email Address' id="email" type='email' {...createAdmin('email')} />
+                                    {errors.email && <FormErrorMessage>{errors.email.message}</FormErrorMessage>}
+                                </FormControl>
 
-                        <FormControl mt={'4'} isInvalid={errors.kata_sandi}>
-                            <FormLabel>Password</FormLabel>
-                            <Stack
-                                position={'relative'}
-                            >
-                                <Input
-                                    placeholder='password'
-                                    id="kata_sandi"
-                                    type={showPassword ? 'text' : 'password'}
-                                    onInput={onShowPassword}
-                                    {...createAdmin('kata_sandi')}
-                                />
-                                {
-                                    show &&
-                                    <Box
-                                        position={'absolute'}
-                                        right={'4'}
-                                        bottom={'4'}
-                                        cursor={'pointer'}
-                                        onClick={() => setShowPassword(!showPassword)}
+                                <FormControl mt={'4'} isInvalid={errors.kata_sandi}>
+                                    <FormLabel>Password</FormLabel>
+                                    <Stack
+                                        position={'relative'}
                                     >
+                                        <Input
+                                            placeholder='password'
+                                            id="kata_sandi"
+                                            type={showPassword ? 'text' : 'password'}
+                                            onInput={onShowPassword}
+                                            {...createAdmin('kata_sandi')}
+                                        />
                                         {
-                                            showPassword ? <BsFillEyeSlashFill /> : <BsFillEyeFill />
+                                            show &&
+                                            <Box
+                                                position={'absolute'}
+                                                right={'4'}
+                                                bottom={'4'}
+                                                cursor={'pointer'}
+                                                onClick={() => setShowPassword(!showPassword)}
+                                            >
+                                                {
+                                                    showPassword ? <BsFillEyeSlashFill /> : <BsFillEyeFill />
+                                                }
+                                            </Box>
                                         }
-                                    </Box>
-                                }
-                            </Stack>
-                            {errors.kata_sandi && <FormErrorMessage>{errors.kata_sandi.message}</FormErrorMessage>}
-                        </FormControl>
+                                    </Stack>
+                                    {errors.kata_sandi && <FormErrorMessage>{errors.kata_sandi.message}</FormErrorMessage>}
+                                </FormControl>
 
-                        <FormControl mt={'4'} isInvalid={errors.hospital_id}>
-                            <FormLabel>Rumah Sakit</FormLabel>
-                            <Select placeholder='Pilih Rumah Sakit' id='hospital_id' onChange={(e)=>onChangeHospital(e.target.value)} {...createAdmin('hospital_id')}>
-                                {
-                                    hospitals.map(data => {
-                                        return <option value={data.id} key={data.id}>{data.nama}</option>
-                                    })
-                                }
-                            </Select>
-                            {errors.hospital_id && <FormErrorMessage>{errors.hospital_id.message}</FormErrorMessage>}
-                        </FormControl>
-                    </>
-                }
-            />
+                                <FormControl mt={'4'} isInvalid={errors.hospital_id}>
+                                    <FormLabel>Rumah Sakit</FormLabel>
+                                    <Select placeholder='Pilih Rumah Sakit' id='hospital_id' onChange={(e) => onChangeHospital(e.target.value)} {...createAdmin('hospital_id')}>
+                                        {
+                                            hospitals.map(data => {
+                                                return <option value={data.id} key={data.id}>{data.nama}</option>
+                                            })
+                                        }
+                                    </Select>
+                                    {errors.hospital_id && <FormErrorMessage>{errors.hospital_id.message}</FormErrorMessage>}
+                                </FormControl>
+                            </>
+                        }
+                    />
 
-            <PopupAdmin
-                modalTitle={'Ubah Akun Admin Rumah Sakit'}
-                isOpen={isModalEditOpen}
-                onClose={onCloseModalEdit}
-                submitButton={handleUpdateAdmin(onUpdateSubmit)}
-                modalBody={
-                    <>
-                        <FormControl isInvalid={errorsUpdate.nama}>
-                            <FormLabel>Nama</FormLabel>
-                            <Input placeholder='Masukan Nama Karyawan' id="nama" type='text' {...updateAdminFunc('nama')} />
-                            {errorsUpdate.nama && <FormErrorMessage>{errorsUpdate.nama.message}</FormErrorMessage>}
-                        </FormControl>
+                    <PopupAdmin
+                        modalTitle={'Ubah Akun Admin Rumah Sakit'}
+                        isOpen={isModalEditOpen}
+                        onClose={onCloseModalEdit}
+                        submitButton={handleUpdateAdmin(onUpdateSubmit)}
+                        modalBody={
+                            <>
+                                <FormControl isInvalid={errorsUpdate.nama}>
+                                    <FormLabel>Nama</FormLabel>
+                                    <Input placeholder='Masukan Nama Karyawan' id="nama" type='text' {...updateAdminFunc('nama')} />
+                                    {errorsUpdate.nama && <FormErrorMessage>{errorsUpdate.nama.message}</FormErrorMessage>}
+                                </FormControl>
 
-                        <FormControl mt={'4'} isInvalid={errorsUpdate.email}>
-                            <FormLabel>Email Address</FormLabel>
-                            <Input placeholder='Email Address' id="email" type='email' {...updateAdminFunc('email')} />
-                            {errorsUpdate.email && <FormErrorMessage>{errorsUpdate.email.message}</FormErrorMessage>}
-                        </FormControl>
+                                <FormControl mt={'4'} isInvalid={errorsUpdate.email}>
+                                    <FormLabel>Email Address</FormLabel>
+                                    <Input placeholder='Email Address' id="email" type='email' {...updateAdminFunc('email')} />
+                                    {errorsUpdate.email && <FormErrorMessage>{errorsUpdate.email.message}</FormErrorMessage>}
+                                </FormControl>
 
-                        <FormControl mt={'4'} isInvalid={errorsUpdate.hospital_id}>
-                            <FormLabel>Rumah Sakit</FormLabel>
-                            <Select placeholder='Pilih Rumah Sakit' id='hospital_id' {...updateAdminFunc('hospital_id')}>
-                                {
-                                    hospitals.map(data => {
-                                        return <option value={data.id} key={data.id}>{data.nama}</option>
-                                    })
-                                }
-                            </Select>
-                            {errorsUpdate.hospital_id && <FormErrorMessage>{errorsUpdate.hospital_id.message}</FormErrorMessage>}
-                        </FormControl>
-                    </>
-                }
-            />
-            <PopupDelete isOpen={isModalDeleteOpen} modalTitle={'Hapus Admin Rumah Sakit'} modalBody={'Apakah kamu yakin menghapus admin?'} onClose={onCloseModalDelete} deletet_name={'Hapus Akun'} onDelete={() => onDeleteHandler(adminId)} />
-        </LayoutAdminRoot>
+                                <FormControl mt={'4'} isInvalid={errorsUpdate.hospital_id}>
+                                    <FormLabel>Rumah Sakit</FormLabel>
+                                    <Select placeholder='Pilih Rumah Sakit' id='hospital_id' {...updateAdminFunc('hospital_id')}>
+                                        {
+                                            hospitals.map(data => {
+                                                return <option value={data.id} key={data.id}>{data.nama}</option>
+                                            })
+                                        }
+                                    </Select>
+                                    {errorsUpdate.hospital_id && <FormErrorMessage>{errorsUpdate.hospital_id.message}</FormErrorMessage>}
+                                </FormControl>
+                            </>
+                        }
+                    />
+                    <PopupDelete isOpen={isModalDeleteOpen} modalTitle={'Hapus Admin Rumah Sakit'} modalBody={'Apakah kamu yakin menghapus admin?'} onClose={onCloseModalDelete} deletet_name={'Hapus Akun'} onDelete={() => onDeleteHandler(adminId)} />
+                </LayoutAdminRoot>
+            }
+        </>
     );
 };
 

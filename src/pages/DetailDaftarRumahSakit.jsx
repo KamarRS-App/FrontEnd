@@ -28,6 +28,7 @@ import { useSelector } from "react-redux";
 import { useDisclosure } from "@chakra-ui/react-use-disclosure";
 import api from "../services/api";
 import { AuthToken } from "../services/authToken";
+import Loading from "../components/Loading";
 
 function DetailDaftarRumahSakit() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -43,6 +44,7 @@ function DetailDaftarRumahSakit() {
   const hospital_id = parseInt(location.state?.hospital_id);
   const patient_id = parseInt(patientId);
   const auth = AuthToken();
+  const [loading, setLoading] = useState(true);
 
   const date = new Date();
   const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
@@ -77,6 +79,7 @@ function DetailDaftarRumahSakit() {
           isClosable: true
         });
       })
+    setLoading(false);
   }
 
   const getDetailHospitalHandler = async () => {
@@ -145,210 +148,216 @@ function DetailDaftarRumahSakit() {
   }, []);
 
   return (
-    <Layout>
-      <Box px={{ base: "5", sm: "10", xl: "36" }} py={10} my={10}>
-        <Flex direction={{ base: "column", xl: "row" }}>
-          <Box mr={{ base: "0", lg: "30px" }} className="basis-3/4">
-            <Box borderWidth={"2px"} p="5" rounded={"10px"}>
-              <Text fontWeight={"semibold"}>Login sebagai</Text>
-              <Text color={"gray"}>{user.nama}</Text>
-            </Box>
-            <Box borderWidth={"2px"} p="5" rounded={"10px"} mt={5} py="10">
-              <Box>
-                <Flex justifyContent={"space-between"}>
-                  <Text fontWeight={"semibold"}>Data Pemesan</Text>
-                </Flex>
-              </Box>
-              <Box mx={5} mt={10}>
-                <FormControl>
+    <>
+      {loading && <Loading body={'Tunggu Sebentar'} />}
+      {
+        !loading &&
+        <Layout>
+          <Box px={{ base: "5", sm: "10", xl: "36" }} py={10} my={10}>
+            <Flex direction={{ base: "column", xl: "row" }}>
+              <Box mr={{ base: "0", lg: "30px" }} className="basis-3/4">
+                <Box borderWidth={"2px"} p="5" rounded={"10px"}>
+                  <Text fontWeight={"semibold"}>Login sebagai</Text>
+                  <Text color={"gray"}>{user.nama}</Text>
+                </Box>
+                <Box borderWidth={"2px"} p="5" rounded={"10px"} mt={5} py="10">
                   <Box>
-                    <Flex direction={{ base: "column", xl: "row" }}>
-                      <Box flexBasis={"100%"}>
-                        <FormLabel>Nama Pemesan</FormLabel>
-                        <Input type="text" disabled value={user.nama} _disabled={{ color: 'black' }} />
-                      </Box>
+                    <Flex justifyContent={"space-between"}>
+                      <Text fontWeight={"semibold"}>Data Pemesan</Text>
                     </Flex>
                   </Box>
-                  <Box mt={5}>
-                    <Flex direction={{ base: "column", xl: "row" }}>
-                      <Box flexBasis={"45%"}>
-                        <FormLabel>Email</FormLabel>
-                        <Input type="email" disabled value={user.email} _disabled={{ color: 'black' }} />
+                  <Box mx={5} mt={10}>
+                    <FormControl>
+                      <Box>
+                        <Flex direction={{ base: "column", xl: "row" }}>
+                          <Box flexBasis={"100%"}>
+                            <FormLabel>Nama Pemesan</FormLabel>
+                            <Input type="text" disabled value={user.nama} _disabled={{ color: 'black' }} />
+                          </Box>
+                        </Flex>
                       </Box>
-                      <Spacer />
-                      <Box flexBasis={"45%"} pt={{ base: "5", xl: "0" }}>
-                        <FormLabel>No. Handphone</FormLabel>
-                        <Input type="string" _disabled={{ color: 'black' }} disabled value={user.no_telpon ? user.no_telpon : 'tidak ada'} />
+                      <Box mt={5}>
+                        <Flex direction={{ base: "column", xl: "row" }}>
+                          <Box flexBasis={"45%"}>
+                            <FormLabel>Email</FormLabel>
+                            <Input type="email" disabled value={user.email} _disabled={{ color: 'black' }} />
+                          </Box>
+                          <Spacer />
+                          <Box flexBasis={"45%"} pt={{ base: "5", xl: "0" }}>
+                            <FormLabel>No. Handphone</FormLabel>
+                            <Input type="string" _disabled={{ color: 'black' }} disabled value={user.no_telpon ? user.no_telpon : 'tidak ada'} />
+                          </Box>
+                        </Flex>
                       </Box>
+                    </FormControl>
+                  </Box>
+                </Box>
+                <Box borderWidth={"2px"} p="5" rounded={"10px"} mt={5} py="10">
+                  <Box>
+                    <Flex justifyContent={"space-between"}>
+                      <Text fontWeight={"semibold"}>Detail Pasien</Text>
+                      <Button
+                        onClick={onOpen}
+                        bg={'#3AB8FF'}
+                        _hover={{ bg: 'alta.primary' }}
+                        color={'white'}
+                      >
+                        Pilih Data Pasien
+                      </Button>
                     </Flex>
                   </Box>
-                </FormControl>
-              </Box>
-            </Box>
-            <Box borderWidth={"2px"} p="5" rounded={"10px"} mt={5} py="10">
-              <Box>
-                <Flex justifyContent={"space-between"}>
-                  <Text fontWeight={"semibold"}>Detail Pasien</Text>
+                  <Box mx={5} mt={10}>
+                    <FormControl>
+                      <Box>
+                        <FormLabel>Nama Depan</FormLabel>
+                        <Input type="text" disabled _disabled={{ color: 'black' }} value={patientSelected?.nama_pasien} />
+                      </Box>
+                      <Box mt={5}>
+                        <Flex direction={{ base: "column", lg: 'row', xl: "row" }}>
+                          <Box flexBasis={"45%"}>
+                            <FormLabel>No. KTP</FormLabel>
+                            <Input type="number" disabled _disabled={{ color: 'black' }} value={patientSelected?.nik} />
+                          </Box>
+                          <Spacer />
+                          <Box flexBasis={"45%"} pt={{ base: "5", xl: "0" }}>
+                            <FormLabel>No. BPJS</FormLabel>
+                            <Input type="number" disabled _disabled={{ color: 'black' }} value={patientSelected?.no_bpjs} />
+                          </Box>
+                        </Flex>
+                      </Box>
+                      <Box mt={5}>
+                        <Flex direction={{ base: "column", lg: 'row', xl: "row" }}>
+                          <Box flexBasis={"45%"}>
+                            <FormLabel>Jenis Kelamin</FormLabel>
+                            <Input type="text" disabled _disabled={{ color: 'black' }} value={patientSelected?.jenis_kelamin} />
+                          </Box>
+                          <Spacer />
+                          <Box flexBasis={"45%"} pt={{ base: "5", xl: "0" }}>
+                            <FormLabel>Usia</FormLabel>
+                            <Input type="number" disabled _disabled={{ color: 'black' }} value={patientSelected?.usia} />
+                          </Box>
+                        </Flex>
+                      </Box>
+                      <Box mt={5}>
+                        <Flex direction={{ base: "column", lg: 'row', xl: "row" }}>
+                          <Box flexBasis={"45%"}>
+                            <FormLabel>Email</FormLabel>
+                            <Input type="email" disabled _disabled={{ color: 'black' }} value={patientSelected?.email_wali} />
+                          </Box>
+                          <Spacer />
+                          <Box flexBasis={"45%"} pt={{ base: "5", xl: "0" }}>
+                            <FormLabel>No. Handphone Wali</FormLabel>
+                            <Input type="number" disabled _disabled={{ color: 'black' }} value={patientSelected?.no_telpon_wali} />
+                          </Box>
+                        </Flex>
+                      </Box>
+                      <Box mt={5}>
+                        <FormLabel>Alamat Domisili</FormLabel>
+                        <Input type="text" disabled _disabled={{ color: 'black' }} value={patientSelected?.alamat_domisili} />
+                      </Box>
+                      <Box mt={5}>
+                        <Flex direction={{ base: "column", lg: 'row', xl: "row" }}>
+                          <Box flexBasis={"45%"}>
+                            <FormLabel>Provinsi</FormLabel>
+                            <Input type="text" disabled _disabled={{ color: 'black' }} value={patientSelected?.provinsi_domisili} />
+                          </Box>
+                          <Spacer />
+                          <Box flexBasis={"45%"} pt={{ base: "5", xl: "0" }}>
+                            <FormLabel>Kabupaten / Kota</FormLabel>
+                            <Input type="string" disabled _disabled={{ color: 'black' }} value={patientSelected?.kabupaten_kota_domisili} />
+                          </Box>
+                        </Flex>
+                      </Box>
+                      <Box mt={10}>
+                        <Checkbox defaultChecked>
+                          Semua data telah terisi dengan sebenar-benarnya
+                        </Checkbox>
+                      </Box>
+                    </FormControl>
+                  </Box>
+                </Box>
+                <Box
+                  mt={10}
+                  mb={20}
+                  textAlign={'end'}
+                >
                   <Button
-                    onClick={onOpen}
-                    bg={'#3AB8FF'}
+                    bg={patientId ? '#3AB8FF' : '#f7f7f7'}
                     _hover={{ bg: 'alta.primary' }}
-                    color={'white'}
+                    color={patientId ? 'white' : '#15192080'}
+                    p={6}
+                    onClick={() => handlerRegistrasi()}
+                    disabled={patientId ? false : true}
                   >
-                    Pilih Data Pasien
+                    Lanjutkan Pendaftaran →
                   </Button>
-                </Flex>
+                </Box>
               </Box>
-              <Box mx={5} mt={10}>
-                <FormControl>
-                  <Box>
-                    <FormLabel>Nama Depan</FormLabel>
-                    <Input type="text" disabled _disabled={{ color: 'black' }} value={patientSelected?.nama_pasien} />
-                  </Box>
-                  <Box mt={5}>
-                    <Flex direction={{ base: "column", lg: 'row', xl: "row" }}>
-                      <Box flexBasis={"45%"}>
-                        <FormLabel>No. KTP</FormLabel>
-                        <Input type="number" disabled _disabled={{ color: 'black' }} value={patientSelected?.nik} />
-                      </Box>
-                      <Spacer />
-                      <Box flexBasis={"45%"} pt={{ base: "5", xl: "0" }}>
-                        <FormLabel>No. BPJS</FormLabel>
-                        <Input type="number" disabled _disabled={{ color: 'black' }} value={patientSelected?.no_bpjs} />
-                      </Box>
+              <Box>
+                <Box borderWidth={"2px"} p="12" rounded={"10px"}>
+                  <Text fontWeight={"semibold"} textAlign="center">
+                    Pendaftaran Kamar Rawat Inap
+                  </Text>
+                  <Box borderTop={"1px"} mt={"5"} pt={"5"}>
+                    <Flex justifyContent={"space-between"}>
+                      <Text>Hari:</Text>
+                      <Text>{myDays[thisDay - 1]}</Text>
                     </Flex>
                   </Box>
-                  <Box mt={5}>
-                    <Flex direction={{ base: "column", lg: 'row', xl: "row" }}>
-                      <Box flexBasis={"45%"}>
-                        <FormLabel>Jenis Kelamin</FormLabel>
-                        <Input type="text" disabled _disabled={{ color: 'black' }} value={patientSelected?.jenis_kelamin} />
-                      </Box>
-                      <Spacer />
-                      <Box flexBasis={"45%"} pt={{ base: "5", xl: "0" }}>
-                        <FormLabel>Usia</FormLabel>
-                        <Input type="number" disabled _disabled={{ color: 'black' }} value={patientSelected?.usia} />
-                      </Box>
-                    </Flex>
-                  </Box>
-                  <Box mt={5}>
-                    <Flex direction={{ base: "column", lg: 'row', xl: "row" }}>
-                      <Box flexBasis={"45%"}>
-                        <FormLabel>Email</FormLabel>
-                        <Input type="email" disabled _disabled={{ color: 'black' }} value={patientSelected?.email_wali} />
-                      </Box>
-                      <Spacer />
-                      <Box flexBasis={"45%"} pt={{ base: "5", xl: "0" }}>
-                        <FormLabel>No. Handphone Wali</FormLabel>
-                        <Input type="number" disabled _disabled={{ color: 'black' }} value={patientSelected?.no_telpon_wali} />
-                      </Box>
-                    </Flex>
-                  </Box>
-                  <Box mt={5}>
-                    <FormLabel>Alamat Domisili</FormLabel>
-                    <Input type="text" disabled _disabled={{ color: 'black' }} value={patientSelected?.alamat_domisili} />
-                  </Box>
-                  <Box mt={5}>
-                    <Flex direction={{ base: "column", lg: 'row', xl: "row" }}>
-                      <Box flexBasis={"45%"}>
-                        <FormLabel>Provinsi</FormLabel>
-                        <Input type="text" disabled _disabled={{ color: 'black' }} value={patientSelected?.provinsi_domisili} />
-                      </Box>
-                      <Spacer />
-                      <Box flexBasis={"45%"} pt={{ base: "5", xl: "0" }}>
-                        <FormLabel>Kabupaten / Kota</FormLabel>
-                        <Input type="string" disabled _disabled={{ color: 'black' }} value={patientSelected?.kabupaten_kota_domisili} />
-                      </Box>
-                    </Flex>
-                  </Box>
-                  <Box mt={10}>
-                    <Checkbox defaultChecked>
-                      Semua data telah terisi dengan sebenar-benarnya
-                    </Checkbox>
-                  </Box>
-                </FormControl>
+                  <Flex justifyContent={"space-between"} mt={5}>
+                    <Text>Tanggal:</Text>
+                    <Text>{day + " " + months[month] + " " + yy}</Text>
+                  </Flex>
+                  <Flex justifyContent={"space-between"} mt={5}>
+                    <Text>Rumah Sakit:</Text>
+                    <Text>{nameHospital}</Text>
+                  </Flex>
+                </Box>
               </Box>
-            </Box>
-            <Box
-              mt={10}
-              mb={20}
-              textAlign={'end'}
-            >
-              <Button
-                bg={patientId ? '#3AB8FF' : '#f7f7f7'}
-                _hover={{ bg: 'alta.primary' }}
-                color={patientId ? 'white' : '#15192080'}
-                p={6}
-                onClick={() => handlerRegistrasi()}
-                disabled={patientId ? false : true}
-              >
-                Lanjutkan Pendaftaran →
-              </Button>
-            </Box>
+            </Flex>
           </Box>
-          <Box>
-            <Box borderWidth={"2px"} p="12" rounded={"10px"}>
-              <Text fontWeight={"semibold"} textAlign="center">
-                Pendaftaran Kamar Rawat Inap
-              </Text>
-              <Box borderTop={"1px"} mt={"5"} pt={"5"}>
-                <Flex justifyContent={"space-between"}>
-                  <Text>Hari:</Text>
-                  <Text>{myDays[thisDay - 1]}</Text>
-                </Flex>
-              </Box>
-              <Flex justifyContent={"space-between"} mt={5}>
-                <Text>Tanggal:</Text>
-                <Text>{day + " " + months[month] + " " + yy }</Text>
-              </Flex>
-              <Flex justifyContent={"space-between"} mt={5}>
-                <Text>Rumah Sakit:</Text>
-                <Text>{nameHospital}</Text>
-              </Flex>
-            </Box>
-          </Box>
-        </Flex>
-      </Box>
 
-      <Modal
-        isCentered
-        onClose={onClose}
-        isOpen={isOpen}
-        motionPreset='slideInBottom'
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Pilih Pasien</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <FormControl>
-              <FormLabel>Pasien Terdaftar pada Akun</FormLabel>
-              <Select
-                placeholder='Pilih Pasien'
-                id='patient'
-                onChange={(e) => setPatientId(e.target.value)}
-              >
-                {
-                  patients?.map((data, index) => (
-                    <option value={data.id} key={index}>{data.nama_pasien}</option>
-                  ))
-                }
-              </Select>
-            </FormControl>
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              onClick={() => handlerSelectPatient()}
-              bg={'#3AB8FF'}
-              _hover={{ bg: 'alta.primary' }}
-              color={'white'}
-            >
-              Pilih
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </Layout>
+          <Modal
+            isCentered
+            onClose={onClose}
+            isOpen={isOpen}
+            motionPreset='slideInBottom'
+          >
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Pilih Pasien</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <FormControl>
+                  <FormLabel>Pasien Terdaftar pada Akun</FormLabel>
+                  <Select
+                    placeholder='Pilih Pasien'
+                    id='patient'
+                    onChange={(e) => setPatientId(e.target.value)}
+                  >
+                    {
+                      patients?.map((data, index) => (
+                        <option value={data.id} key={index}>{data.nama_pasien}</option>
+                      ))
+                    }
+                  </Select>
+                </FormControl>
+              </ModalBody>
+              <ModalFooter>
+                <Button
+                  onClick={() => handlerSelectPatient()}
+                  bg={'#3AB8FF'}
+                  _hover={{ bg: 'alta.primary' }}
+                  color={'white'}
+                >
+                  Pilih
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+        </Layout>
+      }
+    </>
   );
 }
 
