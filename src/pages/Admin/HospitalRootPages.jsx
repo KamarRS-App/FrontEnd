@@ -170,7 +170,7 @@ const HospitalRootPages = () => {
     }
 
     const updateHospitalHandler = async (data) => {
-        await axios.put(`http://34.143.247.242/hospitals/${currentHospital.id}`, data, {
+        await axios.put(`https://rawatinap.online/hospitals/${currentHospital.id}`, data, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 'content-type': 'multipart/form-data'

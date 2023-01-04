@@ -115,38 +115,18 @@ function DetailDaftarRumahSakit() {
       })
   }
 
-  const registrationPatient = async () => {
-    await api.createBedRegistrations(token, {hospital_id, patient_id})
-      .then(response => {
-        console.log(response)
-        toast({
-          position: 'top',
-          title: 'Berhasil mendaftarkan pasien',
-          status: 'success',
-          duration: '2000',
-          isClosable: true
-        });
-      })
-      .catch(error => {
-        console.log(error)
-        toast({
-          position: 'top',
-          title: 'Gagal mendaftarkan pasien',
-          status: 'error',
-          duration: '2000',
-          isClosable: true
-        });
-      })
-  }
-
   const handlerSelectPatient = () => {
     getPatientById(patientId);
     onClose();
   }
 
   const handlerRegistrasi = () => {
-    console.log(hospital_id, patient_id)
-    registrationPatient();
+    navigate('/registrasi/pasien/konfirmasi', {
+      state: {
+        hospital_id: hospital_id,
+        patient_id: patientId
+      }
+    });
   }
 
   useEffect(() => {
@@ -302,7 +282,7 @@ function DetailDaftarRumahSakit() {
                 onClick={() => handlerRegistrasi()}
                 disabled={patientId ? false : true}
               >
-                Lanjutkan Pembayaran →
+                Lanjutkan Pendaftaran →
               </Button>
             </Box>
           </Box>

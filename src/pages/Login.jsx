@@ -4,7 +4,7 @@ import googleLogo from "../assets/images/googlelogo.png";
 import api from "../services/api";
 import { ViewOffIcon, ViewIcon } from "@chakra-ui/icons";
 import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import {
   Button,
   Center,
@@ -27,6 +27,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useDispatch } from "react-redux";
 import { addUsers } from "../features/userSlice";
 import { AuthToken } from "../services/authToken";
+import axios from "axios";
+import { useGoogleLogin } from "@react-oauth/google";
 
 function Login() {
   const [show, setShow] = useState(false);
@@ -107,18 +109,36 @@ function Login() {
     handleLogin(data);
   };
 
-//   useEffect(() => {
-//     if(auth){
-//         toast({
-//             position: 'top',
-//             title: 'Kamu sudah Login',
-//             status: 'warning',
-//             duration: '2000',
-//             isClosable: true
-//         });
-//         navigate('/home');
-//     }
-// },[]);
+  // const googleLogin = useGoogleLogin({
+  //   onSuccess: async (tokenResponse) => {
+  //     console.log(tokenResponse);
+  //     const userInfo = await axios.get(
+  //       'https://rawatinap.online/auth/google/login ',
+  //       { headers: { Authorization: `Bearer ${tokenResponse.access_token}` } },
+  //     );
+
+  //     console.log(userInfo);
+  //   },
+  //   onError: errorResponse => console.log(errorResponse),
+  // });
+
+  const search = useLocation().search;
+  const token = new URLSearchParams(search).get('token')
+  console.log(token)
+
+  useEffect(() => {
+    // if(auth){
+    //     toast({
+    //         position: 'top',
+    //         title: 'Kamu sudah Login',
+    //         status: 'warning',
+    //         duration: '2000',
+    //         isClosable: true
+    //     });
+    //     navigate('/home');
+    // }
+
+  }, []);
 
   return (
     <Box minH={"100%"}>
@@ -273,6 +293,7 @@ function Login() {
                     mt="10"
                     backgroundColor="alta.primary"
                     _hover={{ bg: "#3AB8FF" }}
+                    type='submit'
                     onClick={handleSubmit(onSubmit)}
                   >
                     Login
@@ -288,13 +309,15 @@ function Login() {
               <Divider />
             </Flex>
             <Box mt={10}>
-              <Button
+              <Link
                 colorScheme="white"
                 color="#000000"
                 variant="solid"
                 border="1px"
                 borderColor="#00000066"
                 width="100%"
+                href="https://rawatinap.online/auth/google/login"
+                target={'_blank'}
               >
                 <Flex minWidth="max-content" gap="2" w="100%">
                   <Box>
@@ -305,7 +328,7 @@ function Login() {
                     <Text fontSize="md">Login with Google</Text>
                   </Box>
                 </Flex>
-              </Button>
+              </Link>
             </Box>
             <Box>
               <Center>
