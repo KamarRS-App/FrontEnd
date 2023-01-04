@@ -1,26 +1,42 @@
-import { Flex, Stack, Text, Divider, SimpleGrid } from '@chakra-ui/layout';
-import { Image, Box } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
-import React from 'react';
+import { Flex, Stack, Text, Divider, SimpleGrid } from "@chakra-ui/layout";
+import { Image, Box } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
+import React from "react";
 
 const SideBarAdmin = ({ active }) => {
   return (
-    <Stack listStyleType="none" pt="16" mr={{ base: '0', md: '10', lg: '14' }} ml="0">
+    <Stack
+      listStyleType="none"
+      pt="16"
+      mr={{ base: "0", md: "10", lg: "14" }}
+      ml="0"
+    >
       <Link to="/admin/dashboard">
         <Flex
-          px={{ base: '0', md: '0', lg: '14' }}
-          pl={{ base: '0', md: '5' }}
-          justify={{ base: 'center', md: 'normal' }}
+          px={{ base: "0", md: "0", lg: "14" }}
+          pl={{ base: "0", md: "5" }}
+          justify={{ base: "center", md: "normal" }}
           color="#CDD1E0"
-          py={{ base: '1', md: '2', lg: '2' }}
-          bg={active === 'dashboard' && '#1FA8F642'}
-          borderLeft={active === 'dashboard' && '4px'}
-          borderColor={active === 'dashboard' && '#1FA8F6'}
+          py={{ base: "1", md: "2", lg: "2" }}
+          bg={active === "dashboard" && "#1FA8F642"}
+          borderLeft={active === "dashboard" && "4px"}
+          borderColor={active === "dashboard" && "#1FA8F6"}
           gap="2"
           alignItems="center"
         >
-          <Image src={active === 'dashboard' ? '/src/assets/images/dashboard_active.svg' : '/src/assets/images/dashboard.svg'} width={{ base: '24px', sm: '28px', md: '30px', lg: '32px' }} mr={3} />
-          <Text display={{ base: 'none', sm: 'none', md: 'block', lg: 'block' }} color={active === 'dashboard' && '#0EA7FF'}>
+          <Image
+            src={
+              active === "dashboard"
+                ? "/src/assets/images/dashboard_active.svg"
+                : "/src/assets/images/dashboard.svg"
+            }
+            width={{ base: "24px", sm: "28px", md: "30px", lg: "32px" }}
+            mr={3}
+          />
+          <Text
+            display={{ base: "none", sm: "none", md: "block", lg: "block" }}
+            color={active === "dashboard" && "#0EA7FF"}
+          >
             Dashboard
           </Text>
         </Flex>
@@ -46,57 +62,90 @@ const SideBarAdmin = ({ active }) => {
       </Link> */}
       <Link to="/admin/room">
         <Flex
-          px={{ base: '0', md: '0', lg: '14' }}
-          pl={{ base: '0', md: '5' }}
-          justify={{ base: 'center', md: 'normal' }}
+          px={{ base: "0", md: "0", lg: "14" }}
+          pl={{ base: "0", md: "5" }}
+          justify={{ base: "center", md: "normal" }}
           color="#CDD1E0"
-          py={{ base: '1', md: '2', lg: '2' }}
-          bg={active === 'room' && '#1FA8F642'}
-          borderColor={active === 'room' && '#1FA8F6'}
-          borderLeft={active === 'room' && '4px'}
+          py={{ base: "1", md: "2", lg: "2" }}
+          bg={active === "room" && "#1FA8F642"}
+          borderColor={active === "room" && "#1FA8F6"}
+          borderLeft={active === "room" && "4px"}
           gap="2"
           alignItems="center"
         >
-          <Image src={active === 'room' ? '/src/assets/images/room-active.svg' : '/src/assets/images/kamar-icon.svg'} width={{ base: '25px', sm: '32px', md: '35px', lg: '42px' }} mr={2} />
-          <Text display={{ base: 'none', sm: 'none', md: 'block', lg: 'block' }} color={active === 'room' && '#0EA7FF'}>
+          <Image
+            src={
+              active === "room"
+                ? "/src/assets/images/room-active.svg"
+                : "/src/assets/images/kamar-icon.svg"
+            }
+            width={{ base: "25px", sm: "32px", md: "35px", lg: "42px" }}
+            mr={2}
+          />
+          <Text
+            display={{ base: "none", sm: "none", md: "block", lg: "block" }}
+            color={active === "room" && "#0EA7FF"}
+          >
             Kamar
           </Text>
         </Flex>
       </Link>
       <Link to="/admin/patient">
         <Flex
-          px={{ base: '0', md: '0', lg: '14' }}
-          pl={{ base: '0', md: '5' }}
-          justify={{ base: 'center', md: 'normal' }}
+          px={{ base: "0", md: "0", lg: "14" }}
+          pl={{ base: "0", md: "5" }}
+          justify={{ base: "center", md: "normal" }}
           color="#CDD1E0"
-          py={{ base: '1', md: '2', lg: '2' }}
-          bg={active === 'patient' && '#1FA8F642'}
-          borderLeft={active === 'patient' && '4px'}
-          borderColor={active === 'patient' && '#1FA8F6'}
+          py={{ base: "1", md: "2", lg: "2" }}
+          bg={active === "patient" && "#1FA8F642"}
+          borderLeft={active === "patient" && "4px"}
+          borderColor={active === "patient" && "#1FA8F6"}
           gap="2"
           alignItems="center"
         >
-          <Image src={active === 'patient' ? '/src/assets/images/patient_active.svg' : '/src/assets/images/patient.svg'} width={{ base: '25px', sm: '28px', md: '30px', lg: '32px' }} mr={4} />
-          <Text display={{ base: 'none', sm: 'none', md: 'block', lg: 'block' }} color={active === 'patient' && '#0EA7FF'}>
+          <Image
+            src={
+              active === "patient"
+                ? "/src/assets/images/patient_active.svg"
+                : "/src/assets/images/patient.svg"
+            }
+            width={{ base: "25px", sm: "28px", md: "30px", lg: "32px" }}
+            mr={4}
+          />
+          <Text
+            display={{ base: "none", sm: "none", md: "block", lg: "block" }}
+            color={active === "patient" && "#0EA7FF"}
+          >
             Pasien
           </Text>
         </Flex>
       </Link>
       <Link to="/admin/poliklinik">
         <Flex
-          px={{ base: '0', md: '0', lg: '14' }}
-          pl={{ base: '0', md: '5' }}
-          justify={{ base: 'center', md: 'normal' }}
+          px={{ base: "0", md: "0", lg: "14" }}
+          pl={{ base: "0", md: "5" }}
+          justify={{ base: "center", md: "normal" }}
           color="#CDD1E0"
-          py={{ base: '1', md: '2', lg: '2' }}
-          bg={active === 'poli' && '#1FA8F642'}
-          borderLeft={active === 'poli' && '4px'}
-          borderColor={active === 'poli' && '#1FA8F6'}
+          py={{ base: "1", md: "2", lg: "2" }}
+          bg={active === "poli" && "#1FA8F642"}
+          borderLeft={active === "poli" && "4px"}
+          borderColor={active === "poli" && "#1FA8F6"}
           gap="2"
           alignItems="center"
         >
-          <Image src={active === 'poli' ? '/src/assets/images/poliklinik-active.svg' : '/src/assets/images/poliklinik.svg'} width={{ base: '25px', sm: '30px', md: '35px', lg: '40px' }} mr={2} />
-          <Text display={{ base: 'none', sm: 'none', md: 'block', lg: 'block' }} color={active === 'poli' && '#0EA7FF'}>
+          <Image
+            src={
+              active === "poli"
+                ? "/src/assets/images/poliklinik-active.svg"
+                : "/src/assets/images/poliklinik.svg"
+            }
+            width={{ base: "25px", sm: "30px", md: "35px", lg: "40px" }}
+            mr={2}
+          />
+          <Text
+            display={{ base: "none", sm: "none", md: "block", lg: "block" }}
+            color={active === "poli" && "#0EA7FF"}
+          >
             Poliklinik
           </Text>
         </Flex>
@@ -120,40 +169,62 @@ const SideBarAdmin = ({ active }) => {
           </Text>
         </Flex>
       </Link> */}
-      <Link to="/admin/hospital/profile">
+      <Link to="/admin/daily_praktek">
         <Flex
-          px={{ base: '0', md: '0', lg: '14' }}
-          pl={{ base: '0', md: '5' }}
-          justify={{ base: 'center', md: 'normal' }}
+          px={{ base: "0", md: "0", lg: "14" }}
+          pl={{ base: "0", md: "5" }}
+          justify={{ base: "center", md: "normal" }}
           color="#CDD1E0"
-          py={{ base: '1', md: '2', lg: '2' }}
-          bg={active === 'praktek' && '#1FA8F642'}
-          borderLeft={active === 'praktek' && '4px'}
-          borderColor={active === 'praktek' && '#1FA8F6'}
+          py={{ base: "1", md: "2", lg: "2" }}
+          bg={active === "praktek" && "#1FA8F642"}
+          borderLeft={active === "praktek" && "4px"}
+          borderColor={active === "praktek" && "#1FA8F6"}
           gap="2"
           alignItems="center"
         >
-          <Image src={active === 'praktek' ? '/src/assets/images/praktek-active.svg' : '/src/assets/images/praktek.svg'} width={{ base: '25px', sm: '28px', md: '30px', lg: '32px' }} mr={2} />
-          <Text display={{ base: 'none', sm: 'none', md: 'block', lg: 'block' }} color={active === 'praktek' && '#0EA7FF'}>
+          <Image
+            src={
+              active === "praktek"
+                ? "/src/assets/images/praktek-active.svg"
+                : "/src/assets/images/praktek.svg"
+            }
+            width={{ base: "25px", sm: "28px", md: "30px", lg: "32px" }}
+            mr={2}
+          />
+          <Text
+            display={{ base: "none", sm: "none", md: "block", lg: "block" }}
+            color={active === "praktek" && "#0EA7FF"}
+          >
             Praktek
           </Text>
         </Flex>
       </Link>
       <Link to="/admin/hospital/profile">
         <Flex
-          px={{ base: '0', md: '0', lg: '14' }}
-          pl={{ base: '0', md: '5' }}
-          justify={{ base: 'center', md: 'normal' }}
+          px={{ base: "0", md: "0", lg: "14" }}
+          pl={{ base: "0", md: "5" }}
+          justify={{ base: "center", md: "normal" }}
           color="#CDD1E0"
-          py={{ base: '1', md: '2', lg: '2' }}
-          bg={active === 'hospital' && '#1FA8F642'}
-          borderLeft={active === 'hospital' && '4px'}
-          borderColor={active === 'hospital' && '#1FA8F6'}
+          py={{ base: "1", md: "2", lg: "2" }}
+          bg={active === "hospital" && "#1FA8F642"}
+          borderLeft={active === "hospital" && "4px"}
+          borderColor={active === "hospital" && "#1FA8F6"}
           gap="2"
           alignItems="center"
         >
-          <Image src={active === 'hospital' ? '/src/assets/images/hospital_active.svg' : '/src/assets/images/hospital.svg'} width={{ base: '25px', sm: '30px', md: '35px', lg: '40px' }} mr={2} />
-          <Text display={{ base: 'none', sm: 'none', md: 'block', lg: 'block' }} color={active === 'hospital' && '#0EA7FF'}>
+          <Image
+            src={
+              active === "hospital"
+                ? "/src/assets/images/hospital_active.svg"
+                : "/src/assets/images/hospital.svg"
+            }
+            width={{ base: "25px", sm: "30px", md: "35px", lg: "40px" }}
+            mr={2}
+          />
+          <Text
+            display={{ base: "none", sm: "none", md: "block", lg: "block" }}
+            color={active === "hospital" && "#0EA7FF"}
+          >
             Rumah Sakit
           </Text>
         </Flex>
@@ -161,19 +232,29 @@ const SideBarAdmin = ({ active }) => {
       <Divider borderColor="#CDD1E0" />
       <Link to="/admin/profile">
         <Flex
-          px={{ base: '0', md: '0', lg: '14' }}
-          pl={{ base: '0', md: '5' }}
-          justify={{ base: 'center', md: 'normal' }}
+          px={{ base: "0", md: "0", lg: "14" }}
+          pl={{ base: "0", md: "5" }}
+          justify={{ base: "center", md: "normal" }}
           color="#CDD1E0"
-          py={{ base: '1', md: '2', lg: '2' }}
-          bg={active === 'profile' && '#1FA8F642'}
-          borderLeft={active === 'profile' && '4px'}
-          borderColor={active === 'profile' && '#1FA8F6'}
+          py={{ base: "1", md: "2", lg: "2" }}
+          bg={active === "profile" && "#1FA8F642"}
+          borderLeft={active === "profile" && "4px"}
+          borderColor={active === "profile" && "#1FA8F6"}
           gap="2"
           alignItems="center"
         >
-          <Image src={active === 'profile' ? '/src/assets/images/setting-active.svg' : '/src/assets/images/setting.svg'} width={{ base: '25px', sm: '30px', md: '34px', lg: '39px' }} />
-          <Text display={{ base: 'none', sm: 'none', md: 'block', lg: 'block' }} color={active === 'profile' && '#0EA7FF'}>
+          <Image
+            src={
+              active === "profile"
+                ? "/src/assets/images/setting-active.svg"
+                : "/src/assets/images/setting.svg"
+            }
+            width={{ base: "25px", sm: "30px", md: "34px", lg: "39px" }}
+          />
+          <Text
+            display={{ base: "none", sm: "none", md: "block", lg: "block" }}
+            color={active === "profile" && "#0EA7FF"}
+          >
             Setting
           </Text>
         </Flex>

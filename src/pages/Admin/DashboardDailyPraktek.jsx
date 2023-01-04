@@ -200,7 +200,7 @@ function DashboardDailyPraktek() {
   }, [currentPage]);
 
   return (
-    <LayoutAdmin activeMenu={"doctor"}>
+    <LayoutAdmin activeMenu={"praktek"}>
       <HeadAdmin
         title="Manajemen Praktek"
         isAdd={onModalCreateOpen}
