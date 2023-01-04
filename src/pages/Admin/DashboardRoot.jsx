@@ -17,16 +17,16 @@ const DashboardRoot = () => {
     const auth = AuthToken();
 
     useEffect(() => {
-            if(role !== 'super admin' || !auth) {
-                toast({
-                    position: 'top',
-                    title: 'Kamu Harus Login Dulu',
-                    status: 'warning',
-                    duration: '2000',
-                    isClosable: true
-                })
-                navigate('/root/login');
-            }
+        if (role !== 'super admin' || !auth) {
+            toast({
+                position: 'top',
+                title: 'Kamu Harus Login Dulu',
+                status: 'warning',
+                duration: '2000',
+                isClosable: true
+            })
+            navigate('/root/login');
+        }
     }, []);
     return (
         <LayoutAdminRoot activeMenu={'dashboard'} name={'Team Rawat Inap'} role={'Super Admin'}>

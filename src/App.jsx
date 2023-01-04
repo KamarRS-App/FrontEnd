@@ -45,6 +45,7 @@ import store from "../store";
 import PoliclinicPages from "./pages/Admin/PoliclinicPages";
 import EditProfileUser from "./pages/EditProfileUser";
 import CariRumahSakit from "./pages/CariRumahSakit";
+import LinkPaymentPage from "./pages/LinkPaymentPage";
 
 function App() {
   return (
@@ -66,13 +67,14 @@ function App() {
                 <Route path="/registrasi/pasien" element={<DetailDaftarRumahSakit />} />
                 <Route path="/registrasi/pasien/konfirmasi" element={<Pembayaran />} />
                 <Route path="/registrasi/pembayaran" element={<Payment />} />
-                <Route path="pembayaran/selesai" element={<PembayaranSelesai />} />
+                <Route path="registrasi/pembayaran/selesai" element={<PembayaranSelesai />} />
                 <Route path="dokter" element={<CariDokter />} />
                 <Route path="detail/dokter" element={<DetailDokter />} />
                 <Route path="/buat/janji/dokter" element={<BuatJanjiDokter />} />
                 <Route path="/tentang/kami" element={<TentangKami />} />
                 <Route path="/halaman/privasi" element={<Privasi />} />
                 <Route path="/syarat/dan/ketentuan" element={<SyaratDanKetentuan />} />
+                <Route path="/registrasi/pembayaran/konfirmasi" element={<LinkPaymentPage />} />
 
                 {/* admin */}
                 <Route path="/admin/dashboard" element={<Dashboard />} />

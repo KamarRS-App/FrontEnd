@@ -9,7 +9,6 @@ import {
   Flex,
   Input,
   Spacer,
-  Checkbox,
   Button,
   Accordion,
   AccordionItem,
@@ -87,11 +86,8 @@ function Pembayaran() {
           duration: '2000',
           isClosable: true
         });
-        navigate('/registrasi/pembayaran', {
-          state:{
-            payment: data  
-          }
-        })
+        navigate('/registrasi/pembayaran');
+        Cookies.set('kode_daftar', data.Kode_daftar);
       })
       .catch(error => {
         console.log(error)

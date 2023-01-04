@@ -9,10 +9,10 @@ function CardTotalTransfer({ kode_daftar, biaya_registrasi }) {
     <Card
       width="full"
       justifyContent="end"
-      maxWidth={'400px'}
+      maxWidth={{ md:'300px',lg:'400px' }}
     >
       <CardHeader>
-        <Text fontSize={20} fontWeight={700} color="#072051" m="5" lignItems="center">
+        <Text fontSize={20} fontWeight={700} color="#072051" m="5" alignItems="center">
           Pendaftaran Kamar Rawat Inap
         </Text>
       </CardHeader>
