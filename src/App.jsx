@@ -37,7 +37,7 @@ import EditProfileUser from './pages/EditProfileUser';
 import CariRumahSakit from './pages/CariRumahSakit';
 import LoginAdminRoot from './pages/Admin/LoginAdminRoot';
 import ReservasiRawatJalan from './pages/ReservasiRawatJalan';
-
+import ResumeRawatJalan from './pages/ResumeRawatJalan';
 import './App.css';
 import '@fontsource/plus-jakarta-sans/700.css';
 import '@fontsource/plus-jakarta-sans/400.css';
@@ -73,7 +73,7 @@ function App() {
               <Route path="/halaman/privasi" element={<Privasi />} />
               <Route path="/syarat/dan/ketentuan" element={<SyaratDanKetentuan />} />
               <Route path="/reservasi/rawat/jalan" element={<ReservasiRawatJalan />} />
-
+              <Route path="/resume/rawat/jalan" element={<ResumeRawatJalan />} />
               {/* admin */}
               <Route path="/admin/dashboard" element={<Dashboard />} />
               <Route path="/admin/daily_praktek" element={<DashboardDailyPraktek />} />

@@ -39,10 +39,12 @@ function ReservasiRawatJalan() {
   const [patientSelected, setPatientSelected] = useState();
   const location = useLocation();
   const [nameHospital, setNameHospital] = useState();
-  const hospital_id = parseInt(location.state?.hospital_id);
-  const patient_id = parseInt(patientId);
-
-  const [reservationSelected, setReservationSelected] = useState();
+  const idHospital = parseInt(location.state?.idHospital);
+  const idDoctor = parseInt(location.state?.idDoctor);
+  const idPoliclinic = parseInt(location.state?.idPoliclinic);
+  const [policlinicName, setPoliclinicName] = useState();
+  const [doctorName, setDoctorName] = useState();
+  const [timeSelected, setTimeSelected] = useState();
 
   const date = new Date();
   const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
@@ -54,34 +56,15 @@ function ReservasiRawatJalan() {
   const yy = date.getFullYear();
 
   const getPatientsByUserId = async () => {
-    await api
-      .getPatientByUserId(token, user.id)
-      .then((response) => {
-        const data = response.data.data;
-        setPatients(data);
-        toast({
-          position: 'top',
-          title: 'Berhasil mendapatkan data pasien',
-          status: 'success',
-          duration: '2000',
-          isClosable: true,
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-        toast({
-          position: 'top',
-          title: 'Gagal mendapatkan data pasien',
-          status: 'error',
-          duration: '2000',
-          isClosable: true,
-        });
-      });
+    await api.getPatientByUserId(token, user.id).then((response) => {
+      const data = response.data.data;
+      setPatients(data);
+    });
   };
 
-  const getDetailHospitalHandler = async () => {
+  const getHospitalSelected = async () => {
     await api
-      .getHospitalByID(token, location.state?.hospital_id)
+      .getHospitalByID(token, location.state?.idHospital)
       .then((response) => {
         const data = response.data.data;
         console.log(response);
@@ -92,17 +75,48 @@ function ReservasiRawatJalan() {
       });
   };
 
-  const getReservationSelected = async () => {
+  const getPoliclinicSelected = async () => {
     await api
-      .getAllCheckUpReservations(token)
+      .getPoliclinicById(token, location.state?.idPoliclinic)
       .then((response) => {
         const data = response.data.data;
-        setReservationSelected(data);
+        console.log(response);
+        setPoliclinicName(data.nama_poli);
       })
       .catch((error) => {
         console.log(error);
       });
   };
+  const getDoctorSelected = async () => {
+    await api
+      .getDoctorById(token, location.state?.idDokter)
+      .then((response) => {
+        const data = response.data.data;
+        console.log(response);
+        setDoctorName(data.nama);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const getTimeSelected = async () => {
+    await api
+      .getPoliclinicById(token, location.state?.time)
+      .then((response) => {
+        const data = response.data.data;
+        console.log(response);
+        setTimeSelected(data.jam_praktik);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  console.log(location.state?.idHospital);
+  console.log(location.state?.idPoliclinic);
+  console.log(location.state?.idDokter);
+  console.log(location.state?.time);
 
   const getPatientById = async (id) => {
     await api
@@ -110,13 +124,6 @@ function ReservasiRawatJalan() {
       .then((response) => {
         const data = response.data.data;
         setPatientSelected(data);
-        toast({
-          position: 'top',
-          title: 'Berhasil mendapatkan data pasien',
-          status: 'success',
-          duration: '2000',
-          isClosable: true,
-        });
       })
       .catch((error) => {
         toast({
@@ -134,13 +141,6 @@ function ReservasiRawatJalan() {
       .createBedRegistrations(token, { hospital_id, patient_id })
       .then((response) => {
         console.log(response);
-        toast({
-          position: 'top',
-          title: 'Berhasil mendaftarkan pasien',
-          status: 'success',
-          duration: '2000',
-          isClosable: true,
-        });
       })
       .catch((error) => {
         console.log(error);
@@ -158,10 +158,16 @@ function ReservasiRawatJalan() {
     getPatientById(patientId);
     onClose();
   };
-
   const handlerRegistrasi = () => {
-    console.log(hospital_id, patient_id);
-    registrationPatient();
+    navigate('/resume/rawat/jalan', {
+      state: {
+        idHospital: idHospital,
+        idPoliclinic: idPoliclinic,
+        idDokter: idDokter,
+        date: inDate,
+        time: time,
+      },
+    });
   };
 
   useEffect(() => {
@@ -176,8 +182,10 @@ function ReservasiRawatJalan() {
       navigate('/login');
     }
     getPatientsByUserId();
-    getDetailHospitalHandler();
-    getReservationSelected();
+    getHospitalSelected();
+    getPoliclinicSelected();
+    getDoctorSelected();
+    getTimeSelected();
   }, []);
 
   return (
@@ -322,19 +330,19 @@ function ReservasiRawatJalan() {
               </Flex>
               <Flex justifyContent={'space-between'} mt={5}>
                 <Text>Jam Periksa:</Text>
-                <Text>{day + ' ' + months[month] + ' ' + yy}</Text>
+                <Text>{timeSelected}</Text>
               </Flex>
               <Flex justifyContent={'space-between'} mt={5}>
                 <Text>Rumah Sakit:</Text>
-                <Text></Text>
+                <Text>{nameHospital}</Text>
               </Flex>
               <Flex justifyContent={'space-between'} mt={5}>
                 <Text>Poliklinik:</Text>
-                <Text>{reservationSelected.policlinic_id}</Text>
+                <Text>{policlinicName}</Text>
               </Flex>
               <Flex justifyContent={'space-between'} mt={5}>
                 <Text>Dokter:</Text>
-                <Text>{nameHospital}</Text>
+                <Text>{doctorName}</Text>
               </Flex>
             </Box>
           </Box>
