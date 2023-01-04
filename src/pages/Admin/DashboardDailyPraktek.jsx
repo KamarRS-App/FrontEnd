@@ -1,4 +1,6 @@
 import React, { useEffect } from "react";
+import "../../components/style/pagination.css";
+import { MdModeEdit, MdOutlineDeleteOutline } from "react-icons/md";
 import {
   Box,
   Text,
@@ -18,11 +20,19 @@ import {
   ModalCloseButton,
   ModalBody,
   ModalFooter,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableContainer,
+  Badge,
 } from "@chakra-ui/react";
+import Pagination from "rc-pagination";
 import LayoutAdmin from "../../components/LayoutAdmin";
 import searchIcon from "../../assets/images/searchIcon.svg";
 import HeadAdmin from "../../components/HeadAdmin";
-import PopupAdmin from "../../components/PopupAdmin";
 import { useDisclosure } from "@chakra-ui/hooks";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router";
@@ -36,7 +46,25 @@ function DashboardDailyPraktek() {
   const role = Cookies.get("role");
   const toast = useToast();
   const navigate = useNavigate();
+  const [policlinics, setPoliclinics] = React.useState();
+  const [selectedPoli, setSelectedPoli] = React.useState();
+  const [practiceList, setPracticeList] = React.useState();
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [totalPage, setTotalPage] = React.useState(0);
+  const [selectedPractice, setSelectedPractice] = React.useState();
+  const [newDataPractice, setNewDataPractice] = React.useState({
+    policlinic_id: "",
+    tanggal_praktik: "",
+    kuota_harian: "",
+    status: "",
+  });
+  // ================ PAGINATION ====================
+  //change page
+  const onChangePage = (page) => {
+    setCurrentPage(page);
+  };
 
+  // ================ MENAMBAHKAN DAILY PRACTICE ====================
   //modal controller
   const {
     isOpen: isModalCreateOpen,
@@ -49,7 +77,7 @@ function DashboardDailyPraktek() {
     policlinic_id: yup.number().typeError("Harap masukkan id klinik"),
     tanggal_praktik: yup.string().required("Harap masukkan tanggal praktik"),
     kuota_harian: yup.number().typeError("Harap masukkan kuota yang tersedia"),
-    // status: yup.string().required("Harap masukkan status sekarang"),
+    status: yup.string().required("Harap masukkan status sekarang"),
   });
 
   //rhf configuration
@@ -75,7 +103,15 @@ function DashboardDailyPraktek() {
           duration: 1500,
         });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        toast({
+          title: `Gagal menambahkan data praktek harian`,
+          status: "error",
+          position: "top",
+          isClosable: true,
+          duration: 1500,
+        });
+      });
   };
 
   //submit data
@@ -83,7 +119,60 @@ function DashboardDailyPraktek() {
     sendData(data);
   };
 
+  // =============== EDIT DATA DAILY PRACTICE ======================
+  // modal controller
+  const {
+    isOpen: isModalEditOpen,
+    onOpen: onModalEditOpen,
+    onClose: onCloseModalEdit,
+  } = useDisclosure();
+
+  const editDataPraktik = (e) => {
+    const newData = { ...selectedPractice };
+    newData[e.target.id] = e.target.value;
+    setNewDataPractice(newData);
+    console.log(newData);
+  };
+
+  // =============== MENGAMBIL DATA TIAP POLI ======================
+  //mengambil data tiap poliklinik
+  const getPoliklinikList = async (token) => {
+    await api
+      .getAllPoliclinics(token)
+      .then((response) => {
+        setPoliclinics(response.data.data);
+        console.log(response.data.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  // =============== MENGAMBIL DATA DAILY PRACTICE TIAP POLI ======================
+  //mengambil data page pertama
+  const getDailyPracticeByPoliclinic = async (token, id) => {
+    await api
+      .getAllDailyPractices(token, id)
+      .then((response) => {
+        console.log(response.data.data);
+        setTotalPage(response.data.total_page);
+        setPracticeList(response.data.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  //mengambil data next page
+  const getNextDailyPracticeList = async (token, id, page) => {
+    await api
+      .getNextPageDailyPractice(token, id, page)
+      .then((response) => {
+        setPracticeList(response.data.data);
+        console.log(response.data.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  //============== USE EFFECT ========================
   useEffect(() => {
+    // check apakah udah login
     if (role !== "Admin - Staff" && token === undefined) {
       toast({
         position: "top",
@@ -94,7 +183,17 @@ function DashboardDailyPraktek() {
       });
       navigate("/admin/login");
     }
+
+    // get data tiap poliklinik
+    getPoliklinikList(token);
   }, []);
+
+  //check perubahan pada page, lanjutkan dengan ngambil data selanjutnya/sebelumnya
+  useEffect(() => {
+    if (selectedPoli) {
+      getNextDailyPracticeList(token, selectedPoli, currentPage);
+    }
+  }, [currentPage]);
 
   return (
     <LayoutAdmin activeMenu={"doctor"}>
@@ -103,32 +202,108 @@ function DashboardDailyPraktek() {
         <Box backgroundColor="white" mt={5} minH="600px" p={5}>
           <Box>
             <Flex justifyContent={"end"}>
-              <Select placeholder="Jawa Timur" w={"200px"}>
-                <option value="option1">Jawa Timur</option>
-                <option value="option2">Jawa Barat</option>
-                <option value="option3">Jawa Tengah</option>
+              <Select
+                placeholder="-- Pilih Poli --"
+                w={"200px"}
+                onChange={(e) => {
+                  setSelectedPoli(e.target.value);
+                  setCurrentPage(1);
+                }}
+              >
+                {policlinics?.map((policlinics) => {
+                  return (
+                    <option value={policlinics.id}>
+                      {policlinics.nama_poli}
+                    </option>
+                  );
+                })}
               </Select>
-              <Select placeholder="Surabaya" w={"200px"} ml="5">
-                <option value="option1">Jawa Timur</option>
-                <option value="option2">Jawa Barat</option>
-                <option value="option3">Jawa Tengah</option>
-              </Select>
-              <Button colorScheme="blue" ml="5">
+              <Button
+                colorScheme="blue"
+                ml="5"
+                onClick={() => {
+                  getDailyPracticeByPoliclinic(token, selectedPoli);
+                  setCurrentPage(1);
+                }}
+              >
                 <Image src={searchIcon} />
               </Button>
             </Flex>
           </Box>
-          <Box textAlign={"end"} mt="5">
-            <Input
-              placeholder="Mitra Keluarga Waru"
-              w={{ base: "100%", lg: "300px" }}
-            />
+          <Box mt={10}>
+            {practiceList ? (
+              <>
+                <TableContainer
+                  textAlign={"center"}
+                  h={"480"}
+                  overflowY={"true"}
+                >
+                  <Table variant="simple">
+                    <Thead>
+                      <Tr>
+                        <Th>No</Th>
+                        <Th>Tanggal Praktik</Th>
+                        <Th>Kuota Harian</Th>
+                        <Th>Status</Th>
+                        <Th>Action</Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      {practiceList?.map((practice, index) => {
+                        return (
+                          <Tr>
+                            <Td>{index + 1}</Td>
+                            <Td>{practice.tanggal_praktik}</Td>
+                            <Td>{practice.kuota_harian}</Td>
+                            <Td>
+                              {practice.status === "Available" ? (
+                                <Badge colorScheme="green">AVAILABLE</Badge>
+                              ) : (
+                                <Badge colorScheme="red">NOT AVAILABLE</Badge>
+                              )}
+                            </Td>
+                            <Td>
+                              <Button
+                                bg="transparent"
+                                border="1px"
+                                borderColor={"#E0E0E0"}
+                                onClick={() => {
+                                  onModalEditOpen();
+                                  setSelectedPractice(practice);
+                                }}
+                              >
+                                <MdModeEdit />
+                              </Button>
+                            </Td>
+                          </Tr>
+                        );
+                      })}
+                    </Tbody>
+                  </Table>
+                </TableContainer>
+                <Box textAlign={"center"} mt={5}>
+                  <Pagination
+                    total={totalPage * 10}
+                    onChange={onChangePage}
+                    current={currentPage}
+                    defaultCurrent={1}
+                  />
+                </Box>
+              </>
+            ) : (
+              <Box textAlign={"center"} fontSize={"xl"}>
+                <Text>Tidak ada data.</Text>
+              </Box>
+            )}
           </Box>
         </Box>
       </Box>
+
+      {/* modal mengedit data daily praktek */}
       <Modal
-        isOpen={isModalCreateOpen}
-        onClose={onCloseModalCreate}
+        isOpen={isModalEditOpen}
+        onClose={onCloseModalEdit}
+        isCentered
         size={{ base: "xs", sm: "sm", md: "lg", lg: "2xl" }}
       >
         <ModalOverlay />
@@ -138,9 +313,95 @@ function DashboardDailyPraktek() {
           borderRadius={"3xl"}
         >
           <ModalHeader color={"#1FA8F6"} fontSize="3xl">
-            <Text fontSize={"20px"} mt={"5"}>
-              Tambah Data Praktek Harian
-            </Text>
+            Edit Data Praktek
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <FormControl>
+              <FormLabel>ID Poliklinik</FormLabel>
+              <Input
+                placeholder="ID Poliklinik"
+                id="policlinic_id"
+                type="number"
+                name="policlinic_id"
+                value={selectedPractice?.id}
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel>ID Poliklinik</FormLabel>
+              <Input
+                placeholder="ID Poliklinik"
+                id="policlinic_id"
+                type="number"
+                name="policlinic_id"
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel>ID Poliklinik</FormLabel>
+              <Input
+                placeholder="ID Poliklinik"
+                id="policlinic_id"
+                type="number"
+                name="policlinic_id"
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel>Kuota Harian</FormLabel>
+              <Input
+                placeholder="Kuota Harian"
+                id="kuota_harian"
+                type="number"
+                name="kuota_harian"
+                value={selectedPractice?.kuota_harian}
+              />
+            </FormControl>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              mr={3}
+              bg="#3AB8FF"
+              color={"white"}
+              fontSize={"14px"}
+              fontWeight={"700"}
+              width={"150px"}
+              height={"50px"}
+              _hover={{ bg: "alta.primary" }}
+              onClick={onCloseModalEdit}
+            >
+              Close
+            </Button>{" "}
+            <Button
+              mr={3}
+              bg="#3AB8FF"
+              color={"white"}
+              fontSize={"14px"}
+              fontWeight={"700"}
+              width={"150px"}
+              height={"50px"}
+              _hover={{ bg: "alta.primary" }}
+              onClick={onCloseModalEdit}
+            >
+              Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      {/* modal menambahkan daily praktek */}
+      <Modal
+        isOpen={isModalCreateOpen}
+        onClose={onCloseModalCreate}
+        size={{ base: "xs", sm: "sm", md: "lg", lg: "2xl" }}
+        isCentered
+      >
+        <ModalOverlay />
+        <ModalContent
+          px={{ base: "5", sm: "8", md: "10" }}
+          py={"5"}
+          borderRadius={"3xl"}
+        >
+          <ModalHeader color={"#1FA8F6"} fontSize="3xl">
+            <Text>Tambah Data Praktek Harian</Text>
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={20}>
@@ -191,10 +452,11 @@ function DashboardDailyPraktek() {
             <FormControl isInvalid={errors.status}>
               <FormLabel>Status</FormLabel>
               <Select
-                {...register("mamang")}
+                {...register("status")}
                 id="status"
                 name="status"
                 placeholder={"-- Pilih status --"}
+                defaultValue={"Available"}
               >
                 <option value="Available">Available</option>
                 <option value="Not Available">Not Available</option>

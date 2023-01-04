@@ -588,14 +588,24 @@ export default {
         status: status,
       },
     }),
-  getAllDailyPractices: (token) =>
+  getAllDailyPractices: (token, id) =>
     instance({
       method: `GET`,
-      url: `/practices`,
+      url: `/policlinics/${id}/practices`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
     }),
+
+  getNextPageDailyPractice: (token, id, page) =>
+    instance({
+      method: `GET`,
+      url: `/policlinics/${id}/practices?page=${page}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
+
   getDailyPracticesById: (token, id) =>
     instance({
       method: `GET`,
