@@ -15,7 +15,6 @@ function CariSpesialis() {
   const [kabupaten, setKabupaten] = useState(null);
   const [listKabupaten, setListKabupaten] = useState([]);
 
-  const [inDate, setInDate] = useState('');
   const [hospitals, setHospitals] = useState([]);
   const [policlinics, setPoliclinics] = useState([]);
   const [practices, setPractices] = useState([]);
@@ -28,6 +27,22 @@ function CariSpesialis() {
   const [idPoliclinic, setIdPoliclinic] = useState();
   const [idPractices, setIdPractices] = useState();
   const [idDokter, setIdDokter] = useState();
+  const [inDate, setInDate] = useState('');
+
+  const date = new Date();
+  const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+  const myDays = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum&#39;at', 'Sabtu'];
+
+  const day = date.getDate() + 1;
+  const month = date.getMonth() + 1;
+  const thisDay = date.getDate();
+  const yy = date.getFullYear();
+
+  const nextDay = `${yy}-${month < 10 && `0${month}`}-${day < 10 && `0${day}`}`;
+  console.log(nextDay);
+
+  const dDay = `${yy}-${month < 10 && `0${month}`}-${date.getDate() < 10 && `0${date.getDate()}`}`;
+  console.log(dDay);
 
   const navigate = useNavigate();
 
@@ -43,7 +58,7 @@ function CariSpesialis() {
   const getProvinsi = async () => {
     await axios.get('https://dev.farizdotid.com/api/daerahindonesia/provinsi').then((response) => {
       setProvinsi(response.data.provinsi);
-      console.log(response);
+      // console.log(response);
     });
   };
 
@@ -57,7 +72,8 @@ function CariSpesialis() {
   const getPractices = async (id) => {
     await api.getAllDailyPractices(token, id).then((response) => {
       const data = response.data.data;
-      setKuota(data.kuota_harian);
+      setPractices(data);
+      console.log(data);
     });
   };
 
@@ -106,7 +122,7 @@ function CariSpesialis() {
     const resultKuota = practices.filter((data) => {
       return data.id == id;
     });
-    console.log(resultKuota);
+    // console.log(resultKuota);
     setIdPractices(id);
     getPractices(id);
   };
@@ -120,10 +136,19 @@ function CariSpesialis() {
     const resultPoliclinic = policlinics.filter((data) => {
       return data.id == id;
     });
-    console.log(resultPoliclinic);
+    // console.log(resultPoliclinic);
+    getPractices(id);
     setIdPoliclinic(id);
     getPoliclinic(id);
   };
+  const handlerTanggal = (e) => {
+    setInDate(e);
+  };
+
+  const quota = practices?.filter((data) => {
+    return data.tanggal_praktik == inDate;
+  });
+  console.log(quota);
 
   React.useEffect(() => {
     getProvinsi();
@@ -134,7 +159,7 @@ function CariSpesialis() {
 
   React.useEffect(() => {
     getSpecificCity(kabupaten);
-    console.log(kabupaten);
+    // console.log(kabupaten);
   }, [kabupaten]);
 
   return (
@@ -203,12 +228,13 @@ function CariSpesialis() {
               </Box>
               <Box>
                 <Text py={4}> Tanggal Periksa</Text>
-                <input type="date" value={inDate} onChange={(e) => setInDate(e.target.value)} />
+
+                <Input type={'date'} max={nextDay} min={dDay} value={inDate} onChange={(e) => handlerTanggal(e.target.value)} />
               </Box>
 
               <Box>
                 <Text py={4}> Kuota Harian</Text>
-                <Input type="text" value={kuota} _peerDisabled disabled />
+                <Input type="text" value={quota[0]?.kuota_harian} _peerDisabled disabled />
               </Box>
             </Stack>
 

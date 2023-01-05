@@ -9,6 +9,8 @@ import {
   FormLabel,
   FormErrorMessage,
   FormHelperText,
+  useToast,
+  Checkbox,
 } from "@chakra-ui/react";
 import { Grid, GridItem } from "@chakra-ui/react";
 import { Input } from "@chakra-ui/react";
@@ -20,15 +22,22 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 import api from "../services/api";
+import { BsFillTrashFill } from "react-icons/bs";
 
 function DataDiriPasien() {
   const [provinsi, setProvinsi] = React.useState();
   const [kabupaten, setKabupaten] = React.useState(null);
   const [kabupatenKtp, setKabupatenKtp] = React.useState([]);
   const [noKK, setNoKk] = React.useState();
+  const [anggotaBpjs, setAnggotaBpjs] = React.useState("false");
+  const [previewImageKTP, setPreviewImageKtp] = React.useState();
+  const [imageKtp, setImageKtp] = React.useState();
+  const [previewImageBpjs, setPreviewImageBpjs] = React.useState();
+  const [imageBpjs, setImageBpjs] = React.useState();
+  const toast = useToast();
+
   //yup schema
   const schema = yup.object().shape({
-    no_kk: yup.number().typeError("Harap masukkan nomor kartu keluarga"),
     nik: yup.number().typeError("Harap masukkan Nomor Induk Kependudukan"),
     nama_pasien: yup.string().required("Harap masukkan nama pasien"),
     jenisKelamin: yup.string().required("Harap pilih salah satu jenis kelamin"),
@@ -39,8 +48,8 @@ function DataDiriPasien() {
       .required("Harap masukkan email  wali")
       .email("Format email salah"),
     noKTP: yup.number().typeError("Harap masukkan nomor KTP"),
-    noBPJS: yup.number().typeError("Harap masukkan nomor BPJS"),
-    kelas_bpjs: yup.number().typeError("Harap masukkan kelas BPJS"),
+    // noBPJS: yup.number().typeError("Harap masukkan nomor BPJS"),
+    // kelas_bpjs: yup.number().typeError("Harap masukkan kelas BPJS"),
     usia: yup.number().typeError("Harap masukkan usia"),
     noTelpWali: yup.number().typeError("Harap masukkan nomor telpon wali"),
     alamatKTP: yup.string().required("Harap masukkan alamat sesuai KTP"),
@@ -61,7 +70,7 @@ function DataDiriPasien() {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    mode: "onChange",
+    mode: "onSubmit",
   });
 
   //handle data provinsi
@@ -70,18 +79,33 @@ function DataDiriPasien() {
       .get("https://dev.farizdotid.com/api/daerahindonesia/provinsi")
       .then((response) => {
         setProvinsi(response.data.provinsi);
-        console.log(response);
       });
   };
 
   //handle send data to database
-  const handleSendData = async (data, token) => {
+  const handleSendData = async (token, data) => {
     await api
       .createPatient(token, data)
       .then((response) => {
         console.log(response);
+        toast({
+          position: "top",
+          title: "Berhasil menambahkan data pasien",
+          status: "success",
+          duration: "2000",
+          isClosable: true,
+        });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        toast({
+          position: "top",
+          title: "Ini terjadi karna kesalahan kami, mohon tunggu..",
+          status: "error",
+          duration: "2000",
+          isClosable: true,
+        });
+      });
   };
 
   //get kartu keluarga
@@ -90,20 +114,64 @@ function DataDiriPasien() {
     await api
       .getUser(token)
       .then((response) => {
-        console.log(response);
         setNoKk(response.data.data.no_kk);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        toast({
+          position: "top",
+          title: "Terjadi kesalahan, silahkan hubungi administrator",
+          status: "error",
+          duration: "2000",
+          isClosable: true,
+        });
+      });
+  };
+
+  //============= IMAGE PREVIEW ==============
+  const handleFileKtp = (file) => {
+    setImageKtp(file);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPreviewImageKtp(reader.result);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleFileBpjs = (file) => {
+    setImageBpjs(file);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPreviewImageBpjs(reader.result);
+    };
+    reader.readAsDataURL(file);
   };
 
   //handle submit data
   const onSubmit = (data) => {
     const ngab = Cookies.get("token");
-    console.log(data);
-    handleSendData(data, ngab);
+    const formData = new FormData();
+    formData.append("no_kk", noKK);
+    formData.append("nik", data.nik);
+    formData.append("nama_pasien", data.nama_pasien);
+    formData.append("jenis_kelamin", data.jenisKelamin);
+    formData.append("tanggal_lahir", data.tanggalLahir);
+    formData.append("usia", data.usia);
+    formData.append("nama_wali", data.namaWali);
+    formData.append("email_wali", data.emailWali);
+    formData.append("no_telpon_wali", data.noTelpWali);
+    formData.append("alamat_ktp", data.alamatKTP);
+    formData.append("kabupaten_kota_ktp", data.kota_ktp);
+    formData.append("alamat_domisili", data.domisili);
+    formData.append("provinsi_domisili", data.provinsi);
+    formData.append("provinsi_ktp", data.provinsi_ktp);
+    formData.append("kabupaten_kota_domisili", data.kota);
+    formData.append("no_bpjs", data.noBPJS);
+    formData.append("kelas_bpjs", data.kelas_bpjs);
+    formData.append("foto_ktp", imageKtp);
+    formData.append("foto_bpjs", imageBpjs);
+    handleSendData(ngab, formData);
   };
 
-  // handleSendData(data, token);
   React.useEffect(() => {
     getProvinsi();
     getNomorKk();
@@ -117,15 +185,6 @@ function DataDiriPasien() {
             <Text fontSize="2xl" color="alta.primary" className="font-semibold">
               Data Diri Pasien
             </Text>
-            <Box textAlign={{ base: "start", md: "end" }} pt={10}>
-              <Button
-                bg="#3AB8FF"
-                _hover={{ bg: "alta.primary" }}
-                color="white"
-              >
-                Hapus Pasien x
-              </Button>
-            </Box>
             <Box mt={20}>
               <Grid
                 templateColumns={{
@@ -234,7 +293,6 @@ function DataDiriPasien() {
                       placeholder="-- Pilih provinsi --"
                       onChange={(e) => {
                         setKabupatenKtp(e.target.value);
-                        console.log(kabupatenKtp);
                       }}
                     >
                       {provinsi?.map((prov) => {
@@ -299,13 +357,6 @@ function DataDiriPasien() {
                     <Text color={"red"}>{errors.kota_ktp?.message}</Text>
                   </FormControl>
                 </GridItem>
-                <Box>
-                  <FormControl isInvalid={errors.domisili}>
-                    <FormLabel>Alamat Domisili</FormLabel>
-                    <Input {...register("domisili")} />
-                    <Text color={"red"}>{errors.domisili?.message}</Text>
-                  </FormControl>
-                </Box>
                 <GridItem w="100%" h="100%">
                   <FormControl isInvalid={errors.provinsi}>
                     <FormLabel>Provinsi Domisili</FormLabel>
@@ -376,17 +427,45 @@ function DataDiriPasien() {
                     <Text color={"red"}>{errors.kota?.message}</Text>
                   </FormControl>
                 </GridItem>
+              </Grid>
+            </Box>
+            <Box mt={5}>
+              <FormControl isInvalid={errors.domisili}>
+                <FormLabel>Alamat Domisili</FormLabel>
+                <Input {...register("domisili")} />
+                <Text color={"red"}>{errors.domisili?.message}</Text>
+              </FormControl>
+            </Box>
+            <Box mt={5}>
+              <Checkbox onChange={() => setAnggotaBpjs(!anggotaBpjs)} mb={2}>
+                Daftar Menggunakan BPJS
+              </Checkbox>
+              <Grid
+                templateColumns={{
+                  base: "repeat(1, 1fr)",
+                  md: "repeat(2, 1fr)",
+                }}
+                gap={10}
+              >
                 <GridItem w="100%" h="100%">
                   <FormControl isInvalid={errors.noBPJS}>
                     <FormLabel>No. BPJS</FormLabel>
-                    <Input {...register("noBPJS")} type="number" />
+                    <Input
+                      {...register("noBPJS")}
+                      type="number"
+                      isDisabled={anggotaBpjs}
+                    />
                     <Text color="red">{errors.noBPJS?.message}</Text>
                   </FormControl>
                 </GridItem>
                 <GridItem w="100%" h="100%">
                   <FormControl isInvalid={errors.kelas_bpjs}>
                     <FormLabel>Kelas BPJS</FormLabel>
-                    <Input {...register("kelas_bpjs")} type="number" />
+                    <Input
+                      {...register("kelas_bpjs")}
+                      type="number"
+                      isDisabled={anggotaBpjs}
+                    />
                     <Text color="red">{errors.kelas_bpjs?.message}</Text>
                   </FormControl>
                 </GridItem>
@@ -398,49 +477,81 @@ function DataDiriPasien() {
               </Text>
               <FormControl mt={5}>
                 <FormLabel>Foto KTP</FormLabel>
+                {previewImageKTP ? (
+                  <>
+                    <Box>
+                      <Button
+                        onClick={() => setPreviewImageKtp(null)}
+                        bg="#3AB8FF"
+                        _hover={{ bg: "alta.primary" }}
+                        color="white"
+                      >
+                        Remove Image
+                        <BsFillTrashFill />
+                      </Button>
+                    </Box>
+                  </>
+                ) : (
+                  <></>
+                )}
                 <Input
-                  {...register("fotoKTP")}
+                  // {...register("fotoKTP")}
                   type="file"
                   id="img"
                   name="fotoKTP"
                   accept="image/*"
                   display={"none"}
+                  onChange={(e) => handleFileKtp(e.target.files[0])}
                 />
-                <Box h={300} borderWidth="1px" rounded={10} w="100%">
+                <Box h={400} borderWidth="1px" rounded={10} w="100%" mt={5}>
                   <FormControl>
-                    <label for="fotoKTP" style={{ cursor: "pointer" }}>
+                    <label for="img" style={{ cursor: "pointer" }}>
                       <Grid
                         justifyContent={"center"}
                         alignItems="center"
                         w="100%"
                         textAlign={"center"}
                       >
-                        <Box className="grid justify-center" pt={10}>
-                          <Image
-                            src={UploadIcon}
-                            w="50px"
-                            mt={20}
-                            textAlign="center"
-                          />
-                        </Box>
-                        <Text fontSize={"2xl"}>
-                          Drag & drop files or{" "}
-                          <span>
-                            <label
-                              for="img"
-                              style={{
-                                cursor: "pointer",
-                                color: "#1FA8F6",
-                                fontStyle: "inherit",
-                              }}
-                            >
-                              Browse
-                            </label>
-                          </span>
-                        </Text>
-                        <Text color={"#676767"}>
-                          Jenis file yang didukung: JPEG, PNG
-                        </Text>
+                        {previewImageKTP ? (
+                          <>
+                            <Box w={"100%"} h={"100%"} pt={10}>
+                              <Image
+                                src={previewImageKTP}
+                                w={"300px"}
+                                h={"300px"}
+                              />
+                            </Box>
+                          </>
+                        ) : (
+                          <>
+                            <Box className="grid justify-center" pt={10}>
+                              <Image
+                                src={UploadIcon}
+                                w="50px"
+                                mt={20}
+                                textAlign="center"
+                              />
+                            </Box>
+                            <Text fontSize={"2xl"}>
+                              Upload file kamu{" "}
+                              <span>
+                                <label
+                                  for="img"
+                                  style={{
+                                    cursor: "pointer",
+                                    color: "#1FA8F6",
+                                    fontStyle: "inherit",
+                                  }}
+                                >
+                                  Browse
+                                </label>
+                              </span>
+                            </Text>
+                            <Text color={"#676767"}>
+                              Jenis file yang didukung: JPEG, PNG
+                            </Text>
+                          </>
+                        )}
                       </Grid>
                     </label>
                   </FormControl>
@@ -448,15 +559,33 @@ function DataDiriPasien() {
               </FormControl>
               <FormControl mt={5}>
                 <FormLabel>Foto Kartu BPJS</FormLabel>
+                {previewImageBpjs ? (
+                  <>
+                    <Box>
+                      <Button
+                        onClick={() => setPreviewImageBpjs(null)}
+                        bg="#3AB8FF"
+                        _hover={{ bg: "alta.primary" }}
+                        color="white"
+                      >
+                        Remove Image
+                        <BsFillTrashFill />
+                      </Button>
+                    </Box>
+                  </>
+                ) : (
+                  <></>
+                )}
                 <Input
-                  {...register("fotoBPJS")}
+                  // {...register("fotoBPJS")}
                   type="file"
                   id="bpjs"
                   name="fotoBPJS"
                   accept="image/*"
                   display={"none"}
+                  onChange={(e) => handleFileBpjs(e.target.files[0])}
                 />
-                <Box h={300} borderWidth="1px" rounded={10} w="100%">
+                <Box h={400} borderWidth="1px" rounded={10} w="100%" mt={5}>
                   <label for="bpjs" style={{ cursor: "pointer" }}>
                     <Grid
                       justifyContent={"center"}
@@ -464,32 +593,46 @@ function DataDiriPasien() {
                       w="100%"
                       textAlign={"center"}
                     >
-                      <Box className="grid justify-center" pt={10}>
-                        <Image
-                          src={UploadIcon}
-                          w="50px"
-                          mt={20}
-                          textAlign="center"
-                        />
-                      </Box>
-                      <Text fontSize={"2xl"}>
-                        Drag & drop files or{" "}
-                        <span>
-                          <label
-                            for="img"
-                            style={{
-                              cursor: "pointer",
-                              color: "#1FA8F6",
-                              fontStyle: "inherit",
-                            }}
-                          >
-                            Browse
-                          </label>
-                        </span>
-                      </Text>
-                      <Text color={"#676767"}>
-                        Supported formates: JPEG, PNG
-                      </Text>
+                      {previewImageBpjs ? (
+                        <>
+                          <Box w={"100%"} h={"100%"} pt={10}>
+                            <Image
+                              src={previewImageBpjs}
+                              w={"300px"}
+                              h={"300px"}
+                            />
+                          </Box>
+                        </>
+                      ) : (
+                        <>
+                          <Box className="grid justify-center" pt={10}>
+                            <Image
+                              src={UploadIcon}
+                              w="50px"
+                              mt={20}
+                              textAlign="center"
+                            />
+                          </Box>
+                          <Text fontSize={"2xl"}>
+                            Drag & drop files or{" "}
+                            <span>
+                              <label
+                                for="bpjs"
+                                style={{
+                                  cursor: "pointer",
+                                  color: "#1FA8F6",
+                                  fontStyle: "inherit",
+                                }}
+                              >
+                                Browse
+                              </label>
+                            </span>
+                          </Text>
+                          <Text color={"#676767"}>
+                            Supported formates: JPEG, PNG
+                          </Text>
+                        </>
+                      )}
                     </Grid>
                   </label>
                 </Box>
