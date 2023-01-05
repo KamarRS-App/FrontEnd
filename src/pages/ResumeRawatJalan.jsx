@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Layout from '../components/Layout';
+import ReactToPrint from 'react-to-print';
 import {
   FormControl,
   FormLabel,
@@ -184,7 +185,9 @@ function ResumeRawatJalan() {
                             <Tr fontWeight={'400'} textAlign="start" fontSize={'18px'}>
                               <Tr textAlign={'end'}>{nama}</Tr>
                               <Tr textAlign={'end'}>{jenisKelamin}</Tr>
-                              <Tr textAlign={'end'}>{noHandphone === '' ? 'Data Kosong' : noHandphone}</Tr>
+                              <Tr textAlign={'end'} color="red.400">
+                                {noHandphone === '' ? 'Data Kosong' : noHandphone}
+                              </Tr>
                               <Tr textAlign={'end'}>{email}</Tr>
                               <Tr textAlign={'end'}>{rumahSakit}</Tr>
                               <Tr textAlign={'end'}>{poliklinik}</Tr>
@@ -199,6 +202,7 @@ function ResumeRawatJalan() {
                   </Flex>
                 </Box>
                 <Box mt={10} mb={20} textAlign={'center'}>
+                  <ComponentToPrint ref={componentRef} />
                   <Text mb={10}>Harap Datang 1 jam sebelum periksa</Text>
                   <Button bg="alta.primary" color="white" p={6} onClick={() => handlerRegistrasi()}>
                     Cetak

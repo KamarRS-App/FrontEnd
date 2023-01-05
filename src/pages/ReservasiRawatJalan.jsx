@@ -176,19 +176,19 @@ function ReservasiRawatJalan() {
     handleSendData(patient_id, practiceId);
     console.log(typeof patient_id);
 
-    // navigate('/resume/rawat/jalan', {
-    //   state: {
-    //     nama: patientSelected?.nama_pasien,
-    //     jenisKelamin: patientSelected?.jenis_kelamin,
-    //     noHandphone: patientSelected?.no_telpon_wali,
-    //     email: patientSelected?.email_wali,
-    //     rumahSakit: nameHospital,
-    //     poliklinik: policlinicName,
-    //     dokter: doctorName,
-    //     tanggalPeriksa: inDate,
-    //     jamPeriksa: location.state?.time,
-    //   },
-    // });
+    navigate('/resume/rawat/jalan', {
+      state: {
+        nama: patientSelected?.nama_pasien,
+        jenisKelamin: patientSelected?.jenis_kelamin,
+        noHandphone: patientSelected?.no_telpon_wali,
+        email: patientSelected?.email_wali,
+        rumahSakit: nameHospital,
+        poliklinik: policlinicName,
+        dokter: doctorName,
+        tanggalPeriksa: inDate,
+        jamPeriksa: location.state?.time,
+      },
+    });
   };
 
   useEffect(() => {
