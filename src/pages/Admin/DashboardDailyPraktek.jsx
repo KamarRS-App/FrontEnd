@@ -275,7 +275,7 @@ function DashboardDailyPraktek() {
               >
                 {policlinics?.map((policlinic) => {
                   return (
-                    <option value={policlinic.id}>
+                    <option value={policlinic.id} key={policlinic.id}>
                       {policlinic.nama_poli}
                     </option>
                   );
@@ -314,7 +314,7 @@ function DashboardDailyPraktek() {
                     <Tbody>
                       {practiceList?.map((practice, index) => {
                         return (
-                          <Tr>
+                          <Tr key={index + 1}>
                             <Td>{index + 1}</Td>
                             <Td>{practice.tanggal_praktik}</Td>
                             <Td>{practice.kuota_harian}</Td>
@@ -480,7 +480,11 @@ function DashboardDailyPraktek() {
               >
                 {listPoli?.map((poli) => {
                   return (
-                    <option value={poli.id} label={poli.nama_poli}>
+                    <option
+                      value={poli.id}
+                      label={poli.nama_poli}
+                      key={poli.id}
+                    >
                       {poli.nama_poli}
                     </option>
                   );

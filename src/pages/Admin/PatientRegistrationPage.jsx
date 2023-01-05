@@ -26,6 +26,7 @@ import { useNavigate } from "react-router";
 import api from "../../services/api";
 import { Link } from "react-router-dom";
 import Pagination from "rc-pagination";
+import Loading from "../../components/Loading";
 
 const PatientRegistrationPage = () => {
   const token = Cookies.get("token");
@@ -38,6 +39,7 @@ const PatientRegistrationPage = () => {
   const [daftarBed, setDaftarBed] = useState();
   const [totalPage, setTotalPage] = useState();
   const [selectedBed, setSelectedBed] = useState();
+  const [loading, setLoading] = useState(true);
 
   const {
     isOpen: isModalEditOpen,
@@ -60,6 +62,7 @@ const PatientRegistrationPage = () => {
       .then((response) => {
         // console.log(response.data.data.hospital_id);
         setHospitalId(response.data.data.hospital_id);
+        setLoading(false);
         ngambilDaftarBedDiHospital(
           token,
           response.data.data.hospital_id,
@@ -84,15 +87,6 @@ const PatientRegistrationPage = () => {
       .then((response) => {
         setDaftarBed(response.data.data);
         setTotalPage(response.data.total_page);
-      })
-      .catch((err) => {
-        toast({
-          position: "top",
-          title: "Gagal mendapatkan data kamar yang terdaftar",
-          status: "error",
-          duration: "2000",
-          isClosable: true,
-        });
       });
   };
 
@@ -184,206 +178,215 @@ const PatientRegistrationPage = () => {
   }, [currentPage]);
 
   return (
-    <LayoutAdmin activeMenu={"patient"}>
-      <HeadAdmin
-        title={"Manajemen Pemesanan Kamar"}
-        showFilter={"none"}
-        showSearch={"none"}
-        showAdd={"none"}
-      />
-      <Box backgroundColor="white" mt={5} minH="600px" p={5}>
-        <TableAdmin
-          headTable={
-            <Tr>
-              <Td fontWeight={"400"} textAlign="center" fontSize={"18px"}>
-                Action
-              </Td>
-              <Td fontWeight={"400"} textAlign="center" fontSize={"18px"}>
-                No
-              </Td>
-              <Td fontWeight={"400"} textAlign="center" fontSize={"18px"}>
-                Status Pembayaran
-              </Td>
-              <Td fontWeight={"400"} textAlign="center" fontSize={"18px"}>
-                Status Pasien
-              </Td>
-              <Td fontWeight={"400"} textAlign="center" fontSize={"18px"}>
-                Biaya Registrasi
-              </Td>
-              <Td fontWeight={"400"} textAlign="center" fontSize={"18px"}>
-                Kode Daftar
-              </Td>
-              <Td fontWeight={"400"} textAlign="center" fontSize={"18px"}>
-                Metode Pembayaran
-              </Td>
-              <Td fontWeight={"400"} textAlign="center" fontSize={"18px"}>
-                Link Pembayaran
-              </Td>
-              <Td fontWeight={"400"} textAlign="center" fontSize={"18px"}>
-                ID Transaksi
-              </Td>
-              <Td fontWeight={"400"} textAlign="center" fontSize={"18px"}>
-                Virtual Account
-              </Td>
-              <Td fontWeight={"400"} textAlign="center" fontSize={"18px"}>
-                Bank Penerima
-              </Td>
-              <Td fontWeight={"400"} textAlign="center" fontSize={"18px"}>
-                Waktu Kadaluarsa
-              </Td>
-            </Tr>
-          }
-          bodyTable={
-            <>
-              {daftarBed ? (
-                daftarBed.map((bed, index) => {
-                  return (
-                    <Tr>
-                      <Td textAlign={"center"}>{index + 1}</Td>
-                      <Td>
-                        <ButtonGroup gap="4">
-                          <Button
-                            onClick={() => {
-                              onModalEditOpen();
-                              setSelectedBed(bed);
-                            }}
-                            bg="transparent"
-                            border="1px"
-                            borderColor={"#E0E0E0"}
-                          >
-                            <MdModeEdit />
-                          </Button>
-                          <Button
-                            bg="transparent"
-                            border="1px"
-                            borderColor={"#E0E0E0"}
-                            onClick={() => hapusBedRegistrasi(token, bed.id)}
-                          >
-                            <MdOutlineDeleteOutline />
-                          </Button>
-                        </ButtonGroup>
-                      </Td>
-                      <Td textAlign={"center"}>
-                        {bed.status_pembayaran === "settlement" ? (
-                          <Badge colorScheme="green">
-                            {bed.status_pembayaran}
-                          </Badge>
-                        ) : bed.status_pembayaran === "pending" ? (
-                          <Badge colorScheme={"red"}>
-                            {bed.status_pembayaran}
-                          </Badge>
-                        ) : bed.status_pembayaran === "settlement via BPJS" ? (
-                          <Badge colorScheme="green">
-                            {bed.status_pembayaran}
-                          </Badge>
-                        ) : bed.status_pembayaran === "belum dibayar" ? (
-                          <Badge colorScheme={"red"}>
-                            {bed.status_pembayaran}
-                          </Badge>
-                        ) : (
-                          <Badge>{bed.status_pembayaran}</Badge>
-                        )}
-                      </Td>
-                      <Td textAlign={"center"}>{bed.status_pasien}</Td>
-                      <Td textAlign={"center"}>{bed.biaya_registrasi}</Td>
-                      <Td textAlign={"center"}>{bed.Kode_daftar}</Td>
-                      <Td textAlign={"center"}>{bed.payment_method}</Td>
-                      <Td textAlign={"center"} color={"blue"}>
-                        <Link hrefLang={bed.link_pembayaran}>
-                          Link Pembayaran
-                        </Link>
-                      </Td>
-                      <Td textAlign={"center"}>{bed.transaction_id}</Td>
-                      <Td textAlign={"center"}>{bed.virtual_account}</Td>
-                      <Td textAlign={"center"}>{bed.bank_penerima}</Td>
-                      <Td textAlign={"center"}>{bed.waktu_kedaluarsa}</Td>
-                    </Tr>
-                  );
-                })
-              ) : (
-                <></>
-              )}
-            </>
-          }
-        />
-        <Box textAlign={"center"}>
-          <Pagination
-            total={totalPage * 10}
-            onChange={onChangePage}
-            current={currentPage}
-            defaultCurrent={1}
+    <>
+      {loading ? (
+        <Loading body={"Sedang memuat data"} />
+      ) : (
+        <LayoutAdmin activeMenu={"patient"}>
+          <HeadAdmin
+            title={"Manajemen Pemesanan Kamar"}
+            showFilter={"none"}
+            showSearch={"none"}
+            showAdd={"none"}
           />
-        </Box>
-      </Box>
-      <PopupAdmin
-        modalTitle={"Ubah Data Bed Reservation"}
-        isOpen={isModalEditOpen}
-        onClose={onCloseModalEdit}
-        displayButton={"none"}
-        modalBody={
-          <>
-            <Text fontWeight={"bold"}>Bed ID: {selectedBed?.id}</Text>
-            <Box mt={5}>
-              <FormControl>
-                <FormLabel>Status Pasien:</FormLabel>
-                <Input
-                  value={selectedBed?.status_pasien}
-                  id={"status_pasien"}
-                  onChange={(e) => handlerChangeInput(e)}
-                />
-              </FormControl>
-              <FormControl>
-                <FormLabel>Biaya Registrasi</FormLabel>
-                <Input
-                  value={selectedBed?.biaya_registrasi}
-                  id={"biaya_registrasi"}
-                  type={"number"}
-                  onChange={(e) => handlerChangeInput(e)}
-                />
-              </FormControl>
-              <FormControl>
-                <FormLabel>Status Pembayaran:</FormLabel>
-                <Select
-                  id={"status_pembayaran"}
-                  value={selectedBed.status_pembayaran}
-                  onChange={(e) => handlerChangeInput(e)}
-                >
-                  <option value={"settlement"}>settlement</option>
-                  <option value={"pending"}>pending</option>
-                  <option value={"settlement via BPJS"}>
-                    settlement via BPJS
-                  </option>
-                  <option value={"belum dibayar"}>belum dibayar</option>
-                  <option value={"expire"}>expire</option>
-                </Select>
-              </FormControl>
-              <FormControl>
-                <FormLabel>Bed Id:</FormLabel>
-                <Input
-                  value={selectedBed?.bed_id}
-                  id={"bed_id"}
-                  onChange={(e) => handlerChangeInput(e)}
-                />
-              </FormControl>
-              <Box textAlign={"end"} mt={5}>
-                <Button
-                  onClick={() => onSubmitEdited(selectedBed)}
-                  bg="#3AB8FF"
-                  color={"white"}
-                  fontSize={"14px"}
-                  fontWeight={"700"}
-                  width={"150px"}
-                  height={"50px"}
-                  _hover={{ bg: "alta.primary" }}
-                >
-                  Perbaharui Data
-                </Button>
-              </Box>
+          <Box backgroundColor="white" mt={5} minH="600px" p={5}>
+            <TableAdmin
+              headTable={
+                <Tr>
+                  <Td fontWeight={"400"} textAlign="center" fontSize={"18px"}>
+                    Action
+                  </Td>
+                  <Td fontWeight={"400"} textAlign="center" fontSize={"18px"}>
+                    No
+                  </Td>
+                  <Td fontWeight={"400"} textAlign="center" fontSize={"18px"}>
+                    Status Pembayaran
+                  </Td>
+                  <Td fontWeight={"400"} textAlign="center" fontSize={"18px"}>
+                    Status Pasien
+                  </Td>
+                  <Td fontWeight={"400"} textAlign="center" fontSize={"18px"}>
+                    Biaya Registrasi
+                  </Td>
+                  <Td fontWeight={"400"} textAlign="center" fontSize={"18px"}>
+                    Kode Daftar
+                  </Td>
+                  <Td fontWeight={"400"} textAlign="center" fontSize={"18px"}>
+                    Metode Pembayaran
+                  </Td>
+                  <Td fontWeight={"400"} textAlign="center" fontSize={"18px"}>
+                    Link Pembayaran
+                  </Td>
+                  <Td fontWeight={"400"} textAlign="center" fontSize={"18px"}>
+                    ID Transaksi
+                  </Td>
+                  <Td fontWeight={"400"} textAlign="center" fontSize={"18px"}>
+                    Virtual Account
+                  </Td>
+                  <Td fontWeight={"400"} textAlign="center" fontSize={"18px"}>
+                    Bank Penerima
+                  </Td>
+                  <Td fontWeight={"400"} textAlign="center" fontSize={"18px"}>
+                    Waktu Kadaluarsa
+                  </Td>
+                </Tr>
+              }
+              bodyTable={
+                <>
+                  {daftarBed ? (
+                    daftarBed.map((bed, index) => {
+                      return (
+                        <Tr>
+                          <Td textAlign={"center"}>{index + 1}</Td>
+                          <Td>
+                            <ButtonGroup gap="4">
+                              <Button
+                                onClick={() => {
+                                  onModalEditOpen();
+                                  setSelectedBed(bed);
+                                }}
+                                bg="transparent"
+                                border="1px"
+                                borderColor={"#E0E0E0"}
+                              >
+                                <MdModeEdit />
+                              </Button>
+                              <Button
+                                bg="transparent"
+                                border="1px"
+                                borderColor={"#E0E0E0"}
+                                onClick={() =>
+                                  hapusBedRegistrasi(token, bed.id)
+                                }
+                              >
+                                <MdOutlineDeleteOutline />
+                              </Button>
+                            </ButtonGroup>
+                          </Td>
+                          <Td textAlign={"center"}>
+                            {bed.status_pembayaran === "settlement" ? (
+                              <Badge colorScheme="green">
+                                {bed.status_pembayaran}
+                              </Badge>
+                            ) : bed.status_pembayaran === "pending" ? (
+                              <Badge colorScheme={"red"}>
+                                {bed.status_pembayaran}
+                              </Badge>
+                            ) : bed.status_pembayaran ===
+                              "settlement via BPJS" ? (
+                              <Badge colorScheme="green">
+                                {bed.status_pembayaran}
+                              </Badge>
+                            ) : bed.status_pembayaran === "belum dibayar" ? (
+                              <Badge colorScheme={"red"}>
+                                {bed.status_pembayaran}
+                              </Badge>
+                            ) : (
+                              <Badge>{bed.status_pembayaran}</Badge>
+                            )}
+                          </Td>
+                          <Td textAlign={"center"}>{bed.status_pasien}</Td>
+                          <Td textAlign={"center"}>{bed.biaya_registrasi}</Td>
+                          <Td textAlign={"center"}>{bed.Kode_daftar}</Td>
+                          <Td textAlign={"center"}>{bed.payment_method}</Td>
+                          <Td textAlign={"center"} color={"blue"}>
+                            <Link hrefLang={bed.link_pembayaran}>
+                              Link Pembayaran
+                            </Link>
+                          </Td>
+                          <Td textAlign={"center"}>{bed.transaction_id}</Td>
+                          <Td textAlign={"center"}>{bed.virtual_account}</Td>
+                          <Td textAlign={"center"}>{bed.bank_penerima}</Td>
+                          <Td textAlign={"center"}>{bed.waktu_kedaluarsa}</Td>
+                        </Tr>
+                      );
+                    })
+                  ) : (
+                    <></>
+                  )}
+                </>
+              }
+            />
+            <Box textAlign={"center"}>
+              <Pagination
+                total={totalPage * 10}
+                onChange={onChangePage}
+                current={currentPage}
+                defaultCurrent={1}
+              />
             </Box>
-          </>
-        }
-      />
-    </LayoutAdmin>
+          </Box>
+          <PopupAdmin
+            modalTitle={"Ubah Data Bed Reservation"}
+            isOpen={isModalEditOpen}
+            onClose={onCloseModalEdit}
+            displayButton={"none"}
+            modalBody={
+              <>
+                <Text fontWeight={"bold"}>Bed ID: {selectedBed?.id}</Text>
+                <Box mt={5}>
+                  <FormControl>
+                    <FormLabel>Status Pasien:</FormLabel>
+                    <Input
+                      value={selectedBed?.status_pasien}
+                      id={"status_pasien"}
+                      onChange={(e) => handlerChangeInput(e)}
+                    />
+                  </FormControl>
+                  <FormControl>
+                    <FormLabel>Biaya Registrasi</FormLabel>
+                    <Input
+                      value={selectedBed?.biaya_registrasi}
+                      id={"biaya_registrasi"}
+                      type={"number"}
+                      onChange={(e) => handlerChangeInput(e)}
+                    />
+                  </FormControl>
+                  <FormControl>
+                    <FormLabel>Status Pembayaran:</FormLabel>
+                    <Select
+                      id={"status_pembayaran"}
+                      value={selectedBed?.status_pembayaran}
+                      onChange={(e) => handlerChangeInput(e)}
+                    >
+                      <option value={"settlement"}>settlement</option>
+                      <option value={"pending"}>pending</option>
+                      <option value={"settlement via BPJS"}>
+                        settlement via BPJS
+                      </option>
+                      <option value={"belum dibayar"}>belum dibayar</option>
+                      <option value={"expire"}>expire</option>
+                    </Select>
+                  </FormControl>
+                  <FormControl>
+                    <FormLabel>Bed Id:</FormLabel>
+                    <Input
+                      value={selectedBed?.bed_id}
+                      id={"bed_id"}
+                      onChange={(e) => handlerChangeInput(e)}
+                    />
+                  </FormControl>
+                  <Box textAlign={"end"} mt={5}>
+                    <Button
+                      onClick={() => onSubmitEdited(selectedBed)}
+                      bg="#3AB8FF"
+                      color={"white"}
+                      fontSize={"14px"}
+                      fontWeight={"700"}
+                      width={"150px"}
+                      height={"50px"}
+                      _hover={{ bg: "alta.primary" }}
+                    >
+                      Perbaharui Data
+                    </Button>
+                  </Box>
+                </Box>
+              </>
+            }
+          />
+        </LayoutAdmin>
+      )}
+    </>
   );
 };
 
