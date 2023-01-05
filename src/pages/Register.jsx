@@ -39,21 +39,18 @@ function Register() {
 
   //yup schema
   const schema = yup.object().shape({
-    username: yup.string().required("Harap masukkan username"),
+    nama: yup.string().required("Harap masukkan username"),
     email: yup
       .string()
       .required("Harap masukkan email")
       .email("Format email salah"),
-    nomorhape: yup.number().typeError("Harap masukkan nomor hp").required(),
+    no_telpon: yup.number().typeError("Harap masukkan nomor hp").required(),
     kata_sandi: yup
       .string()
       .required("Harap masukkan password")
       .min(8, "Password setidaknya 8 karakter"),
     nik: yup.number().typeError("Harap masukkan NIK").required(),
-    no_kk: yup
-      .number()
-      .typeError("Harap masukkan Nomor Kartu Keluarga")
-      .required(),
+    no_kk: yup.number().typeError("Harap masukkan Nomor Kartu Keluarga").required(),
   });
 
   //react-hook-form
@@ -207,9 +204,10 @@ function Register() {
                 <form>
                   <FormControl isInvalid={errors.username}>
                     <Input
-                      {...register("username")}
+                      {...register("nama")}
                       placeholder="Masukkan username"
-                      name="username"
+                      type={'text'}
+                      name="nama"
                     />
                     <Text color={"red"}>{errors.username?.message}</Text>
                   </FormControl>
@@ -218,6 +216,8 @@ function Register() {
                     <Input
                       {...register("email")}
                       placeholder="Masukkan email"
+                      type={'email'}
+                      name={'email'}
                     />
                     <Text color={"red"}>{errors.email?.message}</Text>
                     <br />
@@ -226,6 +226,7 @@ function Register() {
                     <Input
                       {...register("nik")}
                       type={"number"}
+                      name={'nik'}
                       placeholder="Masukkan NIK"
                     />
                     <Text color={"red"}>{errors.nik?.message}</Text>
@@ -233,6 +234,7 @@ function Register() {
                   </FormControl>
                   <FormControl isInvalid={errors.no_kk}>
                     <Input
+                      name="no_kk"
                       {...register("no_kk")}
                       type={"number"}
                       placeholder="Masukkan No. Kartu Keluarga"
@@ -245,6 +247,7 @@ function Register() {
                       type="number"
                       {...register("nomorhape")}
                       placeholder="Masukkan nomor hp"
+                      name="no_telpon"
                     />
                     <Text color="red">{errors.nomorhape?.message}</Text>
                   </FormControl>
@@ -255,6 +258,7 @@ function Register() {
                         type={show ? "text" : "password"}
                         {...register("kata_sandi")}
                         placeholder="Masukkan password"
+                        name="kata_sandi"
                         onInput={onShowPassword}
                       />
                       {passwordType && (
