@@ -37,6 +37,7 @@ import ReservasiRawatJalan from './pages/ReservasiRawatJalan';
 import LinkPaymentPage from './pages/LinkPaymentPage';
 import AuthGoogle from './pages/AuthGoogle';
 import ResumeRawatJalan from './pages/ResumeRawatJalan';
+import NotFound from "./pages/NotFound";
 
 import './App.css';
 import '@fontsource/plus-jakarta-sans/700.css';
@@ -91,16 +92,18 @@ function App() {
               <Route path="/admin/hospital/profile" element={<ProfileHospitalPage />} />
               <Route path="/admin/login" element={<LoginAdmin />} />
 
-              {/* super admin */}
-              <Route path="/root/login" element={<LoginAdminRoot />} />
-              <Route path="/root/dashboard" element={<DashboardRoot />} />
-              <Route path="/root/hospital" element={<HospitalRootPages />} />
-              <Route path="/root/user" element={<AdminRoot />} />
-            </Routes>
-          </Box>
-        </ChakraProvider>
-      </BrowserRouter>
-    </Provider>
+                {/* super admin */}
+                <Route path="/root/login" element={<LoginAdminRoot />} />
+                <Route path="/root/dashboard" element={<DashboardRoot />} />
+                <Route path="/root/hospital" element={<HospitalRootPages />} />
+                <Route path="/root/user" element={<AdminRoot />} />
+
+                <Route path="/*" element={<NotFound />} />
+              </Routes>
+            </Box>
+          </ChakraProvider>
+        </BrowserRouter>
+      </Provider>
   );
 }
 

@@ -42,6 +42,7 @@ const HospitalRootPages = () => {
     const [nameKota, setNameKota] = useState('');
     const [kecamatan, setKecamatan] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [imagePrev, setImagePrev] = useState(null);
 
     const auth = AuthToken();
 
@@ -143,7 +144,7 @@ const HospitalRootPages = () => {
     }
 
     const createHospitalHandler = async (data) => {
-        await axios.post('http://34.143.247.242/hospitals', data, {
+        await axios.post('https://rawatinap.online/hospitals', data, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 'content-type': 'multipart/form-data'
@@ -168,6 +169,7 @@ const HospitalRootPages = () => {
                     duration: '1500',
                     isClosable: true
                 })
+                console.log(error)
             })
     }
 
@@ -281,6 +283,7 @@ const HospitalRootPages = () => {
     const handleHospitalImage = (e) => {
         const file = e.target.files[0];
         setHospitalImage(file)
+        setImagePrev(URL.createObjectURL(file));
     }
 
     const onHandlerEdit = (id) => {
@@ -324,6 +327,7 @@ const HospitalRootPages = () => {
         setValueCreate("provinsi", '');
         setValueCreate("kecamatan", '');
         setValueCreate("kabupaten_kota", '');
+        setImagePrev('');
         onCloseModalCreate();
     }
 
@@ -370,6 +374,7 @@ const HospitalRootPages = () => {
         setValueCreate("provinsi", '');
         setValueCreate("kecamatan", '');
         setValueCreate("kabupaten_kota", '');
+        setImagePrev('');
         onCloseModalCreate();
     }
 
@@ -741,6 +746,7 @@ const HospitalRootPages = () => {
                                 </FormControl>
 
                                 <FormControl mt={'4'} isInvalid={errors.foto}>
+                                    {imagePrev && <Image src={imagePrev} maxWidth={'300px'} />}
                                     <FormLabel>Upload Foto Rumah Sakit</FormLabel>
                                     <Input id="foto" type='file'{...createHospital('foto')} onChange={(e) => handleHospitalImage(e)} />
                                     {errors.foto && <FormErrorMessage>{errors.foto.message}</FormErrorMessage>}
