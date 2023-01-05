@@ -113,8 +113,6 @@ function DashboardDailyPraktek() {
 
   //submit data
   const onSubmit = (data) => {
-    console.log(data);
-    console.log(policlinics);
     sendData(data);
   };
 
