@@ -44,6 +44,7 @@ import api from "../../services/api";
 function DashboardDailyPraktek() {
   const token = Cookies.get("token");
   const role = Cookies.get("role");
+  const id = Cookies.get("id");
   const toast = useToast();
   const navigate = useNavigate();
   const [policlinics, setPoliclinics] = React.useState();
@@ -52,7 +53,8 @@ function DashboardDailyPraktek() {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [totalPage, setTotalPage] = React.useState(0);
   const [selectedPractice, setSelectedPractice] = React.useState();
-
+  const [hospitalId, setHospitalId] = React.useState();
+  const [listPoli, setListPoli] = React.useState();
   // ================ PAGINATION ====================
   //change page
   const onChangePage = (page) => {
@@ -153,23 +155,20 @@ function DashboardDailyPraktek() {
       });
   };
 
+  // ======= MENGAMBIL DATA STAFF SEBELUM SET POLIKLINIK ===========
+  const getHospitalIdFromAdmin = async (token, id) => {
+    await api.getAdminById(token, id).then((response) => {
+      setHospitalId(response.data.data.hospital_id);
+    });
+  };
+
   // =============== MENGAMBIL DATA TIAP POLI ======================
   //mengambil data tiap poliklinik
-  const getPoliklinikList = async (token) => {
+  const getPoliklinikList = async (token, id) => {
     await api
-      .getAllPoliclinics(token)
+      .ngambilPoliklinikBerdasarkanHospital(token, id)
       .then((response) => {
-        console.log(response.data.data);
         setPoliclinics(response.data.data);
-      })
-      .catch((err) => {
-        toast({
-          title: `Gagal mengambil data poiliklinik.`,
-          status: "error",
-          position: "top",
-          isClosable: true,
-          duration: 1500,
-        });
       });
   };
 
@@ -211,6 +210,11 @@ function DashboardDailyPraktek() {
       });
   };
 
+  //set policlinic list utk ditmabahkan
+  const ngambilBuatNambahin = () => {
+    setListPoli(policlinics);
+  };
+
   //============== USE EFFECT ========================
   useEffect(() => {
     // check apakah udah login
@@ -224,10 +228,19 @@ function DashboardDailyPraktek() {
       });
       navigate("/admin/login");
     }
-
+    getHospitalIdFromAdmin(token, id);
     // get data tiap poliklinik
-    getPoliklinikList(token);
   }, []);
+
+  useEffect(() => {
+    setListPoli(policlinics);
+  }, [policlinics]);
+
+  useEffect(() => {
+    if (hospitalId) {
+      getPoliklinikList(token, hospitalId);
+    }
+  }, [hospitalId]);
 
   //check perubahan pada page, lanjutkan dengan ngambil data selanjutnya/sebelumnya
   useEffect(() => {
@@ -240,7 +253,10 @@ function DashboardDailyPraktek() {
     <LayoutAdmin activeMenu={"praktek"}>
       <HeadAdmin
         title="Manajemen Praktek"
-        isAdd={onModalCreateOpen}
+        isAdd={() => {
+          onModalCreateOpen();
+          ngambilBuatNambahin();
+        }}
         showSearch={"none"}
         showFilter={"none"}
       />
@@ -257,10 +273,10 @@ function DashboardDailyPraktek() {
                   setPracticeList("");
                 }}
               >
-                {policlinics?.map((policlinics) => {
+                {policlinics?.map((policlinic) => {
                   return (
-                    <option value={policlinics.id}>
-                      {policlinics.nama_poli}
+                    <option value={policlinic.id}>
+                      {policlinic.nama_poli}
                     </option>
                   );
                 })}
@@ -457,13 +473,26 @@ function DashboardDailyPraktek() {
           <ModalBody pb={20}>
             <FormControl isInvalid={errors.policlinic_id}>
               <FormLabel>ID Poliklinik</FormLabel>
-              <Input
+              <Select
+                {...register("policlinic_id")}
+                id="policlinic_id"
+                name="policlinic_id"
+              >
+                {listPoli?.map((poli) => {
+                  return (
+                    <option value={poli.id} label={poli.nama_poli}>
+                      {poli.nama_poli}
+                    </option>
+                  );
+                })}
+              </Select>
+              {/* <Input
                 {...register("policlinic_id")}
                 placeholder="ID Poliklinik"
                 id="policlinic_id"
                 type="number"
                 name="policlinic_id"
-              />
+              /> */}
               {errors.policlinic_id && (
                 <FormErrorMessage>
                   {errors.policlinic_id?.message}
