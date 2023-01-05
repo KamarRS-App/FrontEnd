@@ -36,13 +36,14 @@ function ReservasiRawatJalan() {
   const navigate = useNavigate();
   const [patients, setPatients] = useState([]);
   const [patientId, setPatientId] = useState();
-  const [practiceId, setPracticeId] = useState();
+
   const [patientSelected, setPatientSelected] = useState();
   const location = useLocation();
   const [nameHospital, setNameHospital] = useState();
   const idHospital = parseInt(location.state?.idHospital);
   const idDoctor = parseInt(location.state?.idDoctor);
   const idPoliclinic = parseInt(location.state?.idPoliclinic);
+  const practiceId = parseInt(location.state?.practiceId);
   const [policlinicName, setPoliclinicName] = useState();
   const [doctorName, setDoctorName] = useState();
   const [timeSelected, setTimeSelected] = useState();
@@ -69,7 +70,7 @@ function ReservasiRawatJalan() {
     await api
       .createCheckUpReservation(token, { patient_id, practice_id })
       .then((response) => {
-        console.log(response);
+        // console.log(response);
       })
       .catch((err) => console.log(err));
   };
@@ -79,7 +80,7 @@ function ReservasiRawatJalan() {
       .getHospitalByID(token, location.state?.idHospital)
       .then((response) => {
         const data = response.data.data;
-        console.log(response);
+        // console.log(response);
         setNameHospital(data.nama);
       })
       .catch((error) => {
@@ -92,7 +93,7 @@ function ReservasiRawatJalan() {
       .getPoliclinicById(token, location.state?.idPoliclinic)
       .then((response) => {
         const data = response.data.data;
-        console.log(response);
+        // console.log(response);
         setPoliclinicName(data.nama_poli);
       })
       .catch((error) => {
@@ -104,7 +105,7 @@ function ReservasiRawatJalan() {
       .getDoctorById(token, location.state?.idDokter)
       .then((response) => {
         const data = response.data.data;
-        console.log(response);
+        // console.log(response);
         setDoctorName(data.nama);
       })
       .catch((error) => {
@@ -117,7 +118,7 @@ function ReservasiRawatJalan() {
       .getPoliclinicById(token, location.state?.time)
       .then((response) => {
         const data = response.data.data;
-        console.log(response);
+        // console.log(response);
         setTimeSelected(data.jam_praktik);
       })
       .catch((error) => {
@@ -127,7 +128,7 @@ function ReservasiRawatJalan() {
 
   // console.log(location.state?.idHospital);
   // console.log(location.state?.idPoliclinic);
-  console.log(location.state?.idDokter);
+  // console.log(location.state?.idDokter);
   // console.log(location.state?.time);
 
   const getPatientById = async (id) => {
@@ -152,7 +153,7 @@ function ReservasiRawatJalan() {
     await api
       .createBedRegistrations(token, { hospital_id, patient_id })
       .then((response) => {
-        console.log(response);
+        // console.log(response);
       })
       .catch((error) => {
         console.log(error);
@@ -171,20 +172,23 @@ function ReservasiRawatJalan() {
     onClose();
   };
   const handlerRegistrasi = () => {
-    handleSendData(patientId, practiceId);
-    navigate('/resume/rawat/jalan', {
-      state: {
-        nama: patientSelected?.nama_pasien,
-        jenisKelamin: patientSelected?.jenis_kelamin,
-        noHandphone: patientSelected?.no_telpon_wali,
-        email: patientSelected?.email_wali,
-        rumahSakit: nameHospital,
-        poliklinik: policlinicName,
-        dokter: doctorName,
-        tanggalPeriksa: inDate,
-        jamPeriksa: location.state?.time,
-      },
-    });
+    const patient_id = parseInt(patientId);
+    handleSendData(patient_id, practiceId);
+    console.log(typeof patient_id);
+
+    // navigate('/resume/rawat/jalan', {
+    //   state: {
+    //     nama: patientSelected?.nama_pasien,
+    //     jenisKelamin: patientSelected?.jenis_kelamin,
+    //     noHandphone: patientSelected?.no_telpon_wali,
+    //     email: patientSelected?.email_wali,
+    //     rumahSakit: nameHospital,
+    //     poliklinik: policlinicName,
+    //     dokter: doctorName,
+    //     tanggalPeriksa: inDate,
+    //     jamPeriksa: location.state?.time,
+    //   },
+    // });
   };
 
   useEffect(() => {

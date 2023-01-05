@@ -72,8 +72,23 @@ function CariSpesialis() {
   const getPractices = async (id) => {
     await api.getAllDailyPractices(token, id).then((response) => {
       const data = response.data.data;
-      setPractices(data);
       console.log(data);
+
+      const quota = data.filter((item) => {
+        return item.tanggal_praktik === inDate;
+      });
+      setIdPractices(quota[0]?.id);
+
+      // console.log(quota);
+    });
+  };
+
+  const getQuota = async (id) => {
+    await api.getAllDailyPractices(token, id).then((response) => {
+      const data = response.data.data;
+      // console.log(data);
+      setPractices(data);
+      // console.log(quota);
     });
   };
 
@@ -99,34 +114,6 @@ function CariSpesialis() {
     });
   };
 
-  const handlerRegistrasi = () => {
-    navigate('/reservasi/rawat/jalan', {
-      state: {
-        idHospital: idHospital,
-        idPoliclinic: idPoliclinic,
-        idDokter: idDokter,
-        date: inDate,
-        time: time,
-        kuota: kuota,
-      },
-    });
-  };
-
-  //handle submit data
-
-  //Set Filter Kuota by Poliklinik
-  const resultKuota = practices.filter((data) => {
-    return data.policlinic_id == idPoliclinic;
-  });
-  const handlerKuota = (id) => {
-    const resultKuota = practices.filter((data) => {
-      return data.id == id;
-    });
-    // console.log(resultKuota);
-    setIdPractices(id);
-    getPractices(id);
-  };
-
   //Set Filter Poliklinik by Rumah Sakit
   const resultPoliclinic = policlinics.filter((data) => {
     return data.hospital_id == idHospital;
@@ -137,24 +124,39 @@ function CariSpesialis() {
       return data.id == id;
     });
     // console.log(resultPoliclinic);
-    getPractices(id);
     setIdPoliclinic(id);
     getPoliclinic(id);
   };
+
   const handlerTanggal = (e) => {
     setInDate(e);
+    getPractices(idPoliclinic);
+    getQuota(idPoliclinic);
   };
-
-  const quota = practices?.filter((data) => {
-    return data.tanggal_praktik == inDate;
+  const filterQuota = practices.filter((item) => {
+    return item.tanggal_praktik === inDate;
   });
-  console.log(quota);
+
+  const handlerRegistrasi = () => {
+    // getPractices(idPoliclinic);
+    console.log(filterQuota[0].id);
+    navigate('/reservasi/rawat/jalan', {
+      state: {
+        idHospital: idHospital,
+        idPoliclinic: idPoliclinic,
+        idDokter: idDokter,
+        date: inDate,
+        time: time,
+        kuota: kuota,
+        practiceId: filterQuota[0].id,
+      },
+    });
+  };
 
   React.useEffect(() => {
     getProvinsi();
     getAllHospitalsHandler();
     getPoliclinics();
-    getPractices();
   }, []);
 
   React.useEffect(() => {
@@ -234,7 +236,7 @@ function CariSpesialis() {
 
               <Box>
                 <Text py={4}> Kuota Harian</Text>
-                <Input type="text" value={quota[0]?.kuota_harian} _peerDisabled disabled />
+                <Input type="text" value={filterQuota[0]?.kuota_harian} _peerDisabled disabled />
               </Box>
             </Stack>
 
