@@ -24,6 +24,7 @@ import apiProvinsi from '../services/apiProvinsi';
 import { Link } from 'react-router-dom';
 import { AuthToken } from '../services/authToken';
 import Loading from '../components/Loading';
+import Pagination from 'rc-pagination';
 
 const HomePage = () => {
     const token = Cookies.get('token');
@@ -37,18 +38,24 @@ const HomePage = () => {
     const [selectKota, setSelectKota] = useState('');
     const auth = AuthToken();
     const [loading, setLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPage, setTotalPage] = useState();
+    const [nomor, setNomor] = useState(0);
 
-    const getAllHospitalsHandler = async () => {
-        await api.getHospitals(token)
+    const getAllHospitalsHandler = async (pages) => {
+        await api.getHospitals(token, pages)
             .then(response => {
+                setLoading(true)
                 const data = response.data.data;
                 setHospitals(data);
+                setTotalPage(response.data.total_page)
             })
             .catch(error => {
                 console.log(error);
             })
         setLoading(false)
     }
+
 
     const getProvinsi = async () => {
         await apiProvinsi.getProvinsi()
@@ -77,6 +84,15 @@ const HomePage = () => {
             })
     }
 
+    const onPagination = (page) => {
+        setCurrentPage(page)
+        if (currentPage < page) {
+            setNomor(nomor + 10);
+        } else {
+            setNomor(nomor - 10);
+        }
+    }
+
     const handlerChangeProvinsi = (e) => {
         setSelectKota('');
         getDetailProvinsi(e);
@@ -102,9 +118,10 @@ const HomePage = () => {
             });
             navigate('/login');
         }
-        getAllHospitalsHandler();
+        getAllHospitalsHandler(currentPage);
         getProvinsi();
-    }, []);
+    }, [currentPage]);
+
 
     return (
         <>
@@ -152,44 +169,58 @@ const HomePage = () => {
                         valueKota={selectKota}
                         onChangeKota={(e) => setSelectKota(e.target.value)}
                         headTable={
-                            <Tr>
-                                <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
-                                    No
-                                </Th>
-                                <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
-                                    Nama Rumah Sakit
-                                </Th>
-                                <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
-                                    Pemilik / Pengelola
-                                </Th>
-                                <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
-                                    No Telepon
-                                </Th>
-                                <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
-                                    Alamat
-                                </Th>
-                            </Tr>
+                            <>
+                                <Tr>
+                                    <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
+                                        No
+                                    </Th>
+                                    <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
+                                        Nama Rumah Sakit
+                                    </Th>
+                                    <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
+                                        Pemilik / Pengelola
+                                    </Th>
+                                    <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
+                                        No Telepon
+                                    </Th>
+                                    <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
+                                        Alamat
+                                    </Th>
+                                </Tr>
+                            </>
                         }
                         bodyTable={
                             (nameProvinsi === 'all' || nameProvinsi === '' ? hospitals : selectKota === 'all' || selectKota === '' ? resultHospital : resultRegionHospital)
                                 .map((data, index) => (
-                                    <Tr key={index}>
-                                        <Td>{index + 1}</Td>
-                                        <Link>
+                                        <Tr key={index}>
+                                            <Td>{nomor + index + 1}</Td>
                                             <Td
                                                 textDecoration={'underline'}
                                                 _hover={{ color: '#1FA8F6' }}
                                             >
-                                                {data.nama}
+                                                {/* <Link> */}
+                                                    {data.nama}
+                                                {/* </Link> */}
                                             </Td>
-                                        </Link>
-                                        <Td>{data.pemilik_pengelola}</Td>
-                                        <Td>{data.no_telpon}</Td>
-                                        <Td>{data.alamat + " " + data.kecamatan + " " + data.kabupaten_kota + ", " + data.provinsi + "," + data.kode_pos}</Td>
-                                    </Tr>
+                                            <Td>{data.pemilik_pengelola}</Td>
+                                            <Td>{data.no_telpon}</Td>
+                                            <Td>{data.alamat + " " + data.kecamatan + " " + data.kabupaten_kota + ", " + data.provinsi + "," + data.kode_pos}</Td>
+                                        </Tr>
                                 ))
                         }
                     />
+                    <Flex
+                        justify={'end'}
+                        mx={'20'}
+                        mt={'8'}
+                    >
+                        <Pagination
+                            defaultCurrent={'1'}
+                            current={currentPage}
+                            total={totalPage * 10}
+                            onChange={onPagination}
+                        />
+                    </Flex>
                     <Box
                         textAlign={'center'}
                         mt={'10'}

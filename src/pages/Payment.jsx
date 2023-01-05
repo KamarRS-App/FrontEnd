@@ -64,7 +64,7 @@ function Payment() {
   useEffect(() => {
     const interval = setInterval(() => {
       checkPayment();
-    }, 500);
+    }, 5000);
     return () => clearInterval(interval)
   }, []);
 

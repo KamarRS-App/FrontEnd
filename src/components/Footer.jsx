@@ -1,6 +1,7 @@
-import { Box, Flex, Spacer, Stack, Text, Image, Link } from '@chakra-ui/react';
+import { Box, Flex, Spacer, Stack, Text, Image } from '@chakra-ui/react';
 import React from 'react';
 import { List, ListItem, UnorderedList } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
@@ -24,13 +25,13 @@ const Footer = () => {
                   </Text>
                 </ListItem>
                 <ListItem pt="5">
-                  <Link href="/tentang/kami">About Us</Link>
+                  <Link to="/tentang/kami">About Us</Link>
                 </ListItem>
                 <ListItem pt="3">
-                  <Link href="/halaman/privasi">Privacy</Link>
+                  <Link to="/halaman/privasi">Privacy</Link>
                 </ListItem>
                 <ListItem pt="3">
-                  <Link href="/syarat/dan/ketentuan">Terms & Conditions</Link>
+                  <Link to="/syarat/dan/ketentuan">Terms & Conditions</Link>
                 </ListItem>
               </UnorderedList>
             </Box>
