@@ -216,7 +216,6 @@ const HospitalRootPages = () => {
                 getAllHospitalsHandler();
             })
             .catch(error => {
-                console.log(error)
                 toast({
                     position: 'top',
                     title: 'Gagal Menambahkan Data Rumah Sakit',

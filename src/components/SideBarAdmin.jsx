@@ -82,7 +82,7 @@ const SideBarAdmin = ({ active }) => {
           </Text>
         </Flex>
       </Link>
-      <Link to="/admin/poliklinik">
+      <Link to="/admin/policlinic">
         <Flex
           px={{ base: '0', md: '0', lg: '14' }}
           pl={{ base: '0', md: '5' }}
