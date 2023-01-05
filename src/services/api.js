@@ -510,6 +510,15 @@ export default {
       },
     }),
 
+  ngambilPoliklinikBerdasarkanHospital: (token, hospitalid) =>
+    instance({
+      method: `GET`,
+      url: `/hospitals/${hospitalid}/policlinics`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
+
   //checkup reservations
   createCheckUpReservation: (token, { patient_id, practice_id }) =>
     instance({
