@@ -635,41 +635,19 @@ export default {
       },
     }),
 
-  updateBedRegistrations: (
-    token,
-    id,
-    {
-      hospital_id,
-      patient_id,
-      bed_id,
-      status_pasien,
-      biaya_registrasi,
-      kode_daftar,
-      link_pembayaran,
-      status_pembayaran,
-    }
-  ) =>
+  updateBedRegistrations: (token, id, data) =>
     instance({
       method: `PUT`,
       url: `/registrations/${id}`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      data: {
-        hospital_id: hospital_id,
-        patient_id: patient_id,
-        bed_id: bed_id,
-        status_pasien: status_pasien,
-        biaya_registrasi: biaya_registrasi,
-        kode_daftar: kode_daftar,
-        link_pembayaran: link_pembayaran,
-        status_pembayaran: status_pembayaran,
-      },
+      data: data,
     }),
-  ngambilBedYangKedaftarDiHospital: (token, hospitalid) =>
+  ngambilBedYangKedaftarDiHospital: (token, hospitalid, page) =>
     instance({
       method: `GET`,
-      url: `/hospital/${hospitalid}/registrations`,
+      url: `/hospitals/${hospitalid}/registrations?page=${page}`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
