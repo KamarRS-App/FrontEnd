@@ -159,6 +159,7 @@ function DashboardDailyPraktek() {
     await api
       .getAllPoliclinics(token)
       .then((response) => {
+        console.log(response.data.data);
         setPoliclinics(response.data.data);
       })
       .catch((err) => {

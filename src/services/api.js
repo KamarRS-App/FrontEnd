@@ -657,6 +657,14 @@ export default {
         status_pembayaran: status_pembayaran,
       },
     }),
+  ngambilBedYangKedaftarDiHospital: (token, hospitalid) =>
+    instance({
+      method: `GET`,
+      url: `/hospital/${hospitalid}/registrations`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
 
   DeleteBedRegistrationsById: (token, id) =>
     instance({
