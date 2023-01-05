@@ -60,10 +60,14 @@ const TableListHospital = ({ headTable, bodyTable, onChangeKota, onChangeProvins
       <TableContainer mt={{ base: '10', sm: '16', md: '20' }}>
         <Table variant="simple">
           <Thead>
-            {headTable}
+            <>
+              {headTable}
+            </>
           </Thead>
           <Tbody>
-            {bodyTable}
+            <>
+              {bodyTable}
+            </>
           </Tbody>
         </Table>
       </TableContainer>

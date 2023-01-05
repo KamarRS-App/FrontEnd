@@ -25,7 +25,9 @@ const LinkPaymentPage = () => {
     const method = Cookies.get('bank_penerima').split(" ");
     const bank = method[1];
     const [imgBank, setImgBank] = useState();
-    const nextDay = new Date();
+    const date = new Date();
+    const nextDay = (date.getTime() + 1);
+    console.log(nextDay);
 
     const onCopy = React.useCallback(() => {
         setCopied(true);
@@ -80,6 +82,7 @@ const LinkPaymentPage = () => {
         handleBank();
         const interval = setInterval(() => {
             checkPayment();
+            console.log('cek')
         }, 2000);
         return () => clearInterval(interval)
     }, []);

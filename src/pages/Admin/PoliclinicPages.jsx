@@ -54,7 +54,7 @@ const PoliclinicPages = () => {
     //consume api
     //policlinic
     const getPoliclinicByHospital = async () => {
-        await api.getAllPoliclinics(token)
+        await api.getAllPoliclinics(token, staff.hospital_id)
             .then(response => {
                 const data = response.data.data
                 setPoliclinics(data);
@@ -63,7 +63,7 @@ const PoliclinicPages = () => {
             .catch(error => {
                 toast({
                     position: 'top',
-                    title: 'Gagal memuat data poliklinik',
+                    title: 'Data Poliklinik belum ada',
                     status: 'error',
                     duration: '2000',
                     isClosable: true
@@ -81,7 +81,7 @@ const PoliclinicPages = () => {
             .catch(error => {
                 toast({
                     position: 'top',
-                    title: 'Gagal memuat data dokter',
+                    title: 'Data Dokter belum ada',
                     status: 'error',
                     duration: '2000',
                     isClosable: true
@@ -176,7 +176,7 @@ const PoliclinicPages = () => {
 
     //doctor
     const createDoctorHandler = async (data) => {
-        await axios.post(`http://34.143.247.242/doctors`, data, {
+        await axios.post(`https://rawatinap.online/doctors`, data, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 'content-type': 'multipart/form-data'
@@ -194,7 +194,6 @@ const PoliclinicPages = () => {
                 getDoctorsByPoliclinic();
             })
             .catch(error => {
-                // console.log(error)
                 toast({
                     position: 'top',
                     title: 'Gagal menambahkan data dokter',
@@ -361,8 +360,14 @@ const PoliclinicPages = () => {
         data.append('no_telpon', e.no_telpon)
         data.append('foto', doctorImage)
         data.append('policlinic_id', e.policlinic_id)
-        console.log(data.get('nama'))
         createDoctorHandler(data);
+        setValueDoctor('nama', '');
+        setValueDoctor('email', '');
+        setValueDoctor('foto', '');
+        setValueDoctor('no_telpon', '');
+        setValueDoctor('policlinic_id', null);
+        setValueDoctor('spesialis', '');
+        onCloseAddModalDoctor();
     }
 
     const handleEditeDoctor = (id) => {
@@ -402,6 +407,12 @@ const PoliclinicPages = () => {
         setValue('nama_poli', '')
     };
 
+    const onCloseAddPoliclinic = () => {
+        onCloseModalCreate();
+        setValue('jam_praktik', '')
+        setValue('nama_poli', '')
+    }
+
     const onChangePoliclinic = (values) => {
         setPoliclinicId(values)
         policlinics.map(data => {
@@ -436,6 +447,16 @@ const PoliclinicPages = () => {
     const onUpdateClicked = (values) => {
         updatePoliclinicHandler(values);
         onCloseModalEdit();
+    }
+
+    const handlerCloseAddDoctor = () => {
+        setValueDoctor('nama', '');
+        setValueDoctor('email', '');
+        setValueDoctor('foto', '');
+        setValueDoctor('no_telpon', '');
+        setValueDoctor('policlinic_id', null);
+        setValueDoctor('spesialis', '');
+        onCloseAddModalDoctor();
     }
 
     const newDoctors = doctors.filter((data) => {
@@ -601,7 +622,7 @@ const PoliclinicPages = () => {
                     {/* pop up policlinic */}
                     <PopupAdmin
                         isOpen={isModalCreateOpen}
-                        onClose={onCloseModalCreate}
+                        onClose={onCloseAddPoliclinic}
                         modalTitle={'Tambahkan Poliklinik Baru'}
                         submitButton={handleSubmit(submitButtonPoliclinic)}
                         modalBody={
@@ -657,7 +678,7 @@ const PoliclinicPages = () => {
                     <PopupAdmin
                         modalTitle={"Tambah Data Dokter"}
                         isOpen={isOpenAddModalDoctor}
-                        onClose={onCloseAddModalDoctor}
+                        onClose={handlerCloseAddDoctor}
                         submitButton={handleSubmitDoctor(onSubmitDoctor)}
                         modalBody={
                             <>

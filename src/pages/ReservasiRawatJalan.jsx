@@ -3,8 +3,6 @@ import Layout from '../components/Layout';
 import {
   FormControl,
   FormLabel,
-  FormErrorMessage,
-  FormHelperText,
   Box,
   Text,
   Flex,
@@ -36,51 +34,53 @@ function ReservasiRawatJalan() {
   const navigate = useNavigate();
   const [patients, setPatients] = useState([]);
   const [patientId, setPatientId] = useState();
-
   const [patientSelected, setPatientSelected] = useState();
-  const location = useLocation();
   const [nameHospital, setNameHospital] = useState();
-  const idHospital = parseInt(location.state?.idHospital);
-  const idDoctor = parseInt(location.state?.idDoctor);
-  const idPoliclinic = parseInt(location.state?.idPoliclinic);
-  const practiceId = parseInt(location.state?.practiceId);
   const [policlinicName, setPoliclinicName] = useState();
   const [doctorName, setDoctorName] = useState();
-  const [timeSelected, setTimeSelected] = useState();
-  const time = location.state?.time;
+  
+  const location = useLocation();
+  const hospital_id = location.state?.hospital_id;
+  const checkupTime = location.state?.time;
+  const policlinic_id = location.state?.policlinic_id;
+  const doctor_id = location.state?.dokter_id;
+  const practice_date = location.state?.date;
+  const practice_id = location.state?.practice_id;
 
   const date = new Date();
   const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-  const myDays = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum&#39;at', 'Sabtu'];
+  const myDays = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', `Jum'at`, 'Sabtu'];
 
   const day = date.getDate();
   const month = date.getMonth();
   const thisDay = date.getDate();
   const yy = date.getFullYear();
 
-  const inDate = `${day} ${months[month]} ${yy}`;
+  const no_invoice = date.getSeconds();
+  const today = `${day} ${months[month]} ${yy}`;
+  
   const getPatientsByUserId = async () => {
-    await api.getPatientByUserId(token, user.id).then((response) => {
+    await api.getPatientByUserId(token, user.id)
+    .then((response) => {
       const data = response.data.data;
       setPatients(data);
     });
   };
+
   //handle send data to database
-  const handleSendData = async (patient_id, practice_id) => {
-    await api
-      .createCheckUpReservation(token, { patient_id, practice_id })
+  const handleSendData = async (patient_id, practice_id, nama_dokter, no_antrian) => {
+    await api.createCheckUpReservation(token, { patient_id, practice_id, nama_dokter, no_antrian })
       .then((response) => {
-        // console.log(response);
+        console.log(response)
       })
       .catch((err) => console.log(err));
   };
 
   const getHospitalSelected = async () => {
     await api
-      .getHospitalByID(token, location.state?.idHospital)
+      .getHospitalByID(token, hospital_id)
       .then((response) => {
         const data = response.data.data;
-        // console.log(response);
         setNameHospital(data.nama);
       })
       .catch((error) => {
@@ -90,46 +90,27 @@ function ReservasiRawatJalan() {
 
   const getPoliclinicSelected = async () => {
     await api
-      .getPoliclinicById(token, location.state?.idPoliclinic)
+      .getPoliclinicById(token, policlinic_id)
       .then((response) => {
         const data = response.data.data;
-        // console.log(response);
         setPoliclinicName(data.nama_poli);
       })
       .catch((error) => {
         console.log(error);
       });
   };
+
   const getDoctorSelected = async () => {
     await api
-      .getDoctorById(token, location.state?.idDokter)
+      .getDoctorById(token, doctor_id)
       .then((response) => {
         const data = response.data.data;
-        // console.log(response);
         setDoctorName(data.nama);
       })
       .catch((error) => {
         console.log(error);
       });
   };
-
-  const getTimeSelected = async () => {
-    await api
-      .getPoliclinicById(token, location.state?.time)
-      .then((response) => {
-        const data = response.data.data;
-        // console.log(response);
-        setTimeSelected(data.jam_praktik);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  // console.log(location.state?.idHospital);
-  // console.log(location.state?.idPoliclinic);
-  // console.log(location.state?.idDokter);
-  // console.log(location.state?.time);
 
   const getPatientById = async (id) => {
     await api
@@ -149,47 +130,32 @@ function ReservasiRawatJalan() {
       });
   };
 
-  const registrationPatient = async () => {
-    await api
-      .createBedRegistrations(token, { hospital_id, patient_id })
-      .then((response) => {
-        // console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-        toast({
-          position: 'top',
-          title: 'Gagal mendaftarkan pasien',
-          status: 'error',
-          duration: '2000',
-          isClosable: true,
-        });
-      });
-  };
-
   const handlerSelectPatient = () => {
     getPatientById(patientId);
     onClose();
   };
+
   const handlerRegistrasi = () => {
     const patient_id = parseInt(patientId);
-    handleSendData(patient_id, practiceId);
-    console.log(typeof patient_id);
-
-    // navigate('/resume/rawat/jalan', {
-    //   state: {
-    //     nama: patientSelected?.nama_pasien,
-    //     jenisKelamin: patientSelected?.jenis_kelamin,
-    //     noHandphone: patientSelected?.no_telpon_wali,
-    //     email: patientSelected?.email_wali,
-    //     rumahSakit: nameHospital,
-    //     poliklinik: policlinicName,
-    //     dokter: doctorName,
-    //     tanggalPeriksa: inDate,
-    //     jamPeriksa: location.state?.time,
-    //   },
-    // });
+    const no_antrian = `#CU${no_invoice}`;
+    handleSendData(patient_id, practice_id, doctorName, no_antrian);
+    navigate('/resume/rawat/jalan', {
+      state: {
+        nama: patientSelected?.nama_pasien,
+        jenisKelamin: patientSelected?.jenis_kelamin,
+        noHandphone: patientSelected?.no_telpon_wali,
+        email: patientSelected?.email_wali,
+        rumahSakit: nameHospital,
+        poliklinik: policlinicName,
+        dokter: doctorName,
+        tanggalPeriksa: practice_date,
+        jamPeriksa: checkupTime,
+        no_antrian: no_antrian
+      },
+    });
   };
+
+
 
   useEffect(() => {
     if (!token) {
@@ -206,7 +172,6 @@ function ReservasiRawatJalan() {
     getHospitalSelected();
     getPoliclinicSelected();
     getDoctorSelected();
-    getTimeSelected();
   }, []);
 
   return (
@@ -230,7 +195,7 @@ function ReservasiRawatJalan() {
                     <Flex direction={{ base: 'column', xl: 'row' }}>
                       <Box flexBasis={'100%'}>
                         <FormLabel>Nama Pemesan</FormLabel>
-                        <Input type="text" disabled value={user.nama} _disabled={{ color: 'black' }} />
+                        <Input type="text" disabled placeholder={user.nama} _disabled={{ color: 'black' }} _placeholder={{ color:'black' }} />
                       </Box>
                     </Flex>
                   </Box>
@@ -238,12 +203,12 @@ function ReservasiRawatJalan() {
                     <Flex direction={{ base: 'column', xl: 'row' }}>
                       <Box flexBasis={'45%'}>
                         <FormLabel>Email</FormLabel>
-                        <Input type="email" disabled value={user.email} _disabled={{ color: 'black' }} />
+                        <Input type="email" disabled placeholder={user.email} _disabled={{ color: 'black' }} _placeholder={{ color:'black' }} />
                       </Box>
                       <Spacer />
                       <Box flexBasis={'45%'} pt={{ base: '5', xl: '0' }}>
                         <FormLabel>No. Handphone</FormLabel>
-                        <Input type="string" _disabled={{ color: 'black' }} disabled value={user.no_telpon ? user.no_telpon : 'tidak ada'} />
+                        <Input type="string" _disabled={{ color: 'black' }} _placeholder={{ color:'black' }} disabled placeholder={user.no_telpon ? user.no_telpon : 'tidak ada'} />
                       </Box>
                     </Flex>
                   </Box>
@@ -263,18 +228,18 @@ function ReservasiRawatJalan() {
                 <FormControl>
                   <Box>
                     <FormLabel>Nama Depan</FormLabel>
-                    <Input type="text" disabled _disabled={{ color: 'black' }} value={patientSelected?.nama_pasien} />
+                    <Input type="text" disabled _disabled={{ color: 'black' }} _placeholder={{ color:'black' }} placeholder={patientSelected?.nama_pasien} />
                   </Box>
                   <Box mt={5}>
                     <Flex direction={{ base: 'column', lg: 'row', xl: 'row' }}>
                       <Box flexBasis={'45%'}>
                         <FormLabel>No. KTP</FormLabel>
-                        <Input type="number" disabled _disabled={{ color: 'black' }} value={patientSelected?.nik} />
+                        <Input type="number" disabled _disabled={{ color: 'black' }} _placeholder={{ color:'black' }} placeholder={patientSelected?.nik} />
                       </Box>
                       <Spacer />
                       <Box flexBasis={'45%'} pt={{ base: '5', xl: '0' }}>
                         <FormLabel>No. BPJS</FormLabel>
-                        <Input type="number" disabled _disabled={{ color: 'black' }} value={patientSelected?.no_bpjs} />
+                        <Input type="number" disabled _disabled={{ color: 'black' }} _placeholder={{ color:'black' }} placeholder={patientSelected?.no_bpjs !== '' ? patientSelected?.no_bpjs : 'Tidak Ada'} />
                       </Box>
                     </Flex>
                   </Box>
@@ -282,12 +247,12 @@ function ReservasiRawatJalan() {
                     <Flex direction={{ base: 'column', lg: 'row', xl: 'row' }}>
                       <Box flexBasis={'45%'}>
                         <FormLabel>Jenis Kelamin</FormLabel>
-                        <Input type="text" disabled _disabled={{ color: 'black' }} value={patientSelected?.jenis_kelamin} />
+                        <Input type="text" disabled _disabled={{ color: 'black' }} _placeholder={{ color:'black' }} placeholder={patientSelected?.jenis_kelamin !== '' ? patientSelected?.jenis_kelamin : 'Tidak Ada'} />
                       </Box>
                       <Spacer />
                       <Box flexBasis={'45%'} pt={{ base: '5', xl: '0' }}>
                         <FormLabel>Usia</FormLabel>
-                        <Input type="number" disabled _disabled={{ color: 'black' }} value={patientSelected?.usia} />
+                        <Input type="number" disabled _disabled={{ color: 'black' }} _placeholder={{ color:'black' }} placeholder={patientSelected?.usia} />
                       </Box>
                     </Flex>
                   </Box>
@@ -295,29 +260,29 @@ function ReservasiRawatJalan() {
                     <Flex direction={{ base: 'column', lg: 'row', xl: 'row' }}>
                       <Box flexBasis={'45%'}>
                         <FormLabel>Email</FormLabel>
-                        <Input type="email" disabled _disabled={{ color: 'black' }} value={patientSelected?.email_wali} />
+                        <Input type="email" disabled _disabled={{ color: 'black' }} _placeholder={{ color:'black' }} placeholder={patientSelected?.email_wali !== '' ? patientSelected?.email_wali : 'Tidak Ada'} />
                       </Box>
                       <Spacer />
                       <Box flexBasis={'45%'} pt={{ base: '5', xl: '0' }}>
                         <FormLabel>No. Handphone Wali</FormLabel>
-                        <Input type="number" disabled _disabled={{ color: 'black' }} value={patientSelected?.no_telpon_wali} />
+                        <Input type="number" disabled _disabled={{ color: 'black' }} _placeholder={{ color:'black' }} placeholder={patientSelected?.no_telpon_wali} />
                       </Box>
                     </Flex>
                   </Box>
                   <Box mt={5}>
                     <FormLabel>Alamat Domisili</FormLabel>
-                    <Input type="text" disabled _disabled={{ color: 'black' }} value={patientSelected?.alamat_domisili} />
+                    <Input type="text" disabled _disabled={{ color: 'black' }} _placeholder={{ color:'black' }} placeholder={patientSelected?.alamat_domisili} />
                   </Box>
                   <Box mt={5}>
                     <Flex direction={{ base: 'column', lg: 'row', xl: 'row' }}>
                       <Box flexBasis={'45%'}>
                         <FormLabel>Provinsi</FormLabel>
-                        <Input type="text" disabled _disabled={{ color: 'black' }} value={patientSelected?.provinsi_domisili} />
+                        <Input type="text" disabled _disabled={{ color: 'black' }} _placeholder={{ color:'black' }} placeholder={patientSelected?.provinsi_domisili} />
                       </Box>
                       <Spacer />
                       <Box flexBasis={'45%'} pt={{ base: '5', xl: '0' }}>
                         <FormLabel>Kabupaten / Kota</FormLabel>
-                        <Input type="string" disabled _disabled={{ color: 'black' }} value={patientSelected?.kabupaten_kota_domisili} />
+                        <Input type="string" disabled _disabled={{ color: 'black' }} _placeholder={{ color:'black' }} placeholder={patientSelected?.kabupaten_kota_domisili} />
                       </Box>
                     </Flex>
                   </Box>

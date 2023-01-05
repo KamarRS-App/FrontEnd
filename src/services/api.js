@@ -5,6 +5,7 @@ const instance = axios.create({
 });
 
 export default {
+
   //Auth
   loginUser: (email, password) =>
     instance({
@@ -44,6 +45,7 @@ export default {
         kata_sandi: data.kata_sandi,
       },
     }),
+
   //Users
   register: (data) =>
     instance({
@@ -58,6 +60,7 @@ export default {
         no_telpon: JSON.stringify(data.nomorhape),
       },
     }),
+
   updateUser: (token, data) =>
     instance({
       method: `PUT`,
@@ -74,6 +77,7 @@ export default {
         Authorization: `Bearer ${token}`,
       },
     }),
+
   getUser: (token) =>
     instance({
       method: `GET`,
@@ -82,6 +86,7 @@ export default {
         Authorization: `Bearer ${token}`,
       },
     }),
+
   deleteUser: (token) =>
     instance({
       method: `DELETE`,
@@ -107,6 +112,7 @@ export default {
         Authorization: `Bearer ${token}`,
       },
     }),
+
   updateAdmin: (token, id, data) =>
     instance({
       method: `PUT`,
@@ -121,6 +127,7 @@ export default {
         Authorization: `Bearer ${token}`,
       },
     }),
+    
   deleteAdmin: (token, id) =>
     instance({
       method: `DELETE`,
@@ -129,6 +136,7 @@ export default {
         Authorization: `Bearer ${token}`,
       },
     }),
+    
   getAdmin: (token) =>
     instance({
       method: `GET`,
@@ -157,7 +165,16 @@ export default {
       },
     }),
 
-  getHospitals: (token) =>
+  getHospitals: (token, page) =>
+    instance({
+      method: `GET`,
+      url: `/hospitals?page=${page}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
+  
+  getAllHospitals: (token) => 
     instance({
       method: `GET`,
       url: `/hospitals`,
@@ -485,10 +502,10 @@ export default {
         jam_praktik: data.jam_praktik,
       },
     }),
-  getAllPoliclinics: (token) =>
+  getAllPoliclinics: (token, hospital_id) =>
     instance({
       method: `GET`,
-      url: `/policlinics`,
+      url: `/hospitals/${hospital_id}/policlinics`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -520,7 +537,7 @@ export default {
     }),
 
   //checkup reservations
-  createCheckUpReservation: (token, { patient_id, practice_id }) =>
+  createCheckUpReservation: (token, { patient_id, practice_id, nama_dokter, no_antrian }) =>
     instance({
       method: `POST`,
       url: `/reservations`,
@@ -530,6 +547,8 @@ export default {
       data: {
         patient_id: patient_id,
         practice_id: practice_id,
+        nama_dokter: nama_dokter,
+        no_antrian: no_antrian,
       },
     }),
 
@@ -593,29 +612,6 @@ export default {
     instance({
       method: `GET`,
       url: `/practices/${id}`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }),
-
-  //checkup reservations
-  createCheckUpReservation: (token, { patient_id, practice_id }) =>
-    instance({
-      method: `POST`,
-      url: `/reservations`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      data: {
-        patient_id: patient_id,
-        practice_id: practice_id,
-      },
-    }),
-
-  getAllCheckUpReservations: (token) =>
-    instance({
-      method: `GET`,
-      url: `/reservations`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
