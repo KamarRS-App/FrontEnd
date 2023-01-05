@@ -18,6 +18,7 @@ const PopupAdmin = ({
   modalBody,
   submitButton,
   modalTitle,
+  displayButton,
 }) => {
   return (
     <Modal
@@ -52,6 +53,7 @@ const PopupAdmin = ({
               fontWeight={"700"}
               width={"150px"}
               height={"50px"}
+              display={displayButton}
               _hover={{ bg: "alta.primary" }}
             >
               Simpan
