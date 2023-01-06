@@ -17,6 +17,5 @@ export const AuthToken = () => {
     } catch (e) {
         return false;
     }
-    return true;
-    
+    return true; 
 }

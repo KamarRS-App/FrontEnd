@@ -35,7 +35,7 @@ const Navbar = ({ isAuth, nameUser, isActive }) => {
   };
 
   return (
-    <div className="sticky top-0 z-10">
+    <Box position={'sticky'} top={'0'} zIndex={'10'}>
       <NavBarContainer>
         <Link to="/home">
           <Image
@@ -55,9 +55,11 @@ const Navbar = ({ isAuth, nameUser, isActive }) => {
           onLoginHandler={() => navigate("/login")}
           gotoProfile={() => navigate("/edit")}
           logOut={handeLogoutBosku}
+          gotoPatientPage={() => navigate('/pasien')}
         />
       </NavBarContainer>
-    </div>
+    </Box>
+
   );
 };
 
@@ -77,6 +79,7 @@ const MenuLinks = ({
   isActive,
   gotoProfile,
   logOut,
+  gotoPatientPage
 }) => {
   return (
     <Box
@@ -110,9 +113,9 @@ const MenuLinks = ({
               </Text>
             </Link>
             <Menu>
-              <MenuButton righticon={<ChevronDownIcon />}>
-                <Flex align="center" gap="3">
-                  <Avatar width="30px" height="30px"></Avatar>
+              <MenuButton>
+                <Flex textAlign={"center"} gap={"3"}>
+                  <Avatar width={"30px"} height={"30px"}></Avatar>
                   <Text
                     fontSize={{ base: "16px", md: "18px", lg: "18px" }}
                     color="#1FA8F6"
@@ -123,6 +126,7 @@ const MenuLinks = ({
               </MenuButton>
               <MenuList>
                 <MenuItem onClick={gotoProfile}>Profile</MenuItem>
+                <MenuItem onClick={gotoPatientPage}>Data Pasien</MenuItem>
                 <MenuItem onClick={logOut}>Logout</MenuItem>
               </MenuList>
             </Menu>
@@ -136,16 +140,6 @@ const MenuLinks = ({
             >
               Beranda
             </Link>
-            {/* <Link color="#3AB8FF" _hover={{ textDecoration: 'none' }} href="/home">
-              Cari Rumah Sakit
-            </Link>
-            <Link
-              color="#3AB8FF"
-              _hover={{ textDecoration: "none" }}
-              href="/cari/dokter"
-            >
-              Cari Dokter
-            </Link> */}
             <Button
               bg="#3AB8FF"
               _hover={{ bg: "#1FA8F6" }}

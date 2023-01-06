@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 
 export const adminSlice = createSlice({
     name: 'staffs',
-    initialState: JSON.parse(sessionStorage.getItem('staff')) || {},
+    initialState: JSON.parse(localStorage.getItem('staff')) || {},
     reducers: {
         addStaffs: (state, action) => {
             const newData = {
@@ -11,12 +11,12 @@ export const adminSlice = createSlice({
                 nama: action.payload.nama,
                 hospital_id: action.payload.hospital_id,
             }
-            sessionStorage.setItem('staff', JSON.stringify(newData));
+            localStorage.setItem('staff', JSON.stringify(newData));
             return state = newData;
         },
         destroyStaffs: (state, action) => {
             state = {};
-            sessionStorage.removeItem('staff')
+            localStorage.removeItem('staff')
             Cookies.remove('name');
             Cookies.remove('token');
             Cookies.remove('role');

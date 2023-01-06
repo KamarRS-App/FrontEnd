@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Center, Container, Td, Th, Tr, useToast } from '@chakra-ui/react';
+import { Center, Td, Th, Tr, useToast } from '@chakra-ui/react';
 import { Box, Heading, Text, Flex } from '@chakra-ui/react';
 import { Image } from '@chakra-ui/react';
-import { Wrap, WrapItem } from '@chakra-ui/react';
-import { Grid, GridItem, SimpleGrid } from '@chakra-ui/react';
 import Layout from '../components/Layout';
 import Cookies from 'js-cookie';
 import api from '../services/api';
@@ -158,16 +156,16 @@ function CariRumahSakit() {
                   .map((data, index) => (
                     <Tr key={index}>
                       <Td>{index + 1}</Td>
-                      <Link
-                        to={`/rumahsakit/${data.id}/detail`}
+                      <Td
+                        textDecoration={'underline'}
+                        _hover={{ color: '#1FA8F6' }}
                       >
-                        <Td
-                          textDecoration={'underline'}
-                          _hover={{ color: '#1FA8F6' }}
+                        <Link
+                          to={`/rumahsakit/${data.id}/detail`}
                         >
                           {data.nama}
-                        </Td>
-                      </Link>
+                        </Link>
+                      </Td>
                       <Td>{data.pemilik_pengelola}</Td>
                       <Td>{data.no_telpon}</Td>
                       <Td>{data.alamat + " " + data.kecamatan + " " + data.kabupaten_kota + ", " + data.provinsi + "," + data.kode_pos}</Td>

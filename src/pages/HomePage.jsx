@@ -192,20 +192,22 @@ const HomePage = () => {
                         bodyTable={
                             (nameProvinsi === 'all' || nameProvinsi === '' ? hospitals : selectKota === 'all' || selectKota === '' ? resultHospital : resultRegionHospital)
                                 .map((data, index) => (
-                                        <Tr key={index}>
-                                            <Td>{nomor + index + 1}</Td>
-                                            <Td
-                                                textDecoration={'underline'}
-                                                _hover={{ color: '#1FA8F6' }}
+                                    <Tr key={index}>
+                                        <Td>{nomor + index + 1}</Td>
+                                        <Td
+                                            textDecoration={'underline'}
+                                            _hover={{ color: '#1FA8F6' }}
+                                        >
+                                            <Link
+                                                to={`/rumahsakit/${data.id}/detail`}
                                             >
-                                                {/* <Link> */}
-                                                    {data.nama}
-                                                {/* </Link> */}
-                                            </Td>
-                                            <Td>{data.pemilik_pengelola}</Td>
-                                            <Td>{data.no_telpon}</Td>
-                                            <Td>{data.alamat + " " + data.kecamatan + " " + data.kabupaten_kota + ", " + data.provinsi + "," + data.kode_pos}</Td>
-                                        </Tr>
+                                                {data.nama}
+                                            </Link>
+                                        </Td>
+                                        <Td>{data.pemilik_pengelola}</Td>
+                                        <Td>{data.no_telpon}</Td>
+                                        <Td>{data.alamat + " " + data.kecamatan + " " + data.kabupaten_kota + ", " + data.provinsi + "," + data.kode_pos}</Td>
+                                    </Tr>
                                 ))
                         }
                     />
