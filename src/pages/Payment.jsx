@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import CardPayment from '../components/CardPayment';
 import CardTotalTransfer from '../components/CardTotalTransfer';
 import { Flex, Grid, SimpleGrid, Spacer, useToast } from '@chakra-ui/react';
-import { Center, Container } from '@chakra-ui/react';
 import { Wrap, WrapItem, Heading, Box, Text } from '@chakra-ui/react';
 import Layout from '../components/Layout';
 import { useLocation, useNavigate } from 'react-router';
@@ -93,23 +92,15 @@ function Payment() {
               Pembayaran Pendaftaran Kamar Rawat Inap
             </Text>
             <Box
-            // flexBasis={'60%'}
             >
-
               <CardPayment
                 onClickBCA={() => paymentHandler("transfer_va_bca")}
                 onClickBNI={() => paymentHandler("transfer_va_bni")}
                 onClickBRI={() => paymentHandler("transfer_va_bri")}
                 onClickPermata={() => paymentHandler("transfer_va_permata")}
-              // metode_pembayaran={paymentMethod}
-              // bank={newBank}
-              // imgBank={imgBank}
-              // va={va}
-              // batas_waktu={<Countdown date={date.getTime() + nextDay.getTime()} renderer={renderer} />}
               />
             </Box>
             <Box
-            // flexBasis={'35%'}
             >
               <CardTotalTransfer
                 biaya_registrasi={payment?.biaya_registrasi}

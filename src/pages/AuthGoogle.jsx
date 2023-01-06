@@ -15,7 +15,6 @@ const AuthGoogle = () => {
 
     Cookies.set('token', token);
     Cookies.set('userId', userid);
-    console.log(token)
 
     const getUser = async () => {
         await api.getUser(token)
@@ -28,7 +27,6 @@ const AuthGoogle = () => {
                 console.log(error);
             })
     }
-
 
     useEffect(() => {
         getUser();

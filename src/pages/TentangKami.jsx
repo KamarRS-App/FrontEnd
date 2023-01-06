@@ -4,6 +4,8 @@ import { Box, Heading, Text, Button, Image, Card } from '@chakra-ui/react';
 import { Grid, GridItem, SimpleGrid, Flex } from '@chakra-ui/react';
 import CardFlow from '../components/CardFlow';
 import Layout from '../components/Layout';
+import hospitalAbout from '../assets/images/hospital-about-us.png';
+
 function TentangKami() {
   return (
     <Box>
@@ -13,7 +15,7 @@ function TentangKami() {
         </Text>
         <SimpleGrid columns={2} align="flex-start" flexBasis={{ base: '100%', md: 'auto' }}>
           <Box direction="cols" m={20} w={700} h={595}>
-            <Image src="/images/hospital-about-us.png" alt="doctor_hero" fallbackSrc="https://via.placeholder.com/150" />
+            <Image src={hospitalAbout} alt="doctor_hero" fallbackSrc="https://via.placeholder.com/150" />
           </Box>
           <Box>
             <SimpleGrid rows={2} m={40}>

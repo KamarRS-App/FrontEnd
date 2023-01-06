@@ -12,6 +12,10 @@ import { useLocation, useNavigate } from 'react-router';
 import { paymentBCA, paymentPermata, paymentBRI, paymentBNI } from '../../utils/bankPayment';
 import Layout from '../components/Layout';
 import api from '../services/api';
+import imgBCA from '../assets/images/bank-bca.png';
+import imgBNI from '../assets/images/bank-bni.png';
+import imgBRI from '../assets/images/bank-bri.png';
+import imgPermata from '../assets/images/bank-permata.png';
 
 const LinkPaymentPage = () => {
     const [copied, setCopied] = React.useState(false);
@@ -54,13 +58,13 @@ const LinkPaymentPage = () => {
     // handle Image Bank
     const handleBank = () => {
         if (bank === 'bca') {
-            setImgBank('/logo/bank-bca.png')
+            setImgBank(imgBCA)
         } else if (bank === 'bni') {
-            setImgBank('/logo/bank-bni.png')
+            setImgBank(imgBNI)
         } else if (bank === 'bri') {
-            setImgBank('/logo/bri.png')
+            setImgBank(imgBRI)
         } else {
-            setImgBank('/logo/bank-permata.png')
+            setImgBank(imgPermata)
         }
     }
 
@@ -109,7 +113,7 @@ const LinkPaymentPage = () => {
                             color={'#1FA8F6'}
                             textAlign={'center'}
                         >
-                            selesaikan pembayaran dalam  <Countdown date={Date.now() + nextDay.getTime()} renderer={renderer} />
+                            selesaikan pembayaran dalam  <Countdown date={Date.now() + nextDay} renderer={renderer} />
                         </Text>
                     </CardHeader>
                     <CardBody justifyContent="center" alignItems="center">

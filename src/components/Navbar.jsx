@@ -1,22 +1,8 @@
 import React, { useState } from "react";
 import { Box, Stack } from "@chakra-ui/layout";
 import { Avatar } from "@chakra-ui/avatar";
-import {
-  Image,
-  Button,
-  Flex,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  Text,
-} from "@chakra-ui/react";
-import {
-  ChevronDownIcon,
-  HamburgerIcon,
-  CloseIcon,
-  ChevronRightIcon,
-} from "@chakra-ui/icons";
+import { Image, Button, Flex, Menu, MenuButton, MenuList, MenuItem, Text } from "@chakra-ui/react";
+import { HamburgerIcon, CloseIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router";
 import logo from "../assets/images/logo_rawat_inap.svg"
 import { Link } from "react-router-dom";

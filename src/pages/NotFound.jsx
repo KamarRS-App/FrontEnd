@@ -3,6 +3,7 @@ import { Input } from '@chakra-ui/input';
 import { Box, Flex, Text } from '@chakra-ui/layout';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router';
+import errorImage from '../assets/images/sad.png';
 
 const NotFound = () => {
     const navigate = useNavigate();
@@ -19,7 +20,7 @@ const NotFound = () => {
             alignContent={'center'}
             flexWrap={'wrap'}
         >
-            <Image src='/sad.png' />
+            <Image src={errorImage} />
             <Text
                 mt={'8'}
                 flexBasis={'100%'}

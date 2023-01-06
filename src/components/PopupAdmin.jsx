@@ -58,7 +58,6 @@ const PopupAdmin = ({
             >
               Simpan
             </Button>
-            {/* <Button onClick={onClose}>Cancel</Button> */}
           </ModalFooter>
         </form>
       </ModalContent>

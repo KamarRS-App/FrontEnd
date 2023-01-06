@@ -2,6 +2,20 @@ import { Flex, Stack, Text, Divider, SimpleGrid } from "@chakra-ui/layout";
 import { Image, Box } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import React from "react";
+import dashboardActive from '../assets/images/dashboard_active.svg';
+import dashboard from '../assets/images/dashboard.svg';
+import hospitalActive from '../assets/images/hospital_active.svg';
+import hospital from '../assets/images/hospital.svg';
+import roomActive from '../assets/images/room-active.svg';
+import room from "../assets/images/kamar-icon.svg";
+import poliActive from "../assets/images/poliklinik-active.svg";
+import poli from "../assets/images/patient.svg";
+import adminActive from '../assets/images/admin_active.svg';
+import admin from '../assets/images/admin.svg';
+import practiceActive from "../assets/images/praktek-active.svg";
+import practice from "../assets/images/praktek.svg";
+import settingActive from "../assets/images/setting-active.svg";
+import setting from "../assets/images/setting.svg";
 
 const SideBarAdmin = ({ active }) => {
   return (
@@ -25,11 +39,7 @@ const SideBarAdmin = ({ active }) => {
           alignItems="center"
         >
           <Image
-            src={
-              active === "dashboard"
-                ? "/src/assets/images/dashboard_active.svg"
-                : "/src/assets/images/dashboard.svg"
-            }
+            src={active === "dashboard" ? dashboardActive : dashboard}
             width={{ base: "24px", sm: "28px", md: "30px", lg: "32px" }}
             mr={3}
           />
@@ -41,25 +51,6 @@ const SideBarAdmin = ({ active }) => {
           </Text>
         </Flex>
       </Link>
-      {/* <Link to="/admin/user">
-        <Flex
-          px={{ base: '0', md: '0', lg: '14' }}
-          pl={{ base: '0', md: '5' }}
-          justify={{ base: 'center', md: 'normal' }}
-          color="#CDD1E0"
-          py={{ base: '1', md: '2', lg: '2' }}
-          bg={active === 'user' && '#1FA8F642'}
-          borderLeft={active === 'user' && '4px'}
-          borderColor={active === 'user' && '#1FA8F6'}
-          gap="2"
-          alignItems="center"
-        >
-          <Image src={active === 'user' ? '/src/assets/images/admin_active.svg' : '/src/assets/images/admin.svg'} width={{ base: '24px', sm: '28px', md: '30px', lg: '32px' }} mr={3} />
-          <Text display={{ base: 'none', sm: 'none', md: 'block', lg: 'block' }} color={active === 'user' && '#0EA7FF'}>
-            Admin
-          </Text>
-        </Flex>
-      </Link> */}
       <Link to="/admin/room">
         <Flex
           px={{ base: "0", md: "0", lg: "14" }}
@@ -74,11 +65,7 @@ const SideBarAdmin = ({ active }) => {
           alignItems="center"
         >
           <Image
-            src={
-              active === "room"
-                ? "/src/assets/images/room-active.svg"
-                : "/src/assets/images/kamar-icon.svg"
-            }
+            src={active === "room" ? roomActive : room}
             width={{ base: "25px", sm: "32px", md: "35px", lg: "42px" }}
             mr={2}
           />
@@ -104,11 +91,7 @@ const SideBarAdmin = ({ active }) => {
           alignItems="center"
         >
           <Image
-            src={
-              active === "patient"
-                ? "/src/assets/images/patient_active.svg"
-                : "/src/assets/images/patient.svg"
-            }
+            src={active === "patient" ? adminActive : admin}
             width={{ base: "25px", sm: "28px", md: "30px", lg: "32px" }}
             mr={4}
           />
@@ -134,11 +117,7 @@ const SideBarAdmin = ({ active }) => {
           alignItems="center"
         >
           <Image
-            src={
-              active === "poli"
-                ? "/src/assets/images/poliklinik-active.svg"
-                : "/src/assets/images/poliklinik.svg"
-            }
+            src={active === "poli" ? poliActive : poli}
             width={{ base: "25px", sm: "30px", md: "35px", lg: "40px" }}
             mr={2}
           />
@@ -150,25 +129,6 @@ const SideBarAdmin = ({ active }) => {
           </Text>
         </Flex>
       </Link>
-      {/* <Link to="/admin/doctor">
-        <Flex
-          px={{ base: '0', md: '0', lg: '14' }}
-          pl={{ base: '0', md: '5' }}
-          justify={{ base: 'center', md: 'normal' }}
-          color="#CDD1E0"
-          py={{ base: '1', md: '2', lg: '2' }}
-          bg={active === 'doctor' && '#1FA8F642'}
-          borderLeft={active === 'doctor' && '4px'}
-          borderColor={active === 'doctor' && '#1FA8F6'}
-          gap="2"
-          alignItems="center"
-        >
-          <Image src={active === 'doctor' ? '/src/assets/images/doctor_active.svg' : '/src/assets/images/doctor.svg'} width={{ base: '25px', sm: '30px', md: '35px', lg: '40px' }} mr={2} />
-          <Text display={{ base: 'none', sm: 'none', md: 'block', lg: 'block' }} color={active === 'doctor' && '#0EA7FF'}>
-            Dokter
-          </Text>
-        </Flex>
-      </Link> */}
       <Link to="/admin/daily_praktek">
         <Flex
           px={{ base: "0", md: "0", lg: "14" }}
@@ -183,11 +143,7 @@ const SideBarAdmin = ({ active }) => {
           alignItems="center"
         >
           <Image
-            src={
-              active === "praktek"
-                ? "/src/assets/images/praktek-active.svg"
-                : "/src/assets/images/praktek.svg"
-            }
+            src={ active === "praktek" ? practiceActive : practice }
             width={{ base: "25px", sm: "28px", md: "30px", lg: "32px" }}
             mr={2}
           />
@@ -213,11 +169,7 @@ const SideBarAdmin = ({ active }) => {
           alignItems="center"
         >
           <Image
-            src={
-              active === "hospital"
-                ? "/src/assets/images/hospital_active.svg"
-                : "/src/assets/images/hospital.svg"
-            }
+            src={ active === "hospital" ? hospitalActive : hospital }
             width={{ base: "25px", sm: "30px", md: "35px", lg: "40px" }}
             mr={2}
           />
@@ -244,11 +196,7 @@ const SideBarAdmin = ({ active }) => {
           alignItems="center"
         >
           <Image
-            src={
-              active === "profile"
-                ? "/src/assets/images/setting-active.svg"
-                : "/src/assets/images/setting.svg"
-            }
+            src={ active === "profile" ? settingActive : setting }
             width={{ base: "25px", sm: "30px", md: "34px", lg: "39px" }}
           />
           <Text

@@ -2,6 +2,7 @@ import { Box, Flex, Spacer, Stack, Text, Image } from '@chakra-ui/react';
 import React from 'react';
 import { List, ListItem, UnorderedList } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
+import logo from '../assets/images/logo_rawat_inap.svg';
 
 const Footer = () => {
   return (
@@ -9,7 +10,7 @@ const Footer = () => {
       <Flex justify={['center', 'center', 'space-between']} direction={['column', 'column', 'row']} width="100%" py={{ base: '50px', md: '70px', lg: '80px' }} px={{ base: '20px', md: '50px', lg: '70px' }}>
         <Box>
           <Stack width={{ base: 'auto', md: '400px' }} px={{ base: '20px', md: '0' }}>
-            <Image height="75px" width="100px" objectFit="contain" src="/src/assets/images/logo_rawat_inap.svg" alt="Logo Rawat Inap" />
+            <Image height="75px" width="100px" objectFit="contain" src={logo} alt="Logo Rawat Inap" />
             <Text color="#072051" fontSize="16px" fontWeight="400" lineHeight="30px">
               Kami memberikan informasi kamar Rumah Sakit secara real-time bagi anda dan keluarga
             </Text>

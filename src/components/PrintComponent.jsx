@@ -2,28 +2,6 @@ import { Button } from "@chakra-ui/button";
 import { Box, Flex, Text } from "@chakra-ui/layout";
 import { Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/table";
 import React, { useRef } from "react";
-// import ReactToPrint from "react-to-print";
-
-// export default function PrintComponent() {
-//   let componentRef = useRef();
-
-//   return (
-//     <>
-//       <div id="print_component">
-//         {/* button to trigger printing of target component */}
-//         <ReactToPrint
-//           trigger={() => <Button>Print this out!</Button>}
-//           content={() => componentRef}
-//         />
-
-//         {/* component to be printed */}
-//         <div style={{ display: "none" }}>
-//           <ComponentToPrint ref={(el) => (componentRef = el)} />
-//         </div>
-//       </div>
-//     </>
-//   );
-// }
 
 // component to be printed
 export class PrintComponent extends React.Component {

@@ -3,7 +3,7 @@ import { Center, Grid, GridItem, IconButton, Stack } from '@chakra-ui/react';
 import { Image } from '@chakra-ui/react';
 import { Text } from '@chakra-ui/react';
 import { Box } from '@chakra-ui/react';
-import { Button, ButtonGroup } from '@chakra-ui/react';
+import { ButtonGroup } from '@chakra-ui/react';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 import { Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton } from '@chakra-ui/react';
 import { useDisclosure } from '@chakra-ui/react';

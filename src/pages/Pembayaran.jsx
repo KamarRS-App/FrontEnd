@@ -304,10 +304,6 @@ function Pembayaran() {
                     <Text>Tanggal:</Text>
                     <Text>{`${day} ${months[month]} ${yy}`}</Text>
                   </Flex>
-                  {/* <Flex justifyContent={"space-between"} mt={5}>
-                <Text>Tipe Kamar:</Text>
-                <Text>Kelas I</Text>
-              </Flex> */}
                   <Flex justifyContent={"space-between"} mt={5}>
                     <Text>Rumah Sakit:</Text>
                     <Text>RS Haji Surabaya</Text>

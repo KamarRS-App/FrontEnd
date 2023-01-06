@@ -2,6 +2,12 @@ import { Image } from '@chakra-ui/image';
 import { Flex, Stack, Text } from '@chakra-ui/layout';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import dashboardActive from '../assets/images/dashboard_active.svg';
+import dashboard from '../assets/images/dashboard.svg';
+import hospitalActive from '../assets/images/hospital_active.svg';
+import hospital from '../assets/images/hospital.svg';
+import adminActive from '../assets/images/admin_active.svg';
+import admin from '../assets/images/admin.svg';
 
 const SideBarAdminRoot = ({active}) => {
     return (
@@ -26,7 +32,7 @@ const SideBarAdminRoot = ({active}) => {
                     gap='2'
                     alignItems='center'
                 >
-                    <Image src={active === 'dashboard' ? '/src/assets/images/dashboard_active.svg' : '/src/assets/images/dashboard.svg'}
+                    <Image src={active === 'dashboard' ? dashboardActive : dashboard}
                         width={{ base: '25px', sm: '30px', md: '35px', lg: '40px' }}
                     />
                     <Text
@@ -53,7 +59,7 @@ const SideBarAdminRoot = ({active}) => {
                     alignItems='center'
                 >
                     <Image
-                        src={active === 'hospital' ? '/src/assets/images/hospital_active.svg' : '/src/assets/images/hospital.svg'}
+                        src={active === 'hospital' ? hospitalActive : hospital}
                         width={{ base: '25px', sm: '30px', md: '35px', lg: '40px' }}
                     />
                     <Text
@@ -80,7 +86,7 @@ const SideBarAdminRoot = ({active}) => {
                     alignItems='center'
                 >
                     <Image 
-                        src={active === 'user' ? '/src/assets/images/admin_active.svg' : '/src/assets/images/admin.svg'}
+                        src={active === 'user' ? adminActive : admin}
                         width={{ base: '25px', sm: '30px', md: '35px', lg: '40px' }}
                     />
                     <Text

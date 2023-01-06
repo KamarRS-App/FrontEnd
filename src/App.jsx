@@ -12,7 +12,6 @@ import DetailCariRumahSakit from './pages/DetailCariRumahSakit';
 import Dashboard from './pages/Admin/Dashboard';
 import DetailDaftarRumahSakit from './pages/DetailDaftarRumahSakit';
 import DashboardDailyPraktek from './pages/Admin/DashboardDailyPraktek';
-import UserPage from './pages/Admin/UserPage';
 import RoomPage from './pages/Admin/RoomPage';
 import PatientRegistrationPage from './pages/Admin/PatientRegistrationPage';
 import ProfileHospitalPage from './pages/Admin/ProfileHospitalPage';
@@ -21,11 +20,9 @@ import Pembayaran from './pages/Pembayaran';
 import Payment from './pages/Payment';
 import PembayaranSelesai from './pages/PembayaranSelesai';
 import CariDokter from './pages/CariDokter';
-import DetailDokter from './pages/DetailDokter';
 import DashboardRoot from './pages/Admin/DashboardRoot';
 import HospitalRootPages from './pages/Admin/HospitalRootPages';
 import AdminRoot from './pages/Admin/AdminRoot';
-import BuatJanjiDokter from './pages/BuatJanjiDokter';
 import TentangKami from './pages/TentangKami';
 import Privasi from './pages/Privasi';
 import SyaratDanKetentuan from './pages/SyaratDanKetentuan';
@@ -58,8 +55,7 @@ function App() {
               <Route path="/" element={<Login />} />
               <Route path="/edit" element={<EditProfileUser />} />
               <Route path="/home" element={<HomePage />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} ></Route>
               <Route path="/pasien" element={<TambahData />} />
               <Route path="/pasien/tambah" element={<DataDiriPasien />} />
               <Route path="/rumahsakit" element={<CariRumahSakit />} />
@@ -69,8 +65,7 @@ function App() {
               <Route path="/registrasi/pembayaran" element={<Payment />} />
               <Route path="registrasi/pembayaran/selesai" element={<PembayaranSelesai />} />
               <Route path="dokter" element={<CariDokter />} />
-              <Route path="detail/dokter" element={<DetailDokter />} />
-              <Route path="/buat/janji/dokter" element={<BuatJanjiDokter />} />
+              {/* <Route path="detail/dokter" element={<DetailDokter />} /> */}
               <Route path="/tentang/kami" element={<TentangKami />} />
               <Route path="/halaman/privasi" element={<Privasi />} />
               <Route path="/syarat/dan/ketentuan" element={<SyaratDanKetentuan />} />

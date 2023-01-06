@@ -1,5 +1,4 @@
 import React from 'react';
-import TextFlow from '../components/TextFlow';
 import { Flex, Text, Heading, Box } from '@chakra-ui/react';
 import Layout from '../components/Layout';
 function Privasi() {

@@ -6,6 +6,7 @@ import { IoLogOutOutline } from 'react-icons/io5'
 import React from 'react';
 import { Button } from '@chakra-ui/button';
 import moment from 'moment';
+import logo from '/src/assets/images/logo_rawat_inap.svg';
 
 const NavbarAdmin = ({name, role, onLogout}) => {
     const dateTime = new Date()
@@ -25,7 +26,7 @@ const NavbarAdmin = ({name, role, onLogout}) => {
                     height='75px'
                     width='100px'
                     objectFit='contain'
-                    src='/src/assets/images/logo_rawat_inap.svg'
+                    src={logo}
                     alt='Logo Rawat Inap'
                     />
             </Box>
@@ -33,22 +34,6 @@ const NavbarAdmin = ({name, role, onLogout}) => {
                 gap='10'
                 alignItems='center'
             >
-                {/* <InputGroup
-                    width={{ base: 'full', sm: '300px', md: '400px' }}
-                    shadow='md'
-                    borderRadius='md'
-                    display={{ base:'none', lg:'flex' }}
-                >
-                    <Input
-                        placeholder='Cari Rumah Sakit'
-                        borderRight='none'
-                    />
-                    <InputRightAddon
-                        children={<SearchIcon />}
-                        borderLeft='none'
-                        bg='transparent'
-                    />
-                </InputGroup> */}
                 <Box
                     border='1px'
                     borderColor='#E0E0E0'
