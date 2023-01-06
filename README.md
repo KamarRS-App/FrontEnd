@@ -167,5 +167,7 @@ Hendri William T.  - hendriwilliam29@gmail.com
 [LinkedIn]:https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white
 [LinkedIn-mitro]:https://www.linkedin.com/in/muchamad-mitro-ubaidillah-4541a1150/
 [Github-almira]:https://github.com/Almiramahsa
-[Github-Hendry-url]:https://github.com/hendrywilliam
 [LinkedIn-Almira]:https://www.linkedin.com/in/almira-mahsa
+[Github-Hendry-url]:https://github.com/hendrywilliam
+[LinkedIn-Hendry]:https://www.linkedin.com/in/hendri-william-tinambunan-4192431b5
+

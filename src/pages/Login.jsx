@@ -1,41 +1,154 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../assets/images/logo.png";
-import roomImage from "../assets/images/room.png";
 import googleLogo from "../assets/images/googlelogo.png";
-import { Button, Center } from "@chakra-ui/react";
-import { Input } from "@chakra-ui/react";
-import { Link } from "@chakra-ui/react";
-import { Text } from "@chakra-ui/react";
-import { Divider } from "@chakra-ui/react";
-import { Flex, Spacer } from "@chakra-ui/react";
-import { Image } from "@chakra-ui/react";
-import { Box } from "@chakra-ui/react";
+import api from "../services/api";
+import { ViewOffIcon, ViewIcon } from "@chakra-ui/icons";
+import Cookies from "js-cookie";
+import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import {
+  Button,
+  Center,
+  Input,
+  Link,
+  Text,
+  Divider,
+  Flex,
+  Spacer,
+  Image,
+  Box,
+  InputGroup,
+  InputRightElement,
+  FormControl,
+  useToast,
+} from "@chakra-ui/react";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-
-const schema = yup.object().shape({
-  email: yup
-    .string()
-    .required("Harap masukkan email")
-    .email("Format email salah"),
-  password: yup
-    .string()
-    .required("Harap masukkan password")
-    .min(8, "Password setidaknya harus 8 karakter")
-    .max(32, "Password maksimal 32 karakter"),
-});
+import { useDispatch } from "react-redux";
+import { addUsers } from "../features/userSlice";
+import { AuthToken } from "../services/authToken";
+import axios from "axios";
+import { useGoogleLogin } from "@react-oauth/google";
 
 function Login() {
+  const [show, setShow] = useState(false);
+  const showPassword = () => setShow(!show);
+  const navigate = useNavigate();
+  const toast = useToast();
+  const [passwordType, setPasswordType] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isChecked, setIsChecked] = useState(false);
+  const token = Cookies.get("token");
+  const dispatch = useDispatch();
+  const auth = AuthToken();
+
+  const onShowPassword = (e) => {
+    setPasswordType(e.target.value);
+  };
+
+  //yup schema
+  const schema = yup.object().shape({
+    email: yup.string().email("Format email salah"),
+    kata_sandi: yup.string(),
+  });
+
+  //rhf configuration
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
+    mode: "onChange",
   });
 
-  const onSubmit = (data) => console.log(data);
+  //checkbox handler
+  const handleCheckbox = (e) => {
+    setIsChecked(e.target.checked);
+    console.log(e.target.checked);
+  };
+
+  //handle login
+  const handleLogin = async (email, password) => {
+    await api
+      .loginUser(email, password)
+      .then((response) => {
+        const data = response.data.data;
+        toast({
+          title: `Sukses login, mengalihkan...`,
+          status: "success",
+          position: "top",
+          isClosable: true,
+          duration: 1500,
+        });
+        getUser(data.token);
+        if (isChecked) {
+          localStorage.setItem("email", email);
+          localStorage.setItem("password", password);
+          localStorage.setItem("isChecked", isChecked);
+        } else {
+          localStorage.removeItem("email");
+          localStorage.removeItem("password");
+          localStorage.removeItem("isChecked");
+        }
+        Cookies.set("token", data.token);
+        setTimeout(() => {
+          navigate("/home");
+        }, 2000);
+      })
+      .catch((error) => {
+        toast({
+          title: `Login gagal, silahkan coba lagi.`,
+          status: "error",
+          position: "top",
+          isClosable: true,
+          duration: 1500,
+        });
+      });
+  };
+
+  const getUser = async (token) => {
+    await api
+      .getUser(token)
+      .then((response) => {
+        const data = response.data.data;
+        dispatch(addUsers(data));
+      })
+      .catch(error => {
+        toast({
+          title: `Gagal mendapatkan data user.`,
+          status: "error",
+          position: "top",
+          isClosable: true,
+          duration: 1500,
+        });
+      })
+  };
+  
+  //submit function
+  const onSubmit = (data) => {
+    handleLogin(email, password);
+  };
+  
+  useEffect(() => {
+    if (localStorage.email) {
+      setEmail(localStorage.email);
+      setPassword(localStorage.password);
+      setIsChecked(localStorage.isChecked);
+    }
+
+    if (auth) {
+      toast({
+        position: "top",
+        title: "Kamu sudah Login",
+        status: "warning",
+        duration: "2000",
+        isClosable: true,
+      });
+      navigate("/home");
+    }
+  }, []);
 
   return (
     <Box minH={"100%"}>
@@ -137,28 +250,60 @@ function Login() {
                     Email:
                   </label>{" "}
                   <br />
-                  <Input
-                    {...register("email")}
-                    placeholder="email@gmail.com"
-                    name="email"
-                  />
-                  <Text color="red">{errors.email?.message}</Text>
+                  <FormControl isInvalid={errors.email}>
+                    <Input
+                      // {...register("email")}
+                      placeholder="email@gmail.com"
+                      name="email"
+                      id="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <Text color="red">{errors.email?.message}</Text>
+                  </FormControl>
                   <br />
                   <label for="password" className="text-slate-500">
                     Password:
                   </label>{" "}
                   <br />
-                  <Input
-                    {...register("password")}
-                    placeholder="password"
-                    name="password"
-                  />
-                  <Text color="red">{errors.password?.message}</Text>
+                  <FormControl isInvalid={errors.kata_sandi}>
+                    <InputGroup>
+                      <Input
+                        type={show ? "text" : "password"}
+                        // {...register("kata_sandi")}
+                        placeholder="kata sandi"
+                        name="kata_sandi"
+                        id="password"
+                        onInput={onShowPassword}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                      />
+                      {passwordType !== "" && (
+                        <InputRightElement>
+                          {show ? (
+                            <ViewOffIcon
+                              onClick={showPassword}
+                              cursor={"pointer"}
+                            />
+                          ) : (
+                            <ViewIcon
+                              onClick={showPassword}
+                              cursor={"pointer"}
+                            />
+                          )}
+                        </InputRightElement>
+                      )}
+                    </InputGroup>
+                    <Text color="red">{errors.kata_sandi?.message}</Text>
+                  </FormControl>
                   <Box className="flex flex-row mt-5 justify-between">
                     <Box>
                       <input
                         type="checkbox"
+                        checked={isChecked}
                         className="checkbox checkbox-xs mr-2 border-gray-500"
+                        id={"isChecked"}
+                        onChange={(e) => handleCheckbox(e)}
                       />
                       <label for="rememberme">Remember me</label>
                     </Box>
@@ -170,6 +315,7 @@ function Login() {
                     mt="10"
                     backgroundColor="alta.primary"
                     _hover={{ bg: "#3AB8FF" }}
+                    type='submit'
                     onClick={handleSubmit(onSubmit)}
                   >
                     Login
@@ -185,30 +331,41 @@ function Login() {
               <Divider />
             </Flex>
             <Box mt={10}>
-              <Button
-                colorScheme="white"
-                color="#000000"
-                variant="solid"
-                border="1px"
-                borderColor="#00000066"
-                width="100%"
+              <Link
+                href="https://rawatinap.online/auth/google/login"
+                target={'_self'}
               >
-                <Flex minWidth="max-content" gap="2" w="100%">
-                  <Box>
-                    <Image src={googleLogo} boxSize="20px" />
-                  </Box>
-                  <Spacer />
-                  <Box flex="100%">
-                    <Text fontSize="md">Login with Google</Text>
-                  </Box>
-                </Flex>
-              </Button>
+                <Button
+                  colorScheme="white"
+                  color="#000000"
+                  variant="solid"
+                  border="1px"
+                  borderColor="#00000066"
+                  width="100%"
+                >
+                  <Flex minWidth="max-content" gap="2" w="100%">
+                    <Box>
+                      <Image src={googleLogo} boxSize="20px" />
+                    </Box>
+                    <Spacer />
+                    <Box flex="100%">
+                      <Text fontSize="md">Login with Google</Text>
+                    </Box>
+                  </Flex>
+
+                </Button>
+              </Link>
             </Box>
             <Box>
               <Center>
                 <Text mt="5">
                   Dont have an account?{" "}
-                  <Link color="alta.primary" href="#" fontWeight="semibold">
+                  <Link
+                    color="alta.primary"
+                    href="#"
+                    fontWeight="semibold"
+                    onClick={() => navigate("/register")}
+                  >
                     Sign up
                   </Link>
                 </Text>

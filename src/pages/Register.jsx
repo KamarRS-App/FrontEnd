@@ -1,42 +1,111 @@
 import React from "react";
 import logo from "../assets/images/logo.png";
-import roomImage from "../assets/images/room.png";
 import googleLogo from "../assets/images/googlelogo.png";
-import { Button, Center } from "@chakra-ui/react";
-import { Input } from "@chakra-ui/react";
-import { Link } from "@chakra-ui/react";
-import { Text } from "@chakra-ui/react";
-import { Divider } from "@chakra-ui/react";
-import { Flex, Spacer } from "@chakra-ui/react";
-import { Image } from "@chakra-ui/react";
-import { Box } from "@chakra-ui/react";
+import { ViewOffIcon, ViewIcon } from "@chakra-ui/icons";
+import api from "../services/api";
+import { useNavigate } from "react-router-dom";
+import {
+  Button,
+  Center,
+  Input,
+  Link,
+  Text,
+  Divider,
+  Flex,
+  Spacer,
+  Image,
+  Box,
+  InputGroup,
+  InputRightElement,
+  Icon,
+  useToast,
+  Wrap,
+  FormControl,
+} from "@chakra-ui/react";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-const schema = yup.object().shape({
-  username: yup.string().required("Harap masukkan username"),
-  email: yup
-    .string()
-    .required("Harap masukkan email")
-    .email("Format email salah"),
-  nomorhape: yup.number().typeError("Harap masukkan nomor hp").required(),
-  password: yup
-    .string()
-    .required("Harap masukkan password")
-    .min(8, "Password setidaknya 8 karakter"),
-});
-
 function Register() {
+  const [show, setShow] = React.useState(false);
+  const showPassword = () => setShow(!show);
+  const toast = useToast();
+  const navigate = useNavigate();
+  const [passwordType, setPasswordType] = React.useState("");
+
+  const onShowPassword = (e) => {
+    setPasswordType(e.target.value);
+  };
+
+  //yup schema
+  const schema = yup.object().shape({
+    nama: yup.string().required("Harap masukkan username"),
+    email: yup
+      .string()
+      .required("Harap masukkan email")
+      .email("Format email salah"),
+    no_telpon: yup.number().typeError("Harap masukkan nomor hp").required(),
+    kata_sandi: yup
+      .string()
+      .required("Harap masukkan password")
+      .min(8, "Password setidaknya 8 karakter"),
+    nik: yup.number().typeError("Harap masukkan NIK").required(),
+    no_kk: yup.number().typeError("Harap masukkan Nomor Kartu Keluarga").required(),
+  });
+
+  //react-hook-form
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
+    mode: "onChange",
   });
 
-  const onSubmit = (data) => console.log(data);
+  //handle register
+  const handleRegister = async (data) => {
+    await api
+      .register(data)
+      .then((response) => {
+        toast({
+          title: `Sukses membuat akun.`,
+          status: "success",
+          position: "top",
+          isClosable: true,
+          duration: 1500,
+        });
+      })
+      .catch((err) => {
+        if (
+          (err.response.data.message =
+            "erorr: Gagal membuat akun, Email sudah terdaftar")
+        ) {
+          toast({
+            title: `Email sudah terdaftar`,
+            status: "error",
+            position: "top",
+            isClosable: true,
+            duration: 1500,
+          });
+          console.log(err);
+        } else {
+          toast({
+            title: `Gagal membuat akun`,
+            status: "error",
+            position: "top",
+            isClosable: true,
+            duration: 1500,
+          });
+        }
+      });
+  };
+
+  //submit data
+  const onSubmit = (data) => {
+    console.log(data);
+    handleRegister(data);
+  };
 
   return (
     <Box minH={"100%"}>
@@ -109,7 +178,7 @@ function Register() {
             mx={{ base: "auto", lg: "0" }}
             width={{ base: "350px", sm: "500px", md: "700px", lg: "700px" }}
             px={{ base: "10", lg: "24" }}
-            py={{ base: "16" }}
+            pb={{ base: "16" }}
           >
             <Box
               textAlign="center"
@@ -126,7 +195,6 @@ function Register() {
                 fontSize={{ md: "4xl", lg: "5xl" }}
                 fontWeight="semibold"
                 color="alta.primary"
-                mb="5"
               >
                 Save Life
               </Text>
@@ -134,27 +202,83 @@ function Register() {
             <Box className="flex flex-col">
               <Box className="text-start w-full">
                 <form>
-                  <Input
-                    {...register("username")}
-                    placeholder="Masukkan username"
-                    name="username"
-                  />
-                  <Text color={"red"}>{errors.username?.message}</Text>
+                  <FormControl isInvalid={errors.username}>
+                    <Input
+                      {...register("nama")}
+                      placeholder="Masukkan username"
+                      type={'text'}
+                      name="nama"
+                    />
+                    <Text color={"red"}>{errors.username?.message}</Text>
+                  </FormControl>
                   <br />
-                  <Input {...register("email")} placeholder="Masukkan email" />
-                  <Text color={"red"}>{errors.email?.message}</Text>
+                  <FormControl isInvalid={errors.email}>
+                    <Input
+                      {...register("email")}
+                      placeholder="Masukkan email"
+                      type={'email'}
+                      name={'email'}
+                    />
+                    <Text color={"red"}>{errors.email?.message}</Text>
+                    <br />
+                  </FormControl>
+                  <FormControl isInvalid={errors.nik}>
+                    <Input
+                      {...register("nik")}
+                      type={"number"}
+                      name={'nik'}
+                      placeholder="Masukkan NIK"
+                    />
+                    <Text color={"red"}>{errors.nik?.message}</Text>
+                    <br />
+                  </FormControl>
+                  <FormControl isInvalid={errors.no_kk}>
+                    <Input
+                      name="no_kk"
+                      {...register("no_kk")}
+                      type={"number"}
+                      placeholder="Masukkan No. Kartu Keluarga"
+                    />
+                    <Text color={"red"}>{errors.no_kk?.message}</Text>
+                    <br />
+                  </FormControl>
+                  <FormControl isInvalid={errors.nomorhape}>
+                    <Input
+                      type="number"
+                      {...register("nomorhape")}
+                      placeholder="Masukkan nomor hp"
+                      name="no_telpon"
+                    />
+                    <Text color="red">{errors.nomorhape?.message}</Text>
+                  </FormControl>
                   <br />
-                  <Input
-                    {...register("nomorhape")}
-                    placeholder="Masukkan nomor hp"
-                  />
-                  <Text color="red">{errors.nomorhape?.message}</Text>
-                  <br />
-                  <Input
-                    {...register("password")}
-                    placeholder="Masukkan password"
-                  />
-                  <Text color={"red"}>{errors.password?.message}</Text>
+                  <FormControl isInvalid={errors.kata_sandi}>
+                    <InputGroup>
+                      <Input
+                        type={show ? "text" : "password"}
+                        {...register("kata_sandi")}
+                        placeholder="Masukkan password"
+                        name="kata_sandi"
+                        onInput={onShowPassword}
+                      />
+                      {passwordType && (
+                        <InputRightElement>
+                          {show ? (
+                            <ViewOffIcon
+                              onClick={showPassword}
+                              cursor={"pointer"}
+                            />
+                          ) : (
+                            <ViewIcon
+                              onClick={showPassword}
+                              cursor={"pointer"}
+                            />
+                          )}
+                        </InputRightElement>
+                      )}
+                    </InputGroup>
+                  </FormControl>
+                  <Text color={"red"}>{errors.kata_sandi?.message}</Text>
                   <Button
                     color="white"
                     width="100%"
@@ -198,7 +322,12 @@ function Register() {
               <Center>
                 <Text mt="5">
                   Already have an account?{" "}
-                  <Link color="alta.primary" href="#" fontWeight="semibold">
+                  <Link
+                    color="alta.primary"
+                    href="#"
+                    fontWeight="semibold"
+                    onClick={() => navigate("/login")}
+                  >
                     Login
                   </Link>
                 </Text>

@@ -4,15 +4,39 @@ import { Box, Image, Heading, CardHeader, CardBody, Button, Link, Stack, StackDi
 import { Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer } from '@chakra-ui/react';
 import { MdBuild, MdArrowBack } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
-function CardProfilDokter() {
+import axios from 'axios';
+import api from '../services/api';
+import { useEffect, useState } from 'react';
+
+function CardProfilDokter({ nama, email, bidang, no_telpon }) {
   let navigate = useNavigate();
+  const [AllDoctors, setAllDoctors] = useState([]);
+  const onDoctors = (token, id) => {
+    Router.push({
+      pathname: `/doctors/${id}`,
+    });
+  };
+
+  const getAllDoctors = async () => {
+    await api
+      .getAllDoctors(token)
+
+      .then((response) => {
+        setAllDoctors(response.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    setLoading(false);
+  };
+
   return (
     <Box>
       <Grid mb={100}>
-        <Card maxW="md">
+        <Card maxW="md" mr={10} variant="unstyled">
           <CardHeader>
-            <Button colorScheme="teal" variant="link" mt={2} fontWeight={600} fontSize={18} color="#19345E">
-              dr. Achraf Hakimi, Sp.An-KIC, FIP
+            <Button variant="link" mt={2} fontWeight={600} fontSize={18} color="#19345E">
+              <Text>{nama}</Text>
             </Button>
           </CardHeader>
 
@@ -23,7 +47,7 @@ function CardProfilDokter() {
                   Spesialis
                 </Heading>
                 <Text fontWeight={600} fontSize={16} color="#19345E">
-                  Spesialis Anastesi
+                  {bidang}
                 </Text>
               </Box>
               <Box>
