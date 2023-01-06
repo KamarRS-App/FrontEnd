@@ -138,7 +138,7 @@ Almira Mahsa - almiramahsa9@gmail.com
 [![Github][Github]][Github-almira]
 [![LinkedIn][LinkedIn]][LinkedIn-Almira]
 
-Hendri William T.  - email@gmail.com
+Hendri William T.  - hendriwilliam29@gmail.com
 
 [![Github][Github]][Github-Hendry-url]
 [![LinkedIn][LinkedIn]][LinkedIn-mitro]
