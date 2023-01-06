@@ -133,12 +133,12 @@ Muchamad Mitro Ubaidillah - ubaidillahmitro@gmail.com
 [![Github][Github]][Github-Mitro-url]
 [![LinkedIn][LinkedIn]][LinkedIn-mitro]
 
-Almira - email@gmail.com
+Almira Mahsa - almiramahsa9@gmail.com
 
 [![Github][Github]][Github-almira]
 [![LinkedIn][LinkedIn]][LinkedIn-Almira]
 
-Hendry - email@gmail.com
+Hendri William T.  - email@gmail.com
 
 [![Github][Github]][Github-Hendry-url]
 [![LinkedIn][LinkedIn]][LinkedIn-mitro]
