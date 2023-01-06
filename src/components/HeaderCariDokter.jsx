@@ -2,6 +2,7 @@ import React from 'react';
 import { Center } from '@chakra-ui/react';
 import { Box, Heading, Text, Image } from '@chakra-ui/react';
 import { SimpleGrid } from '@chakra-ui/react';
+import dokter from '../assets/images/doctor_hero.png';
 
 function HeaderCariDokter() {
   return (
@@ -23,7 +24,7 @@ function HeaderCariDokter() {
           </Box>
         </Center>
         <Box direction="cols" mt={50} maxWidth={500}>
-          <Image objectFit="cover" src="/src/assets/images/doctor_hero.png " alt="doctor_hero" fallbackSrc="https://via.placeholder.com/150" />
+          <Image objectFit="cover" src={dokter} alt="doctor_hero" fallbackSrc="https://via.placeholder.com/150" />
         </Box>
       </SimpleGrid>
     </Center>

@@ -18,6 +18,7 @@ import {
   ChevronRightIcon,
 } from "@chakra-ui/icons";
 import { useNavigate } from "react-router";
+import logo from "../assets/images/logo_rawat_inap.svg"
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { destroyUsers } from "../features/userSlice";
@@ -41,7 +42,7 @@ const Navbar = ({ isAuth, nameUser, isActive }) => {
             height="75px"
             width="100px"
             objectFit="contain"
-            src="../assets/images/logo_rawat_inap.svg"
+            src={logo}
             alt="Logo Rawat Inap"
           />
         </Link>

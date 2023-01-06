@@ -1,6 +1,7 @@
 import { ChevronRightIcon } from "@chakra-ui/icons";
 import { Box, Button, Flex, Image, Text } from "@chakra-ui/react";
 import React from "react";
+import homeRoom from "../assets/images/home-room.jpg"
 
 const HeroComponent = () => {
   return (
@@ -14,7 +15,7 @@ const HeroComponent = () => {
         gap={["0", "70px", "70px", "200px"]}
         mt={{ base: "0", md: "50px" }}
         mb={{ base: "30px", md: "150px" }}
-        bg={{ base: "url(/src/assets/images/home-room.jpg)", md: "white" }}
+        bg={{ base: `url(${homeRoom})`, md: "white" }}
         height={{ base: "500px", md: "auto" }}
         bgPosition="center"
       >
@@ -67,7 +68,7 @@ const HeroComponent = () => {
             lg: "50%",
             xl: "60%",
           }}
-          src="/src/assets/images/home-room.jpg"
+          src={homeRoom}
           alt="Ruang Rumah Sakit"
           objectFit="contain"
         />

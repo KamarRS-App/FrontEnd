@@ -9,6 +9,10 @@ import { Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton } from '
 import { useDisclosure } from '@chakra-ui/react';
 
 import ModalPayment from './ModalPayment';
+import imgBCA from '../assets/images/bank-bca.png';
+import imgBNI from '../assets/images/bank-bni.png';
+import imgBRI from '../assets/images/bank-bri.png';
+import imgPermata from '../assets/images/bank-permata.png';
 
 function BankPayment({ onClickBCA, onClickBNI, onClickBRI, onClickPermata }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -22,16 +26,16 @@ function BankPayment({ onClickBCA, onClickBNI, onClickBRI, onClickPermata }) {
         <Center>
           <Grid templateColumns={'repeat(5, 1fr)'} width={'full'}>
             <GridItem>
-              <IconButton onClick={onClickBCA} icon={<Image src="/logo/bank-bca.png" maxWidth={53} />} p={'3'} colorScheme="white" border="1px" borderColor="gray.200" />
+              <IconButton onClick={onClickBCA} icon={<Image src={imgBCA} maxWidth={53} />} p={'3'} colorScheme="white" border="1px" borderColor="gray.200" />
             </GridItem>
             <GridItem>
-              <IconButton onClick={onClickBNI} icon={<Image src="/logo/bank-bni.png" maxWidth={53} />} p={'3'} colorScheme="white" border="1px" borderColor="gray.200" />
+              <IconButton onClick={onClickBNI} icon={<Image src={imgBNI} maxWidth={53} />} p={'3'} colorScheme="white" border="1px" borderColor="gray.200" />
             </GridItem>
             <GridItem>
-              <IconButton onClick={onClickBRI} icon={<Image src="/logo/bri.png" maxWidth={53} />} colorScheme="white" border="1px" borderColor="gray.200" p={'3'} />
+              <IconButton onClick={onClickBRI} icon={<Image src={imgBRI} maxWidth={53} />} colorScheme="white" border="1px" borderColor="gray.200" p={'3'} />
             </GridItem>
             <GridItem>
-              <IconButton onClick={onClickPermata} icon={<Image src="/logo/bank-permata.png" maxWidth={84} />} colorScheme="white" border="1px" borderColor="gray.200" p={'3'} />
+              <IconButton onClick={onClickPermata} icon={<Image src={imgPermata} maxWidth={84} />} colorScheme="white" border="1px" borderColor="gray.200" p={'3'} />
             </GridItem>
             <GridItem>
               <ButtonGroup isAttached variant="outline" justifyContent="center" align="center" onClick={onOpen} px={'3'}>
