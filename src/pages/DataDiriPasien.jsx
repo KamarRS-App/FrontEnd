@@ -29,7 +29,7 @@ function DataDiriPasien() {
   const [kabupaten, setKabupaten] = React.useState(null);
   const [kabupatenKtp, setKabupatenKtp] = React.useState([]);
   const [noKK, setNoKk] = React.useState();
-  const [anggotaBpjs, setAnggotaBpjs] = React.useState("false");
+  const [anggotaBpjs, setAnggotaBpjs] = React.useState(false);
   const [previewImageKTP, setPreviewImageKtp] = React.useState();
   const [imageKtp, setImageKtp] = React.useState();
   const [previewImageBpjs, setPreviewImageBpjs] = React.useState();
@@ -165,8 +165,10 @@ function DataDiriPasien() {
     formData.append("provinsi_domisili", data.provinsi);
     formData.append("provinsi_ktp", data.provinsi_ktp);
     formData.append("kabupaten_kota_domisili", data.kota);
-    formData.append("no_bpjs", data.noBPJS);
-    formData.append("kelas_bpjs", data.kelas_bpjs);
+    if (anggotaBpjs) {
+      formData.append("no_bpjs", data.noBPJS);
+      formData.append("kelas_bpjs", data.kelas_bpjs);
+    }
     formData.append("foto_ktp", imageKtp);
     formData.append("foto_bpjs", imageBpjs);
     handleSendData(ngab, formData);
