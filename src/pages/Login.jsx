@@ -175,7 +175,7 @@ function Login() {
               xl: "700px",
             }}
             width="full"
-            backgroundImage="url(../src/assets/images/home-room.jpg)"
+            backgroundImage="url(../assets/images/home-room.jpg)"
             backgroundSize={{
               base: "cover",
               sm: "cover",

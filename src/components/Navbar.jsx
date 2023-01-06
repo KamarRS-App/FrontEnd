@@ -41,7 +41,7 @@ const Navbar = ({ isAuth, nameUser, isActive }) => {
             height="75px"
             width="100px"
             objectFit="contain"
-            src="../src/assets/images/logo_rawat_inap.svg"
+            src="../assets/images/logo_rawat_inap.svg"
             alt="Logo Rawat Inap"
           />
         </Link>
