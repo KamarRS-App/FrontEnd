@@ -136,7 +136,7 @@ Muchamad Mitro Ubaidillah - ubaidillahmitro@gmail.com
 Almira - email@gmail.com
 
 [![Github][Github]][Github-almira]
-[![LinkedIn][LinkedIn]][LinkedIn-mitro]
+[![LinkedIn][LinkedIn]][LinkedIn-Almira]
 
 Hendry - email@gmail.com
 
@@ -168,3 +168,4 @@ Hendry - email@gmail.com
 [LinkedIn-mitro]:https://www.linkedin.com/in/muchamad-mitro-ubaidillah-4541a1150/
 [Github-almira]:https://github.com/Almiramahsa
 [Github-Hendry-url]:https://github.com/hendrywilliam
+[LinkedIn-Almira]:https://www.linkedin.com/in/almira-mahsa
