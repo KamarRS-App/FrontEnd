@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import logo from "../assets/images/logo.png";
 import googleLogo from "../assets/images/googlelogo.png";
+import room from "../assets/images/room-login.png"
 import api from "../services/api";
 import { ViewOffIcon, ViewIcon } from "@chakra-ui/icons";
 import Cookies from "js-cookie";
@@ -138,7 +139,7 @@ function Login() {
       setIsChecked(localStorage.isChecked);
     }
 
-    if (auth) {
+    if (auth === true) {
       toast({
         position: "top",
         title: "Kamu sudah Login",
@@ -175,7 +176,7 @@ function Login() {
               xl: "700px",
             }}
             width="full"
-            backgroundImage="url(../assets/images/home-room.jpg)"
+            backgroundImage={`url(${room})`}
             backgroundSize={{
               base: "cover",
               sm: "cover",
