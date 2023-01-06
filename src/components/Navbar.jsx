@@ -19,7 +19,6 @@ import {
 } from "@chakra-ui/icons";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
-import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
 import { destroyUsers } from "../features/userSlice";
 
@@ -42,7 +41,7 @@ const Navbar = ({ isAuth, nameUser, isActive }) => {
             height="75px"
             width="100px"
             objectFit="contain"
-            src="/src/assets/images/logo_rawat_inap.svg"
+            src="../src/assets/images/logo_rawat_inap.svg"
             alt="Logo Rawat Inap"
           />
         </Link>
