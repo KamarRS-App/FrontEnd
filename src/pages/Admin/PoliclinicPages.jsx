@@ -213,7 +213,7 @@ const PoliclinicPages = () => {
 
   const updateDoctorHandler = async (id, data) => {
     await axios
-      .put(`http://34.143.247.242/doctors/${id}`, data, {
+      .put(`https://rawatinap.online/doctors/${id}`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
           'content-type': 'multipart/form-data',
