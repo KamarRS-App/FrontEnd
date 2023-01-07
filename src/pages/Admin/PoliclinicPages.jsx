@@ -150,9 +150,7 @@ const PoliclinicPages = () => {
         setValueEdit('nama_poli', data.nama_poli);
         setValueEdit('jam_praktik', data.jam_praktik);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
   };
 
   const deletePoliclinicHandler = async () => {
@@ -255,9 +253,7 @@ const PoliclinicPages = () => {
         setValueUpdateDoctor('no_telpon', data.no_telpon);
         setDoctorImage(data.foto);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
   };
 
   const deleteDoctorHandler = async (id) => {

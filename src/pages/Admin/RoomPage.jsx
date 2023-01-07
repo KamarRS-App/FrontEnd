@@ -169,6 +169,7 @@ const RoomPage = () => {
           isClosable: true,
         });
         onCloseModalEdit();
+
         getAllHospitalBedHandler();
       })
       .catch((error) => {
@@ -358,20 +359,20 @@ const RoomPage = () => {
                 <FormControl mt={4} isInvalid={errors.ruangan}>
                   <FormLabel>Ruangan</FormLabel>
                   <Select placeholder="Pilih Ruangan" id="ruangan" {...createHospitalBed('ruangan')}>
-                    <option>anggrek</option>
-                    <option>melati</option>
+                    <option>Anggrek</option>
+                    <option>Melati</option>
                   </Select>
-                  {/* {errors.role && <FormErrorMessage>{errors.role.message}</FormErrorMessage>} */}
+                  {errors.role && <FormErrorMessage>{errors.role.message}</FormErrorMessage>}
                 </FormControl>
 
                 <FormControl mt={4} isInvalid={errorsUpdate.kelas}>
                   <FormLabel>Kelas</FormLabel>
-                  <Select placeholder="Pilih Ruangan" id="ruangan" {...createHospitalBed('ruangan')}>
-                    <option>vvip</option>
-                    <option>vip</option>
-                    <option>kelas 1</option>
-                    <option>kelas 2</option>
-                    <option>kelas 3</option>
+                  <Select placeholder="Pilih Kelas" id="kelas" {...createHospitalBed('kelas')}>
+                    <option>VVIP</option>
+                    <option>VIP</option>
+                    <option>Kelas 1</option>
+                    <option>Kelas 2</option>
+                    <option>Kelas 3</option>
                   </Select>
                   {errorsUpdate.kelas && <FormErrorMessage>{errors.kelas.message}</FormErrorMessage>}
                 </FormControl>
@@ -407,17 +408,17 @@ const RoomPage = () => {
                     <option>Anggrek</option>
                     <option>Melati</option>
                   </Select>
-                  {errors.role && <FormErrorMessage>{errors.role.message}</FormErrorMessage>}
+                  {/* {errors.role && <FormErrorMessage>{errors.role.message}</FormErrorMessage>} */}
                 </FormControl>
 
                 <FormControl mt={4} isInvalid={errorsUpdate.kelas}>
                   <FormLabel>Kelas</FormLabel>
-                  <Select placeholder="Pilih Ruangan" id="ruangan" {...createHospitalBed('ruangan')}>
-                    <option>vvip</option>
-                    <option>vip</option>
-                    <option>kelas 1</option>
-                    <option>kelas 2</option>
-                    <option>kelas 3</option>
+                  <Select placeholder="Pilih Kelas" id="kelas" {...createHospitalBed('kelas')}>
+                    <option>VVIP</option>
+                    <option>VIP</option>
+                    <option>Kelas 1</option>
+                    <option>Kelas 2</option>
+                    <option>Kelas 3</option>
                   </Select>
                   {errorsUpdate.kelas && <FormErrorMessage>{errors.kelas.message}</FormErrorMessage>}
                 </FormControl>
