@@ -383,8 +383,11 @@ function DashboardDailyPraktek() {
                 confirmEditHandler(token, selectedPractice.id, selectedPractice);
               }}
             >
-              Simpan
+              Ubah
             </Button>{' '}
+            <Button mr={3} bg="#3AB8FF" color={'white'} fontSize={'14px'} fontWeight={'700'} width={'150px'} height={'50px'} _hover={{ bg: 'alta.primary' }} onClick={onCloseModalEdit}>
+              Close
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
