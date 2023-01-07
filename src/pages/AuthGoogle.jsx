@@ -7,37 +7,33 @@ import { addUsers } from '../features/userSlice';
 import api from '../services/api';
 
 const AuthGoogle = () => {
-    const navigate = useNavigate();
-    const search = useLocation().search;
-    const token = new URLSearchParams(search).get('token')
-    const userid = new URLSearchParams(search).get('userid')
-    const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const search = useLocation().search;
+  const token = new URLSearchParams(search).get('token');
+  const userid = new URLSearchParams(search).get('userid');
+  const dispatch = useDispatch();
 
-    Cookies.set('token', token);
-    Cookies.set('userId', userid);
+  Cookies.set('token', token);
+  Cookies.set('userId', userid);
 
-    const getUser = async () => {
-        await api.getUser(token)
-            .then(response => {
-                const data = response.data.data;
-                dispatch(addUsers(data))
-                console.log(response)
-            })
-            .catch(error => {
-                console.log(error);
-            })
-    }
+  const getUser = async () => {
+    await api
+      .getUser(token)
+      .then((response) => {
+        const data = response.data.data;
+        dispatch(addUsers(data));
+      })
+      .catch((error) => {});
+  };
 
-    useEffect(() => {
-        getUser();
-        setTimeout(() => {
-            navigate("/home");
-        }, 2000);
-    }, []);
+  useEffect(() => {
+    getUser();
+    setTimeout(() => {
+      navigate('/home');
+    }, 2000);
+  }, []);
 
-    return (
-        <Loading body={'Sedang Mengalihkan Halaman...'}/>
-    );
-}
+  return <Loading body={'Sedang Mengalihkan Halaman...'} />;
+};
 
 export default AuthGoogle;
