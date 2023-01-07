@@ -361,6 +361,7 @@ const RoomPage = () => {
                   <Select placeholder="Pilih Ruangan" id="ruangan" {...createHospitalBed('ruangan')}>
                     <option>Anggrek</option>
                     <option>Melati</option>
+                    <option>Mawar</option>
                   </Select>
                   {errors.role && <FormErrorMessage>{errors.role.message}</FormErrorMessage>}
                 </FormControl>
@@ -407,6 +408,7 @@ const RoomPage = () => {
                   <Select placeholder="Pilih Ruangan" id="ruangan" {...createHospitalBed('ruangan')}>
                     <option>Anggrek</option>
                     <option>Melati</option>
+                    <option>Mawar</option>
                   </Select>
                   {/* {errors.role && <FormErrorMessage>{errors.role.message}</FormErrorMessage>} */}
                 </FormControl>
