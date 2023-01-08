@@ -127,7 +127,7 @@ export default {
         Authorization: `Bearer ${token}`,
       },
     }),
-    
+
   deleteAdmin: (token, id) =>
     instance({
       method: `DELETE`,
@@ -136,7 +136,7 @@ export default {
         Authorization: `Bearer ${token}`,
       },
     }),
-    
+
   getAdmin: (token) =>
     instance({
       method: `GET`,
@@ -173,15 +173,6 @@ export default {
         Authorization: `Bearer ${token}`,
       },
     }),
-  
-  getAllHospitals: (token) => 
-    instance({
-      method: `GET`,
-      url: `/hospitals`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }),
 
   getHospitalByID: (token, id) =>
     instance({
@@ -190,6 +181,34 @@ export default {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+    }),
+
+  //Filter
+  getHospitalByProvinsi: (token, page, provinsi) =>
+    instance({
+      method: `GET`,
+      url: `/hospitals?page=${page}&provinsi=${provinsi}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    }),
+  getHospitalByKabupaten: (token, page, provinsi, kabupaten) =>
+    instance({
+      method: `GET`,
+      url: `/hospitals?page=${page}&provinsi=${provinsi}&kabupaten_kota=${kabupaten}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    }),
+
+  //Search
+  getHospitalByName: (token, name, page) =>
+    instance({
+      method: `GET`,
+      url: `/hospitals?page=${page}&nama=${name}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
     }),
 
   //patient

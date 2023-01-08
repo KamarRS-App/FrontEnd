@@ -150,9 +150,7 @@ const PoliclinicPages = () => {
         setValueEdit('nama_poli', data.nama_poli);
         setValueEdit('jam_praktik', data.jam_praktik);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
   };
 
   const deletePoliclinicHandler = async () => {
@@ -213,7 +211,7 @@ const PoliclinicPages = () => {
 
   const updateDoctorHandler = async (id, data) => {
     await axios
-      .put(`http://34.143.247.242/doctors/${id}`, data, {
+      .put(`https://rawatinap.online/doctors/${id}`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
           'content-type': 'multipart/form-data',
@@ -255,9 +253,7 @@ const PoliclinicPages = () => {
         setValueUpdateDoctor('no_telpon', data.no_telpon);
         setDoctorImage(data.foto);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
   };
 
   const deleteDoctorHandler = async (id) => {

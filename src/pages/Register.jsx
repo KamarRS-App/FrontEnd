@@ -76,8 +76,8 @@ function Register() {
 
   //submit data
   const onSubmit = (data) => {
-    console.log(data);
     handleRegister(data);
+
   };
 
   return (

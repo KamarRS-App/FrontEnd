@@ -74,9 +74,7 @@ function ReservasiRawatJalan() {
         const data = response.data.data;
         setPoliclinicName(data.nama_poli);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
   };
 
   const getDoctorSelected = async () => {
