@@ -20,26 +20,27 @@ function ProfileHospitalPage() {
   const toast = useToast();
   const navigate = useNavigate();
   const auth = AuthToken();
-  const staff = useSelector((state) => state.staffs)
+  const staff = useSelector((state) => state.staffs);
   const hospital_id = staff.hospital_id;
   const [loading, setLoading] = useState(true);
 
   const getHospitalById = async () => {
-    await api.getHospitalByID(token, hospital_id)
-      .then(response => {
-        setHospital(response.data.data)
+    await api
+      .getHospitalByID(token, hospital_id)
+      .then((response) => {
+        setHospital(response.data.data);
       })
-      .catch(error => {
+      .catch((error) => {
         toast({
           position: 'top',
           title: 'Gagal mendapatkan Data Rumah Sakit',
           status: 'error',
           duration: '2000',
-          isClosable: true
-        })
-      })
+          isClosable: true,
+        });
+      });
     setLoading(false);
-  }
+  };
 
   useEffect(() => {
     if (role !== 'Admin - Staff' || !auth) {
@@ -48,8 +49,8 @@ function ProfileHospitalPage() {
         title: 'Kamu Harus Login Dulu',
         status: 'warning',
         duration: '2000',
-        isClosable: true
-      })
+        isClosable: true,
+      });
       navigate('/admin/login');
     }
     getHospitalById();
@@ -58,8 +59,7 @@ function ProfileHospitalPage() {
   return (
     <>
       {loading && <Loading body={'Halaman Sedang Dimuat...'} />}
-      {
-        !loading &&
+      {!loading && (
         <LayoutAdmin activeMenu={'hospital'}>
           <Stack>
             <Flex
@@ -85,29 +85,29 @@ function ProfileHospitalPage() {
                 <Image src={hospital.foto} borderRadius={'xl'} />
               </Box>
               <Box maxWidth={'500px'}>
-                <Text fontWeight={'700'} color={'#072051'} fontSize={{ base: '18px', sm: '20px', md: '24px' }}>
+                <Text mt={'4'} fontWeight={'700'} color={'#072051'} fontSize={{ base: '14px', sm: '16px', md: '20px' }}>
                   {hospital.nama}
                 </Text>
-                <Text fontSize={{ base: '14px', sm: '16px', md: '20px' }} color={'#B0B0B0'}>
-                  {hospital.alamat + ", " + hospital.kecamatan + ", " + hospital.kabupaten_kota + ", " + hospital.provinsi + ", " + hospital.kode_pos}
+                <Text mt={'4'} fontSize={{ base: '12px', sm: '14px', md: '18px' }} color={'#B0B0B0'}>
+                  {hospital.alamat + ', ' + hospital.kecamatan + ', ' + hospital.kabupaten_kota + ', ' + hospital.provinsi + ', ' + hospital.kode_pos}
                 </Text>
-                <Text fontWeight={'700'} color={'#072051'} fontSize={{ base: '18px', sm: '20px', md: '24px' }}>
+                <Text mt={'4'} fontWeight={'700'} color={'#072051'} fontSize={{ base: '14px', sm: '16px', md: '20px' }}>
                   Kontak:
                 </Text>
-                <Text fontSize={{ base: '14px', sm: '16px', md: '20px' }} color={'#B0B0B0'}>
+                <Text mt={'4'} fontSize={{ base: '12px', sm: '14px', md: '18px' }} color={'#B0B0B0'}>
                   {hospital.no_telpon}
                 </Text>
-                <Text fontWeight={'700'} color={'#072051'} fontSize={{ base: '18px', sm: '20px', md: '24px' }}>
+                <Text mt={'4'} fontWeight={'700'} color={'#072051'} fontSize={{ base: '14px', sm: '16px', md: '20px' }}>
                   Jam Buka:
                 </Text>
-                <Text fontSize={{ base: '14px', sm: '16px', md: '20px' }} color={'#B0B0B0'}>
+                <Text mt={'4'} fontSize={{ base: '12px', sm: '14px', md: '18px' }} color={'#B0B0B0'}>
                   Buka 24 Jam
                 </Text>
               </Box>
             </Stack>
           </Stack>
         </LayoutAdmin>
-      }
+      )}
     </>
   );
 }

@@ -1,18 +1,11 @@
 import { Button, ButtonGroup } from '@chakra-ui/button';
-import { Box, Flex, Stack, Text } from '@chakra-ui/layout';
-import { data } from 'autoprefixer';
+import { Box, Flex, Text } from '@chakra-ui/layout';
 import React from 'react';
-import { CiFilter, CiSearch } from 'react-icons/ci';
+import { CiSearch } from 'react-icons/ci';
 import { IoAddOutline } from 'react-icons/io5';
-import { useDisclosure } from '@chakra-ui/hooks';
-import { Select } from '@chakra-ui/react';
 import { MdModeEdit, MdOutlineDeleteOutline } from 'react-icons/md';
-import PopupAdmin from './PopupAdmin';
-import { FormControl, FormLabel } from '@chakra-ui/form-control';
-import { Input } from '@chakra-ui/input';
 
 const HeadAdminPoli = ({ title, onAdd, nama_poli, select_poli, onDelete, onEdit }) => {
-  // const { isOpen: isOpenModalEdit, onOpen: onOpenModalEdit, onClose: onCloseModalEdit } = useDisclosure();
   return (
     <Flex
       bg="white"

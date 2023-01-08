@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import logo from "../assets/images/logo.png";
 import googleLogo from "../assets/images/googlelogo.png";
+import room from "../assets/images/room-login.png";
 import api from "../services/api";
 import { ViewOffIcon, ViewIcon } from "@chakra-ui/icons";
 import Cookies from "js-cookie";
-import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Button,
   Center,
@@ -27,7 +28,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useDispatch } from "react-redux";
 import { addUsers } from "../features/userSlice";
 import { AuthToken } from "../services/authToken";
-import axios from "axios";
 import { useGoogleLogin } from "@react-oauth/google";
 
 function Login() {
@@ -35,7 +35,7 @@ function Login() {
   const showPassword = () => setShow(!show);
   const navigate = useNavigate();
   const toast = useToast();
-  const [passwordType, setPasswordType] = useState('');
+  const [passwordType, setPasswordType] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isChecked, setIsChecked] = useState(false);
@@ -66,7 +66,6 @@ function Login() {
   //checkbox handler
   const handleCheckbox = (e) => {
     setIsChecked(e.target.checked);
-    console.log(e.target.checked);
   };
 
   //handle login
@@ -115,7 +114,7 @@ function Login() {
         const data = response.data.data;
         dispatch(addUsers(data));
       })
-      .catch(error => {
+      .catch((error) => {
         toast({
           title: `Gagal mendapatkan data user.`,
           status: "error",
@@ -123,22 +122,25 @@ function Login() {
           isClosable: true,
           duration: 1500,
         });
-      })
+      });
   };
-  
+
   //submit function
   const onSubmit = (data) => {
     handleLogin(email, password);
   };
-  
+
   useEffect(() => {
     if (localStorage.email) {
       setEmail(localStorage.email);
       setPassword(localStorage.password);
-      setIsChecked(localStorage.isChecked);
+      if (localStorage.isChecked == "true") {
+        setIsChecked(true);
+      }
+      // setIsChecked(localStorage.isChecked);
     }
 
-    if (auth) {
+    if (auth === true) {
       toast({
         position: "top",
         title: "Kamu sudah Login",
@@ -175,7 +177,7 @@ function Login() {
               xl: "700px",
             }}
             width="full"
-            backgroundImage="url(/src/assets/images/home-room.jpg)"
+            backgroundImage={`url(${room})`}
             backgroundSize={{
               base: "cover",
               sm: "cover",
@@ -246,7 +248,7 @@ function Login() {
             <Box className="flex flex-col">
               <Box className="text-start w-full">
                 <form>
-                  <label for="fname" className="text-slate-500">
+                  <label htmlFor="fname" className="text-slate-500">
                     Email:
                   </label>{" "}
                   <br />
@@ -262,7 +264,7 @@ function Login() {
                     <Text color="red">{errors.email?.message}</Text>
                   </FormControl>
                   <br />
-                  <label for="password" className="text-slate-500">
+                  <label htmlFor="password" className="text-slate-500">
                     Password:
                   </label>{" "}
                   <br />
@@ -305,7 +307,7 @@ function Login() {
                         id={"isChecked"}
                         onChange={(e) => handleCheckbox(e)}
                       />
-                      <label for="rememberme">Remember me</label>
+                      <label htmlFor="rememberme">Remember me</label>
                     </Box>
                     <Link color="red">Lupa Password</Link>
                   </Box>
@@ -315,7 +317,7 @@ function Login() {
                     mt="10"
                     backgroundColor="alta.primary"
                     _hover={{ bg: "#3AB8FF" }}
-                    type='submit'
+                    type="submit"
                     onClick={handleSubmit(onSubmit)}
                   >
                     Login
@@ -333,7 +335,7 @@ function Login() {
             <Box mt={10}>
               <Link
                 href="https://rawatinap.online/auth/google/login"
-                target={'_self'}
+                target={"_self"}
               >
                 <Button
                   colorScheme="white"
@@ -352,7 +354,6 @@ function Login() {
                       <Text fontSize="md">Login with Google</Text>
                     </Box>
                   </Flex>
-
                 </Button>
               </Link>
             </Box>

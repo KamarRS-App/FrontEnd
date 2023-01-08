@@ -11,15 +11,10 @@ import {
   MenuItem,
   Text,
 } from "@chakra-ui/react";
-import {
-  ChevronDownIcon,
-  HamburgerIcon,
-  CloseIcon,
-  ChevronRightIcon,
-} from "@chakra-ui/icons";
+import { HamburgerIcon, CloseIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router";
+import logo from "../assets/images/logo_rawat_inap.svg";
 import { Link } from "react-router-dom";
-import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
 import { destroyUsers } from "../features/userSlice";
 
@@ -31,18 +26,18 @@ const Navbar = ({ isAuth, nameUser, isActive }) => {
 
   const handeLogoutBosku = () => {
     dispatch(destroyUsers());
-    navigate("/login");
+    navigate("/");
   };
 
   return (
-    <Box position={'sticky'} top={'0'} zIndex={'10'}>
+    <Box position={"sticky"} top={"0"} zIndex={"10"}>
       <NavBarContainer>
         <Link to="/home">
           <Image
             height="75px"
             width="100px"
             objectFit="contain"
-            src="/src/assets/images/logo_rawat_inap.svg"
+            src={logo}
             alt="Logo Rawat Inap"
           />
         </Link>
@@ -52,14 +47,13 @@ const Navbar = ({ isAuth, nameUser, isActive }) => {
           Auth={isAuth}
           nameUser={nameUser}
           isActive={isActive}
-          onLoginHandler={() => navigate("/login")}
+          onLoginHandler={() => navigate("/")}
           gotoProfile={() => navigate("/edit")}
           logOut={handeLogoutBosku}
-          gotoPatientPage={() => navigate('/pasien')}
+          gotoPatientPage={() => navigate("/pasien")}
         />
       </NavBarContainer>
     </Box>
-
   );
 };
 
@@ -79,7 +73,7 @@ const MenuLinks = ({
   isActive,
   gotoProfile,
   logOut,
-  gotoPatientPage
+  gotoPatientPage,
 }) => {
   return (
     <Box

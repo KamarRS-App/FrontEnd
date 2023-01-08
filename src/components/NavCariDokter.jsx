@@ -3,6 +3,7 @@ import { Box, Stack } from '@chakra-ui/layout';
 import { Avatar } from '@chakra-ui/avatar';
 import { Image, Button, Flex, Link, Menu, MenuButton, MenuList, MenuItem, Text } from '@chakra-ui/react';
 import { ChevronDownIcon, HamburgerIcon, CloseIcon, ChevronRightIcon } from '@chakra-ui/icons';
+import logo from "../assets/images/logo_rawat_inap.svg";
 
 const NavCariDokter = ({ isAuth }) => {
   const [isOpen, SetIsOpen] = useState(false);
@@ -10,7 +11,7 @@ const NavCariDokter = ({ isAuth }) => {
   return (
     <div className="sticky top-0 z-10">
       <NavBarContainer>
-        <Image height="75px" width="100px" objectFit="contain" src="/src/assets/images/logo_rawat_inap.svg" alt="Logo Rawat Inap" />
+        <Image height="75px" width="100px" objectFit="contain" src={logo} alt="Logo Rawat Inap" />
         <MenuToggle toggle={toggle} isOpen={isOpen} />
         <MenuLinks isOpen={isOpen} Auth={isAuth} />
       </NavBarContainer>

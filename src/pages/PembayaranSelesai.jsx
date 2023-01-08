@@ -4,6 +4,7 @@ import { Text } from '@chakra-ui/react';
 import Footer from '../components/Footer';
 import Layout from '../components/Layout';
 import { Link } from 'react-router-dom';
+import finishImage from '../assets/images/finish-img.png'
 
 function PembayaranSelesai() {
   return (
@@ -18,7 +19,7 @@ function PembayaranSelesai() {
           </Box>
           <Center>
             <Box w={506}>
-              <Image src="/finish.png" w={[150, 250, 330]} />
+              <Image src={finishImage} w={[150, 250, 330]} />
             </Box>
           </Center>
 

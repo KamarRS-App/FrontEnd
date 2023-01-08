@@ -10,6 +10,9 @@ import TableListHospital from '../components/TableListHospital';
 import apiProvinsi from '../services/apiProvinsi';
 import { Link } from 'react-router-dom';
 import Loading from '../components/Loading';
+import image1 from '../assets/images/rs-mitra-keluarga.png';
+import image2 from '../assets/images/rs-haji.png';
+import image3 from '../assets/images/rs-sardjito.png';
 
 
 function CariRumahSakit() {
@@ -117,9 +120,9 @@ function CariRumahSakit() {
 
               <Box>
                 <Flex direction="row" gap="2" wrap="wrap" mt={['50px', '100px', '20px']}>
-                  <Image w={['90px', '150px', '200px']} objectFit="cover" src="/src/assets/images/rs-mitra-keluarga.png" alt="rs-mitra-keluarga" fallbackSrc="https://via.placeholder.com/150" />
-                  <Image w={['90px', '150px', '200px']} objectFit="cover" src="/src/assets/images/rs-haji.png" alt="rs-haji-surabaya" fallbackSrc="https://via.placeholder.com/150" />
-                  <Image w={['90px', '150px', '200px']} src="/src/assets/images/rs-sardjito.png" alt="rs-sardjito" fallbackSrc="https://via.placeholder.com/150" />
+                  <Image w={['90px', '150px', '200px']} objectFit="cover" src={image1} alt="rs-mitra-keluarga" fallbackSrc="https://via.placeholder.com/150" />
+                  <Image w={['90px', '150px', '200px']} objectFit="cover" src={image2} alt="rs-haji-surabaya" fallbackSrc="https://via.placeholder.com/150" />
+                  <Image w={['90px', '150px', '200px']} src={image3} alt="rs-sardjito" fallbackSrc="https://via.placeholder.com/150" />
                 </Flex>
               </Box>
             </Flex>

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import Layout from '../components/Layout';
-import { Box, Button, useToast,Center,} from '@chakra-ui/react';
+import { Box, Button, useToast, Center } from '@chakra-ui/react';
 import Cookies from 'js-cookie';
 import { useLocation, useNavigate } from 'react-router';
 
@@ -26,35 +26,24 @@ function ResumeRawatJalan() {
   const jamPeriksa = location.state?.jamPeriksa;
   const no_antrian = location.state?.no_antrian;
 
-  useEffect(() => {
-
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <Layout>
-      <Center
-        flexDirection={'column'}
-        my={'20'}
-      >
+      <Center flexDirection={'column'} my={'20'}>
         <Box>
           <ReactToPrint
-            trigger={() =>
+            trigger={() => (
               <Box textAlign={'end'} mx={'10'}>
-                <Button
-                  bg={'#3AB8FF'}
-                  color={'white'}
-                  _hover={{ bg:'alta.primary' }}
-                >
-                  Cetak Invoice
+                <Button bg={'#3AB8FF'} color={'white'} _hover={{ bg: 'alta.primary' }}>
+                  Cetak Kartu
                 </Button>
               </Box>
-            }
+            )}
             content={() => componentRef}
           />
 
-          <Box
-            width={{ base: 'auto', lg: '700px' }}
-          >
+          <Box width={{ base: 'auto', lg: '700px' }}>
             <PrintComponent
               ref={(el) => (componentRef = el)}
               nama={nama}
