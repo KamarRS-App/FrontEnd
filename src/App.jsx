@@ -53,6 +53,7 @@ function App() {
             <Routes>
               {/* user */}
               <Route path="/" element={<Login />} />
+              <Route path="/login" element={<Login />} />
               <Route path="/edit" element={<EditProfileUser />} />
               <Route path="/home" element={<HomePage />} />
               <Route path="/register" element={<Register />}></Route>

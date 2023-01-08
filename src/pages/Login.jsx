@@ -21,6 +21,7 @@ import {
   InputRightElement,
   FormControl,
   useToast,
+  FormLabel,
 } from "@chakra-ui/react";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
@@ -248,11 +249,8 @@ function Login() {
             <Box className="flex flex-col">
               <Box className="text-start w-full">
                 <form>
-                  <label htmlFor="fname" className="text-slate-500">
-                    Email:
-                  </label>{" "}
-                  <br />
                   <FormControl isInvalid={errors.email}>
+                  <FormLabel color={'#64748b'} fontWeight={'400'}>Email:</FormLabel>
                     <Input
                       // {...register("email")}
                       placeholder="email@gmail.com"
@@ -263,12 +261,8 @@ function Login() {
                     />
                     <Text color="red">{errors.email?.message}</Text>
                   </FormControl>
-                  <br />
-                  <label htmlFor="password" className="text-slate-500">
-                    Password:
-                  </label>{" "}
-                  <br />
                   <FormControl isInvalid={errors.kata_sandi}>
+                    <FormLabel color={'#64748b'} fontWeight={'400'}>Password:</FormLabel>
                     <InputGroup>
                       <Input
                         type={show ? "text" : "password"}

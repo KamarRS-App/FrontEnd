@@ -1,38 +1,23 @@
 import axios from "axios";
 
 const instance = axios.create({
-    baseURL: "http://dev.farizdotid.com/api/daerahindonesia/",
+    baseURL: "https://api.binderbyte.com/wilayah",
 });
 
 export default {
     getProvinsi: () =>
         instance({
             method: `GET`,
-            url: `/provinsi`
+            url: `/provinsi?api_key=${import.meta.env.VITE_API_KEY}`
         }),
-    getDetailProvinsi: (id) =>
+        getKotaKabupateByProvinsi: (id) =>
         instance({
             method: `GET`,
-            url: `/provinsi/${id}`
-        }),
-    getKotaKabupateByProvinsi: (id) =>
-        instance({
-            method: `GET`,
-            url: `/kota?id_provinsi=${id}`
-        }),
-    getDetailKotaKabupaten: (id) =>
-        instance({
-            method: `GET`,
-            url: `kota/${id}`
+            url: `/kabupaten?api_key=${import.meta.env.VITE_API_KEY}&id_provinsi=${id}`
         }),
     getKecamatanByKota: (id) =>
         instance({
             method: `GET`,
-            url: `/kecamatan?id_kota=${id}`
-        }),
-    getDetailKecamatan: (id) =>
-        instance({
-            method: `GET`,
-            url: `/kecamatan/${id}`
+            url: `/kecamatan?api_key=${import.meta.env.VITE_API_KEY}&id_kabupaten=${id}`
         })
 }
