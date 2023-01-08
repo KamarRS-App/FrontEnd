@@ -33,13 +33,15 @@ function CariRumahSakit() {
   const [totalPage, setTotalPage] = useState();
   const [nomor, setNomor] = useState(0);
   const auth = AuthToken();
+  const [render, setRender] = useState();
 
   const searchByNameRef = useRef();
 
+  //hospital api
   const getAllHospitalsHandler = async (pages) => {
+    setRender(true);
     await api.getHospitals(token, pages)
       .then(response => {
-        setLoading(true)
         const data = response.data.data;
         setHospitals(data);
         setTotalPage(response.data.total_page)
@@ -53,16 +55,22 @@ function CariRumahSakit() {
           isClosable: true
         });
       })
+    setRender(false);
     setLoading(false)
   }
 
   //filter
   const getHospitalByProvinsi = async (page, provinsi) => {
+    setRender(true);
     await api.getHospitalByProvinsi(token, page, provinsi)
       .then(response => {
         const data = response.data.data;
         setHospitals(data);
         setTotalPage(response.data.total_page);
+        setNameProvinsi(provinsi)
+        if (response.data.total_page === 1) {
+          onPagination(1);
+        }
       })
       .catch(error => {
         toast({
@@ -73,15 +81,20 @@ function CariRumahSakit() {
           isClosable: true
         });
       })
-    setLoading(false)
+    setRender(false);
   }
 
   const getHospitalByKabupaten = async (page, provinsi, kabupaten) => {
+    setRender(true);
     await api.getHospitalByKabupaten(token, page, provinsi, kabupaten)
       .then(response => {
         const data = response.data.data;
         setHospitals(data);
+        setNameKota(kabupaten);
         setTotalPage(response.data.total_page)
+        if (response.data.total_page === 1) {
+          onPagination(1);
+        }
       })
       .catch(error => {
         toast({
@@ -92,9 +105,11 @@ function CariRumahSakit() {
           isClosable: true
         });
       })
+    setRender(false);
   }
 
   const getHospitalByName = async (name, page) => {
+    setRender(true);
     await api.getHospitalByName(token, name, page)
       .then(response => {
         const data = response.data.data;
@@ -110,6 +125,7 @@ function CariRumahSakit() {
           isClosable: true
         });
       })
+    setRender(false);
   }
 
   //region api
@@ -133,7 +149,7 @@ function CariRumahSakit() {
   const onPagination = (page) => {
     setCurrentPage(page)
     const selisih = currentPage - page;
-    if (page === 1) {
+    if (page === 1 || totalPage === 1) {
       setNomor(0);
     } else if (page === totalPage) {
       setNomor((totalPage * 10) - 10)
@@ -148,18 +164,20 @@ function CariRumahSakit() {
   }
 
   //handler filter
+  //handler filter
   const selectNameProvinsi = (id) => {
     provinsi.filter((data) => {
       if (data.id === id) {
-        getHospitalByProvinsi(1, data.name);
-        setNameProvinsi(data.name);
+        getHospitalByProvinsi(currentPage, data.name);
       }
     })
   }
 
   const handlerChangeProvinsi = (id) => {
+    setNameProvinsi('');
     if (id == '') {
-      getAllHospitalsHandler(1);
+      onPagination(1);
+      getAllHospitalsHandler();
     } else {
       selectNameProvinsi(id);
       getKotaKabupatenByProvinsi(id);
@@ -171,14 +189,14 @@ function CariRumahSakit() {
     kota.filter((data) => {
       if (data.id == id) {
         getHospitalByKabupaten(1, nameProvinsi, data.name);
-        setNameKota(data.name);
       }
     })
   }
 
   const handlerChangeKabupaten = (id) => {
     setSelectKota(id);
-    if (id == '' || id === 'all') {
+    if (id == '') {
+      onPagination(1);
       getHospitalByProvinsi(1, nameProvinsi)
     } else {
       selectNameKota(id)
@@ -259,6 +277,7 @@ function CariRumahSakit() {
               onSearch={onSearchHandler}
               hospitals={hospitals}
               nomor={nomor}
+              render={render}
             />
             <Pagination
               defaultCurrent={'1'}
