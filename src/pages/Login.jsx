@@ -21,6 +21,8 @@ import {
   InputRightElement,
   FormControl,
   useToast,
+  FormLabel,
+  Checkbox,
 } from "@chakra-ui/react";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
@@ -248,10 +250,9 @@ function Login() {
             <Box className="flex flex-col">
               <Box className="text-start w-full">
                 <form>
-                  <label htmlFor="fname" className="text-slate-500">
-                    Email:
-                  </label>{" "}
-                  <br />
+                  <FormLabel htmlFor="fname" color={"gray"}>
+                    Email{" "}
+                  </FormLabel>
                   <FormControl isInvalid={errors.email}>
                     <Input
                       // {...register("email")}
@@ -263,11 +264,9 @@ function Login() {
                     />
                     <Text color="red">{errors.email?.message}</Text>
                   </FormControl>
-                  <br />
-                  <label htmlFor="password" className="text-slate-500">
+                  <FormLabel htmlFor="password" color={"gray"} mt={5}>
                     Password:
-                  </label>{" "}
-                  <br />
+                  </FormLabel>
                   <FormControl isInvalid={errors.kata_sandi}>
                     <InputGroup>
                       <Input
@@ -298,18 +297,23 @@ function Login() {
                     </InputGroup>
                     <Text color="red">{errors.kata_sandi?.message}</Text>
                   </FormControl>
-                  <Box className="flex flex-row mt-5 justify-between">
-                    <Box>
-                      <input
-                        type="checkbox"
-                        checked={isChecked}
-                        className="checkbox checkbox-xs mr-2 border-gray-500"
-                        id={"isChecked"}
-                        onChange={(e) => handleCheckbox(e)}
-                      />
-                      <label htmlFor="rememberme">Remember me</label>
-                    </Box>
-                    <Link color="red">Lupa Password</Link>
+                  <Box mt={5}>
+                    <Flex direction={"col"} justify={"justify-between"}>
+                      <Flex direction={"col"} w={"50%"}>
+                        <Checkbox
+                          isChecked={isChecked}
+                          mr={2}
+                          mt={1}
+                          id={"isChecked"}
+                          onChange={(e) => handleCheckbox(e)}
+                        >
+                          Remember me
+                        </Checkbox>
+                      </Flex>
+                      <Box textAlign={"end"} w={"50%"}>
+                        <Link color="red">Lupa Password</Link>
+                      </Box>
+                    </Flex>
                   </Box>
                   <Button
                     color="white"

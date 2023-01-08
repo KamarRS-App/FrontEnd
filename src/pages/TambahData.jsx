@@ -157,18 +157,7 @@ function TambahData() {
                 </Button>
               </Box>
               <Box pt={20} className="text-center">
-                {patients.length === 0 ? (
-                  <>
-                    <Text color="gray" fontSize="3xl">
-                      belum ada data terdaftar
-                    </Text>
-                    <Box pt={10}>
-                      <Grid className="justify-center">
-                        <Image src={Group3601} alt="Belum ada data" />
-                      </Grid>
-                    </Box>
-                  </>
-                ) : (
+                {patients ? (
                   <TableContainer>
                     <Table variant="simple">
                       <Thead>
@@ -245,6 +234,17 @@ function TambahData() {
                       </Tbody>
                     </Table>
                   </TableContainer>
+                ) : (
+                  <>
+                    <Text color="gray" fontSize="3xl">
+                      belum ada data terdaftar
+                    </Text>
+                    <Box pt={10}>
+                      <Grid className="justify-center">
+                        <Image src={Group3601} alt="Belum ada data" />
+                      </Grid>
+                    </Box>
+                  </>
                 )}
               </Box>
             </Box>
