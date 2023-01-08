@@ -7,8 +7,6 @@ import Cookies from "js-cookie";
 import {
   FormControl,
   FormLabel,
-  FormErrorMessage,
-  FormHelperText,
   useToast,
   Checkbox,
 } from "@chakra-ui/react";
@@ -26,9 +24,10 @@ import { BsFillTrashFill } from "react-icons/bs";
 import apiProvinsi from "../services/apiProvinsi";
 
 function DataDiriPasien() {
-  const [provinsi, setProvinsi] = React.useState();
-  const [kabupaten, setKabupaten] = React.useState(null);
-  const [kabupatenKtp, setKabupatenKtp] = React.useState([]);
+  const [provinsi, setProvinsi] = React.useState([]);
+  const [provinsiDomisili, setProvinsiDomisili] = React.useState([]);
+  const [kabupaten, setKabupaten] = React.useState([]);
+  const [kabupatenDomisili, setKabupatenDomilisi] = React.useState([]);
   const [noKK, setNoKk] = React.useState();
   const [anggotaBpjs, setAnggotaBpjs] = React.useState(false);
   const [previewImageKTP, setPreviewImageKtp] = React.useState();
@@ -36,6 +35,8 @@ function DataDiriPasien() {
   const [previewImageBpjs, setPreviewImageBpjs] = React.useState();
   const [imageBpjs, setImageBpjs] = React.useState();
   const toast = useToast();
+  const [nameProv, setNameProv] = React.useState();
+  const [nameProvDomisili, setNameProvDomisili] = React.useState();
 
   //yup schema
   const schema = yup.object().shape({
@@ -72,11 +73,22 @@ function DataDiriPasien() {
     mode: "onSubmit",
   });
 
-  //handle data provinsi
-  // const getProvinsi = async () => {
-  //   await apiProvinsi.getProvinsi()
-  //     .then()
-  // };
+  //region api
+  const getProvinsi = async () => {
+    await apiProvinsi.getProvinsi()
+      .then((response) => {
+        const data = response.data.value
+        setProvinsi(data);
+      });
+  };
+
+  const getKotaKabupatenByProvinsi = async (id) => {
+    await apiProvinsi.getKotaKabupateByProvinsi(id)
+      .then(response => {
+        const data = response.data.value;
+        setKabupaten(data);
+      })
+  }
 
   //handle send data to database
   const handleSendData = async (token, data) => {
@@ -142,6 +154,30 @@ function DataDiriPasien() {
     reader.readAsDataURL(file);
   };
 
+
+  //handler select
+  const selectNameProvinsi = (id) => {
+    provinsi.filter((data) => {
+      return data.id === id && setNameProv(data.name);
+    })
+  }
+
+  const handlerChangeProvinsi = (id) => {
+    selectNameProvinsi(id);
+    getKotaKabupatenByProvinsi(id);
+  }
+
+  const selectNameProvinsiDomisili = (id) => {
+    provinsi.filter((data) => {
+      return data.id === id && setNameProvDomisili(data.name);
+    })
+  }
+
+  const handlerChangeProvinsiDomisili = (id) => {
+    selectNameProvinsiDomisili(id);
+    getKotaKabupatenByProvinsi(id);
+  }
+
   //handle submit data
   const onSubmit = (data) => {
     const ngab = Cookies.get("token");
@@ -158,8 +194,8 @@ function DataDiriPasien() {
     formData.append("alamat_ktp", data.alamatKTP);
     formData.append("kabupaten_kota_ktp", data.kota_ktp);
     formData.append("alamat_domisili", data.domisili);
-    formData.append("provinsi_domisili", data.provinsi);
-    formData.append("provinsi_ktp", data.provinsi_ktp);
+    formData.append("provinsi_domisili", nameProvDomisili);
+    formData.append("provinsi_ktp", nameProv);
     formData.append("kabupaten_kota_domisili", data.kota);
     if (anggotaBpjs) {
       formData.append("no_bpjs", data.noBPJS);
@@ -290,11 +326,11 @@ function DataDiriPasien() {
                       {...register("provinsi_ktp")}
                       placeholder="-- Pilih provinsi --"
                       onChange={(e) => {
-                        setKabupatenKtp(e.target.value);
+                        handlerChangeProvinsi(e.target.value);
                       }}
                     >
-                      {provinsi?.map((prov) => {
-                        return <option value={prov.nama}>{prov.nama}</option>;
+                      {provinsi.map((prov) => {
+                        return <option value={prov.id}>{prov.name}</option>;
                       })}
                     </Select>
                     <Text color={"red"}>{errors.provinsi_ktp?.message}</Text>
@@ -308,49 +344,11 @@ function DataDiriPasien() {
                       placeholder="-- Pilih kabupaten/kota --"
                       name="kota_ktp"
                     >
-                      <option value="Kabupaten Pacitan">
-                        Kabupaten Pacitan
-                      </option>
-                      <option value="Kabupaten Ponorogo">
-                        Kabupaten Ponorogo
-                      </option>
-                      <option value="Kabupaten Trenggalek">
-                        Kabupaten Trenggalek
-                      </option>
-                      <option value="Kabupaten Tulungagung">
-                        Kabupaten Tulungagung
-                      </option>
-                      <option value="Kabupaten Blitar">Kabupaten Blitar</option>
-                      <option value="Kabupaten Kediri">Kabupaten Kediri</option>
-                      <option value="Kabupaten Malang">Kabupaten Malang</option>
-                      <option value="Kabupaten Lumajang">
-                        Kabupaten Lumajang
-                      </option>
-                      <option value="Kabupaten Jember">Kabupaten Jember</option>
-                      <option value="Kabupaten Banyuwangi">
-                        Kabupaten Banyuwangi
-                      </option>
-                      <option value="Kabupaten Bondowoso">
-                        Kabupaten Bondowoso
-                      </option>
-                      <option value="Kabupaten Situbondo">
-                        Kabupaten Situbondo
-                      </option>
-                      <option value="Kabupaten Probolinggo">
-                        Kabupaten Probolinggo
-                      </option>
-                      <option value="Kabupaten Pasuruan">
-                        Kabupaten Pasuruan
-                      </option>
-                      <option value="Kabupaten Sidoarjo">
-                        Kabupaten Sidoarjo
-                      </option>
-                      <option value="Kabupaten Mojokerto">
-                        Kabupaten Mojokerto
-                      </option>
-                      <option value="Kabupaten Jombang">
-                        Kabupaten Jombang
-                      </option>
+                      {
+                        kabupaten.map(data => (
+                          <option value={data.name}>{data.name}</option>
+                        ))
+                      }
                     </Select>
                     <Text color={"red"}>{errors.kota_ktp?.message}</Text>
                   </FormControl>
@@ -361,10 +359,10 @@ function DataDiriPasien() {
                     <Select
                       {...register("provinsi")}
                       placeholder="-- Pilih provinsi --"
-                      onChange={(e) => setKabupaten(e.target.value)}
+                      onChange={(e) => handlerChangeProvinsiDomisili(e.target.value)}
                     >
                       {provinsi?.map((prov) => {
-                        return <option value={prov.nama}>{prov.nama}</option>;
+                        return <option value={prov.id}>{prov.name}</option>;
                       })}
                     </Select>
                     <Text color={"red"}>{errors.provinsi?.message}</Text>
@@ -378,49 +376,11 @@ function DataDiriPasien() {
                       placeholder="-- Pilih kabupaten/kota --"
                       name={"kota"}
                     >
-                      <option value="Kabupaten Pacitan">
-                        Kabupaten Pacitan
-                      </option>
-                      <option value="Kabupaten Ponorogo">
-                        Kabupaten Ponorogo
-                      </option>
-                      <option value="Kabupaten Trenggalek">
-                        Kabupaten Trenggalek
-                      </option>
-                      <option value="Kabupaten Tulungagung">
-                        Kabupaten Tulungagung
-                      </option>
-                      <option value="Kabupaten Blitar">Kabupaten Blitar</option>
-                      <option value="Kabupaten Kediri">Kabupaten Kediri</option>
-                      <option value="Kabupaten Malang">Kabupaten Malang</option>
-                      <option value="Kabupaten Lumajang">
-                        Kabupaten Lumajang
-                      </option>
-                      <option value="Kabupaten Jember">Kabupaten Jember</option>
-                      <option value="Kabupaten Banyuwangi">
-                        Kabupaten Banyuwangi
-                      </option>
-                      <option value="Kabupaten Bondowoso">
-                        Kabupaten Bondowoso
-                      </option>
-                      <option value="Kabupaten Situbondo">
-                        Kabupaten Situbondo
-                      </option>
-                      <option value="Kabupaten Probolinggo">
-                        Kabupaten Probolinggo
-                      </option>
-                      <option value="Kabupaten Pasuruan">
-                        Kabupaten Pasuruan
-                      </option>
-                      <option value="Kabupaten Sidoarjo">
-                        Kabupaten Sidoarjo
-                      </option>
-                      <option value="Kabupaten Mojokerto">
-                        Kabupaten Mojokerto
-                      </option>
-                      <option value="Kabupaten Jombang">
-                        Kabupaten Jombang
-                      </option>
+                      {
+                        kabupaten.map(data => (
+                          <option value={data.name}>{data.name}</option>
+                        ))
+                      }
                     </Select>
                     <Text color={"red"}>{errors.kota?.message}</Text>
                   </FormControl>
