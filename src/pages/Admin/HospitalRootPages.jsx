@@ -230,55 +230,59 @@ const HospitalRootPages = () => {
     const getProvinsi = async () => {
         await apiProvinsi.getProvinsi()
             .then((response) => {
-                const data = response.data.provinsi
+                const data = response.data.value
                 setProvinsi(data);
+                console.log(response);
             });
     };
-
-    const getDetailProvinsi = async (id) => {
-        await apiProvinsi.getDetailProvinsi(id)
-            .then(response => {
-                const data = response.data;
-                setNameProvinsi(data.nama)
-            })
-    }
 
     const getKotaKabupatenByProvinsi = async (id) => {
         await apiProvinsi.getKotaKabupateByProvinsi(id)
             .then(response => {
-                const data = response.data.kota_kabupaten;
+                const data = response.data.value;
                 setKota(data);
+                console.log(response);
             })
-    }
-
-    const getDetailKota = async (id) => {
-        await apiProvinsi.getDetailKotaKabupaten(id)
+        }
+        
+        const getKecamatanByKota = async (id) => {
+            await apiProvinsi.getKecamatanByKota(id)
             .then(response => {
-                const data = response.data;
-                setNameKota(data.nama);
-            })
-    }
-
-    const getKecamatanByKota = async (id) => {
-        await apiProvinsi.getKecamatanByKota(id)
-            .then(response => {
-                const data = response.data.kecamatan;
+                const data = response.data.value;
+                console.log(response);
                 setKecamatan(data);
             })
     }
 
     //handler daerah
-    const handlerProvinsi = (id) => {
-        getDetailProvinsi(id);
-        getKotaKabupatenByProvinsi(id);
+    const selectNameProvinsi = (id) => {
+        provinsi.filter((data) => {
+            if (data.id === id) {
+                setNameProvinsi(data.name);
+            }
+        })
     }
 
+
+    const selectNameKota = (id) => {
+        kota.filter((data) => {
+            if (data.id == id) {
+                setNameKota(data.name);
+            }
+        })
+    }
+
+    const handlerProvinsi = (id) => {
+        getKotaKabupatenByProvinsi(id);
+        selectNameProvinsi(id);
+    }
+    
     const handlerKota = (id) => {
-        getDetailKota(id);
+        selectNameKota(id);
         getKecamatanByKota(id);
     }
 
-    //handler
+    //handler image
     const handleHospitalImage = (e) => {
         const file = e.target.files[0];
         setHospitalImage(file)
@@ -401,6 +405,7 @@ const HospitalRootPages = () => {
         getAllHospitalsHandler();
         getProvinsi();
     }, []);
+
     return (
         <>
             {loading && <Loading body={'Sedang Memuat Data...'} />}
@@ -646,7 +651,7 @@ const HospitalRootPages = () => {
                                         >
                                             {
                                                 provinsi.map(data => (
-                                                    <option value={data.id} key={data.id}>{data.nama}</option>
+                                                    <option value={data.id} key={data.id}>{data.name}</option>
                                                 ))
                                             }
                                         </Select>
@@ -663,7 +668,7 @@ const HospitalRootPages = () => {
                                         >
                                             {
                                                 kota.map(data => (
-                                                    <option value={data.id} key={data.id}>{data.nama}</option>
+                                                    <option value={data.id} key={data.id}>{data.name}</option>
                                                 ))
                                             }
                                         </Select>
@@ -679,7 +684,7 @@ const HospitalRootPages = () => {
                                         >
                                             {
                                                 kecamatan.map(data => (
-                                                    <option value={data.nama} key={data.id}>{data.nama}</option>
+                                                    <option value={data.nama} key={data.id}>{data.name}</option>
                                                 ))
                                             }
                                         </Select>

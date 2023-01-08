@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Center, Td, Th, Tr, useToast } from '@chakra-ui/react';
 import { Box, Heading, Text, Flex } from '@chakra-ui/react';
 import { Image } from '@chakra-ui/react';
@@ -13,6 +13,8 @@ import Loading from '../components/Loading';
 import image1 from '../assets/images/rs-mitra-keluarga.png';
 import image2 from '../assets/images/rs-haji.png';
 import image3 from '../assets/images/rs-sardjito.png';
+import Pagination from 'rc-pagination';
+import { AuthToken } from '../services/authToken';
 
 
 function CariRumahSakit() {
@@ -25,63 +27,176 @@ function CariRumahSakit() {
   const [nameProvinsi, setNameProvinsi] = useState('');
   const [kota, setKota] = useState([]);
   const [selectKota, setSelectKota] = useState('');
+  const [nameKota, setNameKota] = useState('');
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPage, setTotalPage] = useState();
+  const [nomor, setNomor] = useState(0);
+  const auth = AuthToken();
 
-  const getAllHospitalsHandler = async () => {
-    await api.getHospitals(token)
+  const searchByNameRef = useRef();
+
+  const getAllHospitalsHandler = async (pages) => {
+    await api.getHospitals(token, pages)
+      .then(response => {
+        setLoading(true)
+        const data = response.data.data;
+        setHospitals(data);
+        setTotalPage(response.data.total_page)
+      })
+      .catch(error => {
+        toast({
+          position: 'top',
+          title: 'Belum ada Rumah Sakit Terdaftar',
+          status: 'error',
+          duration: '2000',
+          isClosable: true
+        });
+      })
+    setLoading(false)
+  }
+
+  //filter
+  const getHospitalByProvinsi = async (page, provinsi) => {
+    await api.getHospitalByProvinsi(token, page, provinsi)
       .then(response => {
         const data = response.data.data;
         setHospitals(data);
+        setTotalPage(response.data.total_page);
       })
       .catch(error => {
-        console.log(error);
+        toast({
+          position: 'top',
+          title: 'Belum ada Rumah Sakit Terdaftar',
+          status: 'error',
+          duration: '2000',
+          isClosable: true
+        });
       })
-    setLoading(false);
+    setLoading(false)
   }
 
+  const getHospitalByKabupaten = async (page, provinsi, kabupaten) => {
+    await api.getHospitalByKabupaten(token, page, provinsi, kabupaten)
+      .then(response => {
+        const data = response.data.data;
+        setHospitals(data);
+        setTotalPage(response.data.total_page)
+      })
+      .catch(error => {
+        toast({
+          position: 'top',
+          title: 'Belum ada Rumah Sakit Terdaftar',
+          status: 'error',
+          duration: '2000',
+          isClosable: true
+        });
+      })
+  }
+
+  const getHospitalByName = async (name, page) => {
+    await api.getHospitalByName(token, name, page)
+      .then(response => {
+        const data = response.data.data;
+        setHospitals(data);
+        setTotalPage(response.data.total_page)
+      })
+      .catch(error => {
+        toast({
+          position: 'top',
+          title: 'Belum ada Rumah Sakit Terdaftar',
+          status: 'error',
+          duration: '2000',
+          isClosable: true
+        });
+      })
+  }
+
+  //region api
   const getProvinsi = async () => {
     await apiProvinsi.getProvinsi()
       .then((response) => {
-        const data = response.data.provinsi
+        const data = response.data.value
         setProvinsi(data);
       });
   };
 
-  const getDetailProvinsi = async (id) => {
-    await apiProvinsi.getDetailProvinsi(id)
-      .then(response => {
-        const data = response.data;
-        setNameProvinsi(data.nama)
-      })
-      .catch(error => {
-        setNameProvinsi('all')
-      })
-  }
-
   const getKotaKabupatenByProvinsi = async (id) => {
     await apiProvinsi.getKotaKabupateByProvinsi(id)
       .then(response => {
-        const data = response.data.kota_kabupaten;
+        const data = response.data.value;
         setKota(data);
       })
   }
 
-  const handlerChangeProvinsi = (e) => {
-    setSelectKota('');
-    getDetailProvinsi(e);
-    getKotaKabupatenByProvinsi(e);
+  //pagination
+  const onPagination = (page) => {
+    setCurrentPage(page)
+    const selisih = currentPage - page;
+    if (page === 1) {
+      setNomor(0);
+    } else if (page === totalPage) {
+      setNomor((totalPage * 10) - 10)
+    }
+    else {
+      if (selisih < 0) {
+        setNomor(Math.abs((selisih * 10) + nomor));
+      } else if (selisih > 0) {
+        setNomor(Math.abs((selisih * 10) - nomor));
+      }
+    }
   }
 
-  const resultHospital = hospitals.filter((data) => {
-    return data.provinsi == nameProvinsi;
-  })
+  //handler filter
+  const selectNameProvinsi = (id) => {
+    provinsi.filter((data) => {
+      if (data.id === id) {
+        getHospitalByProvinsi(1, data.name);
+        setNameProvinsi(data.name);
+      }
+    })
+  }
 
-  const resultRegionHospital = resultHospital.filter((data) => {
-    return data.kabupaten_kota == selectKota;
-  })
+  const handlerChangeProvinsi = (id) => {
+    if (id == '') {
+      getAllHospitalsHandler(1);
+    } else {
+      selectNameProvinsi(id);
+      getKotaKabupatenByProvinsi(id);
+    }
+    setSelectKota('');
+  }
+
+  const selectNameKota = (id) => {
+    kota.filter((data) => {
+      if (data.id == id) {
+        getHospitalByKabupaten(1, nameProvinsi, data.name);
+        setNameKota(data.name);
+      }
+    })
+  }
+
+  const handlerChangeKabupaten = (id) => {
+    setSelectKota(id);
+    if (id == '' || id === 'all') {
+      getHospitalByProvinsi(1, nameProvinsi)
+    } else {
+      selectNameKota(id)
+    }
+  }
+
+  //search
+  const handleSearch = () => {
+    const data = searchByNameRef.current.value;
+    getHospitalByName(data, 1);
+  }
+
+  const onSearchHandler = () => {
+    handleSearch();
+  }
 
   useEffect(() => {
-    if (!token) {
+    if (!auth) {
       toast({
         position: 'top',
         title: 'Kamu Harus Login Dulu',
@@ -91,9 +206,14 @@ function CariRumahSakit() {
       });
       navigate('/login');
     }
+    if (nameProvinsi === '') {
+      getAllHospitalsHandler(currentPage);
+    } else {
+      getHospitalByKabupaten(currentPage, nameProvinsi, nameKota);
+    }
     getProvinsi();
-    getAllHospitalsHandler();
-  }, []);
+  }, [currentPage]);
+
   return (
     <>
       {loading && <Loading body={'Tunggu Sebentar'} />}
@@ -134,47 +254,17 @@ function CariRumahSakit() {
               onChangeProvinsi={(e) => handlerChangeProvinsi(e.target.value)}
               kota={kota}
               valueKota={selectKota}
-              onChangeKota={(e) => setSelectKota(e.target.value)}
-              headTable={
-                <Tr>
-                  <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
-                    No
-                  </Th>
-                  <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
-                    Nama Rumah Sakit
-                  </Th>
-                  <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
-                    Pemilik / Pengelola
-                  </Th>
-                  <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
-                    No Telepon
-                  </Th>
-                  <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
-                    Alamat
-                  </Th>
-                </Tr>
-              }
-              bodyTable={
-                (nameProvinsi === 'all' || nameProvinsi === '' ? hospitals : selectKota === 'all' || selectKota === '' ? resultHospital : resultRegionHospital)
-                  .map((data, index) => (
-                    <Tr key={index}>
-                      <Td>{index + 1}</Td>
-                      <Td
-                        textDecoration={'underline'}
-                        _hover={{ color: '#1FA8F6' }}
-                      >
-                        <Link
-                          to={`/rumahsakit/${data.id}/detail`}
-                        >
-                          {data.nama}
-                        </Link>
-                      </Td>
-                      <Td>{data.pemilik_pengelola}</Td>
-                      <Td>{data.no_telpon}</Td>
-                      <Td>{data.alamat + " " + data.kecamatan + " " + data.kabupaten_kota + ", " + data.provinsi + "," + data.kode_pos}</Td>
-                    </Tr>
-                  ))
-              }
+              onChangeKota={(e) => handlerChangeKabupaten(e.target.value)}
+              inputRef={searchByNameRef}
+              onSearch={onSearchHandler}
+              hospitals={hospitals}
+              nomor={nomor}
+            />
+            <Pagination
+              defaultCurrent={'1'}
+              current={currentPage}
+              total={totalPage * 10}
+              onChange={onPagination}
             />
           </Box>
         </Layout>

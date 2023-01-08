@@ -23,6 +23,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 import api from "../services/api";
 import { BsFillTrashFill } from "react-icons/bs";
+import apiProvinsi from "../services/apiProvinsi";
 
 function DataDiriPasien() {
   const [provinsi, setProvinsi] = React.useState();
@@ -48,8 +49,6 @@ function DataDiriPasien() {
       .required("Harap masukkan email  wali")
       .email("Format email salah"),
     noKTP: yup.number().typeError("Harap masukkan nomor KTP"),
-    // noBPJS: yup.number().typeError("Harap masukkan nomor BPJS"),
-    // kelas_bpjs: yup.number().typeError("Harap masukkan kelas BPJS"),
     usia: yup.number().typeError("Harap masukkan usia"),
     noTelpWali: yup.number().typeError("Harap masukkan nomor telpon wali"),
     alamatKTP: yup.string().required("Harap masukkan alamat sesuai KTP"),
@@ -74,13 +73,10 @@ function DataDiriPasien() {
   });
 
   //handle data provinsi
-  const getProvinsi = async () => {
-    await axios
-      .get("https://dev.farizdotid.com/api/daerahindonesia/provinsi")
-      .then((response) => {
-        setProvinsi(response.data.provinsi);
-      });
-  };
+  // const getProvinsi = async () => {
+  //   await apiProvinsi.getProvinsi()
+  //     .then()
+  // };
 
   //handle send data to database
   const handleSendData = async (token, data) => {
