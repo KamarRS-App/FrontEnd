@@ -482,8 +482,12 @@ function DataDiriPasien() {
                 </Box>
                 <Box mt={5}>
                   <Checkbox
-                    onChange={() => setAnggotaBpjs(!anggotaBpjs)}
+                    onChange={() => {
+                      setAnggotaBpjs(!anggotaBpjs);
+                      console.log(anggotaBpjs);
+                    }}
                     mb={2}
+                    isChecked={anggotaBpjs}
                   >
                     Daftar Menggunakan BPJS
                   </Checkbox>
@@ -500,7 +504,7 @@ function DataDiriPasien() {
                         <Input
                           {...register("noBPJS")}
                           type="number"
-                          isDisabled={anggotaBpjs}
+                          isDisabled={!anggotaBpjs}
                         />
                         <Text color="red">{errors.noBPJS?.message}</Text>
                       </FormControl>
@@ -511,7 +515,7 @@ function DataDiriPasien() {
                         <Input
                           {...register("kelas_bpjs")}
                           type="number"
-                          isDisabled={anggotaBpjs}
+                          isDisabled={!anggotaBpjs}
                         />
                         <Text color="red">{errors.kelas_bpjs?.message}</Text>
                       </FormControl>
