@@ -348,8 +348,8 @@ function DataDiriPasien() {
                           }}
                         >
                           {provinsi.map((prov) => {
-                        return <option value={prov.id}>{prov.name}</option>;
-                      })}
+                            return <option value={prov.id}>{prov.name}</option>;
+                          })}
                         </Select>
                         <Text color={"red"}>
                           {errors.provinsi_ktp?.message}
@@ -365,11 +365,10 @@ function DataDiriPasien() {
                           name="kota_ktp"
                         >
                           {
-                        kabupaten.map(data => (
-                          <option value={data.name}>{data.name}</option>
-                        ))
-                      }
-                          </option>
+                            kabupaten.map(data => (
+                              <option value={data.name}>{data.name}</option>
+                            ))
+                          }
                         </Select>
                         <Text color={"red"}>{errors.kota_ktp?.message}</Text>
                       </FormControl>
@@ -383,8 +382,8 @@ function DataDiriPasien() {
                           onChange={(e) => handlerChangeProvinsiDomisili(e.target.value)}
                         >
                           {provinsi?.map((prov) => {
-                        return <option value={prov.id}>{prov.name}</option>;
-                      })}
+                            return <option value={prov.id}>{prov.name}</option>;
+                          })}
                         </Select>
                         <Text color={"red"}>{errors.provinsi?.message}</Text>
                       </FormControl>
@@ -397,11 +396,11 @@ function DataDiriPasien() {
                           placeholder="-- Pilih kabupaten/kota --"
                           name={"kota"}
                         >
-                           {
-                        kabupaten.map(data => (
-                          <option value={data.name}>{data.name}</option>
-                        ))
-                      }
+                          {
+                            kabupaten.map(data => (
+                              <option value={data.name}>{data.name}</option>
+                            ))
+                          }
                         </Select>
                         <Text color={"red"}>{errors.kota?.message}</Text>
                       </FormControl>
