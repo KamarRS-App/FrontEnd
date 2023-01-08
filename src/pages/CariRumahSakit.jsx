@@ -239,10 +239,10 @@ function CariRumahSakit() {
         !loading &&
         <Layout isActive={'hospital'}>
           <Box>
-            <Flex direction={['column-reverse', 'column-reverse', 'row']} alignItems="center" justify="center">
-              <Center>
+            <Flex direction={{ base:'column-reverse', md:'column-reverse', lg:'row' }} alignItems="center" justify="center" mx={'5'}>
+              <Center gap={'10'}>
                 <Box color="#1FA8F6" w={['300px', '350px', '500px']} h={['200px', '400px', '400px']} mt={50}>
-                  <Heading fontWeight={600} fontSize={['30px', '42px']} mr={10}>
+                  <Heading fontWeight={600} fontSize={['30px', '42px']}>
                     Find Room,
                   </Heading>
                   <Heading fontWeight={600} fontSize={['30px', '42px']}>
@@ -279,12 +279,18 @@ function CariRumahSakit() {
               nomor={nomor}
               render={render}
             />
-            <Pagination
-              defaultCurrent={'1'}
-              current={currentPage}
-              total={totalPage * 10}
-              onChange={onPagination}
-            />
+            <Flex
+              justify={'end'}
+              mx={'20'}
+              mt={'8'}
+            >
+              <Pagination
+                defaultCurrent={'1'}
+                current={currentPage}
+                total={totalPage * 10}
+                onChange={onPagination}
+              />
+            </Flex>
           </Box>
         </Layout>
       }

@@ -102,7 +102,7 @@ function Register() {
   //submit data
   const onSubmit = (data) => {
     console.log(data);
-    handleRegister(data);
+    // handleRegister(data);
   };
 
   return (
@@ -284,6 +284,7 @@ function Register() {
                     backgroundColor="alta.primary"
                     _hover={{ bg: "#3AB8FF" }}
                     onClick={handleSubmit(onSubmit)}
+                    type={'submit'}
                   >
                     Sign Up
                   </Button>

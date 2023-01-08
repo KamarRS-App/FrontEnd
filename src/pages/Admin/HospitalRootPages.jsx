@@ -9,7 +9,7 @@ import { useDisclosure } from '@chakra-ui/hooks';
 import PopupAdmin from '../../components/PopupAdmin';
 import { FormControl, FormErrorMessage, FormLabel } from '@chakra-ui/form-control';
 import { Input } from '@chakra-ui/input';
-import { Grid } from '@chakra-ui/layout';
+import { Flex, Grid } from '@chakra-ui/layout';
 import { Select } from '@chakra-ui/select';
 import Cookies from 'js-cookie';
 import { Image, useToast } from '@chakra-ui/react';
@@ -23,6 +23,7 @@ import PopupDelete from '../../components/PopupDelete';
 import apiProvinsi from '../../services/apiProvinsi';
 import { AuthToken } from '../../services/authToken';
 import Loading from '../../components/Loading';
+import Pagination from 'rc-pagination';
 
 const HospitalRootPages = () => {
     const { isOpen: isModalCreateOpen, onOpen: onModalCreateOpen, onClose: onCloseModalCreate } = useDisclosure();
@@ -43,6 +44,9 @@ const HospitalRootPages = () => {
     const [kecamatan, setKecamatan] = useState([]);
     const [loading, setLoading] = useState(true);
     const [imagePrev, setImagePrev] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPage, setTotalPage] = useState();
+    const [nomor, setNomor] = useState(0);
 
     const auth = AuthToken();
 
@@ -134,11 +138,12 @@ const HospitalRootPages = () => {
             })
     }
 
-    const getAllHospitalsHandler = async () => {
-        await api.getHospitals(token)
+    const getAllHospitalsHandler = async (pages) => {
+        await api.getHospitals(token, pages)
             .then(response => {
                 const data = response.data.data;
                 setHospitals(data)
+                setTotalPage(response.data.total_page)
             })
         setLoading(false);
     }
@@ -232,7 +237,6 @@ const HospitalRootPages = () => {
             .then((response) => {
                 const data = response.data.value
                 setProvinsi(data);
-                console.log(response);
             });
     };
 
@@ -241,15 +245,13 @@ const HospitalRootPages = () => {
             .then(response => {
                 const data = response.data.value;
                 setKota(data);
-                console.log(response);
             })
-        }
-        
-        const getKecamatanByKota = async (id) => {
-            await apiProvinsi.getKecamatanByKota(id)
+    }
+
+    const getKecamatanByKota = async (id) => {
+        await apiProvinsi.getKecamatanByKota(id)
             .then(response => {
                 const data = response.data.value;
-                console.log(response);
                 setKecamatan(data);
             })
     }
@@ -263,7 +265,6 @@ const HospitalRootPages = () => {
         })
     }
 
-
     const selectNameKota = (id) => {
         kota.filter((data) => {
             if (data.id == id) {
@@ -276,7 +277,7 @@ const HospitalRootPages = () => {
         getKotaKabupatenByProvinsi(id);
         selectNameProvinsi(id);
     }
-    
+
     const handlerKota = (id) => {
         selectNameKota(id);
         getKecamatanByKota(id);
@@ -391,6 +392,24 @@ const HospitalRootPages = () => {
         onCloseModalDelete();
     }
 
+    //filter
+    const onPagination = (page) => {
+        setCurrentPage(page)
+        const selisih = currentPage - page;
+        if (page === 1 || totalPage === 1) {
+            setNomor(0);
+        } else if (page === totalPage) {
+            setNomor((totalPage * 10) - 10)
+        }
+        else {
+            if (selisih < 0) {
+                setNomor(Math.abs((selisih * 10) + nomor));
+            } else if (selisih > 0) {
+                setNomor(Math.abs((selisih * 10) - nomor));
+            }
+        }
+    }
+
     useEffect(() => {
         if (role !== 'super admin' || !auth) {
             toast({
@@ -402,9 +421,9 @@ const HospitalRootPages = () => {
             })
             navigate('/root/login');
         }
-        getAllHospitalsHandler();
+        getAllHospitalsHandler(currentPage);
         getProvinsi();
-    }, []);
+    }, [currentPage]);
 
     return (
         <>
@@ -516,7 +535,7 @@ const HospitalRootPages = () => {
                                         <Td
                                             textAlign={'center'}
                                         >
-                                            {index + 1}
+                                            {nomor + index + 1}
                                         </Td>
                                         <Td
                                             textAlign={'center'}
@@ -611,6 +630,18 @@ const HospitalRootPages = () => {
                                 </Tr>
                         }
                     />
+                    <Flex
+                        justify={'end'}
+                        mx={'20'}
+                        mt={'8'}
+                    >
+                        <Pagination
+                            defaultCurrent={'1'}
+                            current={currentPage}
+                            total={totalPage * 10}
+                            onChange={onPagination}
+                        />
+                    </Flex>
                     <PopupAdmin
                         modalTitle={'Tambah Rumah Sakit'}
                         isOpen={isModalCreateOpen}
