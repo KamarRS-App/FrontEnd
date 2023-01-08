@@ -254,6 +254,7 @@ function Login() {
                     Email{" "}
                   </FormLabel>
                   <FormControl isInvalid={errors.email}>
+                  <FormLabel color={'#64748b'} fontWeight={'400'}>Email:</FormLabel>
                     <Input
                       // {...register("email")}
                       placeholder="email@gmail.com"
@@ -268,6 +269,7 @@ function Login() {
                     Password:
                   </FormLabel>
                   <FormControl isInvalid={errors.kata_sandi}>
+                    <FormLabel color={'#64748b'} fontWeight={'400'}>Password:</FormLabel>
                     <InputGroup>
                       <Input
                         type={show ? "text" : "password"}

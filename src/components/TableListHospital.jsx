@@ -1,8 +1,10 @@
 import React from 'react';
-import { Box, Flex, Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableContainer, Text, Select, Input, Button, InputLeftAddon, InputGroup } from '@chakra-ui/react';
+import { Box, Flex, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Text, Select, Input, Button, Center } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
+import { Link } from 'react-router-dom';
+import LoadingTable from './LoadingTable';
 
-const TableListHospital = ({ headTable, bodyTable, onChangeKota, onChangeProvinsi, provinsi, kota, valueProvinsi, valueKota }) => {
+const TableListHospital = ({ nomor, hospitals, onChangeKota, onChangeProvinsi, provinsi, kota, valueProvinsi, valueKota, inputRef, onSearch, render }) => {
   return (
     <Box px="20">
       <Text fontWeight="600" fontSize={['30px', '38px']} mb={['10']} color="#1FA8F6" textAlign={{ base: 'center', md: 'left' }}>
@@ -17,10 +19,9 @@ const TableListHospital = ({ headTable, bodyTable, onChangeKota, onChangeProvins
             onChange={onChangeProvinsi}
             value={valueProvinsi}
           >
-            <option value="all">Tampilkan semua</option>
             {
               provinsi?.map(data => (
-                <option value={data.id} key={data.id}>{data.nama}</option>
+                <option value={data.id} key={data.id}>{data.name}</option>
               ))
             }
           </Select>
@@ -33,41 +34,77 @@ const TableListHospital = ({ headTable, bodyTable, onChangeKota, onChangeProvins
             onChange={onChangeKota}
             value={valueKota}
           >
-            <option value="all">Tampilkan semua</option>
             {
               kota?.map(data => (
-                <option value={data.nama} key={data.id}>{data.nama}</option>
+                <option value={data.id} key={data.id}>{data.name}</option>
               ))
             }
           </Select>
         </Box>
-        <Button bg="#3AB8FF" color="white" _hover={{ bg: '#1FA8F6' }} width={{ base: 'full', md: 'auto' }}>
+      </Flex>
+      <Flex justify="flex-end" mt={'5'} gap={'2'}>
+        <Input placeholder="Cari Rumah Sakit" maxWidth={'350px'} ref={inputRef} />
+        <Button bg="#3AB8FF" color="white" _hover={{ bg: '#1FA8F6' }} width={{ base: 'full', md: 'auto' }} onClick={onSearch}>
           <SearchIcon />
         </Button>
-      </Flex>
-      <Flex justify="flex-end" mt={'5'}>
-        <InputGroup width={{ base: 'full', sm: 'full', md: '400px' }} shadow="md" borderRadius="md">
-          <InputLeftAddon children={<SearchIcon />} />
-          <Input placeholder="Cari Rumah Sakit" />
-        </InputGroup>
-      </Flex>
-      <Flex gap="2" mt={'20'}>
-        <Text fontWeight="bold">Surabaya</Text>
-        <Text>ditemukan</Text>
-        <Text fontWeight="bold">43</Text>
-        <Text>Rumah Sakit</Text>
       </Flex>
       <TableContainer mt={{ base: '10', sm: '16', md: '20' }}>
         <Table variant="simple">
           <Thead>
-            <>
-              {headTable}
-            </>
+            <Tr>
+              <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
+                No
+              </Th>
+              <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
+                Nama Rumah Sakit
+              </Th>
+              <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
+                Pemilik / Pengelola
+              </Th>
+              <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
+                No Telepon
+              </Th>
+              <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
+                Alamat
+              </Th>
+            </Tr>
           </Thead>
           <Tbody>
-            <>
-              {bodyTable}
-            </>
+            {render &&
+              <Tr>
+                <Td
+                  colSpan={'5'}
+                  py={'16'}
+                >
+                  <Center
+                    textAlign={'center'}
+                  >
+                    <LoadingTable />
+                  </Center>
+                </Td>
+              </Tr>
+            }
+            {!render &&
+              hospitals.map((data, index) => (
+                <Tr key={index}>
+                  <Td>{nomor + index + 1}</Td>
+                  <Td
+                    textDecoration={'underline'}
+                    _hover={{ color: '#1FA8F6' }}
+                  >
+                    <Link
+                      to={`/rumahsakit/${data.id}/detail`}
+                    >
+                      {data.nama}
+                    </Link>
+                  </Td>
+                  <Td>{data.pemilik_pengelola}</Td>
+                  <Td>{data.no_telpon}</Td>
+                  <Td>{data.alamat + " " + data.kecamatan + " " + data.kabupaten_kota + ", " + data.provinsi + "," + data.kode_pos}</Td>
+                </Tr>
+              ))
+
+            }
           </Tbody>
         </Table>
       </TableContainer>

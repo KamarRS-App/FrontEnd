@@ -174,7 +174,7 @@ export default {
     }),
 
   getAllHospitals: (token) =>
-    instance({
+      instance({
       method: `GET`,
       url: `/hospitals`,
       headers: {
@@ -189,6 +189,34 @@ export default {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+    }),
+
+  //Filter
+  getHospitalByProvinsi: (token, page, provinsi) =>
+    instance({
+      method: `GET`,
+      url: `/hospitals?page=${page}&provinsi=${provinsi}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    }),
+  getHospitalByKabupaten: (token, page, provinsi, kabupaten) =>
+    instance({
+      method: `GET`,
+      url: `/hospitals?page=${page}&provinsi=${provinsi}&kabupaten_kota=${kabupaten}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    }),
+
+  //Search
+  getHospitalByName: (token, name, page) =>
+    instance({
+      method: `GET`,
+      url: `/hospitals?page=${page}&nama=${name}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
     }),
 
   //patient
