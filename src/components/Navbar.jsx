@@ -1,10 +1,19 @@
 import React, { useState } from "react";
 import { Box, Stack } from "@chakra-ui/layout";
 import { Avatar } from "@chakra-ui/avatar";
-import { Image, Button, Flex, Menu, MenuButton, MenuList, MenuItem, Text } from "@chakra-ui/react";
+import {
+  Image,
+  Button,
+  Flex,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Text,
+} from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router";
-import logo from "../assets/images/logo_rawat_inap.svg"
+import logo from "../assets/images/logo_rawat_inap.svg";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { destroyUsers } from "../features/userSlice";
@@ -17,11 +26,11 @@ const Navbar = ({ isAuth, nameUser, isActive }) => {
 
   const handeLogoutBosku = () => {
     dispatch(destroyUsers());
-    navigate("/login");
+    navigate("/");
   };
 
   return (
-    <Box position={'sticky'} top={'0'} zIndex={'10'}>
+    <Box position={"sticky"} top={"0"} zIndex={"10"}>
       <NavBarContainer>
         <Link to="/home">
           <Image
@@ -38,14 +47,13 @@ const Navbar = ({ isAuth, nameUser, isActive }) => {
           Auth={isAuth}
           nameUser={nameUser}
           isActive={isActive}
-          onLoginHandler={() => navigate("/login")}
+          onLoginHandler={() => navigate("/")}
           gotoProfile={() => navigate("/edit")}
           logOut={handeLogoutBosku}
-          gotoPatientPage={() => navigate('/pasien')}
+          gotoPatientPage={() => navigate("/pasien")}
         />
       </NavBarContainer>
     </Box>
-
   );
 };
 
@@ -65,7 +73,7 @@ const MenuLinks = ({
   isActive,
   gotoProfile,
   logOut,
-  gotoPatientPage
+  gotoPatientPage,
 }) => {
   return (
     <Box
