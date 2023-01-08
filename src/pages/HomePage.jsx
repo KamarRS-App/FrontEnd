@@ -140,6 +140,8 @@ const HomePage = () => {
                 setKota(data);
             })
     }
+  };
+
 
     //pagination
     const onPagination = (page) => {
@@ -307,32 +309,32 @@ const HomePage = () => {
                         </Button>
                     </Box>
                 </Layout>
-            }
-        </>
-    );
-}
+        
+    </>
+  );
+};
 
 const flowRegister = [
-    {
-        no: 1,
-        desc: 'Registrasi pasien rawat inap melalui website',
-    },
-    {
-        no: 2,
-        desc: 'Memilih kamar rawat inap berdasarkan rumah sakit dan jenis kamar',
-    },
-    {
-        no: 3,
-        desc: 'Melakukan pembayaran pendaftaran pasien rawat inap',
-    },
-    {
-        no: 4,
-        desc: 'Mendapatkan email konfirmasi pasien rawat inap',
-    },
-    {
-        no: 5,
-        desc: 'Membawa pasien  terdaftar rawat inap ke rumah sakit yang dituju',
-    },
-]
+  {
+    no: 1,
+    desc: 'Registrasi pasien rawat inap melalui website',
+  },
+  {
+    no: 2,
+    desc: 'Memilih kamar rawat inap berdasarkan rumah sakit dan jenis kamar',
+  },
+  {
+    no: 3,
+    desc: 'Melakukan pembayaran pendaftaran pasien rawat inap',
+  },
+  {
+    no: 4,
+    desc: 'Mendapatkan email konfirmasi pasien rawat inap',
+  },
+  {
+    no: 5,
+    desc: 'Membawa pasien  terdaftar rawat inap ke rumah sakit yang dituju',
+  },
+];
 
 export default HomePage;

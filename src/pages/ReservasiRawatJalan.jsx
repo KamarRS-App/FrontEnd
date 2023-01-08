@@ -1,25 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Layout from '../components/Layout';
-import {
-  FormControl,
-  FormLabel,
-  Box,
-  Text,
-  Flex,
-  Input,
-  Spacer,
-  Checkbox,
-  Button,
-  useToast,
-  Select,
-  Modal,
-  ModalOverlay,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  ModalContent,
-  ModalHeader,
-} from '@chakra-ui/react';
+import { FormControl, FormLabel, Box, Text, Flex, Input, Spacer, Checkbox, Button, useToast, Select, Modal, ModalOverlay, ModalCloseButton, ModalBody, ModalFooter, ModalContent, ModalHeader } from '@chakra-ui/react';
 import Cookies from 'js-cookie';
 import { useLocation, useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
@@ -38,7 +19,7 @@ function ReservasiRawatJalan() {
   const [nameHospital, setNameHospital] = useState();
   const [policlinicName, setPoliclinicName] = useState();
   const [doctorName, setDoctorName] = useState();
-  
+
   const location = useLocation();
   const hospital_id = location.state?.hospital_id;
   const checkupTime = location.state?.time;
@@ -58,10 +39,9 @@ function ReservasiRawatJalan() {
 
   const no_invoice = date.getSeconds();
   const today = `${day} ${months[month]} ${yy}`;
-  
+
   const getPatientsByUserId = async () => {
-    await api.getPatientByUserId(token, user.id)
-    .then((response) => {
+    await api.getPatientByUserId(token, user.id).then((response) => {
       const data = response.data.data;
       setPatients(data);
     });
@@ -69,10 +49,9 @@ function ReservasiRawatJalan() {
 
   //handle send data to database
   const handleSendData = async (patient_id, practice_id, nama_dokter, no_antrian) => {
-    await api.createCheckUpReservation(token, { patient_id, practice_id, nama_dokter, no_antrian })
-      .then((response) => {
-        console.log(response)
-      })
+    await api
+      .createCheckUpReservation(token, { patient_id, practice_id, nama_dokter, no_antrian })
+      .then((response) => {})
       .catch((err) => console.log(err));
   };
 
@@ -95,9 +74,7 @@ function ReservasiRawatJalan() {
         const data = response.data.data;
         setPoliclinicName(data.nama_poli);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
   };
 
   const getDoctorSelected = async () => {
@@ -150,12 +127,10 @@ function ReservasiRawatJalan() {
         dokter: doctorName,
         tanggalPeriksa: practice_date,
         jamPeriksa: checkupTime,
-        no_antrian: no_antrian
+        no_antrian: no_antrian,
       },
     });
   };
-
-
 
   useEffect(() => {
     if (!token) {
@@ -195,7 +170,7 @@ function ReservasiRawatJalan() {
                     <Flex direction={{ base: 'column', xl: 'row' }}>
                       <Box flexBasis={'100%'}>
                         <FormLabel>Nama Pemesan</FormLabel>
-                        <Input type="text" disabled placeholder={user.nama} _disabled={{ color: 'black' }} _placeholder={{ color:'black' }} />
+                        <Input type="text" disabled placeholder={user.nama} _disabled={{ color: 'black' }} _placeholder={{ color: 'black' }} />
                       </Box>
                     </Flex>
                   </Box>
@@ -203,12 +178,12 @@ function ReservasiRawatJalan() {
                     <Flex direction={{ base: 'column', xl: 'row' }}>
                       <Box flexBasis={'45%'}>
                         <FormLabel>Email</FormLabel>
-                        <Input type="email" disabled placeholder={user.email} _disabled={{ color: 'black' }} _placeholder={{ color:'black' }} />
+                        <Input type="email" disabled placeholder={user.email} _disabled={{ color: 'black' }} _placeholder={{ color: 'black' }} />
                       </Box>
                       <Spacer />
                       <Box flexBasis={'45%'} pt={{ base: '5', xl: '0' }}>
                         <FormLabel>No. Handphone</FormLabel>
-                        <Input type="string" _disabled={{ color: 'black' }} _placeholder={{ color:'black' }} disabled placeholder={user.no_telpon ? user.no_telpon : 'tidak ada'} />
+                        <Input type="string" _disabled={{ color: 'black' }} _placeholder={{ color: 'black' }} disabled placeholder={user.no_telpon ? user.no_telpon : 'tidak ada'} />
                       </Box>
                     </Flex>
                   </Box>
@@ -228,18 +203,18 @@ function ReservasiRawatJalan() {
                 <FormControl>
                   <Box>
                     <FormLabel>Nama Depan</FormLabel>
-                    <Input type="text" disabled _disabled={{ color: 'black' }} _placeholder={{ color:'black' }} placeholder={patientSelected?.nama_pasien} />
+                    <Input type="text" disabled _disabled={{ color: 'black' }} _placeholder={{ color: 'black' }} placeholder={patientSelected?.nama_pasien} />
                   </Box>
                   <Box mt={5}>
                     <Flex direction={{ base: 'column', lg: 'row', xl: 'row' }}>
                       <Box flexBasis={'45%'}>
                         <FormLabel>No. KTP</FormLabel>
-                        <Input type="number" disabled _disabled={{ color: 'black' }} _placeholder={{ color:'black' }} placeholder={patientSelected?.nik} />
+                        <Input type="number" disabled _disabled={{ color: 'black' }} _placeholder={{ color: 'black' }} placeholder={patientSelected?.nik} />
                       </Box>
                       <Spacer />
                       <Box flexBasis={'45%'} pt={{ base: '5', xl: '0' }}>
                         <FormLabel>No. BPJS</FormLabel>
-                        <Input type="number" disabled _disabled={{ color: 'black' }} _placeholder={{ color:'black' }} placeholder={patientSelected?.no_bpjs !== '' ? patientSelected?.no_bpjs : 'Tidak Ada'} />
+                        <Input type="number" disabled _disabled={{ color: 'black' }} _placeholder={{ color: 'black' }} placeholder={patientSelected?.no_bpjs !== '' ? patientSelected?.no_bpjs : 'Tidak Ada'} />
                       </Box>
                     </Flex>
                   </Box>
@@ -247,12 +222,12 @@ function ReservasiRawatJalan() {
                     <Flex direction={{ base: 'column', lg: 'row', xl: 'row' }}>
                       <Box flexBasis={'45%'}>
                         <FormLabel>Jenis Kelamin</FormLabel>
-                        <Input type="text" disabled _disabled={{ color: 'black' }} _placeholder={{ color:'black' }} placeholder={patientSelected?.jenis_kelamin !== '' ? patientSelected?.jenis_kelamin : 'Tidak Ada'} />
+                        <Input type="text" disabled _disabled={{ color: 'black' }} _placeholder={{ color: 'black' }} placeholder={patientSelected?.jenis_kelamin !== '' ? patientSelected?.jenis_kelamin : 'Tidak Ada'} />
                       </Box>
                       <Spacer />
                       <Box flexBasis={'45%'} pt={{ base: '5', xl: '0' }}>
                         <FormLabel>Usia</FormLabel>
-                        <Input type="number" disabled _disabled={{ color: 'black' }} _placeholder={{ color:'black' }} placeholder={patientSelected?.usia} />
+                        <Input type="number" disabled _disabled={{ color: 'black' }} _placeholder={{ color: 'black' }} placeholder={patientSelected?.usia} />
                       </Box>
                     </Flex>
                   </Box>
@@ -260,29 +235,29 @@ function ReservasiRawatJalan() {
                     <Flex direction={{ base: 'column', lg: 'row', xl: 'row' }}>
                       <Box flexBasis={'45%'}>
                         <FormLabel>Email</FormLabel>
-                        <Input type="email" disabled _disabled={{ color: 'black' }} _placeholder={{ color:'black' }} placeholder={patientSelected?.email_wali !== '' ? patientSelected?.email_wali : 'Tidak Ada'} />
+                        <Input type="email" disabled _disabled={{ color: 'black' }} _placeholder={{ color: 'black' }} placeholder={patientSelected?.email_wali !== '' ? patientSelected?.email_wali : 'Tidak Ada'} />
                       </Box>
                       <Spacer />
                       <Box flexBasis={'45%'} pt={{ base: '5', xl: '0' }}>
                         <FormLabel>No. Handphone Wali</FormLabel>
-                        <Input type="number" disabled _disabled={{ color: 'black' }} _placeholder={{ color:'black' }} placeholder={patientSelected?.no_telpon_wali} />
+                        <Input type="number" disabled _disabled={{ color: 'black' }} _placeholder={{ color: 'black' }} placeholder={patientSelected?.no_telpon_wali} />
                       </Box>
                     </Flex>
                   </Box>
                   <Box mt={5}>
                     <FormLabel>Alamat Domisili</FormLabel>
-                    <Input type="text" disabled _disabled={{ color: 'black' }} _placeholder={{ color:'black' }} placeholder={patientSelected?.alamat_domisili} />
+                    <Input type="text" disabled _disabled={{ color: 'black' }} _placeholder={{ color: 'black' }} placeholder={patientSelected?.alamat_domisili} />
                   </Box>
                   <Box mt={5}>
                     <Flex direction={{ base: 'column', lg: 'row', xl: 'row' }}>
                       <Box flexBasis={'45%'}>
                         <FormLabel>Provinsi</FormLabel>
-                        <Input type="text" disabled _disabled={{ color: 'black' }} _placeholder={{ color:'black' }} placeholder={patientSelected?.provinsi_domisili} />
+                        <Input type="text" disabled _disabled={{ color: 'black' }} _placeholder={{ color: 'black' }} placeholder={patientSelected?.provinsi_domisili} />
                       </Box>
                       <Spacer />
                       <Box flexBasis={'45%'} pt={{ base: '5', xl: '0' }}>
                         <FormLabel>Kabupaten / Kota</FormLabel>
-                        <Input type="string" disabled _disabled={{ color: 'black' }} _placeholder={{ color:'black' }} placeholder={patientSelected?.kabupaten_kota_domisili} />
+                        <Input type="string" disabled _disabled={{ color: 'black' }} _placeholder={{ color: 'black' }} placeholder={patientSelected?.kabupaten_kota_domisili} />
                       </Box>
                     </Flex>
                   </Box>

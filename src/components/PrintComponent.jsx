@@ -1,42 +1,24 @@
-import { Button } from "@chakra-ui/button";
-import { Box, Flex, Text } from "@chakra-ui/layout";
-import { Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/table";
-import React, { useRef } from "react";
-
+import { Button } from '@chakra-ui/button';
+import { Box, Flex, Text } from '@chakra-ui/layout';
+import { Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/table';
+import React, { useRef } from 'react';
+import logo from '../assets/images/logo.svg';
+import { Image } from '@chakra-ui/react';
 // component to be printed
 export class PrintComponent extends React.Component {
   render() {
     const { nama, jenis_kelamin, no_telpon, email, hospital, policlinic, doctor, practice_date, practice_time, no_antrian } = this.props;
     return (
-      <Box
-        mt={'5'}
-        py={'10'}
-        mx={'10'}
-        maxWidth={'700px'}
-        bg="white"
-        color={'black'}
-        borderWidth={'2px'}
-        p="5"
-        rounded={'10px'}
-        borderColor={'#00000042'}
-      >
-        <Text
-          fontSize={20}
-          color="#072051"
-          fontWeight={700}
-          textAlign={'center'}
-          mt={'10'}
-        >
+      <Box mt={'5'} py={'10'} mx={'10'} maxWidth={'700px'} bg="white" color={'black'} borderWidth={'2px'} p="5" rounded={'10px'} borderColor={'#00000042'}>
+        <Image mt={'5'} w={130} src={logo} alt="logo rawat inap" />
+        <Text fontSize={24} color="#072051" fontWeight={700} textAlign={'center'} mt={'10'}>
           Resume Pendaftaran Online Rawat Jalan
         </Text>
-        <Text
-          color="#072051"
-          fontWeight={700}
-          textAlign={'center'}
-          fontSize={'24px'}
-          mb={'10'}
-        >
-          No.{no_antrian}
+        <Text fontSize={18} color="#072051" fontWeight={400} textAlign={'center'} mt={'7'}>
+          Kode Pendaftaran :
+        </Text>
+        <Text color="#072051" fontWeight={700} textAlign={'center'} fontSize={'24px'} mb={'10'}>
+          {no_antrian}
         </Text>
         <TableContainer variant="striped">
           <Table>
@@ -73,7 +55,7 @@ export class PrintComponent extends React.Component {
                 <Td fontWeight={'600'}>Tanggal Periksa</Td>
                 <Td>{practice_date}</Td>
               </Tr>
-              <Tr fontWeight={'400'} textAlign="start" fontSize={'18px'}>
+              <Tr fontWeight={'400'} textAlign="start" fontSize={'18px'} mb={20}>
                 <Td fontWeight={'600'}>Jam Periksa</Td>
                 <Td>{practice_time}</Td>
               </Tr>
