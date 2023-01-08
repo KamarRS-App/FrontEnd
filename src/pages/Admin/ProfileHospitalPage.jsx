@@ -94,13 +94,13 @@ function ProfileHospitalPage() {
                 <Text mt={'4'} fontWeight={'700'} color={'#072051'} fontSize={{ base: '14px', sm: '16px', md: '20px' }}>
                   Kontak:
                 </Text>
-                <Text fontSize={{ base: '12px', sm: '14px', md: '18px' }} color={'#B0B0B0'}>
+                <Text mt={'4'} fontSize={{ base: '12px', sm: '14px', md: '18px' }} color={'#B0B0B0'}>
                   {hospital.no_telpon}
                 </Text>
                 <Text mt={'4'} fontWeight={'700'} color={'#072051'} fontSize={{ base: '14px', sm: '16px', md: '20px' }}>
                   Jam Buka:
                 </Text>
-                <Text fontSize={{ base: '12px', sm: '14px', md: '18px' }} color={'#B0B0B0'}>
+                <Text mt={'4'} fontSize={{ base: '12px', sm: '14px', md: '18px' }} color={'#B0B0B0'}>
                   Buka 24 Jam
                 </Text>
               </Box>

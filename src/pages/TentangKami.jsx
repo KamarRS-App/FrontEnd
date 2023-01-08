@@ -5,7 +5,7 @@ import { Grid, GridItem, SimpleGrid, Flex } from '@chakra-ui/react';
 import CardFlow from '../components/CardFlow';
 import Layout from '../components/Layout';
 import hospitalAbout from '../assets/images/hospital-about-us.png';
-
+import rawatInap from '../assets/images/rawat_inap.svg';
 function TentangKami() {
   return (
     <Box>
@@ -19,7 +19,7 @@ function TentangKami() {
           </Box>
           <Box>
             <SimpleGrid rows={2} m={40}>
-              <Image w={150} src="/images/logo-rawat-inap.png" alt="logo rawat inap" fallbackSrc="https://via.placeholder.com/150" />
+              <Image w={150} src={rawatInap} alt="logo rawat inap" fallbackSrc="https://via.placeholder.com/150" />
               <Card w={400} variant="unstyled">
                 <Text fontWeight={400} fontSize={18} color="#072051" pt={5} lineHeight={9}>
                   Rawat Inap merupakan sebuah platform kesehatan digital penyedia informasi ketersediaan kamar rumah sakit secara real-time, akurat dan transparan yang dapat diakses oleh siapa saja. Kami hadir dengan tim terbaik untuk
