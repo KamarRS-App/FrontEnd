@@ -158,8 +158,7 @@ const HomePage = () => {
         setNomor(Math.abs(selisih * 10 - nomor));
       }
     }
-  };
-
+    
   //search
   const handleSearch = () => {
     const data = searchByNameRef.current.value;
@@ -209,89 +208,131 @@ const HomePage = () => {
     }
   };
 
-  useEffect(() => {
-    if (!auth) {
-      toast({
-        position: 'top',
-        title: 'Kamu Harus Login Dulu',
-        status: 'warning',
-        duration: '2000',
-        isClosable: true,
-      });
-      navigate('/login');
-    }
-    if (nameProvinsi === '') {
-      getAllHospitalsHandler(currentPage);
-    } else {
-      getHospitalByKabupaten(currentPage, nameProvinsi, nameKota);
-    }
-    getProvinsi();
-  }, [currentPage]);
+    useEffect(() => {
+        if (!auth) {
+            toast({
+                position: 'top',
+                title: 'Kamu Harus Login Dulu',
+                status: 'warning',
+                duration: '2000',
+                isClosable: true
+            });
+            navigate('/login');
+        }
+        if (nameProvinsi === '') {
+            getAllHospitalsHandler(currentPage);
+        } else {
+            getHospitalByKabupaten(currentPage, nameProvinsi, nameKota);
+        }
+        getProvinsi();
+    }, [currentPage]);
 
-  return (
-    <>
-      {loading && <Loading body={'Tunggu Sebentar...'} />}
-      {!loading && (
-        <Layout isActive={'home'}>
-          <HeroComponent />
-          <Box px={['20']} my={['20']}>
-            <Text fontWeight="600" fontSize={['30px', '48px']} mb={['10']} color="#1FA8F6" textAlign={{ base: 'center', md: 'left' }}>
-              Alur Pendaftaran
-            </Text>
-            <Flex gridTemplateColumns={'repeat(3, 1fr)'} rowGap="20" columnGap="10" flexWrap="wrap" justifyContent="center">
-              {flowRegister.map((data) => (
-                <CardFlow key={data.no} desc={data.desc} number={data.no} />
-              ))}
-            </Flex>
-          </Box>
-          <TableListHospital
-            provinsi={provinsi}
-            valueProvinsi={selectProvinsi}
-            onChangeProvinsi={(e) => handlerChangeProvinsi(e.target.value)}
-            kota={kota}
-            valueKota={selectKota}
-            onChangeKota={(e) => handlerChangeKabupaten(e.target.value)}
-            inputRef={searchByNameRef}
-            onSearch={onSearchHandler}
-            hospitals={hospitals}
-            nomor={nomor}
-            render={render}
-          />
-          <Flex justify={'end'} mx={'20'} mt={'8'}>
-            <Pagination defaultCurrent={'1'} current={currentPage} total={totalPage * 10} onChange={onPagination} />
-          </Flex>
-          <Box textAlign={'center'} mt={'10'} mb={'20'}>
-            <Button onClick={() => navigate('/rumahsakit')} bg={'#3AB8FF'} color={'white'} px={'10'} py={'6'} _hover={{ bg: 'alta.primary' }}>
-              Telusuri Lebih Banyak
-            </Button>
-          </Box>
-        </Layout>
-      )}
-    </>
-  );
+    return (
+        <>
+            {loading && <Loading body={'Tunggu Sebentar...'} />}
+            {
+                !loading &&
+                <Layout isActive={'home'}>
+                    <HeroComponent />
+                    <Box
+                        px={['20']}
+                        my={['20']}
+                    >
+                        <Text
+                            fontWeight='600'
+                            fontSize={['30px', '48px']}
+                            mb={['10']}
+                            color='#1FA8F6'
+                            textAlign={{ base: 'center', md: 'left' }}
+                        >
+                            Alur Pendaftaran
+                        </Text>
+                        <Flex
+                            gridTemplateColumns={'repeat(3, 1fr)'}
+                            rowGap='20'
+                            columnGap='10'
+                            flexWrap='wrap'
+                            justifyContent='center'
+                        >
+                            {
+                                flowRegister.map(data => (
+                                    <CardFlow
+                                        key={data.no}
+                                        desc={data.desc}
+                                        number={data.no}
+                                    />
+                                ))
+                            }
+                        </Flex>
+                    </Box>
+                    <TableListHospital
+                        provinsi={provinsi}
+                        valueProvinsi={selectProvinsi}
+                        onChangeProvinsi={(e) => handlerChangeProvinsi(e.target.value)}
+                        kota={kota}
+                        valueKota={selectKota}
+                        onChangeKota={(e) => handlerChangeKabupaten(e.target.value)}
+                        inputRef={searchByNameRef}
+                        onSearch={onSearchHandler}
+                        hospitals={hospitals}
+                        nomor={nomor}
+                        render={render}
+                    />
+                    <Flex
+                        justify={'end'}
+                        mx={'20'}
+                        mt={'8'}
+                    >
+                        <Pagination
+                            defaultCurrent={'1'}
+                            current={currentPage}
+                            total={totalPage * 10}
+                            onChange={onPagination}
+                        />
+                    </Flex>
+                    <Box
+                        textAlign={'center'}
+                        mt={'10'}
+                        mb={'20'}
+                    >
+                        <Button
+                            onClick={() => navigate('/rumahsakit')}
+                            bg={'#3AB8FF'}
+                            color={'white'}
+                            px={'10'}
+                            py={'6'}
+                            _hover={{ bg: 'alta.primary' }}
+                        >
+                            Telusuri Lebih Banyak
+                        </Button>
+                    </Box>
+                </Layout>
+            }
+        </>
+    );
 };
 
 const flowRegister = [
-  {
-    no: 1,
-    desc: 'Registrasi pasien rawat inap melalui website',
-  },
-  {
-    no: 2,
-    desc: 'Memilih kamar rawat inap berdasarkan rumah sakit dan jenis kamar',
-  },
-  {
-    no: 3,
-    desc: 'Melakukan pembayaran pendaftaran pasien rawat inap',
-  },
-  {
-    no: 4,
-    desc: 'Mendapatkan email konfirmasi pasien rawat inap',
-  },
-  {
-    no: 5,
-    desc: 'Membawa pasien  terdaftar rawat inap ke rumah sakit yang dituju',
-  },
+    {
+        no: 1,
+        desc: 'Registrasi pasien rawat inap melalui website',
+    },
+    {
+        no: 2,
+        desc: 'Memilih kamar rawat inap berdasarkan rumah sakit dan jenis kamar',
+    },
+    {
+        no: 3,
+        desc: 'Melakukan pembayaran pendaftaran pasien rawat inap',
+    },
+    {
+        no: 4,
+        desc: 'Mendapatkan email konfirmasi pasien rawat inap',
+    },
+    {
+        no: 5,
+        desc: 'Membawa pasien  terdaftar rawat inap ke rumah sakit yang dituju',
+    },
 ];
 
 export default HomePage;

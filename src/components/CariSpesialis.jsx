@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Heading, Input, Text, useToast } from '@chakra-ui/react';
-import { Button } from '@chakra-ui/react';
-import { Stack, Select, Card, Link } from '@chakra-ui/react';
-import axios from 'axios';
-import Cookies from 'js-cookie';
-import { useNavigate } from 'react-router';
-import api from '../services/api';
-import Loading from '../components/Loading';
+import React, { useEffect, useState } from "react";
+import { Box, Heading, Input, Text, useToast } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
+import { Stack, Select, Card, Link } from "@chakra-ui/react";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router";
+import api from "../services/api";
+import Loading from "../components/Loading";
+import apiProvinsi from "../services/apiProvinsi";
+
 
 function CariSpesialis() {
   const [provinsi, setProvinsi] = useState();
@@ -24,6 +26,8 @@ function CariSpesialis() {
   const [idDokter, setIdDokter] = useState();
   const [inDate, setInDate] = useState('');
   const [loading, setLoading] = useState(true);
+  const [nameProv, setNameProv] = useState();
+  const [nameKab, setNameKab] = useState();
 
   const navigate = useNavigate();
   const token = Cookies.get('token');
@@ -33,22 +37,26 @@ function CariSpesialis() {
   const day = date.getDate() + 1;
   const month = date.getMonth() + 1;
   const yy = date.getFullYear();
-  const nextDay = `${yy}-${month < 10 && `0${month}`}-${day < 10 && `0${day}`}`;
-  const dDay = `${yy}-${month < 10 && `0${month}`}-${date.getDate() < 10 && `0${date.getDate()}`}`;
+  const nextDay = `${yy}-${month < 10 ? `0${month}` : `${month}`}-${day < 10 ? `0${day}` : `${day}`}`;
+  const dDay = `${yy}-${month < 10 && `0${month}`}-${
+    date.getDate() < 10 && `0${date.getDate()}`
+  }`;
 
   //handle data provinsi
   const getProvinsi = async () => {
-    await axios.get('https://dev.farizdotid.com/api/daerahindonesia/provinsi').then((response) => {
-      setProvinsi(response.data.provinsi);
-    });
-    setLoading(false);
+    await apiProvinsi.getProvinsi()
+      .then((response) => {
+        setProvinsi(response.data.value);
+        setLoading(false);
+      });n
   };
 
   //handle kabupaten/kota
   const getSpecificCity = async (id) => {
-    await axios.get(`https://dev.farizdotid.com/api/daerahindonesia/kota?id_provinsi=${id}`).then((response) => {
-      setListKabupaten(response.data.kota_kabupaten);
-    });
+    await apiProvinsi.getKotaKabupateByProvinsi(id)
+      .then((response) => {
+        setListKabupaten(response.data.value);
+      });
   };
 
   const getPractices = async (id, practiceDate) => {
@@ -89,9 +97,8 @@ function CariSpesialis() {
       });
   };
 
-  const getAllHospitalsHandler = async () => {
-    await api
-      .getAllHospitals(token)
+  const getHospitalByProv = async (page, provinsi) => {
+    await api.getHospitalByProvinsi(token, page, provinsi)
       .then((response) => {
         const data = response.data.data;
         setHospitals(data);
@@ -104,6 +111,25 @@ function CariSpesialis() {
           duration: '2000',
           isClosable: true,
         });
+        setHospitals([])
+      });
+  };
+
+  const getHospitalByKab = async (page, provinsi, kabupaten) => {
+    await api.getHospitalByKabupaten(token, page, provinsi, kabupaten)
+      .then((response) => {
+        const data = response.data.data;
+        setHospitals(data);
+      })
+      .catch((error) => {
+        toast({
+          position: "top",
+          title: "Belum Ada Rumah Sakit Terdaftar",
+          status: "error",
+          duration: "2000",
+          isClosable: true,
+        });
+        setHospitals([])
       });
   };
 
@@ -119,6 +145,24 @@ function CariSpesialis() {
     setIdHospital(id);
     getPoliclinics(id);
   };
+
+  const selectNameProv = (id) => {
+    provinsi.filter((data) => {
+      if(data.id == id){
+        setNameProv(data.name)
+        getHospitalByProv(1, data.name)
+      }
+    })
+  }
+
+  const handlerChangeProv = (id) => {
+    selectNameProv(id);
+    getSpecificCity(id);
+  }
+
+  const handlerChangeKab = (name) => {
+    getHospitalByKab(1, nameProv, name);
+  }
 
   const handlerPoliclinics = (id) => {
     setIdPoliclinic(id);
@@ -145,12 +189,7 @@ function CariSpesialis() {
 
   useEffect(() => {
     getProvinsi();
-    getAllHospitalsHandler();
   }, []);
-
-  useEffect(() => {
-    getSpecificCity(kabupaten);
-  }, [kabupaten]);
 
   return (
     <>
@@ -177,11 +216,14 @@ function CariSpesialis() {
                 <Stack spacing={3}>
                   <Box>
                     <Text py={4}> Provinsi</Text>
-                    <Select placeholder="-- Pilih provinsi --" onChange={(e) => setKabupaten(e.target.value)}>
+                    <Select
+                      placeholder="-- Pilih provinsi --"
+                      onChange={(e) => handlerChangeProv(e.target.value)}
+                    >
                       {provinsi?.map((prov) => {
                         return (
                           <option value={prov.id} key={prov.id}>
-                            {prov.nama}
+                            {prov.name}
                           </option>
                         );
                       })}
@@ -189,11 +231,11 @@ function CariSpesialis() {
                   </Box>
                   <Box>
                     <Text py={4}> Kabupaten/Kota</Text>
-                    <Select placeholder="-- Pilih kabupaten/kota --">
+                    <Select placeholder="-- Pilih kabupaten/kota --" onChange={(e) => handlerChangeKab(e.target.value)}>
                       {listKabupaten?.map((kota) => {
                         return (
-                          <option value={kota.nama} key={kota.id}>
-                            {kota.nama}
+                          <option value={kota.name} key={kota.id}>
+                            {kota.name}
                           </option>
                         );
                       })}

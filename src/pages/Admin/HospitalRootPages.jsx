@@ -26,463 +26,386 @@ import Loading from '../../components/Loading';
 import Pagination from 'rc-pagination';
 
 const HospitalRootPages = () => {
-  const { isOpen: isModalCreateOpen, onOpen: onModalCreateOpen, onClose: onCloseModalCreate } = useDisclosure();
-  const { isOpen: isModalEditOpen, onOpen: onModalEditOpen, onClose: onCloseModalEdit } = useDisclosure();
-  const { isOpen: isModalDeleteOpen, onOpen: onModalDeleteOpen, onClose: onCloseModalDelete } = useDisclosure();
-  const role = Cookies.get('role');
-  const token = Cookies.get('token');
-  const navigate = useNavigate();
-  const toast = useToast();
-  const [hospitals, setHospitals] = useState([]);
-  const [currentHospital, setCurrentHospital] = useState([]);
-  const [hospitalImage, setHospitalImage] = useState();
-  const [hospitalId, setHospitalId] = useState('');
-  const [provinsi, setProvinsi] = useState([]);
-  const [nameProvinsi, setNameProvinsi] = useState('');
-  const [kota, setKota] = useState([]);
-  const [nameKota, setNameKota] = useState('');
-  const [kecamatan, setKecamatan] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [imagePrev, setImagePrev] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPage, setTotalPage] = useState();
-  const [nomor, setNomor] = useState(0);
+    const { isOpen: isModalCreateOpen, onOpen: onModalCreateOpen, onClose: onCloseModalCreate } = useDisclosure();
+    const { isOpen: isModalEditOpen, onOpen: onModalEditOpen, onClose: onCloseModalEdit } = useDisclosure();
+    const { isOpen: isModalDeleteOpen, onOpen: onModalDeleteOpen, onClose: onCloseModalDelete } = useDisclosure();
+    const role = Cookies.get('role');
+    const token = Cookies.get('token');
+    const navigate = useNavigate();
+    const toast = useToast();
+    const [hospitals, setHospitals] = useState([]);
+    const [currentHospital, setCurrentHospital] = useState([]);
+    const [hospitalImage, setHospitalImage] = useState();
+    const [hospitalId, setHospitalId] = useState('');
+    const [provinsi, setProvinsi] = useState([]);
+    const [nameProvinsi, setNameProvinsi] = useState('');
+    const [kota, setKota] = useState([]);
+    const [nameKota, setNameKota] = useState('');
+    const [kecamatan, setKecamatan] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [imagePrev, setImagePrev] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPage, setTotalPage] = useState();
+    const [nomor, setNomor] = useState(0);
 
-  const auth = AuthToken();
+    const auth = AuthToken();
 
-  const initialValues = {
-    kode_rs: '',
-    nama: '',
-    foto: '',
-    alamat: '',
-    provinsi: '',
-    kabupaten_kota: '',
-    kecamatan: '',
-    kode_pos: '',
-    no_telepon: '',
-    email: '',
-    kelas_rs: '',
-    pemilik_pengelola: '',
-    jumlah_tempat_tidur: null,
-    status_penggunaan: '',
-    biaya_registrasi: null,
-  };
+    const initialValues = {
+        kode_rs: '',
+        nama: '',
+        foto: '',
+        alamat: '',
+        provinsi: '',
+        kabupaten_kota: '',
+        kecamatan: '',
+        kode_pos: '',
+        no_telepon: '',
+        email: '',
+        kelas_rs: '',
+        pemilik_pengelola: '',
+        jumlah_tempat_tidur: null,
+        status_penggunaan: '',
+        biaya_registrasi: null,
+    }
 
-  const [initialValue, setInitialValue] = useState(initialValues);
+    const [initialValue, setInitialValue] = useState(initialValues);
 
-  const schema = Yup.object().shape({
-    kode_rs: Yup.string().required('Kode Rumah Sakit wajib diisi'),
-    nama: Yup.string().required('Nama Rumah Sakit tidak boleh kosong'),
-    foto: Yup.string().required('Foto tidak boleh kosong'),
-    alamat: Yup.string().required('Alamat tidak boleh kosong'),
-    provinsi: Yup.string().required('Provinsi tidak boleh kosong'),
-    kabupaten_kota: Yup.string().required('Kabupaten/Kota tidak boleh kosong'),
-    kecamatan: Yup.string().required('Kecamatan tidak boleh kosong'),
-    kode_pos: Yup.string().required('Kode pos tidak boleh kosong'),
-    no_telepon: Yup.string().min(9, 'Nomor salah').max(13, 'Nomor Salah').required('Nomor tidak boleh kosong'),
-    email: Yup.string().email('Format Email salah').required('Email tidak boleh kosong'),
-    kelas_rs: Yup.string().required('Kelas Rumah Sakit tidak boleh kosong'),
-    pemilik_pengelola: Yup.string().required('Pemilik/Pengelola tidak boleh kosong'),
-    jumlah_tempat_tidur: Yup.number('Harus Angka').required('Jumlah tempat tidur harus diisi'),
-    status_penggunaan: Yup.string().required('Status rumah sakit wajib diisi'),
-    biaya_registrasi: Yup.number('Harus Angka').required('Biaya registrasi wajib diisi'),
-  });
+    const schema = Yup.object().shape({
+        kode_rs: Yup.string().required('Kode Rumah Sakit wajib diisi'),
+        nama: Yup.string().required('Nama Rumah Sakit tidak boleh kosong'),
+        foto: Yup.string().required('Foto tidak boleh kosong'),
+        alamat: Yup.string().required('Alamat tidak boleh kosong'),
+        provinsi: Yup.string().required('Provinsi tidak boleh kosong'),
+        kabupaten_kota: Yup.string().required('Kabupaten/Kota tidak boleh kosong'),
+        kecamatan: Yup.string().required('Kecamatan tidak boleh kosong'),
+        kode_pos: Yup.string().required('Kode pos tidak boleh kosong'),
+        no_telepon: Yup.string().min(9, 'Nomor salah').max(13, 'Nomor Salah').required('Nomor tidak boleh kosong'),
+        email: Yup.string().email('Format Email salah').required('Email tidak boleh kosong'),
+        kelas_rs: Yup.string().required('Kelas Rumah Sakit tidak boleh kosong'),
+        pemilik_pengelola: Yup.string().required('Pemilik/Pengelola tidak boleh kosong'),
+        jumlah_tempat_tidur: Yup.number('Harus Angka').required('Jumlah tempat tidur harus diisi'),
+        status_penggunaan: Yup.string().required('Status rumah sakit wajib diisi'),
+        biaya_registrasi: Yup.number('Harus Angka').required('Biaya registrasi wajib diisi'),
+    })
 
-  const {
-    register: createHospital,
-    handleSubmit,
-    setValue: setValueCreate,
-    formState: { errors },
-  } = useForm({
-    mode: 'onTouched',
-    reValidateMode: 'onSubmit',
-    resolver: yupResolver(schema),
-    defaultValues: initialValue,
-  });
+    const { register: createHospital, handleSubmit, setValue: setValueCreate, formState: { errors } } = useForm({
+        mode: "onTouched",
+        reValidateMode: "onSubmit",
+        resolver: yupResolver(schema),
+        defaultValues: initialValue,
+    })
 
-  const {
-    register: updateHospital,
-    handleSubmit: handleUpdate,
-    formState: { errors: errorsUpdate },
-    setValue: setUpdate,
-  } = useForm({
-    mode: 'onChange',
-    reValidateMode: 'onChange',
-    resolver: yupResolver(schema),
-    defaultValues: initialValue,
-  });
+    const { register: updateHospital, handleSubmit: handleUpdate, formState: { errors: errorsUpdate }, setValue: setUpdate } = useForm({
+        mode: "onChange",
+        reValidateMode: "onChange",
+        resolver: yupResolver(schema),
+        defaultValues: initialValue,
+    })
 
-  //consume api
+    //consume api
 
-  const getHospitalHandler = async (id) => {
-    await api
-      .getHospitalByID(token, id)
-      .then((response) => {
-        const data = response.data.data;
-        setUpdate('nama', data.nama);
-        setUpdate('foto', data.foto);
-        setUpdate('kode_rs', data.kode_rs);
-        setUpdate('alamat', data.alamat);
-        setUpdate('kode_pos', data.kode_pos);
-        setUpdate('no_telepon', data.no_telpon);
-        setUpdate('email', data.email);
-        setUpdate('kelas_rs', data.kelas_rs);
-        setUpdate('jumlah_tempat_tidur', data.jumlah_tempat_tidur);
-        setUpdate('pemilik_pengelola', data.pemilik_pengelola);
-        setUpdate('biaya_registrasi', data.biaya_registrasi);
-        setUpdate('status_penggunaan', data.status_penggunaan);
-        setUpdate('provinsi', data.provinsi);
-        setUpdate('kecamatan', data.kecamatan);
-        setUpdate('kabupaten_kota', data.kabupaten_kota);
-        setCurrentHospital(data);
-      })
-      .catch((error) => {
-        if (error) {
-          toast({
-            position: 'top',
-            title: 'Gagal Mendapatkan Data Rumah Sakit',
-            status: 'error',
-            duration: '1500',
-            isClosable: true,
-          });
+    const getHospitalHandler = async (id) => {
+        await api.getHospitalByID(token, id)
+            .then(response => {
+                const data = response.data.data;
+                setUpdate("nama", data.nama);
+                setUpdate("foto", data.foto);
+                setUpdate("kode_rs", data.kode_rs);
+                setUpdate("alamat", data.alamat);
+                setUpdate("kode_pos", data.kode_pos);
+                setUpdate("no_telepon", data.no_telpon);
+                setUpdate("email", data.email);
+                setUpdate("kelas_rs", data.kelas_rs);
+                setUpdate("jumlah_tempat_tidur", data.jumlah_tempat_tidur);
+                setUpdate("pemilik_pengelola", data.pemilik_pengelola);
+                setUpdate("biaya_registrasi", data.biaya_registrasi);
+                setUpdate('status_penggunaan', data.status_penggunaan);
+                setUpdate("provinsi", data.provinsi);
+                setUpdate("kecamatan", data.kecamatan);
+                setUpdate("kabupaten_kota", data.kabupaten_kota);
+                setCurrentHospital(data)
+            })
+            .catch(error => {
+                if (error) {
+                    toast({
+                        position: 'top',
+                        title: 'Gagal Mendapatkan Data Rumah Sakit',
+                        status: 'error',
+                        duration: '1500',
+                        isClosable: true
+                    })
+                }
+            })
+    }
+
+    const getAllHospitalsHandler = async (pages) => {
+        await api.getHospitals(token, pages)
+            .then(response => {
+                const data = response.data.data;
+                setHospitals(data)
+                setTotalPage(response.data.total_page)
+            })
+        setLoading(false);
+    }
+
+    const createHospitalHandler = async (data) => {
+        await axios.post('https://rawatinap.online/hospitals', data, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'content-type': 'multipart/form-data'
+            }
+        })
+            .then(response => {
+                toast({
+                    position: 'top',
+                    title: 'Berhasil Menambahkan Data Rumah Sakit',
+                    status: 'success',
+                    duration: '1500',
+                    isClosable: true
+                })
+                getAllHospitalsHandler();
+                onCloseModalCreate();
+            })
+            .catch(error => {
+                toast({
+                    position: 'top',
+                    title: 'Gagal Menambahkan Data Rumah Sakit',
+                    status: 'error',
+                    duration: '1500',
+                    isClosable: true
+                })
+                console.log(error)
+            })
+    }
+
+    const updateHospitalHandler = async (data) => {
+        await axios.put(`https://rawatinap.online/hospitals/${currentHospital.id}`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'content-type': 'multipart/form-data'
+            }
+        })
+            .then(response => {
+                toast({
+                    position: 'top',
+                    title: 'Berhasil Menambahkan Data Rumah Sakit',
+                    status: 'success',
+                    duration: '1500',
+                    isClosable: true
+                })
+                onCloseModalEdit();
+                getAllHospitalsHandler();
+            })
+            .catch(error => {
+                toast({
+                    position: 'top',
+                    title: 'Gagal Menambahkan Data Rumah Sakit',
+                    status: 'error',
+                    duration: '1500',
+                    isClosable: true
+                })
+            })
+    }
+
+    const deleteHospitalHandler = async (id) => {
+        await api.deleteHospital(token, id)
+            .then(response => {
+                console.log(response.data)
+                toast({
+                    position: 'top',
+                    title: 'Berhasil Menambahkan Data Rumah Sakit',
+                    status: 'success',
+                    duration: '1500',
+                    isClosable: true
+                })
+                getAllHospitalsHandler();
+            })
+            .catch(error => {
+                toast({
+                    position: 'top',
+                    title: 'Gagal Menambahkan Data Rumah Sakit',
+                    status: 'error',
+                    duration: '1500',
+                    isClosable: true
+                })
+            })
+    }
+
+    //api dearah
+    const getProvinsi = async () => {
+        await apiProvinsi.getProvinsi()
+            .then((response) => {
+                const data = response.data.value
+                setProvinsi(data);
+            });
+    };
+
+    const getKotaKabupatenByProvinsi = async (id) => {
+        await apiProvinsi.getKotaKabupateByProvinsi(id)
+            .then(response => {
+                const data = response.data.value;
+                setKota(data);
+            })
+    }
+
+    const getKecamatanByKota = async (id) => {
+        await apiProvinsi.getKecamatanByKota(id)
+            .then(response => {
+                const data = response.data.value;
+                setKecamatan(data);
+            })
+    }
+
+    //handler daerah
+    const selectNameProvinsi = (id) => {
+        provinsi.filter((data) => {
+            if (data.id === id) {
+                setNameProvinsi(data.name);
+            }
+        })
+    }
+
+    const selectNameKota = (id) => {
+        kota.filter((data) => {
+            if (data.id == id) {
+                setNameKota(data.name);
+            }
+        })
+    }
+
+    const handlerProvinsi = (id) => {
+        getKotaKabupatenByProvinsi(id);
+        selectNameProvinsi(id);
+    }
+
+    const handlerKota = (id) => {
+        selectNameKota(id);
+        getKecamatanByKota(id);
+    }
+
+    //handler
+    const handleHospitalImage = (e) => {
+        const file = e.target.files[0];
+        setHospitalImage(file);
+        setImagePrev(URL.createObjectURL(file));
+    };
+
+    const onHandlerEdit = (id) => {
+        getHospitalHandler(id);
+        if (currentHospital) {
+            onModalEditOpen();
         }
-      });
-  };
+    };
 
-  const getAllHospitalsHandler = async (pages) => {
-    await api.getHospitals(token, pages).then((response) => {
-      const data = response.data.data;
-      setHospitals(data);
-      setTotalPage(response.data.total_page);
-    });
-    setLoading(false);
-  };
+    const onSubmit = (values) => {
+        const data = new FormData();
+        data.append('kode_rs', values.kode_rs);
+        data.append('nama', values.nama);
+        data.append('alamat', values.alamat);
+        data.append('provinsi', nameProvinsi);
+        data.append('kabupaten_kota', nameKota);
+        data.append('kecamatan', values.kecamatan);
+        data.append('kode_pos', values.kode_pos);
+        data.append('no_telpon', values.no_telepon);
+        data.append('email', values.email);
+        data.append('kelas_rs', values.kelas_rs);
+        data.append('pemilik_pengelola', values.pemilik_pengelola);
+        data.append('jumlah_tempat_tidur', values.jumlah_tempat_tidur);
+        data.append('status_penggunaan', values.status_penggunaan);
+        data.append('biaya_registrasi', values.biaya_registrasi);
+        data.append('foto', hospitalImage);
 
-  const createHospitalHandler = async (data) => {
-    await axios
-      .post('https://rawatinap.online/hospitals', data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'content-type': 'multipart/form-data',
-        },
-      })
-      .then((response) => {
-        toast({
-          position: 'top',
-          title: 'Berhasil Menambahkan Data Rumah Sakit',
-          status: 'success',
-          duration: '1500',
-          isClosable: true,
-        });
-        getAllHospitalsHandler();
+        createHospitalHandler(data);
+        setValueCreate('nama', '');
+        setValueCreate('foto', '');
+        setValueCreate('kode_rs', '');
+        setValueCreate('alamat', '');
+        setValueCreate('kode_pos', '');
+        setValueCreate('no_telepon', '');
+        setValueCreate('email', '');
+        setValueCreate('kelas_rs', '');
+        setValueCreate('jumlah_tempat_tidur', null);
+        setValueCreate('pemilik_pengelola', '');
+        setValueCreate('biaya_registrasi', null);
+        setValueCreate('status_penggunaan', '');
+        setValueCreate('provinsi', '');
+        setValueCreate('kecamatan', '');
+        setValueCreate('kabupaten_kota', '');
+        setImagePrev('');
         onCloseModalCreate();
-      })
-      .catch((error) => {
-        toast({
-          position: 'top',
-          title: 'Gagal Menambahkan Data Rumah Sakit',
-          status: 'error',
-          duration: '1500',
-          isClosable: true,
-        });
-        console.log(error);
-      });
-  };
+    };
 
-  const updateHospitalHandler = async (data) => {
-    await axios
-      .put(`https://rawatinap.online/hospitals/${currentHospital.id}`, data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'content-type': 'multipart/form-data',
-        },
-      })
-      .then((response) => {
-        toast({
-          position: 'top',
-          title: 'Berhasil Menambahkan Data Rumah Sakit',
-          status: 'success',
-          duration: '1500',
-          isClosable: true,
-        });
+    const onUpdateHandler = (values) => {
+        const data = new FormData();
+
+        data.append('kode_rs', values.kode_rs);
+        data.append('nama', values.nama);
+        data.append('alamat', values.alamat);
+        data.append('provinsi', values.provinsi);
+        data.append('kabupaten_kota', values.kabupaten_kota);
+        data.append('kecamatan', values.kecamatan);
+        data.append('kode_pos', values.kode_pos);
+        data.append('no_telpon', values.no_telepon);
+        data.append('email', values.email);
+        data.append('kelas_rs', values.kelas_rs);
+        data.append('pemilik_pengelola', values.pemilik_pengelola);
+        data.append('jumlah_tempat_tidur', values.jumlah_tempat_tidur);
+        data.append('status_penggunaan', values.status_penggunaan);
+        data.append('biaya_registrasi', values.biaya_registrasi);
+        data.append('foto', hospitalImage !== undefined && hospitalImage);
+
+        updateHospitalHandler(data);
+    };
+
+    const onCloseHandler = () => {
+        setHospitalImage(undefined);
         onCloseModalEdit();
-        getAllHospitalsHandler();
-      })
-      .catch((error) => {
-        toast({
-          position: 'top',
-          title: 'Gagal Menambahkan Data Rumah Sakit',
-          status: 'error',
-          duration: '1500',
-          isClosable: true,
-        });
-      });
-  };
+    };
 
-  const deleteHospitalHandler = async (id) => {
-    await api
-      .deleteHospital(token, id)
-      .then((response) => {
-        console.log(response.data);
-        toast({
-          position: 'top',
-          title: 'Berhasil Menambahkan Data Rumah Sakit',
-          status: 'success',
-          duration: '1500',
-          isClosable: true,
-        });
-        getAllHospitalsHandler();
-      })
-      .catch((error) => {
-        toast({
-          position: 'top',
-          title: 'Gagal Menambahkan Data Rumah Sakit',
-          status: 'error',
-          duration: '1500',
-          isClosable: true,
-        });
-      });
-  };
+    const onCloseCreateHandler = () => {
+        setValueCreate('nama', '');
+        setValueCreate('foto', '');
+        setValueCreate('kode_rs', '');
+        setValueCreate('alamat', '');
+        setValueCreate('kode_pos', '');
+        setValueCreate('no_telepon', '');
+        setValueCreate('email', '');
+        setValueCreate('kelas_rs', '');
+        setValueCreate('jumlah_tempat_tidur', null);
+        setValueCreate('pemilik_pengelola', '');
+        setValueCreate('biaya_registrasi', null);
+        setValueCreate('status_penggunaan', '');
+        setValueCreate('provinsi', '');
+        setValueCreate('kecamatan', '');
+        setValueCreate('kabupaten_kota', '');
+        setImagePrev('');
+        onCloseModalCreate();
+    };
 
-  //api dearah
-  const getProvinsi = async () => {
-    await apiProvinsi.getProvinsi().then((response) => {
-      const data = response.data.value;
-      setProvinsi(data);
-    });
-  };
+    const onDeleteClicked = (id) => {
+        onModalDeleteOpen();
+        setHospitalId(id);
+    };
 
-  const getKotaKabupatenByProvinsi = async (id) => {
-    await apiProvinsi.getKotaKabupateByProvinsi(id).then((response) => {
-      const data = response.data.value;
-      setKota(data);
-    });
-  };
+    const onDeleteHandler = () => {
+        deleteHospitalHandler(hospitalId);
+        onCloseModalDelete();
+    };
 
-  const getKecamatanByKota = async (id) => {
-    await apiProvinsi.getKecamatanByKota(id).then((response) => {
-      const data = response.data.value;
-      setKecamatan(data);
-    });
-  };
-
-  //handler daerah
-  const selectNameProvinsi = (id) => {
-    provinsi.filter((data) => {
-      if (data.id === id) {
-        setNameProvinsi(data.name);
-      }
-    });
-  };
-
-  const selectNameKota = (id) => {
-    kota.filter((data) => {
-      if (data.id == id) {
-        setNameKota(data.name);
-      }
-    });
-  };
-
-  const handlerProvinsi = (id) => {
-    getKotaKabupatenByProvinsi(id);
-    selectNameProvinsi(id);
-  };
-
-  const handlerKota = (id) => {
-    selectNameKota(id);
-    getKecamatanByKota(id);
-  };
-
-  //handler
-  const handleHospitalImage = (e) => {
-    const file = e.target.files[0];
-    setHospitalImage(file);
-    setImagePrev(URL.createObjectURL(file));
-  };
-
-  const onHandlerEdit = (id) => {
-    getHospitalHandler(id);
-    if (currentHospital) {
-      onModalEditOpen();
-    }
-  };
-
-  const onSubmit = (values) => {
-    const data = new FormData();
-    data.append('kode_rs', values.kode_rs);
-    data.append('nama', values.nama);
-    data.append('alamat', values.alamat);
-    data.append('provinsi', nameProvinsi);
-    data.append('kabupaten_kota', nameKota);
-    data.append('kecamatan', values.kecamatan);
-    data.append('kode_pos', values.kode_pos);
-    data.append('no_telpon', values.no_telepon);
-    data.append('email', values.email);
-    data.append('kelas_rs', values.kelas_rs);
-    data.append('pemilik_pengelola', values.pemilik_pengelola);
-    data.append('jumlah_tempat_tidur', values.jumlah_tempat_tidur);
-    data.append('status_penggunaan', values.status_penggunaan);
-    data.append('biaya_registrasi', values.biaya_registrasi);
-    data.append('foto', hospitalImage);
-
-    createHospitalHandler(data);
-    setValueCreate('nama', '');
-    setValueCreate('foto', '');
-    setValueCreate('kode_rs', '');
-    setValueCreate('alamat', '');
-    setValueCreate('kode_pos', '');
-    setValueCreate('no_telepon', '');
-    setValueCreate('email', '');
-    setValueCreate('kelas_rs', '');
-    setValueCreate('jumlah_tempat_tidur', null);
-    setValueCreate('pemilik_pengelola', '');
-    setValueCreate('biaya_registrasi', null);
-    setValueCreate('status_penggunaan', '');
-    setValueCreate('provinsi', '');
-    setValueCreate('kecamatan', '');
-    setValueCreate('kabupaten_kota', '');
-    setImagePrev('');
-    onCloseModalCreate();
-  };
-
-  const onUpdateHandler = (values) => {
-    const data = new FormData();
-
-    data.append('kode_rs', values.kode_rs);
-    data.append('nama', values.nama);
-    data.append('alamat', values.alamat);
-    data.append('provinsi', values.provinsi);
-    data.append('kabupaten_kota', values.kabupaten_kota);
-    data.append('kecamatan', values.kecamatan);
-    data.append('kode_pos', values.kode_pos);
-    data.append('no_telpon', values.no_telepon);
-    data.append('email', values.email);
-    data.append('kelas_rs', values.kelas_rs);
-    data.append('pemilik_pengelola', values.pemilik_pengelola);
-    data.append('jumlah_tempat_tidur', values.jumlah_tempat_tidur);
-    data.append('status_penggunaan', values.status_penggunaan);
-    data.append('biaya_registrasi', values.biaya_registrasi);
-    data.append('foto', hospitalImage !== undefined && hospitalImage);
-
-    updateHospitalHandler(data);
-  };
-
-  const onCloseHandler = () => {
-    setHospitalImage(undefined);
-    onCloseModalEdit();
-  };
-
-  const onCloseCreateHandler = () => {
-    setValueCreate('nama', '');
-    setValueCreate('foto', '');
-    setValueCreate('kode_rs', '');
-    setValueCreate('alamat', '');
-    setValueCreate('kode_pos', '');
-    setValueCreate('no_telepon', '');
-    setValueCreate('email', '');
-    setValueCreate('kelas_rs', '');
-    setValueCreate('jumlah_tempat_tidur', null);
-    setValueCreate('pemilik_pengelola', '');
-    setValueCreate('biaya_registrasi', null);
-    setValueCreate('status_penggunaan', '');
-    setValueCreate('provinsi', '');
-    setValueCreate('kecamatan', '');
-    setValueCreate('kabupaten_kota', '');
-    setImagePrev('');
-    onCloseModalCreate();
-  };
-
-  const onDeleteClicked = (id) => {
-    onModalDeleteOpen();
-    setHospitalId(id);
-  };
-
-  const onDeleteHandler = () => {
-    deleteHospitalHandler(hospitalId);
-    onCloseModalDelete();
-  };
-
-  //filter
-  const onPagination = (page) => {
-    setCurrentPage(page);
-    const selisih = currentPage - page;
-    if (page === 1 || totalPage === 1) {
-      setNomor(0);
-    } else if (page === totalPage) {
-      setNomor(totalPage * 10 - 10);
-    } else {
-      if (selisih < 0) {
-        setNomor(Math.abs(selisih * 10 + nomor));
-      } else if (selisih > 0) {
-        setNomor(Math.abs(selisih * 10 - nomor));
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (role !== 'super admin' || !auth) {
-      toast({
-        position: 'top',
-        title: 'Kamu Harus Login Dulu',
-        status: 'warning',
-        duration: '2000',
-        isClosable: true,
-      });
-      navigate('/root/login');
-    }
-    getAllHospitalsHandler(currentPage);
-    getProvinsi();
-  }, [currentPage]);
-
-  return (
-    <>
-      {loading && <Loading body={'Sedang Memuat Data...'} />}
-      {!loading && (
-        <LayoutAdminRoot activeMenu={'hospital'}>
-          <HeadAdmin title={'Manajemen Rumah Sakit'} isAdd={onModalCreateOpen} />
-          <TableAdmin
-            headTable={
-              <Tr>
-                <Td fontWeight={'400'} textAlign="center" fontSize={'18px'}>
-                  No
-                </Td>
-                <Td fontWeight={'400'} textAlign="center" fontSize={'18px'}>
-                  Actions
-                </Td>
-                <Td fontWeight={'400'} textAlign="center" fontSize={'18px'}>
-                  Foto
-                </Td>
-                <Td fontWeight={'400'} textAlign="center" fontSize={'18px'}>
-                  Nama Rumah Sakit
-                </Td>
-                <Td fontWeight={'400'} textAlign="center" fontSize={'18px'}>
-                  Kode Rumah Sakit
-                </Td>
-                <Td fontWeight={'400'} textAlign="center" fontSize={'18px'}>
-                  Alamat
-                </Td>
-                <Td fontWeight={'400'} textAlign="center" fontSize={'18px'}>
-                  No Telpon
-                </Td>
-                <Td fontWeight={'400'} textAlign="center" fontSize={'18px'}>
-                  Email
-                </Td>
-                <Td fontWeight={'400'} textAlign="center" fontSize={'18px'}>
-                  Kelas RS
-                </Td>
-                <Td fontWeight={'400'} textAlign="center" fontSize={'18px'}>
-                  Pemilik/Pengelola
-                </Td>
-                <Td fontWeight={'400'} textAlign="center" fontSize={'18px'}>
-                  Jumlah Tempat Tidur
-                </Td>
-                <Td fontWeight={'400'} textAlign="center" fontSize={'18px'}>
-                  Status Rumah Sakit
-                </Td>
-                <Td fontWeight={'400'} textAlign="center" fontSize={'18px'}>
-                  Biaya Pendaftaran
-                </Td>
-              </Tr>
+    //filter
+    const onPagination = (page) => {
+        setCurrentPage(page)
+        const selisih = currentPage - page;
+        if (page === 1 || totalPage === 1) {
+            setNomor(0);
+        } else if (page === totalPage) {
+            setNomor((totalPage * 10) - 10)
+        }
+        else {
+            if (selisih < 0) {
+                setNomor(Math.abs((selisih * 10) + nomor));
+            } else if (selisih > 0) {
+                setNomor(Math.abs((selisih * 10) - nomor));
             }
             bodyTable={
               hospitals.length !== 0 ? (
@@ -784,19 +707,8 @@ const HospitalRootPages = () => {
                 </FormControl>
               </>
             }
-          />
-          <PopupDelete
-            deletet_name={'Hapus Hospital'}
-            modalBody={'Apakah Anda Yakin Menghapus Data Hospital?'}
-            modalTitle={'Hapus Data Hospital'}
-            isOpen={isModalDeleteOpen}
-            onClose={onCloseModalDelete}
-            onDelete={() => onDeleteHandler(hospitalId)}
-          />
-        </LayoutAdminRoot>
-      )}
-    </>
-  );
+        </>
+    );
 };
 
 export default HospitalRootPages;
