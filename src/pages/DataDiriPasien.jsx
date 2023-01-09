@@ -4,12 +4,7 @@ import { Text } from "@chakra-ui/react";
 import { Button } from "@chakra-ui/react";
 import { Image } from "@chakra-ui/react";
 import Cookies from "js-cookie";
-import {
-  FormControl,
-  FormLabel,
-  useToast,
-  Checkbox,
-} from "@chakra-ui/react";
+import { FormControl, FormLabel, useToast, Checkbox } from "@chakra-ui/react";
 import { Grid, GridItem } from "@chakra-ui/react";
 import { Input } from "@chakra-ui/react";
 import { Select } from "@chakra-ui/react";
@@ -74,7 +69,7 @@ function DataDiriPasien() {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    mode: "onSubmit",
+    mode: "onChange",
   });
 
   //region api
@@ -416,8 +411,11 @@ function DataDiriPasien() {
                 </Box>
                 <Box mt={5}>
                   <Checkbox
-                    onChange={() => setAnggotaBpjs(!anggotaBpjs)}
+                    onChange={() => {
+                      setAnggotaBpjs(!anggotaBpjs);
+                    }}
                     mb={2}
+                    isChecked={anggotaBpjs}
                   >
                     Daftar Menggunakan BPJS
                   </Checkbox>
@@ -434,7 +432,7 @@ function DataDiriPasien() {
                         <Input
                           {...register("noBPJS")}
                           type="number"
-                          isDisabled={anggotaBpjs}
+                          isDisabled={!anggotaBpjs}
                         />
                         <Text color="red">{errors.noBPJS?.message}</Text>
                       </FormControl>
@@ -445,7 +443,7 @@ function DataDiriPasien() {
                         <Input
                           {...register("kelas_bpjs")}
                           type="number"
-                          isDisabled={anggotaBpjs}
+                          isDisabled={!anggotaBpjs}
                         />
                         <Text color="red">{errors.kelas_bpjs?.message}</Text>
                       </FormControl>
@@ -486,7 +484,11 @@ function DataDiriPasien() {
                     />
                     <Box h={400} borderWidth="1px" rounded={10} w="100%" mt={5}>
                       <FormControl>
-                        <label htmlFor="img" style={{ cursor: "pointer" }}>
+                        <FormLabel
+                          htmlFor="img"
+                          style={{ cursor: "pointer" }}
+                          h={"100%"}
+                        >
                           <Grid
                             justifyContent={"center"}
                             alignItems="center"
@@ -516,16 +518,17 @@ function DataDiriPasien() {
                                 <Text fontSize={"2xl"}>
                                   Upload file disini{" "}
                                   <span>
-                                    <label
+                                    <FormLabel
                                       htmlFor="img"
                                       style={{
                                         cursor: "pointer",
                                         color: "#1FA8F6",
                                         fontStyle: "inherit",
                                       }}
+                                      textAlign={"center"}
                                     >
                                       Browse
-                                    </label>
+                                    </FormLabel>
                                   </span>
                                 </Text>
                                 <Text color={"#676767"}>
@@ -534,7 +537,7 @@ function DataDiriPasien() {
                               </>
                             )}
                           </Grid>
-                        </label>
+                        </FormLabel>
                       </FormControl>
                     </Box>
                   </FormControl>
@@ -567,7 +570,7 @@ function DataDiriPasien() {
                       onChange={(e) => handleFileBpjs(e.target.files[0])}
                     />
                     <Box h={400} borderWidth="1px" rounded={10} w="100%" mt={5}>
-                      <label htmlFor="bpjs" style={{ cursor: "pointer" }}>
+                      <FormLabel htmlFor="bpjs" style={{ cursor: "pointer" }}>
                         <Grid
                           justifyContent={"center"}
                           alignItems="center"
@@ -597,16 +600,17 @@ function DataDiriPasien() {
                               <Text fontSize={"2xl"}>
                                 Upload file disini{" "}
                                 <span>
-                                  <label
+                                  <FormLabel
                                     htmlFor="bpjs"
                                     style={{
                                       cursor: "pointer",
                                       color: "#1FA8F6",
                                       fontStyle: "inherit",
                                     }}
+                                    textAlign={"center"}
                                   >
                                     Browse
-                                  </label>
+                                  </FormLabel>
                                 </span>
                               </Text>
                               <Text color={"#676767"}>
@@ -615,7 +619,7 @@ function DataDiriPasien() {
                             </>
                           )}
                         </Grid>
-                      </label>
+                      </FormLabel>
                     </Box>
                   </FormControl>
                 </Box>
