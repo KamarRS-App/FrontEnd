@@ -5,7 +5,6 @@ const instance = axios.create({
 });
 
 export default {
-
   //Auth
   loginUser: (email, password) =>
     instance({
@@ -47,17 +46,17 @@ export default {
     }),
 
   //Users
-  register: (data) =>
+  registerData: (data) =>
     instance({
       method: `POST`,
       url: `/users`,
       data: {
-        nama: data.username,
+        nama: data.nama,
         email: data.email,
         nik: JSON.stringify(data.nik),
         no_kk: JSON.stringify(data.no_kk),
         kata_sandi: data.kata_sandi,
-        no_telpon: JSON.stringify(data.nomorhape),
+        no_telpon: JSON.stringify(data.nomorHape),
       },
     }),
 
@@ -127,7 +126,7 @@ export default {
         Authorization: `Bearer ${token}`,
       },
     }),
-    
+
   deleteAdmin: (token, id) =>
     instance({
       method: `DELETE`,
@@ -136,7 +135,7 @@ export default {
         Authorization: `Bearer ${token}`,
       },
     }),
-    
+
   getAdmin: (token) =>
     instance({
       method: `GET`,
@@ -173,9 +172,9 @@ export default {
         Authorization: `Bearer ${token}`,
       },
     }),
-  
-  getAllHospitals: (token) => 
-    instance({
+
+  getAllHospitals: (token) =>
+      instance({
       method: `GET`,
       url: `/hospitals`,
       headers: {
@@ -190,6 +189,34 @@ export default {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+    }),
+
+  //Filter
+  getHospitalByProvinsi: (token, page, provinsi) =>
+    instance({
+      method: `GET`,
+      url: `/hospitals?page=${page}&provinsi=${provinsi}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    }),
+  getHospitalByKabupaten: (token, page, provinsi, kabupaten) =>
+    instance({
+      method: `GET`,
+      url: `/hospitals?page=${page}&provinsi=${provinsi}&kabupaten_kota=${kabupaten}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    }),
+
+  //Search
+  getHospitalByName: (token, name, page) =>
+    instance({
+      method: `GET`,
+      url: `/hospitals?page=${page}&nama=${name}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
     }),
 
   //patient
@@ -537,7 +564,10 @@ export default {
     }),
 
   //checkup reservations
-  createCheckUpReservation: (token, { patient_id, practice_id, nama_dokter, no_antrian }) =>
+  createCheckUpReservation: (
+    token,
+    { patient_id, practice_id, nama_dokter, no_antrian }
+  ) =>
     instance({
       method: `POST`,
       url: `/reservations`,

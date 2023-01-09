@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Center, Td, Th, Tr, useToast } from '@chakra-ui/react';
 import { Box, Heading, Text, Flex } from '@chakra-ui/react';
 import { Image } from '@chakra-ui/react';
@@ -13,6 +13,8 @@ import Loading from '../components/Loading';
 import image1 from '../assets/images/rs-mitra-keluarga.png';
 import image2 from '../assets/images/rs-haji.png';
 import image3 from '../assets/images/rs-sardjito.png';
+import Pagination from 'rc-pagination';
+import { AuthToken } from '../services/authToken';
 
 function CariRumahSakit() {
   const token = Cookies.get('token');
@@ -24,61 +26,195 @@ function CariRumahSakit() {
   const [nameProvinsi, setNameProvinsi] = useState('');
   const [kota, setKota] = useState([]);
   const [selectKota, setSelectKota] = useState('');
+  const [nameKota, setNameKota] = useState('');
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPage, setTotalPage] = useState();
+  const [nomor, setNomor] = useState(0);
+  const auth = AuthToken();
+  const [render, setRender] = useState();
 
-  const getAllHospitalsHandler = async () => {
+  const searchByNameRef = useRef();
+
+  //hospital api
+  const getAllHospitalsHandler = async (pages) => {
+    setRender(true);
     await api
-      .getHospitals(token)
+      .getHospitals(token, pages)
       .then((response) => {
         const data = response.data.data;
         setHospitals(data);
+        setTotalPage(response.data.total_page);
       })
-      .catch((error) => {});
+      .catch((error) => {
+        toast({
+          position: 'top',
+          title: 'Belum ada Rumah Sakit Terdaftar',
+          status: 'error',
+          duration: '2000',
+          isClosable: true,
+        });
+      });
+    setRender(false);
     setLoading(false);
   };
 
+  //filter
+  const getHospitalByProvinsi = async (page, provinsi) => {
+    setRender(true);
+    await api
+      .getHospitalByProvinsi(token, page, provinsi)
+      .then((response) => {
+        const data = response.data.data;
+        setHospitals(data);
+        setTotalPage(response.data.total_page);
+        setNameProvinsi(provinsi);
+        if (response.data.total_page === 1) {
+          onPagination(1);
+        }
+      })
+      .catch((error) => {
+        toast({
+          position: 'top',
+          title: 'Belum ada Rumah Sakit Terdaftar',
+          status: 'error',
+          duration: '2000',
+          isClosable: true,
+        });
+      });
+    setRender(false);
+  };
+
+  const getHospitalByKabupaten = async (page, provinsi, kabupaten) => {
+    setRender(true);
+    await api
+      .getHospitalByKabupaten(token, page, provinsi, kabupaten)
+      .then((response) => {
+        const data = response.data.data;
+        setHospitals(data);
+        setNameKota(kabupaten);
+        setTotalPage(response.data.total_page);
+        if (response.data.total_page === 1) {
+          onPagination(1);
+        }
+      })
+      .catch((error) => {
+        toast({
+          position: 'top',
+          title: 'Belum ada Rumah Sakit Terdaftar',
+          status: 'error',
+          duration: '2000',
+          isClosable: true,
+        });
+      });
+    setRender(false);
+  };
+
+  const getHospitalByName = async (name, page) => {
+    setRender(true);
+    await api
+      .getHospitalByName(token, name, page)
+      .then((response) => {
+        const data = response.data.data;
+        setHospitals(data);
+        setTotalPage(response.data.total_page);
+      })
+      .catch((error) => {
+        toast({
+          position: 'top',
+          title: 'Belum ada Rumah Sakit Terdaftar',
+          status: 'error',
+          duration: '2000',
+          isClosable: true,
+        });
+      });
+    setRender(false);
+  };
+
+  //region api
   const getProvinsi = async () => {
     await apiProvinsi.getProvinsi().then((response) => {
-      const data = response.data.provinsi;
+      const data = response.data.value;
       setProvinsi(data);
     });
   };
 
-  const getDetailProvinsi = async (id) => {
-    await apiProvinsi
-      .getDetailProvinsi(id)
-      .then((response) => {
-        const data = response.data;
-        setNameProvinsi(data.nama);
-      })
-      .catch((error) => {
-        setNameProvinsi('all');
-      });
-  };
-
   const getKotaKabupatenByProvinsi = async (id) => {
     await apiProvinsi.getKotaKabupateByProvinsi(id).then((response) => {
-      const data = response.data.kota_kabupaten;
+      const data = response.data.value;
       setKota(data);
     });
   };
 
-  const handlerChangeProvinsi = (e) => {
-    setSelectKota('');
-    getDetailProvinsi(e);
-    getKotaKabupatenByProvinsi(e);
+  //pagination
+  const onPagination = (page) => {
+    setCurrentPage(page);
+    const selisih = currentPage - page;
+    if (page === 1 || totalPage === 1) {
+      setNomor(0);
+    } else if (page === totalPage) {
+      setNomor(totalPage * 10 - 10);
+    } else {
+      if (selisih < 0) {
+        setNomor(Math.abs(selisih * 10 + nomor));
+      } else if (selisih > 0) {
+        setNomor(Math.abs(selisih * 10 - nomor));
+      }
+    }
   };
 
-  const resultHospital = hospitals.filter((data) => {
-    return data.provinsi == nameProvinsi;
-  });
+  //handler filter
+  //handler filter
+  const selectNameProvinsi = (id) => {
+    provinsi.filter((data) => {
+      if (data.id === id) {
+        getHospitalByProvinsi(currentPage, data.name);
+      }
+    });
+  };
 
-  const resultRegionHospital = resultHospital.filter((data) => {
-    return data.kabupaten_kota == selectKota;
-  });
+  const handlerChangeProvinsi = (id) => {
+    setNameProvinsi('');
+    if (id == '') {
+      onPagination(1);
+      getAllHospitalsHandler();
+    } else {
+      selectNameProvinsi(id);
+      getKotaKabupatenByProvinsi(id);
+    }
+    setSelectKota('');
+  };
+
+  const selectNameKota = (id) => {
+    kota.filter((data) => {
+      if (data.id == id) {
+        getHospitalByKabupaten(1, nameProvinsi, data.name);
+      }
+    });
+  };
+
+  const handlerChangeKabupaten = (id) => {
+    setSelectKota(id);
+    if (id == '') {
+      onPagination(1);
+      getHospitalByProvinsi(1, nameProvinsi);
+    } else {
+      selectNameKota(id);
+    }
+  };
+
+  //search
+  const handleSearch = () => {
+    const data = searchByNameRef.current.value;
+    getHospitalByName(data, 1);
+  };
+
+  const onSearchHandler = () => {
+    handleSearch();
+  };
 
   useEffect(() => {
-    if (!token) {
+    if (!auth) {
       toast({
         position: 'top',
         title: 'Kamu Harus Login Dulu',
@@ -88,19 +224,24 @@ function CariRumahSakit() {
       });
       navigate('/login');
     }
+    if (nameProvinsi === '') {
+      getAllHospitalsHandler(currentPage);
+    } else {
+      getHospitalByKabupaten(currentPage, nameProvinsi, nameKota);
+    }
     getProvinsi();
-    getAllHospitalsHandler();
-  }, []);
+  }, [currentPage]);
+
   return (
     <>
       {loading && <Loading body={'Tunggu Sebentar'} />}
       {!loading && (
         <Layout isActive={'hospital'}>
           <Box>
-            <Flex direction={['column-reverse', 'column-reverse', 'row']} alignItems="center" justify="center">
-              <Center>
+            <Flex direction={{ base: 'column-reverse', md: 'column-reverse', lg: 'row' }} alignItems="center" justify="center" mx={'5'}>
+              <Center gap={'10'}>
                 <Box color="#1FA8F6" w={['300px', '350px', '500px']} h={['200px', '400px', '400px']} mt={50}>
-                  <Heading fontWeight={600} fontSize={['30px', '42px']} mr={10}>
+                  <Heading fontWeight={600} fontSize={['30px', '42px']}>
                     Find Room,
                   </Heading>
                   <Heading fontWeight={600} fontSize={['30px', '42px']}>
@@ -130,38 +271,16 @@ function CariRumahSakit() {
               onChangeProvinsi={(e) => handlerChangeProvinsi(e.target.value)}
               kota={kota}
               valueKota={selectKota}
-              onChangeKota={(e) => setSelectKota(e.target.value)}
-              headTable={
-                <Tr>
-                  <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
-                    No
-                  </Th>
-                  <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
-                    Nama Rumah Sakit
-                  </Th>
-                  <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
-                    Pemilik / Pengelola
-                  </Th>
-                  <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
-                    No Telepon
-                  </Th>
-                  <Th color="alta.primary" fontWeight={' 700'} fontSize={'16px'}>
-                    Alamat
-                  </Th>
-                </Tr>
-              }
-              bodyTable={(nameProvinsi === 'all' || nameProvinsi === '' ? hospitals : selectKota === 'all' || selectKota === '' ? resultHospital : resultRegionHospital).map((data, index) => (
-                <Tr key={index}>
-                  <Td>{index + 1}</Td>
-                  <Td textDecoration={'underline'} _hover={{ color: '#1FA8F6' }}>
-                    <Link to={`/rumahsakit/${data.id}/detail`}>{data.nama}</Link>
-                  </Td>
-                  <Td>{data.pemilik_pengelola}</Td>
-                  <Td>{data.no_telpon}</Td>
-                  <Td>{data.alamat + ' ' + data.kecamatan + ' ' + data.kabupaten_kota + ', ' + data.provinsi + ',' + data.kode_pos}</Td>
-                </Tr>
-              ))}
+              onChangeKota={(e) => handlerChangeKabupaten(e.target.value)}
+              inputRef={searchByNameRef}
+              onSearch={onSearchHandler}
+              hospitals={hospitals}
+              nomor={nomor}
+              render={render}
             />
+            <Flex justify={'end'} mx={'20'} mt={'8'}>
+              <Pagination defaultCurrent={'1'} current={currentPage} total={totalPage * 10} onChange={onPagination} />
+            </Flex>
           </Box>
         </Layout>
       )}
