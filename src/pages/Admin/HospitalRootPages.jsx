@@ -24,11 +24,15 @@ import apiProvinsi from '../../services/apiProvinsi';
 import { AuthToken } from '../../services/authToken';
 import Loading from '../../components/Loading';
 import Pagination from 'rc-pagination';
+import SearchModal from '../../components/SearchModal';
 
 const HospitalRootPages = () => {
     const { isOpen: isModalCreateOpen, onOpen: onModalCreateOpen, onClose: onCloseModalCreate } = useDisclosure();
     const { isOpen: isModalEditOpen, onOpen: onModalEditOpen, onClose: onCloseModalEdit } = useDisclosure();
     const { isOpen: isModalDeleteOpen, onOpen: onModalDeleteOpen, onClose: onCloseModalDelete } = useDisclosure();
+
+    const { isOpen: isOpenSearch, onOpen: onOpenSearch, onClose: onCloseSearch } = useDisclosure();
+
     const role = Cookies.get('role');
     const token = Cookies.get('token');
     const navigate = useNavigate();
@@ -431,7 +435,7 @@ const HospitalRootPages = () => {
             {
                 !loading &&
                 <LayoutAdminRoot activeMenu={'hospital'}>
-                    <HeadAdmin title={'Manajemen Rumah Sakit'} isAdd={onModalCreateOpen} />
+                    <HeadAdmin title={'Manajemen Rumah Sakit'} isAdd={onModalCreateOpen} onSearch={onOpenSearch} />
                     <TableAdmin
                         headTable={
                             <Tr>
@@ -933,6 +937,8 @@ const HospitalRootPages = () => {
                         onClose={onCloseModalDelete}
                         onDelete={() => onDeleteHandler(hospitalId)}
                     />
+
+                    <SearchModal isOpen={isOpenSearch} onClose={onCloseSearch} />
                 </LayoutAdminRoot>
             }
         </>
