@@ -115,10 +115,14 @@ const RoomPage = () => {
   };
 
   const getAllHospitalBedHandler = async () => {
-    await api.getAllBeds(token, staff.hospital_id).then((response) => {
+    await api.getAllBeds(token, staff.hospital_id)
+    .then((response) => {
       const data = response.data.data;
       setBeds(data);
-    });
+    })
+    .catch(error => {
+
+    })
     setLoading(false);
   };
 
@@ -270,7 +274,7 @@ const RoomPage = () => {
       {loading && <Loading body={'Sedang Memuat Data...'} />}
       {!loading && (
         <LayoutAdmin activeMenu={'room'}>
-          <HeadAdmin title={'Manajemen Tempat Tidur Pasien'} isAdd={onOpenAdd} />
+          <HeadAdmin title={'Manajemen Tempat Tidur Pasien'} isAdd={onOpenAdd} showFilter={'none'} showSearch={'none'}/>
           <Box mt={'5'} py={'10'} bg="white">
             <TableAdmin
               headTable={

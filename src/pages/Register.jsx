@@ -1,14 +1,14 @@
-import React from 'react';
-import logo from '../assets/images/logo.png';
-import googleLogo from '../assets/images/googlelogo.png';
-import { ViewOffIcon, ViewIcon } from '@chakra-ui/icons';
-import api from '../services/api';
-import { useNavigate } from 'react-router-dom';
-import { Button, Center, Input, Link, Text, Divider, Flex, Spacer, Image, Box, InputGroup, InputRightElement, useToast, FormControl } from '@chakra-ui/react';
-import * as yup from 'yup';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import roomRegister from '../assets/images/room-register.png';
+import React from "react";
+import logo from "../assets/images/logo.png";
+import googleLogo from "../assets/images/googlelogo.png";
+import { ViewOffIcon, ViewIcon } from "@chakra-ui/icons";
+import api from "../services/api";
+import { useNavigate } from "react-router-dom";
+import { Button, Center, Input, Link, Text, Divider, Flex, Spacer, Image, Box, InputGroup, InputRightElement, useToast, FormControl} from "@chakra-ui/react";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import imgRegister from '../assets/images/home-room.jpg';
 
 function Register() {
   const [show, setShow] = React.useState(false);
@@ -25,9 +25,7 @@ function Register() {
   const schema = yup.object({
     nama: yup.string().required('Harap masukkan username'),
     email: yup.string().required('Harap masukkan email').email('Format email salah'),
-    // no_telpon: yup
-    //   .number("Nomor telpon haruslah angka")
-    //   .required("Harap masukkan nomor telpon"),
+    no_telpon: yup.strin().required("Harap masukkan nomor telpon"),
     kata_sandi: yup.string().required('Harap masukkan password').min(8, 'Password setidaknya 8 karakter'),
     nik: yup.number().typeError('Harap masukkan NIK').required(),
     no_kk: yup.number().typeError('Harap masukkan Nomor Kartu Keluarga').required(),
@@ -98,7 +96,7 @@ function Register() {
               xl: '700px',
             }}
             width="full"
-            backgroundImage={`url(${roomRegister})`}
+            backgroundImage={`url(${imgRegister})`}
             backgroundSize={{
               base: 'cover',
               sm: 'cover',

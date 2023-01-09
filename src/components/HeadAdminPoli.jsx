@@ -5,7 +5,7 @@ import { CiSearch } from 'react-icons/ci';
 import { IoAddOutline } from 'react-icons/io5';
 import { MdModeEdit, MdOutlineDeleteOutline } from 'react-icons/md';
 
-const HeadAdminPoli = ({ title, onAdd, nama_poli, select_poli, onDelete, onEdit }) => {
+const HeadAdminPoli = ({ title, onAdd, nama_poli, select_poli, onDelete, onEdit, disable }) => {
   return (
     <Flex
       bg="white"
@@ -39,13 +39,10 @@ const HeadAdminPoli = ({ title, onAdd, nama_poli, select_poli, onDelete, onEdit 
           <Button onClick={onAdd} bg="transparent" border="1px" borderColor={'#E0E0E0'}>
             <IoAddOutline fontSize={'30px'} />
           </Button>
-          <Button bg="transparent" border="1px" borderColor={'#E0E0E0'}>
-            <CiSearch fontSize={'30px'} />
-          </Button>
-          <Button bg="transparent" border="1px" borderColor={'#E0E0E0'} onClick={onEdit}>
+          <Button bg="transparent" border="1px" borderColor={'#E0E0E0'} onClick={onEdit} disabled={disable}>
             <MdModeEdit />
           </Button>
-          <Button bg="transparent" border="1px" borderColor={'#E0E0E0'} onClick={onDelete}>
+          <Button bg="transparent" border="1px" borderColor={'#E0E0E0'} onClick={onDelete} disabled={disable}>
             <MdOutlineDeleteOutline />
           </Button>
         </ButtonGroup>

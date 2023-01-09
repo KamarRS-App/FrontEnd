@@ -24,11 +24,18 @@ import apiProvinsi from '../../services/apiProvinsi';
 import { AuthToken } from '../../services/authToken';
 import Loading from '../../components/Loading';
 import Pagination from 'rc-pagination';
+import SearchModal from '../../components/SearchModal';
+import FilterModal from '../../components/FilterModal';
+import LoadingTable from '../../components/LoadingTable';
 
 const HospitalRootPages = () => {
     const { isOpen: isModalCreateOpen, onOpen: onModalCreateOpen, onClose: onCloseModalCreate } = useDisclosure();
     const { isOpen: isModalEditOpen, onOpen: onModalEditOpen, onClose: onCloseModalEdit } = useDisclosure();
     const { isOpen: isModalDeleteOpen, onOpen: onModalDeleteOpen, onClose: onCloseModalDelete } = useDisclosure();
+
+    const { isOpen: isOpenSearch, onOpen: onOpenSearch, onClose: onCloseSearch } = useDisclosure();
+    const { isOpen: isOpenFilter, onOpen: onOpenFilter, onClose: onCloseFIlter } = useDisclosure();
+
     const role = Cookies.get('role');
     const token = Cookies.get('token');
     const navigate = useNavigate();
@@ -47,6 +54,11 @@ const HospitalRootPages = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPage, setTotalPage] = useState();
     const [nomor, setNomor] = useState(0);
+    const [render, setRender] = useState();
+    const [idProv, setIdProv] = useState();
+    const [idKab, setIdKab] = useState();
+
+    const searchRef = useRef();
 
     const auth = AuthToken();
 
@@ -231,6 +243,59 @@ const HospitalRootPages = () => {
             })
     }
 
+    const getHospitalByName = async (name, page) => {
+        setRender(true);
+        await api.getHospitalByName(token, name, page)
+            .then(response => {
+                const data = response.data.data;
+                setHospitals(data);
+                setTotalPage(response.data.total_page)
+            })
+            .catch(error => {
+                toast({
+                    position: 'top',
+                    title: 'Belum ada Rumah Sakit Terdaftar',
+                    status: 'error',
+                    duration: '2000',
+                    isClosable: true
+                });
+            })
+        setRender(false);
+    }
+
+    //filter
+    const getHospitalByKabupaten = async (page, provinsi, kabupaten) => {
+        setRender(true);
+        await api.getHospitalByKabupaten(token, page, provinsi, kabupaten)
+            .then(response => {
+                const data = response.data.data;
+                setHospitals(data);
+                setNameKota(kabupaten);
+                setTotalPage(response.data.total_page)
+                if (response.data.total_page === 1) {
+                    onPagination(1);
+                }
+                toast({
+                    position: 'top',
+                    title: 'Rumah Sakit berhasil di temukan',
+                    status: 'success',
+                    duration: '2000',
+                    isClosable: true
+                });
+            })
+            .catch(error => {
+                toast({
+                    position: 'top',
+                    title: 'Belum ada Rumah Sakit Terdaftar',
+                    status: 'error',
+                    duration: '2000',
+                    isClosable: true
+                });
+            })
+        setRender(false);
+    }
+
+
     //api dearah
     const getProvinsi = async () => {
         await apiProvinsi.getProvinsi()
@@ -392,7 +457,7 @@ const HospitalRootPages = () => {
         onCloseModalDelete();
     };
 
-    //filter
+    //pagination
     const onPagination = (page) => {
         setCurrentPage(page)
         const selisih = currentPage - page;
@@ -408,6 +473,34 @@ const HospitalRootPages = () => {
                 setNomor(Math.abs((selisih * 10) - nomor));
             }
         }
+    }
+
+    //search
+    const handleSearch = () => {
+        const data = searchRef.current.value;
+        getHospitalByName(data, 1);
+    }
+
+    //filter
+
+    const onHandlerProvinsi = (id) => {
+        setNameProvinsi('');
+        selectNameProvinsi(id);
+        setIdProv(id);
+        getKotaKabupatenByProvinsi(id);
+        setIdKab(' ')
+        setNameKota(' ');
+    }
+
+    const onHandlerKabupaten = (id) => {
+        setNameKota('');
+        setIdKab(id);
+        selectNameKota(id)
+    }
+
+    const handlerFilter = () => {
+        getHospitalByKabupaten(1, nameProvinsi, nameKota);
+        onCloseFIlter();
     }
 
     useEffect(() => {
@@ -431,7 +524,7 @@ const HospitalRootPages = () => {
             {
                 !loading &&
                 <LayoutAdminRoot activeMenu={'hospital'}>
-                    <HeadAdmin title={'Manajemen Rumah Sakit'} isAdd={onModalCreateOpen} />
+                    <HeadAdmin title={'Manajemen Rumah Sakit'} isAdd={onModalCreateOpen} onSearch={onOpenSearch} onFilter={onOpenFilter} />
                     <TableAdmin
                         headTable={
                             <Tr>
@@ -529,105 +622,121 @@ const HospitalRootPages = () => {
                             </Tr>
                         }
                         bodyTable={
-                            hospitals.length !== 0 ?
-                                hospitals?.map((data, index) => (
-                                    <Tr key={data.id}>
+                            <>
+                                {
+                                    render &&
+                                    <Tr>
                                         <Td
+                                            colSpan={'12'}
                                             textAlign={'center'}
                                         >
-                                            {nomor + index + 1}
-                                        </Td>
-                                        <Td
-                                            textAlign={'center'}
-                                        >
-                                            <ButtonGroup gap='4'>
-                                                <Button
-                                                    onClick={() => onHandlerEdit(data.id)}
-                                                    bg='transparent'
-                                                    border='1px'
-                                                    borderColor={'#E0E0E0'}
-                                                >
-                                                    <MdModeEdit />
-                                                </Button>
-                                                <Button
-                                                    onClick={() => onDeleteClicked(data.id)}
-                                                    bg='transparent'
-                                                    border='1px'
-                                                    borderColor={'#E0E0E0'}
-                                                >
-                                                    <MdOutlineDeleteOutline />
-                                                </Button>
-                                            </ButtonGroup>
-                                        </Td>
-                                        <Td
-                                            textAlign={'center'}
-                                        >
-                                            <Image
-                                                src={data.foto}
-                                                minWidth={'150px'}
-                                                maxWidth={'300px'}
-                                            />
-                                        </Td>
-                                        <Td
-                                            textAlign={'center'}
-                                        >
-                                            {data.nama}
-                                        </Td>
-                                        <Td
-                                            textAlign={'center'}
-                                        >
-                                            {data.kode_rs}
-                                        </Td>
-                                        <Td
-                                            textAlign={'center'}
-                                        >
-                                            {data.alamat + ", kec." + data.kecamatan + ", " + data.kabupaten_kota + ", " + data.provinsi + ", " + data.kode_pos}
-                                        </Td>
-                                        <Td
-                                            textAlign={'center'}
-                                        >
-                                            {data.no_telpon}
-                                        </Td>
-                                        <Td
-                                            textAlign={'center'}
-                                        >
-                                            {data.email}
-                                        </Td>
-                                        <Td
-                                            textAlign={'center'}
-                                        >
-                                            {data.kelas_rs}
-                                        </Td>
-                                        <Td
-                                            textAlign={'center'}
-                                        >
-                                            {data.pemilik_pengelola}
-                                        </Td>
-                                        <Td
-                                            textAlign={'center'}
-                                        >
-                                            {data.jumlah_tempat_tidur}
-                                        </Td>
-                                        <Td
-                                            textAlign={'center'}
-                                        >
-                                            {data.status_penggunaan}
-                                        </Td>
-                                        <Td
-                                            textAlign={'center'}
-                                        >
-                                            Rp. {data.biaya_registrasi}
+                                            <LoadingTable />
                                         </Td>
                                     </Tr>
-                                ))
-                                :
-                                <Tr>
-                                    <Td colSpan={'12'}
-                                        textAlign={'center'}
-                                    >
-                                        Data Kosong
-                                    </Td>
-                                </Tr>
+                                }
+                                {
+                                    !render &&
+                                        hospitals.length !== 0 ?
+                                        hospitals?.map((data, index) => (
+                                            <Tr key={data.id}>
+                                                <Td
+                                                    textAlign={'center'}
+                                                >
+                                                    {nomor + index + 1}
+                                                </Td>
+                                                <Td
+                                                    textAlign={'center'}
+                                                >
+                                                    <ButtonGroup gap='4'>
+                                                        <Button
+                                                            onClick={() => onHandlerEdit(data.id)}
+                                                            bg='transparent'
+                                                            border='1px'
+                                                            borderColor={'#E0E0E0'}
+                                                        >
+                                                            <MdModeEdit />
+                                                        </Button>
+                                                        <Button
+                                                            onClick={() => onDeleteClicked(data.id)}
+                                                            bg='transparent'
+                                                            border='1px'
+                                                            borderColor={'#E0E0E0'}
+                                                        >
+                                                            <MdOutlineDeleteOutline />
+                                                        </Button>
+                                                    </ButtonGroup>
+                                                </Td>
+                                                <Td
+                                                    textAlign={'center'}
+                                                >
+                                                    <Image
+                                                        src={data.foto}
+                                                        minWidth={'150px'}
+                                                        maxWidth={'300px'}
+                                                    />
+                                                </Td>
+                                                <Td
+                                                    textAlign={'center'}
+                                                >
+                                                    {data.nama}
+                                                </Td>
+                                                <Td
+                                                    textAlign={'center'}
+                                                >
+                                                    {data.kode_rs}
+                                                </Td>
+                                                <Td
+                                                    textAlign={'center'}
+                                                >
+                                                    {data.alamat + ", kec." + data.kecamatan + ", " + data.kabupaten_kota + ", " + data.provinsi + ", " + data.kode_pos}
+                                                </Td>
+                                                <Td
+                                                    textAlign={'center'}
+                                                >
+                                                    {data.no_telpon}
+                                                </Td>
+                                                <Td
+                                                    textAlign={'center'}
+                                                >
+                                                    {data.email}
+                                                </Td>
+                                                <Td
+                                                    textAlign={'center'}
+                                                >
+                                                    {data.kelas_rs}
+                                                </Td>
+                                                <Td
+                                                    textAlign={'center'}
+                                                >
+                                                    {data.pemilik_pengelola}
+                                                </Td>
+                                                <Td
+                                                    textAlign={'center'}
+                                                >
+                                                    {data.jumlah_tempat_tidur}
+                                                </Td>
+                                                <Td
+                                                    textAlign={'center'}
+                                                >
+                                                    {data.status_penggunaan}
+                                                </Td>
+                                                <Td
+                                                    textAlign={'center'}
+                                                >
+                                                    Rp. {data.biaya_registrasi}
+                                                </Td>
+                                            </Tr>
+                                        ))
+                                        :
+                                        <Tr>
+                                            <Td colSpan={'12'}
+                                                textAlign={'center'}
+                                            >
+                                                Data Kosong
+                                            </Td>
+                                        </Tr>
+                                }
+                            </>
                         }
                     />
                     <Flex
@@ -822,36 +931,42 @@ const HospitalRootPages = () => {
                                 >
                                     <FormControl isInvalid={errorsUpdate.provinsi}>
                                         <FormLabel>Provinsi</FormLabel>
-                                        <Select placeholder={currentHospital.provinsi} id='provinsi' {...updateHospital('provinsi')}>
-                                            <option>Jawa Timur</option>
-                                            <option>rawat jalan</option>
-                                            <option>verifikasi</option>
-                                            <option>pendaftaran</option>
-                                            <option>selesai</option>
+                                        <Select placeholder={currentHospital.provinsi} id='provinsi' {...updateHospital('provinsi')}
+                                            onChange={(e) => handlerProvinsi(e.target.value)}
+                                        >
+                                            {
+                                                provinsi.map(data => (
+                                                    <option value={data.id} key={data.id}>{data.name}</option>
+                                                ))
+                                            }
                                         </Select>
                                         {errorsUpdate.provinsi && <FormErrorMessage>{errorsUpdate.provinsi.message}</FormErrorMessage>}
                                     </FormControl>
 
                                     <FormControl isInvalid={errorsUpdate.kabupaten_kota}>
                                         <FormLabel>Kabupaten / Kota</FormLabel>
-                                        <Select placeholder={currentHospital.kabupaten_kota} id='kabupaten_kota' {...updateHospital('kabupaten_kota')}>
-                                            <option>Surabaya</option>
-                                            <option>rawat jalan</option>
-                                            <option>verifikasi</option>
-                                            <option>pendaftaran</option>
-                                            <option>selesai</option>
+                                        <Select placeholder={currentHospital.kabupaten_kota} id='kabupaten_kota' {...updateHospital('kabupaten_kota')}
+                                            onChange={(e) => handlerKota(e.target.value)}
+                                        >
+                                            {
+                                                kota.map(data => (
+                                                    <option value={data.id} key={data.id}>{data.name}</option>
+                                                ))
+                                            }
                                         </Select>
                                         {errorsUpdate.kabupaten_kota && <FormErrorMessage>{errorsUpdate.kabupaten_kota.message}</FormErrorMessage>}
                                     </FormControl>
 
                                     <FormControl isInvalid={errorsUpdate.kecamatan}>
                                         <FormLabel>Kecamatan</FormLabel>
-                                        <Select placeholder={currentHospital.kecamatan} id='kecamatan' {...updateHospital('kecamatan')} >
-                                            <option>Rungkut</option>
-                                            <option>rawat jalan</option>
-                                            <option>verifikasi</option>
-                                            <option>pendaftaran</option>
-                                            <option>selesai</option>
+                                        <Select placeholder={currentHospital.kecamatan} id='kecamatan' {...updateHospital('kecamatan')}
+                                            {...createHospital('kecamatan')}
+                                        >
+                                            {
+                                                kecamatan.map(data => (
+                                                    <option value={data.nama} key={data.id}>{data.name}</option>
+                                                ))
+                                            }
                                         </Select>
                                         {errorsUpdate.kecamatan && <FormErrorMessage>{errorsUpdate.kecamatan.message}</FormErrorMessage>}
                                     </FormControl>
@@ -933,6 +1048,28 @@ const HospitalRootPages = () => {
                         onClose={onCloseModalDelete}
                         onDelete={() => onDeleteHandler(hospitalId)}
                     />
+
+                    <SearchModal
+                        isOpen={isOpenSearch}
+                        onClose={onCloseSearch}
+                        onSearch={() => handleSearch()}
+                        searchRef={searchRef}
+                    />
+
+                    <FilterModal
+                        isOpen={isOpenFilter}
+                        onClose={onCloseFIlter}
+                        dataSelect2={kota}
+                        dataSelect1={provinsi}
+                        onChangeSelect1={(e) => onHandlerProvinsi(e.target.value)}
+                        onChangeSelect2={(e) => onHandlerKabupaten(e.target.value)}
+                        onFilter={() => handlerFilter()}
+                        valueSelect1={idProv}
+                        valueSelect2={idKab}
+                        titleSelect1={'Pilih Provinsi'}
+                        titleSelect2={'Pilih Kabupaten/Kota'}
+                    />
+
                 </LayoutAdminRoot>
             }
         </>
