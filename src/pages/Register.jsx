@@ -25,7 +25,7 @@ function Register() {
   const schema = yup.object({
     nama: yup.string().required('Harap masukkan username'),
     email: yup.string().required('Harap masukkan email').email('Format email salah'),
-    no_telpon: yup.strin().required("Harap masukkan nomor telpon"),
+    no_telpon: yup.string().required("Harap masukkan nomor telpon"),
     kata_sandi: yup.string().required('Harap masukkan password').min(8, 'Password setidaknya 8 karakter'),
     nik: yup.number().typeError('Harap masukkan NIK').required(),
     no_kk: yup.number().typeError('Harap masukkan Nomor Kartu Keluarga').required(),
