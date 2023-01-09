@@ -189,8 +189,8 @@ function Login() {
               <Box className="text-start w-full">
                 <form>
                   <FormControl isInvalid={errors.email}>
-                    <FormLabel color={'#64748b'} fontWeight={'400'}>
-                      Email:
+                    <FormLabel htmlFor="fname" color={"gray"}>
+                      Email{" "}
                     </FormLabel>
                     <Input
                       // {...register("email")}
@@ -202,9 +202,8 @@ function Login() {
                     />
                     <Text color="red">{errors.email?.message}</Text>
                   </FormControl>
-
                   <FormControl isInvalid={errors.kata_sandi}>
-                    <FormLabel color={'#64748b'} fontWeight={'400'} mt={5}>
+                    <FormLabel htmlFor="password" color={"gray"} mt={5}>
                       Password:
                     </FormLabel>
                     <InputGroup>
