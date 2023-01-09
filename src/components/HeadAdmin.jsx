@@ -4,7 +4,7 @@ import React from "react";
 import { CiFilter, CiSearch } from "react-icons/ci";
 import { IoAddOutline } from "react-icons/io5";
 
-const HeadAdmin = ({ title, isAdd, showAdd, showSearch, showFilter, onSearch }) => {
+const HeadAdmin = ({ title, isAdd, showAdd, showSearch, showFilter, onSearch, onFilter }) => {
   return (
     <Flex
       bg="white"
@@ -46,6 +46,7 @@ const HeadAdmin = ({ title, isAdd, showAdd, showSearch, showFilter, onSearch }) 
             border="1px"
             borderColor={"#E0E0E0"}
             display={showFilter}
+            onClick={onFilter}
           >
             <CiFilter fontSize={"32px"} />
           </Button>

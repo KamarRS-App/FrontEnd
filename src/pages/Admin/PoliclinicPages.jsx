@@ -38,6 +38,7 @@ const PoliclinicPages = () => {
   const [policlinicName, setPoliclinicName] = useState('');
   const [doctorImage, setDoctorImage] = useState('');
   const [doctorId, setDoctorId] = useState();
+  const [checkData, setCheckData] = useState()
 
   //policlinic
   const { isOpen: isModalCreateOpen, onOpen: onModalCreateOpen, onClose: onCloseModalCreate } = useDisclosure();
@@ -60,6 +61,7 @@ const PoliclinicPages = () => {
         const data = response.data.data;
         setPoliclinics(data);
         searchIdDefault(data);
+        setCheckData(true)
       })
       .catch((error) => {
         toast({
@@ -69,6 +71,7 @@ const PoliclinicPages = () => {
           duration: '2000',
           isClosable: true,
         });
+        setCheckData(false)
       });
     setLoading(false);
   };
@@ -515,6 +518,7 @@ const PoliclinicPages = () => {
             nama_poli={'Pilih Poliklinik'}
             onDelete={onOpenModalDelete}
             onEdit={onEditHandler}
+            disable={checkData ? false : true}
             select_poli={
               <Select width={'200px'} id={'policlinic_id'} value={policlinicId} onChange={(e) => onChangePoliclinic(e.target.value)}>
                 {policlinics.map((data, index) => {

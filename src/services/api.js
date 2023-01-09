@@ -145,6 +145,15 @@ export default {
       },
     }),
 
+    getAdminByName: (token, name) =>
+    instance({
+      method: `GET`,
+      url: `/staffs?hospital_name=${name}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
+
   getAdminById: (token, id) =>
     instance({
       method: `GET`,

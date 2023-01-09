@@ -7,8 +7,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import api from '../../services/api';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { addStaffs } from '../../features/adminSlice';
+import logo from '../../assets/images/logo_rawat_inap.svg';
 
 const LoginAdmin = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -105,7 +106,7 @@ const LoginAdmin = () => {
 
   return (
     <Stack minWidth={'full'} minHeight={'100vh'} maxHeight={'100vh'} bg={'#FAFAFA'} p={{ base: '5', md: '10' }}>
-      <Image height="auto" width="135px" objectFit="contain" src="/src/assets/images/logo_rawat_inap.svg" alt="Logo Rawat Inap" ml={'10'} />
+      <Image height="auto" width="135px" objectFit="contain" src={logo} alt="Logo Rawat Inap" ml={'10'} />
       <HStack justify={'center'} alignItems="center">
         <Box maxWidth={'500px'} maxHeight={'650px'} bg={'white'} border={'1px'} borderRadius={'2xl'} shadow={'lg'} width={'full'} height={'full'} borderColor={'#E0E0E0'} px={{ base: '10', md: '80px' }} py={{ base: '10', md: '70px' }}>
           <Text color={'#1FA8F6'} fontSize={{ base: '26px', md: '36px' }} fontWeight={'600'}>

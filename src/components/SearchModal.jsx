@@ -1,23 +1,23 @@
 import { Button } from '@chakra-ui/button';
+import { Input } from '@chakra-ui/input';
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/modal';
 import React from 'react';
 
-const SearchModal = ({isOpen, onClose}) => {
+const SearchModal = ({isOpen, onClose, searchRef, onSearch}) => {
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Modal Title</ModalHeader>
+                <ModalHeader>Pencarian Rumah Sakit</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    
+                    <Input ref={searchRef} placeholder={'Cari Rumah Sakit'} />
                 </ModalBody>
 
                 <ModalFooter>
-                    <Button colorScheme='blue' mr={3} onClick={onClose}>
-                        Close
+                    <Button bg={'#3AB8FF'} _hover={{ bg:'alta.primary' }} color={'white'} mr={3} onClick={onSearch}>
+                        Cari Rumah Sakit
                     </Button>
-                    <Button variant='ghost'>Secondary Action</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>

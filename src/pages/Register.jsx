@@ -23,6 +23,7 @@ import {
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import imgRegister from '../assets/images/home-room.jpg';
 
 function Register() {
   const [show, setShow] = React.useState(false);
@@ -42,9 +43,6 @@ function Register() {
       .string()
       .required("Harap masukkan email")
       .email("Format email salah"),
-    // no_telpon: yup
-    //   .number("Nomor telpon haruslah angka")
-    //   .required("Harap masukkan nomor telpon"),
     kata_sandi: yup
       .string()
       .required("Harap masukkan password")
@@ -134,7 +132,7 @@ function Register() {
               xl: "700px",
             }}
             width="full"
-            backgroundImage="url(/src/assets/images/home-room.jpg)"
+            backgroundImage={`url(${imgRegister})`}
             backgroundSize={{
               base: "cover",
               sm: "cover",

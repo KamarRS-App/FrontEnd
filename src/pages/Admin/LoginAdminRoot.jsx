@@ -7,6 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import api from '../../services/api';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import logo from '../../assets/images/logo_rawat_inap.svg';
 
 const LoginAdminRoot = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -81,7 +82,7 @@ const LoginAdminRoot = () => {
                 height='auto'
                 width='135px'
                 objectFit='contain'
-                src='/src/assets/images/logo_rawat_inap.svg'
+                src={logo}
                 alt='Logo Rawat Inap'
                 ml={'10'}
             />
@@ -175,30 +176,6 @@ const LoginAdminRoot = () => {
                             </Stack>
                             {errors.kata_sandi && <FormErrorMessage>{errors.kata_sandi.message}</FormErrorMessage>}
                         </FormControl>
-                        {/* <Flex
-                            mt={'8'}
-                            justify={'space-between'}
-                        >
-                            <Checkbox
-                                colorScheme={'linkedin'}
-                                size='lg'
-
-                            >
-                                <Text
-                                    fontWeight={'600'}
-                                    fontSize={'15px'}
-                                >
-                                    Remember Me
-                                </Text>
-                            </Checkbox>
-                            <Text
-                                color={'#E86969'}
-                                fontWeight={'500'}
-                                fontSize={'15px'}
-                            >
-                                lupa password
-                            </Text>
-                        </Flex> */}
                         <Button
                             type='submit'
                             mt={'10'}

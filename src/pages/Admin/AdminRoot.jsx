@@ -12,7 +12,7 @@ import { Input } from '@chakra-ui/input';
 import { Select } from '@chakra-ui/select';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
-import { Box, Stack, useToast } from '@chakra-ui/react';
+import { Box, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, useToast } from '@chakra-ui/react';
 import api from '../../services/api';
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
@@ -21,11 +21,13 @@ import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import PopupDelete from '../../components/PopupDelete';
 import { AuthToken } from '../../services/authToken';
 import Loading from '../../components/Loading';
+import FilterModal from '../../components/FilterModal';
 
 const AdminRoot = () => {
   const { isOpen: isModalCreateOpen, onOpen: onModalCreateOpen, onClose: onCloseModalCreate } = useDisclosure();
   const { isOpen: isModalEditOpen, onOpen: onModalEditOpen, onClose: onCloseModalEdit } = useDisclosure();
   const { isOpen: isModalDeleteOpen, onOpen: onModalDeleteOpen, onClose: onCloseModalDelete } = useDisclosure();
+  const { isOpen: isOpenFilter, onOpen: onOpenFilter, onClose: onCloseFilter } = useDisclosure();
 
   const role = Cookies.get('role');
   const token = Cookies.get('token');
@@ -37,6 +39,7 @@ const AdminRoot = () => {
   const [show, setShow] = useState('');
   const [adminId, setAdminId] = useState('');
   const [loading, setLoading] = useState(true);
+  const [nameHospital, setNameHospital] = useState()
 
   const auth = AuthToken();
 
@@ -170,6 +173,24 @@ const AdminRoot = () => {
       });
   };
 
+  const getAdminStaffByName = async (name) => {
+    await api.getAdminByName(token, name)
+      .then(response => {
+        const data = response.data.data;
+        console.log(data);
+        setAdminStaff(data);
+      })
+      .catch(error => {
+        toast({
+          position: 'top',
+          title: 'Data Admin Tidak tersedai',
+          status: 'error',
+          duration: '2000',
+          isClosable: true,
+        });
+      })
+  }
+
   const updateAdminStaff = async (id, data) => {
     await api
       .updateAdmin(token, id, data)
@@ -265,22 +286,10 @@ const AdminRoot = () => {
     setShow(e.target.value);
   };
 
-  useEffect(() => {
-    if (role !== 'super admin' && token === undefined) {
-      toast({
-        position: 'top',
-        title: 'Kamu Harus Login Dulu',
-        status: 'warning',
-        duration: '2000',
-        isClosable: true,
-      });
-      navigate('/root/login');
-    }
-    getAllAdminStaff();
-    getAllHospitalsHandler();
-  }, []);
-
-  const onError = (error) => {};
+  const onFilter = () => {
+    getAdminStaffByName(nameHospital);
+    onCloseFilter();
+  }
 
   useEffect(() => {
     if (role !== 'super admin' || !auth) {
@@ -302,7 +311,12 @@ const AdminRoot = () => {
       {loading && <Loading body={'Sedang Memuat Halaman...'} />}
       {!loading && (
         <LayoutAdminRoot activeMenu={'user'}>
-          <HeadAdmin title={'Manajemen Akun Super Admin Rumah Sakit'} isAdd={onModalCreateOpen} />
+          <HeadAdmin
+            title={'Manajemen Akun Super Admin Rumah Sakit'}
+            isAdd={onModalCreateOpen}
+            showSearch={'none'}
+            onFilter={onOpenFilter}
+          />
           <TableAdmin
             headTable={
               <Tr>
@@ -366,7 +380,7 @@ const AdminRoot = () => {
             modalTitle={'Tambahkan Akun Admin Rumah Sakit'}
             isOpen={isModalCreateOpen}
             onClose={onCloseHandler}
-            submitButton={handleSubmit(onSubmitCreate, onError)}
+            submitButton={handleSubmit(onSubmitCreate)}
             modalBody={
               <>
                 <FormControl isInvalid={errors.nama}>
@@ -447,6 +461,37 @@ const AdminRoot = () => {
             }
           />
           <PopupDelete isOpen={isModalDeleteOpen} modalTitle={'Hapus Admin Rumah Sakit'} modalBody={'Apakah kamu yakin menghapus admin?'} onClose={onCloseModalDelete} deletet_name={'Hapus Akun'} onDelete={() => onDeleteHandler(adminId)} />
+
+          <Modal isOpen={isOpenFilter} onClose={onCloseFilter}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Filter Admin Staff</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <FormControl>
+                  <FormLabel>Pilih Rumah Sakit</FormLabel>
+                  <Select
+                    placeholder='Pilih Rumah Sakit'
+                    shadow="md"
+                    borderRadius="md"
+                    onChange={(e) => setNameHospital(e.target.value)}
+                    value={nameHospital}
+                  >
+                    {
+                      hospitals.map(data => (
+                        <option value={data.nama} key={data.id}>{data.nama}</option>
+                      ))
+                    }
+                  </Select>
+                </FormControl>
+              </ModalBody>
+              <ModalFooter>
+                <Button bg={'#3AB8FF'} _hover={{ bg: 'alta.primary' }} color={'white'} mr={3} onClick={()=>onFilter()}>
+                  Terapkan Filter
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
         </LayoutAdminRoot>
       )}
     </>
