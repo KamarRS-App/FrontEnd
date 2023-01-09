@@ -250,11 +250,10 @@ function Login() {
             <Box className="flex flex-col">
               <Box className="text-start w-full">
                 <form>
-                  <FormLabel htmlFor="fname" color={"gray"}>
-                    Email{" "}
-                  </FormLabel>
                   <FormControl isInvalid={errors.email}>
-                  <FormLabel color={'#64748b'} fontWeight={'400'}>Email:</FormLabel>
+                    <FormLabel htmlFor="fname" color={"gray"}>
+                      Email{" "}
+                    </FormLabel>
                     <Input
                       // {...register("email")}
                       placeholder="email@gmail.com"
@@ -265,11 +264,10 @@ function Login() {
                     />
                     <Text color="red">{errors.email?.message}</Text>
                   </FormControl>
-                  <FormLabel htmlFor="password" color={"gray"} mt={5}>
-                    Password:
-                  </FormLabel>
                   <FormControl isInvalid={errors.kata_sandi}>
-                    <FormLabel color={'#64748b'} fontWeight={'400'}>Password:</FormLabel>
+                    <FormLabel htmlFor="password" color={"gray"} mt={5}>
+                      Password:
+                    </FormLabel>
                     <InputGroup>
                       <Input
                         type={show ? "text" : "password"}
