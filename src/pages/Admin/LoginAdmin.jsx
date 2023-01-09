@@ -1,4 +1,4 @@
-import { Box, Button, Checkbox, Flex, FormControl, FormErrorMessage, FormLabel, HStack, Image, Input, Stack, Text, useToast } from '@chakra-ui/react';
+import { Box, Button, Checkbox, Flex, FormControl, FormErrorMessage, FormLabel, HStack, Image, Input, Stack, Text, useToast, Link } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import * as Yup from 'yup';
@@ -158,6 +158,11 @@ const LoginAdmin = () => {
             <Button type="submit" mt={'10'} width={'full'} bg={'#1FA8F6'} color={'white'} fontSize={'16px'} fontWeight={'600'} _hover={{ bg: '#3AB8FF' }}>
               Login
             </Button>
+            <Text fontWeight={'500'} fontSize={'15px'} mt={5}>
+              <Link color="#828282" href="#" fontWeight={400} onClick={() => navigate('/root/login')}>
+                Login sebagai Super Admin
+              </Link>
+            </Text>
           </form>
         </Box>
       </HStack>

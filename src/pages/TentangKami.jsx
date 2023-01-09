@@ -14,7 +14,7 @@ function TentangKami() {
           Tentang Kami
         </Text>
         <Flex direction={['column', 'column', 'row']} alignItems="center" justify="left">
-          <Box direction="cols" m={20}>
+          <Box>
             <Image src={hospitalAbout} alt="doctor_hero" fallbackSrc="https://via.placeholder.com/150" />
           </Box>
 
