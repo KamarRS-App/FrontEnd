@@ -35,126 +35,127 @@ const HomePage = () => {
     //hospital api
     const getAllHospitalsHandler = async (pages) => {
         setRender(true);
-        await api.getHospitals(token, pages)
-            .then(response => {
+        await api
+            .getHospitals(token, pages)
+            .then((response) => {
                 const data = response.data.data;
                 setHospitals(data);
-                setTotalPage(response.data.total_page)
+                setTotalPage(response.data.total_page);
             })
-            .catch(error => {
+            .catch((error) => {
                 toast({
                     position: 'top',
                     title: 'Belum ada Rumah Sakit Terdaftar',
                     status: 'error',
                     duration: '2000',
-                    isClosable: true
+                    isClosable: true,
                 });
-            })
+            });
         setRender(false);
-        setLoading(false)
-    }
+        setLoading(false);
+    };
 
     //filter
     const getHospitalByProvinsi = async (page, provinsi) => {
         setRender(true);
-        await api.getHospitalByProvinsi(token, page, provinsi)
-            .then(response => {
+        await api
+            .getHospitalByProvinsi(token, page, provinsi)
+            .then((response) => {
                 const data = response.data.data;
                 setHospitals(data);
                 setTotalPage(response.data.total_page);
-                setNameProvinsi(provinsi)
+                setNameProvinsi(provinsi);
                 if (response.data.total_page === 1) {
                     onPagination(1);
                 }
             })
-            .catch(error => {
+            .catch((error) => {
                 toast({
                     position: 'top',
                     title: 'Belum ada Rumah Sakit Terdaftar',
                     status: 'error',
                     duration: '2000',
-                    isClosable: true
+                    isClosable: true,
                 });
-            })
+            });
         setRender(false);
-    }
+    };
 
     const getHospitalByKabupaten = async (page, provinsi, kabupaten) => {
         setRender(true);
-        await api.getHospitalByKabupaten(token, page, provinsi, kabupaten)
-            .then(response => {
+        await api
+            .getHospitalByKabupaten(token, page, provinsi, kabupaten)
+            .then((response) => {
                 const data = response.data.data;
                 setHospitals(data);
                 setNameKota(kabupaten);
-                setTotalPage(response.data.total_page)
+                setTotalPage(response.data.total_page);
                 if (response.data.total_page === 1) {
                     onPagination(1);
                 }
             })
-            .catch(error => {
+            .catch((error) => {
                 toast({
                     position: 'top',
                     title: 'Belum ada Rumah Sakit Terdaftar',
                     status: 'error',
                     duration: '2000',
-                    isClosable: true
+                    isClosable: true,
                 });
-            })
+            });
         setRender(false);
-    }
+    };
 
     //search
     const getHospitalByName = async (name, page) => {
         setRender(true);
-        await api.getHospitalByName(token, name, page)
-            .then(response => {
+        await api
+            .getHospitalByName(token, name, page)
+            .then((response) => {
                 const data = response.data.data;
                 setHospitals(data);
-                setTotalPage(response.data.total_page)
+                setTotalPage(response.data.total_page);
             })
-            .catch(error => {
+            .catch((error) => {
                 toast({
                     position: 'top',
                     title: 'Belum ada Rumah Sakit Terdaftar',
                     status: 'error',
                     duration: '2000',
-                    isClosable: true
+                    isClosable: true,
                 });
-            })
+            });
         setRender(false);
-    }
+    };
 
     //region api
     const getProvinsi = async () => {
-        await apiProvinsi.getProvinsi()
-            .then((response) => {
-                const data = response.data.value
-                setProvinsi(data);
-            });
+        await apiProvinsi.getProvinsi().then((response) => {
+            const data = response.data.value;
+            setProvinsi(data);
+        });
     };
 
     const getKotaKabupatenByProvinsi = async (id) => {
-        await apiProvinsi.getKotaKabupateByProvinsi(id)
-            .then(response => {
-                const data = response.data.value;
-                setKota(data);
-            })
-    }
+        await apiProvinsi.getKotaKabupateByProvinsi(id).then((response) => {
+            const data = response.data.value;
+            setKota(data);
+        });
+    };
 
     //pagination
     const onPagination = (page) => {
-        setCurrentPage(page)
+        setCurrentPage(page);
         const selisih = currentPage - page;
         if (page === 1 || totalPage === 1) {
             setNomor(0);
         } else if (page === totalPage) {
-            setNomor((totalPage * 10) - 10)
-        }
-        else {
+            setNomor(totalPage * 10 - 10);
+        } else {
             if (selisih < 0) {
-                setNomor(Math.abs((selisih * 10) + nomor));
+                setNomor(Math.abs(selisih * 10 + nomor));
             } else if (selisih > 0) {
-                setNomor(Math.abs((selisih * 10) - nomor));
+                setNomor(Math.abs(selisih * 10 - nomor));
             }
         }
     }
@@ -163,11 +164,11 @@ const HomePage = () => {
     const handleSearch = () => {
         const data = searchByNameRef.current.value;
         getHospitalByName(data, 1);
-    }
+    };
 
     const onSearchHandler = () => {
         handleSearch();
-    }
+    };
 
     //handler filter
     const selectNameProvinsi = (id) => {
@@ -175,8 +176,8 @@ const HomePage = () => {
             if (data.id === id) {
                 getHospitalByProvinsi(currentPage, data.name);
             }
-        })
-    }
+        });
+    };
 
     const handlerChangeProvinsi = (id) => {
         setNameProvinsi('');
@@ -188,25 +189,25 @@ const HomePage = () => {
             getKotaKabupatenByProvinsi(id);
         }
         setSelectKota('');
-    }
+    };
 
     const selectNameKota = (id) => {
         kota.filter((data) => {
             if (data.id == id) {
                 getHospitalByKabupaten(1, nameProvinsi, data.name);
             }
-        })
-    }
+        });
+    };
 
     const handlerChangeKabupaten = (id) => {
         setSelectKota(id);
         if (id == '') {
             onPagination(1);
-            getHospitalByProvinsi(1, nameProvinsi)
+            getHospitalByProvinsi(1, nameProvinsi);
         } else {
-            selectNameKota(id)
+            selectNameKota(id);
         }
-    }
+    };
 
     useEffect(() => {
         if (!auth) {

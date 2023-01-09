@@ -1,12 +1,12 @@
 import React from 'react';
-import { Box} from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import HeaderCariDokter from '../components/HeaderCariDokter';
 import CariSpesialis from '../components/CariSpesialis';
 import Layout from '../components/Layout';
 
 function CariDokter() {
   return (
-    <Layout>
+    <Layout isActive={'doctor'}>
       <Box w="full">
         <HeaderCariDokter />
         <CariSpesialis />
