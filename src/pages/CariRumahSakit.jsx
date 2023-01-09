@@ -14,7 +14,6 @@ import image1 from '../assets/images/rs-mitra-keluarga.png';
 import image2 from '../assets/images/rs-haji.png';
 import image3 from '../assets/images/rs-sardjito.png';
 
-
 function CariRumahSakit() {
   const token = Cookies.get('token');
   const toast = useToast();
@@ -28,57 +27,55 @@ function CariRumahSakit() {
   const [loading, setLoading] = useState(true);
 
   const getAllHospitalsHandler = async () => {
-    await api.getHospitals(token)
-      .then(response => {
+    await api
+      .getHospitals(token)
+      .then((response) => {
         const data = response.data.data;
         setHospitals(data);
       })
-      .catch(error => {
-        console.log(error);
-      })
+      .catch((error) => {});
     setLoading(false);
-  }
+  };
 
   const getProvinsi = async () => {
-    await apiProvinsi.getProvinsi()
-      .then((response) => {
-        const data = response.data.provinsi
-        setProvinsi(data);
-      });
+    await apiProvinsi.getProvinsi().then((response) => {
+      const data = response.data.provinsi;
+      setProvinsi(data);
+    });
   };
 
   const getDetailProvinsi = async (id) => {
-    await apiProvinsi.getDetailProvinsi(id)
-      .then(response => {
+    await apiProvinsi
+      .getDetailProvinsi(id)
+      .then((response) => {
         const data = response.data;
-        setNameProvinsi(data.nama)
+        setNameProvinsi(data.nama);
       })
-      .catch(error => {
-        setNameProvinsi('all')
-      })
-  }
+      .catch((error) => {
+        setNameProvinsi('all');
+      });
+  };
 
   const getKotaKabupatenByProvinsi = async (id) => {
-    await apiProvinsi.getKotaKabupateByProvinsi(id)
-      .then(response => {
-        const data = response.data.kota_kabupaten;
-        setKota(data);
-      })
-  }
+    await apiProvinsi.getKotaKabupateByProvinsi(id).then((response) => {
+      const data = response.data.kota_kabupaten;
+      setKota(data);
+    });
+  };
 
   const handlerChangeProvinsi = (e) => {
     setSelectKota('');
     getDetailProvinsi(e);
     getKotaKabupatenByProvinsi(e);
-  }
+  };
 
   const resultHospital = hospitals.filter((data) => {
     return data.provinsi == nameProvinsi;
-  })
+  });
 
   const resultRegionHospital = resultHospital.filter((data) => {
     return data.kabupaten_kota == selectKota;
-  })
+  });
 
   useEffect(() => {
     if (!token) {
@@ -87,7 +84,7 @@ function CariRumahSakit() {
         title: 'Kamu Harus Login Dulu',
         status: 'warning',
         duration: '2000',
-        isClosable: true
+        isClosable: true,
       });
       navigate('/login');
     }
@@ -97,8 +94,7 @@ function CariRumahSakit() {
   return (
     <>
       {loading && <Loading body={'Tunggu Sebentar'} />}
-      {
-        !loading &&
+      {!loading && (
         <Layout isActive={'hospital'}>
           <Box>
             <Flex direction={['column-reverse', 'column-reverse', 'row']} alignItems="center" justify="center">
@@ -154,31 +150,21 @@ function CariRumahSakit() {
                   </Th>
                 </Tr>
               }
-              bodyTable={
-                (nameProvinsi === 'all' || nameProvinsi === '' ? hospitals : selectKota === 'all' || selectKota === '' ? resultHospital : resultRegionHospital)
-                  .map((data, index) => (
-                    <Tr key={index}>
-                      <Td>{index + 1}</Td>
-                      <Td
-                        textDecoration={'underline'}
-                        _hover={{ color: '#1FA8F6' }}
-                      >
-                        <Link
-                          to={`/rumahsakit/${data.id}/detail`}
-                        >
-                          {data.nama}
-                        </Link>
-                      </Td>
-                      <Td>{data.pemilik_pengelola}</Td>
-                      <Td>{data.no_telpon}</Td>
-                      <Td>{data.alamat + " " + data.kecamatan + " " + data.kabupaten_kota + ", " + data.provinsi + "," + data.kode_pos}</Td>
-                    </Tr>
-                  ))
-              }
+              bodyTable={(nameProvinsi === 'all' || nameProvinsi === '' ? hospitals : selectKota === 'all' || selectKota === '' ? resultHospital : resultRegionHospital).map((data, index) => (
+                <Tr key={index}>
+                  <Td>{index + 1}</Td>
+                  <Td textDecoration={'underline'} _hover={{ color: '#1FA8F6' }}>
+                    <Link to={`/rumahsakit/${data.id}/detail`}>{data.nama}</Link>
+                  </Td>
+                  <Td>{data.pemilik_pengelola}</Td>
+                  <Td>{data.no_telpon}</Td>
+                  <Td>{data.alamat + ' ' + data.kecamatan + ' ' + data.kabupaten_kota + ', ' + data.provinsi + ',' + data.kode_pos}</Td>
+                </Tr>
+              ))}
             />
           </Box>
         </Layout>
-      }
+      )}
     </>
   );
 }

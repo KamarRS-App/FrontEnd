@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { Box, Heading, Input, Text, useToast } from "@chakra-ui/react";
-import { Button } from "@chakra-ui/react";
-import { Stack, Select, Card, Link } from "@chakra-ui/react";
-import axios from "axios";
-import Cookies from "js-cookie";
-import { useNavigate } from "react-router";
-import api from "../services/api";
-import Loading from "../components/Loading";
+import React, { useEffect, useState } from 'react';
+import { Box, Heading, Input, Text, useToast } from '@chakra-ui/react';
+import { Button } from '@chakra-ui/react';
+import { Stack, Select, Card, Link } from '@chakra-ui/react';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router';
+import api from '../services/api';
+import Loading from '../components/Loading';
 
 function CariSpesialis() {
   const [provinsi, setProvinsi] = useState();
@@ -22,11 +22,11 @@ function CariSpesialis() {
   const [idPoliclinic, setIdPoliclinic] = useState();
   const [idPractices, setIdPractices] = useState();
   const [idDokter, setIdDokter] = useState();
-  const [inDate, setInDate] = useState("");
+  const [inDate, setInDate] = useState('');
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
-  const token = Cookies.get("token");
+  const token = Cookies.get('token');
   const toast = useToast();
 
   const date = new Date();
@@ -34,29 +34,21 @@ function CariSpesialis() {
   const month = date.getMonth() + 1;
   const yy = date.getFullYear();
   const nextDay = `${yy}-${month < 10 && `0${month}`}-${day < 10 && `0${day}`}`;
-  const dDay = `${yy}-${month < 10 && `0${month}`}-${
-    date.getDate() < 10 && `0${date.getDate()}`
-  }`;
+  const dDay = `${yy}-${month < 10 && `0${month}`}-${date.getDate() < 10 && `0${date.getDate()}`}`;
 
   //handle data provinsi
   const getProvinsi = async () => {
-    await axios
-      .get("https://dev.farizdotid.com/api/daerahindonesia/provinsi")
-      .then((response) => {
-        setProvinsi(response.data.provinsi);
-        setLoading(false);
-      });
+    await axios.get('https://dev.farizdotid.com/api/daerahindonesia/provinsi').then((response) => {
+      setProvinsi(response.data.provinsi);
+    });
+    setLoading(false);
   };
 
   //handle kabupaten/kota
   const getSpecificCity = async (id) => {
-    await axios
-      .get(
-        `https://dev.farizdotid.com/api/daerahindonesia/kota?id_provinsi=${id}`
-      )
-      .then((response) => {
-        setListKabupaten(response.data.kota_kabupaten);
-      });
+    await axios.get(`https://dev.farizdotid.com/api/daerahindonesia/kota?id_provinsi=${id}`).then((response) => {
+      setListKabupaten(response.data.kota_kabupaten);
+    });
   };
 
   const getPractices = async (id, practiceDate) => {
@@ -70,10 +62,10 @@ function CariSpesialis() {
       })
       .catch((error) => {
         toast({
-          position: "top",
-          title: "Jadwal checkup belum tersedia",
-          status: "error",
-          duration: "2000",
+          position: 'top',
+          title: 'Jadwal checkup belum tersedia',
+          status: 'error',
+          duration: '2000',
           isClosable: true,
         });
       });
@@ -88,10 +80,10 @@ function CariSpesialis() {
       })
       .catch((error) => {
         toast({
-          position: "top",
-          title: "Belum Ada Policlinic Terdaftar",
-          status: "error",
-          duration: "2000",
+          position: 'top',
+          title: 'Belum Ada Policlinic Terdaftar',
+          status: 'error',
+          duration: '2000',
           isClosable: true,
         });
       });
@@ -106,10 +98,10 @@ function CariSpesialis() {
       })
       .catch((error) => {
         toast({
-          position: "top",
-          title: "Belum Ada Rumah Sakit Terdaftar",
-          status: "error",
-          duration: "2000",
+          position: 'top',
+          title: 'Belum Ada Rumah Sakit Terdaftar',
+          status: 'error',
+          duration: '2000',
           isClosable: true,
         });
       });
@@ -139,7 +131,7 @@ function CariSpesialis() {
   };
 
   const handlerRegistrasi = () => {
-    navigate("/reservasi/rawat/jalan", {
+    navigate('/reservasi/rawat/jalan', {
       state: {
         hospital_id: idHospital,
         policlinic_id: idPoliclinic,
@@ -163,48 +155,29 @@ function CariSpesialis() {
   return (
     <>
       {loading ? (
-        <Loading body={"Mengambil data..."} />
+        <Loading body={'Tunggu Sebentar...'} />
       ) : (
-        <Box w="100%" direction={{ base: "column-reverse", md: "row" }}>
+        <Box w="100%" direction={{ base: 'column-reverse', md: 'row' }}>
           <Box align="center" variant="elevated" mx={10} h={200}>
             <Box>
               <Heading fontWeight={600} fontSize={36} color="#1FA8F6">
-                {" "}
-                Temukan spesialis / klinik{" "}
+                {' '}
+                Temukan spesialis / klinik{' '}
               </Heading>
             </Box>
             <Box w={688}>
               <Text fontWeight={400} fontSize={18} align="center">
-                Temukan spesialis/klinik yang tepat untuk menangani kebutuhan
-                kesehatan Anda. Anda dapat mencari berdasarkan nama,
-                spesialisasi, lokasi rumah sakit, dan jadwal praktik di sini.
+                Temukan spesialis/klinik yang tepat untuk menangani kebutuhan kesehatan Anda. Anda dapat mencari berdasarkan nama, spesialisasi, lokasi rumah sakit, dan jadwal praktik di sini.
               </Text>
             </Box>
           </Box>
-          <Box
-            py={"10"}
-            bg="white"
-            maxWidth={["1000px"]}
-            mx="auto"
-            height="auto"
-          >
-            <Card
-              shadow="lg"
-              height="auto"
-              py="5"
-              maxWidth={["1000px"]}
-              borderRadius="xl"
-              alignItems="left"
-              p={20}
-            >
+          <Box py={'10'} bg="white" maxWidth={['1000px']} mx="auto" height="auto">
+            <Card shadow="lg" height="auto" py="5" maxWidth={['1000px']} borderRadius="xl" alignItems="left" p={20}>
               <form>
                 <Stack spacing={3}>
                   <Box>
                     <Text py={4}> Provinsi</Text>
-                    <Select
-                      placeholder="-- Pilih provinsi --"
-                      onChange={(e) => setKabupaten(e.target.value)}
-                    >
+                    <Select placeholder="-- Pilih provinsi --" onChange={(e) => setKabupaten(e.target.value)}>
                       {provinsi?.map((prov) => {
                         return (
                           <option value={prov.id} key={prov.id}>
@@ -228,11 +201,7 @@ function CariSpesialis() {
                   </Box>
                   <Box>
                     <Text py={4}> Rumah Sakit</Text>
-                    <Select
-                      onChange={(e) => handleHospitalChange(e.target.value)}
-                      placeholder="-- Pilih Rumah Sakit --"
-                      id="hospital_id"
-                    >
+                    <Select onChange={(e) => handleHospitalChange(e.target.value)} placeholder="-- Pilih Rumah Sakit --" id="hospital_id">
                       {hospitals?.map((data) => {
                         return (
                           <option value={data.id} key={data.id}>
@@ -244,10 +213,7 @@ function CariSpesialis() {
                   </Box>
                   <Box color="#000000">
                     <Text py={4}> Poliklinik</Text>
-                    <Select
-                      onChange={(e) => handlerPoliclinics(e.target.value)}
-                      placeholder="-- Pilih Poliklinik --"
-                    >
+                    <Select onChange={(e) => handlerPoliclinics(e.target.value)} placeholder="-- Pilih Poliklinik --">
                       {policlinics?.map((data) => {
                         return (
                           <option value={data.id} key={data.id}>
@@ -259,10 +225,7 @@ function CariSpesialis() {
                   </Box>
                   <Box>
                     <Text py={4}> Dokter</Text>
-                    <Select
-                      onChange={(e) => setIdDokter(e.target.value)}
-                      placeholder="-- Pilih Dokter --"
-                    >
+                    <Select onChange={(e) => setIdDokter(e.target.value)} placeholder="-- Pilih Dokter --">
                       {doctors?.map((data) => {
                         return (
                           <option value={data.id} key={data.id}>
@@ -274,52 +237,21 @@ function CariSpesialis() {
                   </Box>
                   <Box>
                     <Text py={4}> Jam Praktik</Text>
-                    <Input
-                      type="text"
-                      placeholder={time}
-                      disabled
-                      _placeholder={{ color: "#000000" }}
-                      _disabled={{ color: "black" }}
-                      onChange={(e) => setTime(e.target.value)}
-                    />
+                    <Input type="text" placeholder={time} disabled _placeholder={{ color: '#000000' }} _disabled={{ color: 'black' }} onChange={(e) => setTime(e.target.value)} />
                   </Box>
                   <Box>
                     <Text py={4}> Tanggal Periksa</Text>
 
-                    <Input
-                      type={"date"}
-                      max={nextDay}
-                      min={dDay}
-                      value={inDate}
-                      onChange={(e) => handlerTanggal(e.target.value)}
-                    />
+                    <Input type={'date'} max={nextDay} min={dDay} value={inDate} onChange={(e) => handlerTanggal(e.target.value)} />
                   </Box>
 
                   <Box>
                     <Text py={4}> Kuota Harian</Text>
-                    <Input
-                      type="text"
-                      placeholder={
-                        practices.length !== 0
-                          ? practices.kuota_harian
-                          : "Not Avaible"
-                      }
-                      _placeholder={{ color: "#000000" }}
-                      _disabled={{ color: "black" }}
-                      _peerDisabled
-                      disabled
-                    />
+                    <Input type="text" placeholder={practices.length !== 0 ? practices.kuota_harian : 'Not Avaible'} _placeholder={{ color: '#000000' }} _disabled={{ color: 'black' }} _peerDisabled disabled />
                   </Box>
                 </Stack>
 
-                <Button
-                  onClick={() => handlerRegistrasi()}
-                  my={20}
-                  color="#FFFFFF"
-                  bg="#3AB8FF"
-                  _hover={{ bg: "alta.primary" }}
-                  disabled={practices.length !== 0 ? false : true}
-                >
+                <Button onClick={() => handlerRegistrasi()} my={20} color="#FFFFFF" bg="#3AB8FF" _hover={{ bg: 'alta.primary' }} disabled={practices.length !== 0 ? false : true}>
                   Selanjutnya
                 </Button>
               </form>
