@@ -141,7 +141,7 @@ Almira Mahsa - almiramahsa9@gmail.com
 Hendri William T.  - hendriwilliam29@gmail.com
 
 [![Github][Github]][Github-Hendry-url]
-[![LinkedIn][LinkedIn]][LinkedIn-mitro]
+[![LinkedIn][LinkedIn]][LinkedIn-Hendry]
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
